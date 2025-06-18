@@ -1,2 +1,3 @@
-# Twin64-Book
-The architecture of the Twin-64 Processor
+# Twin64-The-Book
+
+The Book about the Twin-64 processor.
