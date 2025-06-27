@@ -126,7 +126,7 @@
 		\node at (5.75,1) {\small 0};
 		\node at (7.5,1) {\small Reg B};
 		\node at (9,1) {\small dw};
-		\node at (12.25,1) {\small S-IMM-13 / special};
+		\node at (12.25,1) {\small S-IMM-13};
    	 	
        \end{tikzpicture}
 	\end{flushleft}
@@ -175,13 +175,18 @@
 
 \instructionentry{Description}{
 
-The \texttt{ADD} instruction adds two operands and stores them to the target register \texttt{RegR}. The immediate instruction format will add the sign extended 15-bit value to \texttt{RegB}. The register instruction format instruction will add \texttt{RegA} and \texttt{RegB}. 
+The \texttt{ADD} instruction adds two signed 64-bit operands and stores them to the target register \texttt{RegR}. 
 
-The indexed instruction format will load the content of memory address formed by adding the scaled immediate 13-bit field to the base register \texttt{RegB} and add the data value to \texttt{RegA}. The register indexed instruction format will load the content of memory address formed by adding \texttt{RegX} to the base register \texttt{RegB} and add the data value to \texttt{RegA}. Both load formats will use the dw field to specify the data value width. A dw value of zero load an 8-bit, a value of 1 a 16-bit value,  value of 2 a 32-bit value and a value of 3 a 64-bit value. The data value fetched is signed extended to a 64-bit value.
+The immediate instruction format will add the sign extended 15-bit value to \texttt{RegB}. The register instruction format instruction will add \texttt{RegA} and \texttt{RegB}.  
+
+The indexed instruction format will load the content of memory address formed by adding the scaled immediate 13-bit field to the base register \texttt{RegB} and add the data value to \texttt{RegA}. The \textbf{dw} field indicates the data value width. A \textbf{dw} value of zero load an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. In addition, the \textbf{dw} field will scale the offset value by left shifting the immediate field according to the data width.
+
+The register indexed instruction format will load the content of memory address formed by adding \texttt{RegX} to the base register \texttt{RegB} and add the data value to \texttt{RegA}. Both load formats will use the \textbf{dw} field to specify the data value width. A \textbf{dw} value of zero load an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. The offset in \texttt{RegX} is interpreted as a byte offset, independent of the actual \textbf{dw} field value.
 
 }
 
 \instructionentry{Operation}{
+
   	\texttt{RegR <- RegB + RegA} {(register format)}\\
   	\smallskip
   	\texttt{RegR <- RegB + immOperand( )} {(immediate format)}\\
