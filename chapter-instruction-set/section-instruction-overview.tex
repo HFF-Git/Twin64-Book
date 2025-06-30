@@ -6,29 +6,290 @@
 \addcontentsline{toc}{section}{Instruction Overview}
 
 
-\subsection*{Integer Arithmetic Instructions}
+\subsection*{Arithmetic Instructions}
 
-ADD, SUB, SHLxA, SHRxA
+The arithmetic instruction operate on two signed 64-bit operands and stores the result to the target register. There are two instruction layouts, immediate and register based. The \textbf{immediate operand instruction format} will add the sign extended 15-bit value to \texttt{RegB}. The register instruction format instruction will add \texttt{RegA} and \texttt{RegB}.  The following figure shows the instruction layout.
+
+\begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape]
+        
+        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text width=3cm,
+                text centered,
+                fill=white!50] (blocks) at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1, 1.5);
+     	\draw[-] (3,0.5) -- (3, 1.5);
+     	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
+     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
+          	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.75,0.25) {3};
+    	\node at (7.5,0.25) {4};
+   	 	\node at (11.5,0.25) {15};
+   	 	
+   	 	\node at (0.5,1) {\small 0};
+		\node at (2,1) {\small opCode };
+		\node at (4,1) {\small Reg R};
+		\node at (5.75,1) {\small Opt };
+		\node at (7.5,1) {\small Reg B};
+		\node at (11.5,1) {\small S-IMM-15};
+ 	\end{tikzpicture}
+\end{center}
+
+The \textbf{register instruction format} type instruction uses two registers as input operands, performs the operation and stores the result in a third register. The following figure shows the instruction layout.
+
+\begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape]
+        
+        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text width=3cm,
+                text centered,
+                fill=white!50] (blocks) at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1, 1.5);
+     	\draw[-] (3,0.5) -- (3, 1.5);
+     	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
+     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
+     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
+     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
+     	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.75,0.25) {3};
+    	\node at (7.5,0.25) {4};
+    	\node at (9,0.25) {2};
+    	\node at (10.5,0.25) {4};
+   	 	\node at (13.75,0.25) {9};
+   	 	
+   	 	\node at (0.5,1) {\small 0};
+		\node at (2,1) {\small opCode };
+		\node at (4,1) {\small Reg R};
+		\node at (5.75,1) {\small Opt };
+		\node at (7.5,1) {\small Reg B};
+		\node at (9,1) {\small Opt };
+		\node at (10.5,1) {\small Reg A};
+		\node at (13.75,1) {\small 0 };
+   	\end{tikzpicture}
+\end{center}
+
+
+The \textbf{ADD} and \textbf{SUB} perform signed integer 64-bit arithmetic with an overflow resulting in an overflow trap. There are no operations on unsigned quantities. The \textbf{SHLxA} and \textbf{SHRxA} perform an arithmetic shift operations and add an operand to the shifted input, storing the result in the target register.
+
+The \textbf{CMP} compares two registers for being equal, not equal, less than and les or equal than. The result of this comparison is store din the target register.
 
 \subsection*{Bit Operations Instructions}
 
-AND, OR, XOR, EXTR, DEP, DSR
+The bit operation instruction fall into two groups. The 
+\textbf{AND}, \textbf{OR} and \textbf{XOR} instructions implement the logical operations as their name suggest. Like the arithmetic instructions, there is an immediate instruction and a register instruction layout.
+
+The second group implements the bit manipulation operations. The \textbf{EXTR} instruction extracts a bit field from a register and places the field in another register. Optionally, the extracted field is signed extended. The \textbf{DEP} instruction deposits a bit field in a target register. 
+
+\begin{center}
+    \begin{tikzpicture}[scale=0.9, transform shape]
+        
+        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text width=3cm,
+                text centered,
+                fill=white!50] (blocks) at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1, 1.5);
+     	\draw[-] (3,0.5) -- (3, 1.5);
+     	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
+     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
+     	\draw[-] (10,0.5) -- (10, 1.5);
+     	\draw[-] (13,0.5) -- (13, 1.5);
+     	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.75,0.25) {3};
+    	\node at (7.5,0.25) {4};
+    	\node at (9.25,0.25) {3};
+    	\node at (11.5,0.25) {6};
+    	\node at (14.5,0.25) {6};
+    	   	 	
+   	 	\node at (0.5,1) {\small 0};
+		\node at (2,1) {\small opCode};
+		\node at (4,1) {\small Reg R};
+		\node at (5.75,1) {\small Opt };
+		\node at (7.5,1) {\small Reg B};
+		\node at (9.25,1) {\small Opt };
+		\node at (11.25,1) {\small pos};
+		\node at (14.25,1) {\small len};
+   	 	
+       \end{tikzpicture}
+\end{center}
+
+The \textbf{DSR} instruction concatenates two general registers, shifts the 128-bit quantity to the right and stores the lower 32 bits in a target register.
+
+\begin{center}
+    \begin{tikzpicture}[scale=0.9, transform shape]
+        
+        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text width=3cm,
+                text centered,
+                fill=white!50] (blocks) at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1, 1.5);
+     	\draw[-] (3,0.5) -- (3, 1.5);
+     	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
+     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
+     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
+     	
+     	\draw[-] (13,0.5) -- (13, 1.5);
+     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
+     	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.75,0.25) {3};
+    	\node at (7.5,0.25) {4};
+    	\node at (9,0.25) {2};
+    	\node at (10.5,0.25) {4};
+    	\node at (12.15,0.25) {3};
+   	 	\node at (14.0,0.25) {6};
+   	 	
+   	 	\node at (0.5,1) {\small 0};
+		\node at (2,1) {\small opCode };
+		\node at (4,1) {\small Reg R};
+		\node at (5.75,1) {\small Opt };
+		\node at (7.5,1) {\small Reg B};
+		\node at (9,1) {\small Opt };
+		\node at (10.5,1) {\small Reg A};
+		\node at (12.25,1) {\small 0};
+		\node at (14.0,1) {\small len };
+   	 	
+       \end{tikzpicture}
+\end{center}
 
 \subsection*{Immediate Instructions}
 
-LDI, ADDIL, LDO
+\textbf{LDI}, \textbf{ADDIL}, \textbf{LDO}
+
+
+
+
 
 \subsection*{Memory Reference Instructions}
 
-LD, ST, LDR, STC
+T64 is a register memory architecture. It has the common load/store instructions as well as instructions that combined an operation with a memory reference. Memory reference instructions feature two addressing modes. The first is the base register and offset instruction. the second the base register and register index instruction. 
+
+The \textbf{indexed instruction format} will load the content of memory address formed by adding the scaled immediate 13-bit field to the base register \texttt{RegB} and add the data value to \texttt{RegA}. The \textbf{dw} field indicates the data value width. A \textbf{dw} value of zero load an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. In addition, the \textbf{dw} field will scale the offset value by left shifting the immediate field according to the data width. The following figure shows the general instruction layout for base register and offset instruction.
+
+\begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape]
+        
+        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text width=3cm,
+                text centered,
+                fill=white!50] (blocks) at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1, 1.5);
+     	\draw[-] (3,0.5) -- (3, 1.5);
+     	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
+     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
+     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
+     	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.75,0.25) {3};
+    	\node at (7.5,0.25) {4};
+    	\node at (9,0.25) {2};
+     	\node at (12.25,0.25) {13};
+   	 	
+   	 	\node at (0.5,1) {\small 1};
+		\node at (2,1) {\small opCode };
+		\node at (4,1) {\small Reg R};
+		\node at (5.75,1) {\small Opt };
+		\node at (7.5,1) {\small Reg B};
+		\node at (9,1) {\small dw};
+		\node at (12.25,1) {\small S-IMM-13};
+   	 	
+       \end{tikzpicture}
+	\end{center}
+
+The \textbf{register indexed instruction format} will load the content of memory address formed by adding \texttt{RegX} to the base register \texttt{RegB} and add the data value to \texttt{RegA}. Both load formats will use the \textbf{dw} field to specify the data value width. A \textbf{dw} value of zero load an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. The offset in \texttt{RegX} is interpreted as a byte offset, independent of the actual \textbf{dw} field value. The following figure shows the general instruction layout for base register and register index type instructions.
+
+\begin{center}
+    \begin{tikzpicture}[scale=0.7, transform shape]
+        
+        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text width=3cm,
+                text centered,
+                fill=white!50] (blocks) at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1, 1.5);
+     	\draw[-] (3,0.5) -- (3, 1.5);
+     	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
+     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
+     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
+     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
+     	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.75,0.25) {3};
+    	\node at (7.5,0.25) {4};
+    	\node at (9,0.25) {2};
+    	\node at (10.5,0.25) {4};
+   	 	\node at (13.75,0.25) {9};
+   	 	
+   	 	\node at (0.5,1) {\small 1};
+		\node at (2,1) {\small opCode };
+		\node at (4,1) {\small Reg R};
+		\node at (5.75,1) {\small  Opt };
+		\node at (7.5,1) {\small Reg B};
+		\node at (9,1) {\small dw};
+		\node at (10.5,1) {\small Reg X};
+		\node at (13.75,1) {\small 0};
+   	 	
+       \end{tikzpicture}
+	\end{center}
+
+The \textbf{LD} and \textbf{ST} instruction are the load and store instructions. In addition to the two addressing modes presented above, they also feature a base register address modification. Depending on the offset sign, the base register is updated before or after the address computation with the effective address computed. See the instruction description for more details.
+
+The \textbf{LDR} and \textbf{STC} instruction implement the base support for a pipeline friendly method for semaphore operations. They only support the base register and offset mode. Also, there is no base register modification option.
+
+The \textbf{ADD}, \textbf{SUB}, \textbf{AND}, \textbf{OR}, \textbf{XOR}, \textbf{CMP} instructions perform the respective operation as described above with one operand being fetched from memory.
 
 \subsection*{Branch Instructions}
 
 B, BR, BV, BB, CBR, MBR
-
-\subsection*{Combined Instructions}
-
-ADD, SUB, AND, OR, XOR, CMP
 
 \subsection*{System Instructions}
 
