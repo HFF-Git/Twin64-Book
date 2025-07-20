@@ -1,0 +1,32 @@
+\chapter*{Input/Output}
+\addcontentsline{toc}{chapter}{Input/Output}
+
+
+\section*{Concepts}
+\addcontentsline{toc}{section}{Concepts}
+
+memory mapped
+
+dedicated address space in physical memory
+
+bus concept 
+
+module concept
+
+modules have registers - load / store, however registers do not have to be 64 bit wide.
+
+the system bus features up to 64 modules. that is: 64 HPA pages, need: 1Mb address range.
+
+a module listens to three address ranges
+
+- hard physical address range. a page. privileged.
+
+- soft physical address range. allocated by the module for further space. aligned on a page boundary.
+
+- broadcast address range. Mirrors the system bus range. A write to a register in that range applies to all corresponding registers of a module on the same bus. 
+
+modules are processors, memory and I/O cards.
+
+we could keep processor stats in the HPA space
+
+memory module has entire memory as SPA space

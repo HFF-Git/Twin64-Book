@@ -9,6 +9,17 @@
 \section*{Data Types}
 \addcontentsline{toc}{section}{Data Types}
 
+64 bit signed is the basic unit
+
+lower sizes are sign extended before use
+
+address computation uses a 32-bit unsigned math, i.e. numbers wrap around in 32 bit space.
+
+
+\section*{Byte Ordering}
+\addcontentsline{toc}{section}{Byte Ordering}
+
+
 
 \section*{General Registers}
 \addcontentsline{toc}{section}{General Registers}
@@ -22,13 +33,34 @@
 \addcontentsline{toc}{section}{Processor Status Register}
 
 
-\section*{Byte Ordering}
-\addcontentsline{toc}{section}{Byte Ordering}
 
 
 \section*{TLB}
 \addcontentsline{toc}{section}{TLB}
 
+fully associative TLB
+
+support for large pages ( 16Kb, 256 Kb, 4Mb, 64 Mb )
+
+implementations can choose a unified or a split TLB
+
+bits:
+
+V - valid
+
+L - entry locked
+
+
+M - modified trap
+
+B - branch taken trap
+
+
+
+
 
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
+
+cache visible architecture
+
