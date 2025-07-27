@@ -9,7 +9,53 @@
 \section*{Data Types}
 \addcontentsline{toc}{section}{Data Types}
 
-64 bit signed is the basic unit
+Twin-64 is a big endian 64-bit machine. The fundamental data type is a 64-bit signed integer with the most significant bit being left. Bits are numbered from left to right, starting with bit 64 as the MSB bit down to bit 0 as LSB. Memory access is performed on a double, word, half-word or byte basis. All addresses are however always expressed as bytes addresses.
+
+\begin{figure}[ht]
+\begin{center}
+\begin{tikzpicture}[scale=0.7, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,8);
+  	
+  	\node[  tsRectangle, 
+            minimum width=4cm,
+            minimum height=0.75cm,
+            fill=white!50] (blocks) at (14,7) { Byte };
+                
+    \node at (15.75,7.75) {0};
+    \node at (12.25,7.75) {7};
+
+    \node[  tsRectangle, 
+            minimum width=8cm,
+            minimum height=0.75cm,
+            fill=white!50] (blocks) at (12,5) { Half };
+                
+    \node at (15.75,5.75) {0};
+    \node at (8.25,5.75) {15};
+       
+    \node[  tsRectangle, 
+            minimum width=12cm,
+            minimum height=0.75cm,
+            fill=white!50] (blocks) at (10,3) { Word };
+                
+    \node at (15.75,3.75) {0};
+    \node at (4.25,3.75) {31};
+    
+    \node[  tsRectangle, 
+            minimum width=16cm,
+            minimum height=0.75cm,
+            fill=white!50] (blocks) at (8,1) { Double };
+            
+    \node at (15.75,1.75) {0};
+    \node at (.25,1.75) {63};
+                
+      
+\end{tikzpicture}
+\end{center}
+\caption{Data types}
+\label{fig:data types}
+\end{figure}
+
 
 lower sizes are sign extended before use
 
@@ -19,19 +65,142 @@ address computation uses a 32-bit unsigned math, i.e. numbers wrap around in 32 
 \section*{Byte Ordering}
 \addcontentsline{toc}{section}{Byte Ordering}
 
+Twin-64 supports little endian and big endian byte ordering models.
+
 
 
 \section*{General Registers}
 \addcontentsline{toc}{section}{General Registers}
 
+Twin-64 features a set of 16 general purposes registers.
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.9, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(12,17);
+
+	% Rectangle dimensions
+	\def\width{6}
+	\def\leftofs{4}
+	\def\rightofs{\leftofs + \width}
+
+	% Left and right side
+	\draw[thick] (\leftofs, 0) -- (\leftofs, 16);
+	\draw[thick] (\rightofs, 0) -- (\rightofs, 16);
+	
+	% Horizontal lines
+	\foreach \i in {0,...,15} {
+  		\pgfmathsetmacro\y{\i}
+  		\pgfmathtruncatemacro\reg{15 - \i}
+  
+  		\draw[thick] (\leftofs,\y) -- (\rightofs,\y);
+  		\node at ({\leftofs + \width / 2}, {\y + 0.5}) { General Register \reg};
+	}
+	
+	\draw[thick] (\leftofs, 16) -- ((\rightofs, 16);
+			
+		
+\end{tikzpicture}
+\end{center}
+\caption{General registers}
+\label{fig:General registers}
+\end{figure}
+
 
 \section*{Control Registers}
 \addcontentsline{toc}{section}{Control Registers}
 
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.9, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(12,17);
 
-\section*{Processor Status Register}
-\addcontentsline{toc}{section}{Processor Status Register}
+	% Rectangle dimensions
+	\def\width{6}
+	\def\leftofs{4}
+	\def\rightofs{\leftofs + \width}
 
+	% Left and right side
+	\draw[thick] (\leftofs, 0) -- (\leftofs, 16);
+	\draw[thick] (\rightofs, 0) -- (\rightofs, 16);
+	
+	% Horizontal lines
+	\foreach \i in {0,...,15} {
+  		\pgfmathsetmacro\y{\i}
+  		\pgfmathtruncatemacro\reg{15 - \i}
+  
+  		\draw[thick] (\leftofs,\y) -- (\rightofs,\y);
+  		\node at ({\leftofs + \width / 2}, {\y + 0.5}) { Control Register \reg};
+	}
+	
+	\draw[thick] (\leftofs, 16) -- ((\rightofs, 16);
+			
+		
+\end{tikzpicture}
+\end{center}
+\caption{General registers}
+\label{fig:General registers}
+\end{figure}
+
+Some general registers have a dedicated use. Register zero will always return a zero value when read and a write operation will have no effect. Although there are only 16 general registers in the CPU, implementing such a register greatly simplifies the instruction design, in that it for example provides a target when the result is not needed. General register one is a scratch register and also serves as an implicit target for some instructions. Other general registers may have dedicated purpose defined in the runtime architecture. 
+
+\section*{Program State Register}
+\addcontentsline{toc}{section}{Processor State Register}
+
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.9, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+    \node[  tsRectangle, 
+            minimum width=16cm,
+            minimum height=1cm,  
+            fill=white!50] (blocks) at (8,1) { };
+                
+  	\draw[-] (0.25,0.5) -- (0.25,1.5);
+    \draw[-] (0.5,0.5) -- (0.5,1.5);
+    \draw[-] (0.75,0.5) -- (0.75,1.5);
+    \draw[-] (1,0.5) -- (1,1.5);
+  	\draw[-] (1.25,0.5) -- (1.25,1.5);
+    \draw[-] (1.5,0.5) -- (1.5,1.5);
+   	\draw[-] (1.75,0.5) -- (1.75,1.5);
+   	\draw[-] (2,0.5) -- (2,1.5);
+   	\draw[-] (2.25,0.5) -- (2.25,1.5);
+   	\draw[-] (2.5,0.5) -- (2.5,1.5);
+   	\draw[-] (2.75,0.5) -- (2.75,1.5);	     	
+   	\draw[-] (3,0.5) -- (3,1.5);
+    \draw[-] (8,0.5) -- (8,1.5);
+     	
+    \def\flagOfs{0.125}
+	\node at (\flagOfs, 1) {\tiny X};
+	\node at (\flagOfs + 0.25, 1) {\tiny X};
+	\node at (\flagOfs + 0.5, 1) {\tiny X};
+	\node at (\flagOfs + 0.75, 1) {\tiny X};
+	\node at (\flagOfs + 1, 1) {\tiny X};
+	\node at (\flagOfs + 1.25, 1) {\tiny X};
+	\node at (\flagOfs + 1.5, 1) {\tiny X};
+	\node at (\flagOfs + 1.75, 1) {\tiny X};
+	\node at (\flagOfs + 2, 1) {\tiny X};
+	\node at (\flagOfs + 2.25, 1) {\tiny X};
+	\node at (\flagOfs + 2.5, 1) {\tiny X};
+	\node at (\flagOfs + 2.75, 1) {\tiny X};
+				
+	\node at (5.75,1) {\small IA Segment};
+	\node at (11,1) {\small IA Offset};
+		
+	\node at (1.5,0.25) {12};
+    \node at (5,0.25) {20};
+   	\node at (11,0.25) {32};
+   	 	
+\end{tikzpicture}
+\end{center}
+\caption{Program state register}
+\label{fig:Program state register}
+\end{figure}
 
 
 
