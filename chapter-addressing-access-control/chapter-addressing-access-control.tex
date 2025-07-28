@@ -24,7 +24,7 @@ The first dimension is the \textbf{access control} and \textbf{privilege level} 
 \section*{Access Protection}
 \addcontentsline{toc}{section}{Access Protection}
 
-The second dimension of protection is a \textbf{protection ID}. Twon-64 allows to record a set of segment Id values in the processor control registers. For each access to a segment that has the protection check bit set, one of the protection Id control registers must match the segment Id. If not, a protection violation trap is raised.
+The second dimension of protection is a \textbf{protection ID}. Twin-64 allows to record a set of segment Id values in the processor control registers. For each access to a segment that has the protection check bit set, one of the protection Id control registers must match the segment Id. If not, a protection violation trap is raised.
 
 Protection Id checking is typically used to form a grouping of access. A good example is the stack data segment, which is accessible at user privilege level. Since the CPU features a global virtual memory address space, every task could access a data stack of another task. With protection Id checking enabled and the segment Id loaded in one of the control registers, only the corresponding user task is allowed to access the stack data segment with a matching protection Id. 
 

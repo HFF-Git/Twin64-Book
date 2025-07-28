@@ -25,6 +25,81 @@ This document describes the overall architecture, instruction set and runtime mo
 
 The runtime environment chapters present the runtime architecture. Although the CPU architecture and instructions allow for a great flexibility how to write programs, a runtime architecture is essential to define the common usage of the instruction set for assembler and compilers. 
 
+
+
+\section*{System Organization and Overview}
+\addcontentsline{toc}{section}{System Organization and Overview}
+
+??? key elements ...
+
+\subsection*{A Register Memory Architecture}
+\addcontentsline{toc}{subsection}{A Register Memory Architecture}
+
+Twin-64 implements a \textbf{register memory architecture} offering few addressing modes for the operand combined with a fixed instruction word length. For most instructions one operand is the register, the other is a flexible operand which could be an immediate, a register content or a memory address from where the data is obtained or placed. The result is placed in the register which is also the first operand. These type of machines are also called two address machines.
+
+In contrast to similar historical register-memory designs, there is no operation which does a read and write operation to memory in the same instruction. For example, there is no "increment memory" instruction, since this would require two memory operations and is in general not pipeline friendly. Memory data access is performed on a machine word, half-word or byte basis. Besides the implicit operand fetch in a computational instruction, there are dedicated memory load / store instructions. In addition to the register-immediate operand and register memory-operand mode, one operand mode supports the three operand model ( Rs = Ra OP Rb ), specifying two registers and a result register, which allows to perform three address register for computational operations as well. The machine can therefore operate in a memory register model as well as a load / store register model.
+
+
+\subsection*{Processor}
+\addcontentsline{toc}{subsection}{Processor}
+
+The Twin-64 processor is only one element of a complete system. A system also includes memory and  I/O modules.  adapters, and interconnecting busses. The Central Processing Unit (CPU) includes a general register set and machine state registers. To support virtual memory addressing, a hardware translation lookaside buffer (TLB) is included on processors to provide virtual to physical address translations. A cache is optional, but for performance reasons a key component of the processor.
+
+
+\subsection*{Virtual Memory}
+\addcontentsline{toc}{subsection}{Virtual Memory}
+
+Twin-64 emits at the CPU level virtual addresses. The global virtual memory range is a 52-bit space organized into a 20-bit segment Id and a 32-bit byte offset. 
+
+Virtual addresses are translated to physical addresses by the TLB when memory is referenced. Address translations are made at the page level. The first four segments also represent the physical address range. An address in that range bypasses the TLB and accesses physical memory directly. 
+
+
+
+Page size 16Kb to 64Mb. 
+
+
+
+\subsection*{Security and Protection Support}
+\addcontentsline{toc}{subsection}{Security and Protection Support}
+
+
+\subsection*{Debugging Support}
+\addcontentsline{toc}{subsection}{Debugging Support}
+
+
+
+
+
+\subsection*{Input/Output}
+\addcontentsline{toc}{subsection}{Input/Output}
+
+Twin-64 features a memory-mapped I/O architecture. Control of I/O modules is accomplished through memory load and store instructions. Processors invoke I/O operations by executing load and store instructions to either virtual or absolute addresses. When implementing a driver, the standard page-level protection mechanism is applied during virtual-to-absolute address translation. A driver, typically implemented running in privileged mode, can also grant a user program direct control by mapping an I/O page into virtual space without compromising system integrity. 
+
+
+\subsection*{Interrupt System}
+\addcontentsline{toc}{subsection}{Interrupt System}
+
+
+\section*{Instruction Set Overview}
+\addcontentsline{toc}{section}{Instruction Set Overview}
+
+??? quick summary of instruction types...
+
+\subsection*{Computational instructions}
+\addcontentsline{toc}{subsection}{Computational instructions}
+
+\subsection*{Memory reference instructions}
+\addcontentsline{toc}{subsection}{Computational instructions}
+
+\subsection*{Branch instructions}
+\addcontentsline{toc}{subsection}{Branch instructions}
+
+
+\subsection*{System control instructions}
+\addcontentsline{toc}{subsection}{System control instructions}
+
+
+
 \section*{This book}
 \addcontentsline{toc}{section}{This Book}
 

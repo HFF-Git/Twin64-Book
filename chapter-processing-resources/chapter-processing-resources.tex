@@ -2,8 +2,10 @@
 %
 %
 %--------------------------------------------------------------------------------
-\chapter*{System Organization}
-\addcontentsline{toc}{chapter}{System Organization}
+\chapter*{Processing Resources}
+\addcontentsline{toc}{chapter}{Processing Resources}
+
+
 
 
 \section*{Data Types}
@@ -78,35 +80,51 @@ Twin-64 features a set of 16 general purposes registers.
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(12,17);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(12,9);
 
 	% Rectangle dimensions
-	\def\width{6}
-	\def\leftofs{4}
+	\def\width{12}
+	\def\leftofs{2}
 	\def\rightofs{\leftofs + \width}
+	
+	% Bits
+	\node at (\leftofs + 0.25,8 + 0.25) {\small 63};
+	\node at (\rightofs - 0.25,8 + 0.25) {\small 0};
 
-	% Left and right side
-	\draw[thick] (\leftofs, 0) -- (\leftofs, 16);
-	\draw[thick] (\rightofs, 0) -- (\rightofs, 16);
-	
-	% Horizontal lines
-	\foreach \i in {0,...,15} {
-  		\pgfmathsetmacro\y{\i}
-  		\pgfmathtruncatemacro\reg{15 - \i}
+	% Box
+	\draw[thick] (\leftofs, 0) -- (\leftofs, 8);
+	\draw[thick] (\rightofs, 0) -- (\rightofs, 8);
+	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
+	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
+	  		
+	% Fields  		
+  	\draw[thick] (\leftofs, 7) -- (\rightofs, 7);
+  	\node at ({\leftofs - 0.75}, {7 + 0.5}) { GR0 };
+  	\node at (8, {7 + 0.5}) { Permanent zero };
+  		
+  	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
+  	\node at ({\leftofs - 0.75}, {6 + 0.5}) { GR1};
+  	\node at (8, {6 + 0.5}) { Target for ADDIL or General use };	
+  		
+  	\draw[thick] (\leftofs, 5) -- (\rightofs, 5);
+  	\node at ({\leftofs - 0.75}, {5 + 0.5}) { GR2};
+  	\node at (8, {5 + 0.5}) { General use };	
+  		
+  	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
+  	\node at ({\leftofs - 0.75}, {1 + 0.5}) { GR14};
+  	\node at (8, {1 + 0.5}) { General use };	
+  		
+  	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);
+  	\node at ({\leftofs - 0.75}, {0 + 0.5}) { GR15};
+  	\node at (8, {0 + 0.5}) { General use };	
   
-  		\draw[thick] (\leftofs,\y) -- (\rightofs,\y);
-  		\node at ({\leftofs + \width / 2}, {\y + 0.5}) { General Register \reg};
-	}
-	
-	\draw[thick] (\leftofs, 16) -- ((\rightofs, 16);
-			
-		
 \end{tikzpicture}
 \end{center}
 \caption{General registers}
 \label{fig:General registers}
 \end{figure}
 
+Some general registers have a dedicated use. Register zero will always return a zero value when read and a write operation will have no effect. Although there are only 16 general registers in the CPU, implementing such a register greatly simplifies the instruction design, in that it for example provides a target when the result is not needed. General register one is a scratch register and also serves as an implicit target for some instructions. Other general registers may have dedicated purpose defined in the runtime architecture. 
 
 \section*{Control Registers}
 \addcontentsline{toc}{section}{Control Registers}
@@ -116,35 +134,124 @@ Twin-64 features a set of 16 general purposes registers.
 \begin{tikzpicture}[scale=0.9, transform shape]
         
   	\draw[help lines, gray!70, dashed] (0,0) grid(12,17);
-
-	% Rectangle dimensions
-	\def\width{6}
-	\def\leftofs{4}
+  	
+  	% Rectangle dimensions
+	\def\width{12}
+	\def\leftofs{2}
 	\def\rightofs{\leftofs + \width}
+  	
+  	% Bits
+  	\node at (\leftofs + 0.25,16 + 0.25) {\small 63};
+  	\node at (\leftofs + 5.75,16 + 0.25) {\small 32};
+	\node at (\rightofs - 5.75,16 + 0.25) {\small 31};
+	\node at (\rightofs - 0.25,16 + 0.25) {\small 0};
 
-	% Left and right side
+	% Box
 	\draw[thick] (\leftofs, 0) -- (\leftofs, 16);
 	\draw[thick] (\rightofs, 0) -- (\rightofs, 16);
+	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
+	\draw[thick] (\leftofs, 16) -- (\rightofs, 16);
 	
-	% Horizontal lines
-	\foreach \i in {0,...,15} {
-  		\pgfmathsetmacro\y{\i}
-  		\pgfmathtruncatemacro\reg{15 - \i}
-  
-  		\draw[thick] (\leftofs,\y) -- (\rightofs,\y);
-  		\node at ({\leftofs + \width / 2}, {\y + 0.5}) { Control Register \reg};
-	}
-	
-	\draw[thick] (\leftofs, 16) -- ((\rightofs, 16);
+	% Fields 
+	% CR0
+	\draw[thick] (\leftofs, 15) -- (\rightofs, 15);
+  	\node at ({\leftofs - 0.75}, {15 + 0.5}) { CR0 };
+  	
+  	% CR1
+  	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
+  	\node at ({\leftofs - 0.75}, {14 + 0.5}) { CR1 };
+  	
+  	% CR2
+  	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
+  	\node at ({\leftofs - 0.75}, {13 + 0.5}) { CR2 };
+  	
+  	% CR3
+  	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
+  	\node at ({\leftofs - 0.75}, {12 + 0.5}) { CR3 };
+  	
+  	% CR4
+  	\draw[thick] (\leftofs, 11) -- (\rightofs, 11);
+  	\draw[thick] (\leftofs + \width / 2, 11) -- (\leftofs + \width / 2, 12);
+  	\draw[thick] (\leftofs + \width / 2 - 0.5, 11) -- (\leftofs + \width / 2 - 0.5, 12);
+  	\draw[thick] (\rightofs - 0.5, 11) -- (\rightofs - 0.5, 12);
+  	\node at ({\leftofs - 0.75}, {11 + 0.5}) { CR4 };
+  	\node at ({\leftofs + 3}, {11 + 0.5}) { Protection Id 1 };
+  	\node at ({\leftofs + \width/2 - 0.25}, {11 + 0.5}) { W };
+  	\node at ({\rightofs - 3}, {11 + 0.5}) { Protection Id 2 };
+  	\node at ({\rightofs - 0.25}, {11 + 0.5}) { W };
+  	
+  	% CR5
+  	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
+  	\draw[thick] (\leftofs + \width / 2, 10) -- (\leftofs + \width / 2, 11);
+  	\draw[thick] (\leftofs + \width / 2 - 0.5, 10) -- (\leftofs + \width / 2 - 0.5, 11);
+  	\draw[thick] (\rightofs - 0.5, 10) -- (\rightofs - 0.5, 11);
+  	\node at ({\leftofs - 0.75}, {10 + 0.5}) { CR5 };
+  	\node at ({\leftofs + 3}, {10 + 0.5}) { Protection Id 3 };
+  	\node at ({\leftofs + \width/2 - 0.25}, {10 + 0.5}) { W };
+  	\node at ({\rightofs - 3}, {10 + 0.5}) { Protection Id 4 };
+  	\node at ({\rightofs - 0.25}, {10 + 0.5}) { W };
+  	
+  	%CR6
+  	\draw[thick] (\leftofs, 9) -- (\rightofs, 9);
+  	\draw[thick] (\leftofs + \width / 2, 9) -- (\leftofs + \width / 2, 10);
+  	\draw[thick] (\leftofs + \width / 2 - 0.5, 9) -- (\leftofs + \width / 2 - 0.5, 10);
+  	\draw[thick] (\rightofs - 0.5, 9) -- (\rightofs - 0.5, 10);
+  	\node at ({\leftofs - 0.75}, {9 + 0.5}) { CR6 };
+  	\node at ({\leftofs + 3}, {9 + 0.5}) { Protection Id 5 };
+  	\node at ({\leftofs + \width/2 - 0.25}, {9 + 0.5}) { W };
+  	\node at ({\rightofs - 3}, {9 + 0.5}) { Protection Id 6 };
+  	\node at ({\rightofs - 0.25}, {11 + 0.5}) { W };
+  	
+  	% CR7
+  	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
+  	\draw[thick] (\leftofs + \width / 2, 8) -- (\leftofs + \width / 2, 9);
+  	\draw[thick] (\leftofs + \width / 2 - 0.5, 8) -- (\leftofs + \width / 2 - 0.5, 9);
+  	\draw[thick] (\rightofs - 0.5, 8) -- (\rightofs - 0.5, 9);
+  	\node at ({\leftofs - 0.75}, {8 + 0.5}) { CR7 };
+  	\node at ({\leftofs + 3}, {8 + 0.5}) { Protection Id 7 };
+  	\node at ({\leftofs + \width/2 - 0.25}, {8 + 0.5}) { W };
+  	\node at ({\rightofs - 3}, {8 + 0.5}) { Protection Id 8 };
+  	\node at ({\rightofs - 0.25}, {8 + 0.5}) { W };
+  	
+  	% CR8
+  	\draw[thick] (\leftofs, 7) -- (\rightofs, 7);
+  	\node at ({\leftofs - 0.75}, {7 + 0.5}) { CR8 };
+  	
+  	% CR9
+  	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
+  	\node at ({\leftofs - 0.75}, {6 + 0.5}) { CR9 };
+  	
+  	% CR10
+  	\draw[thick] (\leftofs, 5) -- (\rightofs, 5);
+  	\node at ({\leftofs - 0.75}, {5 + 0.5}) { CR10 };
+  	
+  	% CR11
+  	\draw[thick] (\leftofs, 4) -- (\rightofs, 4);
+  	\node at ({\leftofs - 0.75}, {4 + 0.5}) { CR11 };
+  	
+  	% CR12
+  	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
+  	\node at ({\leftofs - 0.75}, {3 + 0.5}) { CR12 };
+  	
+  	% CR13
+  	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
+  	\node at ({\leftofs - 0.75}, {2 + 0.5}) { CR13 };
+  	
+  	% CR14
+  	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);;
+  	\node at ({\leftofs - 0.75}, {1 + 0.5}) { CR14 };
+  	
+  	% CR15
+  	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
+  	\node at ({\leftofs - 0.75}, {0 + 0.5}) { CR15 };
 			
-		
 \end{tikzpicture}
 \end{center}
-\caption{General registers}
-\label{fig:General registers}
+\caption{Control registers}
+\label{fig:Control registers}
 \end{figure}
 
-Some general registers have a dedicated use. Register zero will always return a zero value when read and a write operation will have no effect. Although there are only 16 general registers in the CPU, implementing such a register greatly simplifies the instruction design, in that it for example provides a target when the result is not needed. General register one is a scratch register and also serves as an implicit target for some instructions. Other general registers may have dedicated purpose defined in the runtime architecture. 
+
 
 \section*{Program State Register}
 \addcontentsline{toc}{section}{Processor State Register}
