@@ -3,20 +3,20 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{ADD — Integer Addition}
-\addcontentsline{toc}{section}{ADD - Integer Addition}
+\section*{SUB — Integer Subtraction}
+\addcontentsline{toc}{section}{SUB - Integer Subtraction}
 
 \instructionentry{Syntax}{
-  \texttt{ADD RegR, RegB, RegA} \\
-  \texttt{ADD RegR, RegB, SignedImmed15}
+  \texttt{SUB RegR, RegB, RegA} \\
+  \texttt{SUB RegR, RegB, SignedImmed15}
   
-  \texttt{ADD[.D/W/H/B] RegR, SignedImmed13( RegB )} \\
-  \texttt{ADD.D/W/H/B] RegR, RegX ( RegB )}
+  \texttt{SUB[.D/W/H/B] RegR, SignedImmed13( RegB )} \\
+  \texttt{SUB.D/W/H/B] RegR, RegX ( RegB )}
 }
 
 \instructionentry{Format}{
 
-	The ADD instruction uses the register, the immediate, the indexed and the register indexed instruction formats. \\
+	The SUB instruction uses the register, the immediate, the indexed and the register indexed instruction formats. \\
 
    	\begin{flushleft}
     	\begin{tikzpicture}[scale=0.7, transform shape]
@@ -47,7 +47,7 @@
    	 	\node at (13.75,0.25) {9};
    	 	
    	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeADD};
+		\node at (2,1) {\small \OpCodeSUB};
 		\node at (4,1) {\small Reg R};
 		\node at (5.75,1) {\small 0};
 		\node at (7.5,1) {\small Reg B};
@@ -83,7 +83,7 @@
    	 	\node at (11.5,0.25) {15};
    	 	
    	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeADD};
+		\node at (2,1) {\small \OpCodeSUB};
 		\node at (4,1) {\small Reg R};
 		\node at (5.75,1) {\small 0};
 		\node at (7.5,1) {\small Reg B};
@@ -119,7 +119,7 @@
      	\node at (12.25,0.25) {13};
    	 	
    	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small \OpCodeADD};
+		\node at (2,1) {\small \OpCodeSUB};
 		\node at (4,1) {\small Reg R};
 		\node at (5.75,1) {\small 0};
 		\node at (7.5,1) {\small Reg B};
@@ -159,7 +159,7 @@
    	 	\node at (13.75,0.25) {9};
    	 	
    	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small \OpCodeADD};
+		\node at (2,1) {\small \OpCodeSUB};
 		\node at (4,1) {\small Reg R};
 		\node at (5.75,1) {\small 0};
 		\node at (7.5,1) {\small Reg B};
@@ -173,16 +173,16 @@
 
 \instructionentry{Description}{
 
-The \texttt{ADD} instruction adds two signed 64-bit operands and stores them to the target register \texttt{RegR}. The instruction supports the immediate, the register and the two memory reference instruction formats. An arithmetic overflow results in a numeric overflow trap. The indexed formats may cause a memory reference associated trap.
+The \texttt{SUB} instruction subtracts a signed 64-bit operand from a general register \texttt{RegB} and stores the result to the target register \texttt{RegR}. The instruction supports the immediate, the register and the two memory reference instruction formats. An arithmetic overflow results in a numeric overflow trap. The indexed formats may cause a memory reference associated trap.
 }
 
 \instructionentry{Operation}{
 
-  	\texttt{RegR <- RegB + RegA} {(register format)}\\
+  	\texttt{RegR <- RegB - RegA} {(register format)}\\
   	\smallskip
-  	\texttt{RegR <- RegB + immOperand( )} {(immediate format)}\\
+  	\texttt{RegR <- RegB - immOperand( )} {(immediate format)}\\
    	\smallskip
-  	\texttt{RegR <- RegR + memOperand( )} {(indexed formats)}\\
+  	\texttt{RegR <- RegR - memOperand( )} {(indexed formats)}\\
 }
 
 \instructionentry{Exceptions}{

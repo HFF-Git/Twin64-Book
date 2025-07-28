@@ -155,7 +155,7 @@ Some general registers have a dedicated use. Register zero will always return a 
 \begin{tikzpicture}[scale=0.9, transform shape]
         
   	\draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
+  	
     \node[  tsRectangle, 
             minimum width=16cm,
             minimum height=1cm,  
@@ -202,16 +202,97 @@ Some general registers have a dedicated use. Register zero will always return a 
 \label{fig:Program state register}
 \end{figure}
 
+\begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
+    \caption{Status Field Bits} \\
+    \toprule
+    \textbf{Head 1} & \textbf{Head 2} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{Head 1} & \textbf{Head 2} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    \textbf{text 1} & text \\
+    \midrule
+    \textbf{text 2} & text \\
+\end{longtable}
+
 
 
 \section*{TLB}
 \addcontentsline{toc}{section}{TLB}
 
-fully associative TLB
+For performance reasons, the virtual address translation result is stored in a translation look-aside buffer. The TLB is essentially a copy of the page table entry information that represents the virtual page currently loaded at the physical address. Depending on the hardware implementation, there can be a combined TLB or a separate instruction TLB and data TLB. A TLB is essentially a cache for address translations. The virtual page number, VPN, is stored along with attributes and the physical page number, PPN, in the TLB hardware. The current architecture allows for a 34-bit physical address space, which is a 16GB memory space.
 
-support for large pages ( 16Kb, 256 Kb, 4Mb, 64 Mb )
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.9, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,6);
+  	
+    \node[  tsRectangle, 
+            minimum width=9.5cm,
+            minimum height=0.75cm,  
+            fill=white,
+            anchor=west] at (0,5) { };
+    \node[anchor=west] at (0, 5) {\small Virtual page number};
+    \node[anchor=west] at (11,5) {38bit};
+            
+  	\node[  tsRectangle, 
+            minimum width=5cm,
+            minimum height=0.75cm,  
+            fill=white,
+            anchor=west] at (0,4) { };
+    \node[anchor=west] at (0, 4) {\small Physical page number};   
+     \node[anchor=west] at (11,4) {20bit};
+    
+    \node[  tsRectangle, 
+            minimum width=8cm,
+            minimum height=0.75cm,  
+            fill=white,
+            anchor=west] at (0,3) { };
+    \draw[-] (7.75,2.625) -- (7.75,3.35);
+    \node[anchor=west] at (0, 3) {\small Protection ID};  
+    \node[anchor=west] at (7.65, 3) {\tiny W};  
+    \node[anchor=west] at (11,3) {32bit};
+     
+    \node[  tsRectangle, 
+            minimum width=1cm,
+            minimum height=0.75cm,  
+            fill=white,
+            anchor=west] at (0,2) { };
+    \node[anchor=west] at (0, 2) {\small Acc}; 
+    \node[anchor=west] at (11,2) {4bit};
+    
+    \node[  tsRectangle, 
+            minimum width=2cm,
+            minimum height=0.75cm,  
+            fill=white,
+            anchor=west] at (0,1) { };
+    \node[anchor=west] at (0,1) {\small Flags};
+    \node[anchor=west] at (11,1) {8bit};
+            
+\end{tikzpicture}
+\end{center}
+\caption{Tlb info}
+\label{fig: Tlb info}
+\end{figure}
 
-implementations can choose a unified or a split TLB
+
+The first four segments, segment 0 to 3, are special in that they bypass the TLB entirely. The address range represents physical memory and can only be access in privileged mode. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range.
+
+To reduce TLB processing overhead, the TLB is capable of storing virtual address ranges. There is support for a large page size of 16Kb, 256 Kb, 4Mb and 64 Mb.
+
+
+
+38bit VPN, 20bit PPN, 4bit AR, 32 bit PID, 2bit size, xbit flags
+
 
 bits:
 
@@ -219,10 +300,33 @@ V - valid
 
 L - entry locked
 
-
 M - modified trap
 
 B - branch taken trap
+
+U - uncacheable
+
+\begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
+    \caption{TLB Fields} \\
+    \toprule
+    \textbf{Head 1} & \textbf{Head 2} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{Head 1} & \textbf{Head 2} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    \textbf{text 1} & text \\
+    \midrule
+    \textbf{text 2} & text \\
+\end{longtable}
+
 
 
 
@@ -231,5 +335,5 @@ B - branch taken trap
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
 
-cache visible architecture
+Twin-64 is a cache visible architecture, featuring cache models for unified or separate instruction and data cache. While hardware directly controls the cache for cache line insertion and replacement, the software has explicit control on flushing and purging cache line entries. There are instructions to flush and purge cache lines. To speed up the entire memory access process, the cache uses the virtual address to index into the arrays, which can be done in parallel to the TLB lookup. When the physical address tag in the cache and the physical page address in the TLB match, there will be a cache hit. The architecture will not specify the size of cache lines or cache organization. Typically a cache line will hold four to eight machine words, the cache organization is in the simplest case a single set direct mapped cache. The Twin-64 architecture does not specify a particular cache and cache hierarchy model. The architecture just specifies instructions to handle cache operations, such as delete or flushing a cache.
 

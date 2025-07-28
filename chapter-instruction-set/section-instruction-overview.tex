@@ -5,203 +5,91 @@
 \section*{Instruction Overview}
 \addcontentsline{toc}{section}{Instruction Overview}
 
+This chapter presents the Twin-64 instruction set. Like typical RISC style instruction sets, it is a fixed length instruction set with very few regular formats. The instructions are group into four categories, arithmetic and logical, load and store, branch and special and system instructions.
 
-\subsection*{Arithmetic Instructions}
+\subsection*{Instruction Formats}
+\addcontentsline{toc}{section}{Instruction Formats}
 
-The arithmetic instruction operate on two signed 64-bit operands and stores the result to the target register. There are two instruction layouts, immediate and register based. The \textbf{immediate operand instruction format} will add the sign extended 15-bit value to \texttt{RegB}. The register instruction format instruction will add \texttt{RegA} and \texttt{RegB}.  The following figure shows the instruction layout.
+Twin-64 uses few instruction formats. They are grouped by the number of available register slots and the length of the immediate value field. The \textbf{signed immediate S19} instruction format provides one register and a 19 bit signed immediate field. This format is typically used by branch instructions.
 
+\begin{figure}[H]
 \begin{center}
-    \begin{tikzpicture}[scale=0.7, transform shape]
+\begin{tikzpicture}[scale=0.7, transform shape]
         
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+   	% \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
         
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
+  	\node[  tsRectangle, 
+            minimum width=16cm,
+            minimum height=1cm,
+            text width=3cm,
+            text centered,
+            fill=white] at (8,1) { };
                 
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
+   	\draw[-] (1,0.5) -- (1,1.5);
+   	\draw[-] (3,0.5) -- (3,1.5);
+   	\draw[-] (5,0.5) -- (5,1.5);
+   	\draw[-] (6.5,0.5) -- (6.5,1.5);
+     	
+   	\node at (0.5,0.25) {2};
+   	\node at (2,0.25) {4}; 
+   	\node at (4,0.25) {4};
+   	\node at (5.75,0.25) {3};
+   	\node at (11,0.25) {19};
+   	 	
+  	\node at (0.5,1) {\small Grp};
+	\node at (2,1) {\small OpCode};
+	\node at (4,1) {\small Reg R};
+	\node at (5.75,1) {\small Opt 1};
+	\node at (11,1) {\small S-IMM-19};
+   	 	
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+The \textbf{signed immediate S15} instruction format provides two registers and a 15 bit signed immediate field. This format is used by branch instructions as well as instruction which operate on a register and an immediate value.
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.7, transform shape]
+        
+   	% \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+  	\node[  tsRectangle, 
+          	minimum width=16cm,
+           	minimum height=1cm,
+           	text width=3cm,
+           	text centered,
+           	fill=white!50] (blocks) at (8,1) { };
+                
+   	\draw[-] (1,0.5) -- (1, 1.5);
+    \draw[-] (3,0.5) -- (3, 1.5);
+    \draw[-] (5,0.5) -- (5, 1.5);
+    \draw[-] (6.5,0.5) -- (6.5, 1.5);
+   	\draw[-] (8.5,0.5) -- (8.5, 1.5);
           	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-   	 	\node at (11.5,0.25) {15};
+  	\node at (0.5,0.25) {2};
+   	\node at (2,0.25) {4};
+   	\node at (4,0.25) {4};
+  	\node at (5.75,0.25) {3};
+   	\node at (7.5,0.25) {4};
+  	\node at (11.5,0.25) {15};
    	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small opCode };
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small Opt };
-		\node at (7.5,1) {\small Reg B};
-		\node at (11.5,1) {\small S-IMM-15};
- 	\end{tikzpicture}
+  	\node at (0.5,1) {\small Grp};
+	\node at (2,1) {\small OpCode};
+	\node at (4,1) {\small Reg R};
+	\node at (5.75,1) {\small Opt 1};
+	\node at (7.5,1) {\small Reg B};
+	\node at (11.5,1) {\small S-IMM-15};
+   	 	
+\end{tikzpicture}
 \end{center}
+\end{figure}
 
-The \textbf{register instruction format} type instruction uses two registers as input operands, performs the operation and stores the result in a third register. The following figure shows the instruction layout.
+The \textbf{signed immediate S13/special} instruction format provides two registers, an additional option field  and a 13 bit signed immediate field. Some instruction use the S-IMM-13 field for special encodings instead of a signed value. This format is used by memory reference instructions where the address is formed by a base register and a 13-bit signed offset.
 
+\begin{figure}[H]
 \begin{center}
-    \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-   	 	\node at (13.75,0.25) {9};
-   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small opCode };
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small Opt };
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small Opt };
-		\node at (10.5,1) {\small Reg A};
-		\node at (13.75,1) {\small 0 };
-   	\end{tikzpicture}
-\end{center}
-
-
-The \textbf{ADD} and \textbf{SUB} perform signed integer 64-bit arithmetic with an overflow resulting in an overflow trap. There are no operations on unsigned quantities. The \textbf{SHLxA} and \textbf{SHRxA} perform an arithmetic shift operations and add an operand to the shifted input, storing the result in the target register.
-
-The \textbf{CMP} compares two registers for being equal, not equal, less than and les or equal than. The result of this comparison is store din the target register.
-
-\subsection*{Bit Operations Instructions}
-
-The bit operation instruction fall into two groups. The 
-\textbf{AND}, \textbf{OR} and \textbf{XOR} instructions implement the logical operations as their name suggest. Like the arithmetic instructions, there is an immediate instruction and a register instruction layout.
-
-The second group implements the bit manipulation operations. The \textbf{EXTR} instruction extracts a bit field from a register and places the field in another register. Optionally, the extracted field is signed extended. The \textbf{DEP} instruction deposits a bit field in a target register. 
-
-\begin{center}
-    \begin{tikzpicture}[scale=0.9, transform shape]
-        
-        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (10,0.5) -- (10, 1.5);
-     	\draw[-] (13,0.5) -- (13, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9.25,0.25) {3};
-    	\node at (11.5,0.25) {6};
-    	\node at (14.5,0.25) {6};
-    	   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small opCode};
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small Opt };
-		\node at (7.5,1) {\small Reg B};
-		\node at (9.25,1) {\small Opt };
-		\node at (11.25,1) {\small pos};
-		\node at (14.25,1) {\small len};
-   	 	
-       \end{tikzpicture}
-\end{center}
-
-The \textbf{DSR} instruction concatenates two general registers, shifts the 128-bit quantity to the right and stores the lower 32 bits in a target register.
-
-\begin{center}
-    \begin{tikzpicture}[scale=0.9, transform shape]
-        
-        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	
-     	\draw[-] (13,0.5) -- (13, 1.5);
-     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-    	\node at (12.15,0.25) {3};
-   	 	\node at (14.0,0.25) {6};
-   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small opCode };
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small Opt };
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small Opt };
-		\node at (10.5,1) {\small Reg A};
-		\node at (12.25,1) {\small 0};
-		\node at (14.0,1) {\small len };
-   	 	
-       \end{tikzpicture}
-\end{center}
-
-\subsection*{Immediate Instructions}
-
-\textbf{LDI}, \textbf{ADDIL}, \textbf{LDO}
-
-
-
-
-
-\subsection*{Memory Reference Instructions}
-
-T64 is a register memory architecture. It has the common load/store instructions as well as instructions that combined an operation with a memory reference. Memory reference instructions feature two addressing modes. The first is the base register and offset instruction. the second the base register and register index instruction. 
-
-The \textbf{indexed instruction format} will load the content of memory address formed by adding the scaled immediate 13-bit field to the base register \texttt{RegB} and add the data value to \texttt{RegA}. The \textbf{dw} field indicates the data value width. A \textbf{dw} value of zero load an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. In addition, the \textbf{dw} field will scale the offset value by left shifting the immediate field according to the data width. The following figure shows the general instruction layout for base register and offset instruction.
-
-\begin{center}
-    \begin{tikzpicture}[scale=0.7, transform shape]
+\begin{tikzpicture}[scale=0.7, transform shape]
         
         % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
         
@@ -227,21 +115,23 @@ The \textbf{indexed instruction format} will load the content of memory address 
     	\node at (9,0.25) {2};
      	\node at (12.25,0.25) {13};
    	 	
-   	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small opCode };
+   	 	\node at (0.5,1) {\small Grp};
+		\node at (2,1) {\small OpCode};
 		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small Opt };
+		\node at (5.75,1) {\small Opt 1};
 		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small dw};
-		\node at (12.25,1) {\small S-IMM-13};
+		\node at (9,1) {\small Opt 2};
+		\node at (12.25,1) {\small S-IMM-13 / special};
    	 	
-       \end{tikzpicture}
-	\end{center}
+\end{tikzpicture}
+\end{center}
+\end{figure}
 
-The \textbf{register indexed instruction format} will load the content of memory address formed by adding \texttt{RegX} to the base register \texttt{RegB} and add the data value to \texttt{RegA}. Both load formats will use the \textbf{dw} field to specify the data value width. A \textbf{dw} value of zero load an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. The offset in \texttt{RegX} is interpreted as a byte offset, independent of the actual \textbf{dw} field value. The following figure shows the general instruction layout for base register and register index type instructions.
+The \textbf{ register/signed immediate S9/special} instruction format provides three registers, an additional option field  and a 9 bit signed immediate field. Some instruction use the S-IMM-9 field for special encodings instead of a signed value.instead of a signed value. This instruction format is used for all computational instructions where three registers are needed.
 
+\begin{figure}[H]
 \begin{center}
-    \begin{tikzpicture}[scale=0.7, transform shape]
+\begin{tikzpicture}[scale=0.7, transform shape]
         
         % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
         
@@ -269,17 +159,86 @@ The \textbf{register indexed instruction format} will load the content of memory
     	\node at (10.5,0.25) {4};
    	 	\node at (13.75,0.25) {9};
    	 	
-   	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small opCode };
+   	 	\node at (0.5,1) {\small Grp};
+		\node at (2,1) {\small OpCode};
 		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small  Opt };
+		\node at (5.75,1) {\small Opt 1};
 		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small dw};
-		\node at (10.5,1) {\small Reg X};
-		\node at (13.75,1) {\small 0};
+		\node at (9,1) {\small Opt 2};
+		\node at (10.5,1) {\small Reg A};
+		\node at (13.75,1) {\small S-IMM-9 / special };
    	 	
-       \end{tikzpicture}
-	\end{center}
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+The \textbf{unsigned immediate U20} format is used by the immediate instruction group to provide a 20bit unsigned value. This value is then placed at certain positions in the register target Reg R.
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.7, transform shape]
+        
+        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text width=3cm,
+                text centered,
+                fill=white!50] (blocks) at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1,1.5);
+     	\draw[-] (3,0.5) -- (3,1.5);
+     	\draw[-] (5,0.5) -- (5,1.5);
+     	\draw[-] (6,0.5) -- (6,1.5);
+     	     	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.5,0.25) {2};
+   	 	\node at (11,0.25) {20};
+   	 	
+   	 	\node at (0.5,1) {\small Grp};
+		\node at (2,1) {\small OpCode};
+		\node at (4,1) {\small Reg R};
+		\node at (5.5,1) {\small 0};
+		\node at (11,1) {\small U-IMM-20};
+   	 	
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+
+\subsection*{Arithmetic Instructions}
+
+The arithmetic instruction operate on two signed 64-bit operands and stores the result to the target register. There are two instruction layouts, signed immediate S15 and register based. The \textbf{immediate operand instruction format} will add the sign extended 15-bit value to \texttt{RegB}. The \textbf{register instruction format} type instruction uses two registers as input operands, performs the operation and stores the result in a third register. The following figure shows the instruction layout.
+
+The \textbf{ADD} and \textbf{SUB} instructions perform signed integer 64-bit arithmetic with a numeric overflow resulting in an overflow trap. There are no operations on unsigned quantities. The \textbf{SHLxA} and \textbf{SHRxA} perform an arithmetic left shift operation and add an operand to the shifted input, storing the result in the target register.
+
+The \textbf{CMP} compares two registers for being equal, not equal, less than and les or equal than. The result of this comparison is store din the target register.
+
+\subsection*{Bit Operations Instructions}
+
+The bit operation instruction fall into two groups. The 
+\textbf{AND}, \textbf{OR} and \textbf{XOR} instructions implement the logical operations as their name suggest. Like the arithmetic instructions, there is an immediate instruction and a register instruction layout.
+
+The second group implements the bit manipulation operations. The \textbf{EXTR} instruction extracts a bit field from a register and places the field in another register. Optionally, the extracted field is signed extended. The \textbf{DEP} instruction deposits a bit field into a target register. 
+
+The \textbf{DSR} instruction concatenates two general registers, shifts the 128-bit quantity to the right and stores the lower 64 bits in a target register.
+
+\subsection*{Immediate Instructions}
+
+The \textbf{LDI}, and \textbf{ADDIL} are instruction for forming large constants. With a 32-bit instruction word, even 32-bit constants are not possible in one instruction. The \textbf{LDI} instruction has a qualifier to load a constant value at a defined position in the target register. The opt field allow to select fields in the target register where the constant value is stored. The \textbf{ADDIL} instruction adds the upper portion of a 32-bit immediate value to the lower 32-bit half of a general register. This instruction is used primarily for address arithmetic to allow reaching any location in a segment.
+
+The \textbf{LDO} instruction loads an offset into a general register. The address loaded is formed by adding the signed immediate value to the base register.
+
+\subsection*{Memory Reference Instructions}
+
+Twin-64 is a register memory architecture. It has the common load/store instructions as well as instructions that combined an operation with a memory reference. Memory reference instructions feature two addressing modes. The first is the base register and offset instruction. the second the base register and register index instruction. 
+
+The \textbf{indexed instruction format} will load the content of memory address formed by adding the scaled immediate 13-bit field to the base register \texttt{RegB} and add the data value to \texttt{RegA}. The \textbf{dw} field indicates the data value width. A \textbf{dw} value of zero load an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. In addition, the \textbf{dw} field will scale the offset value by left shifting the immediate field according to the data width. The following figure shows the general instruction layout for base register and offset instruction.
+
+The \textbf{register indexed instruction format} will load the content of memory address formed by adding \texttt{RegX} to the base register \texttt{RegB} and add the data value to \texttt{RegA}. Both load formats will use the \textbf{dw} field to specify the data value width. A \textbf{dw} value of zero load an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. The offset in \texttt{RegX} is interpreted as a byte offset, independent of the actual \textbf{dw} field value. The following figure shows the general instruction layout for base register and register index type instructions.
 
 The \textbf{LD} and \textbf{ST} instruction are the load and store instructions. In addition to the two addressing modes presented above, they also feature a base register address modification. Depending on the offset sign, the base register is updated before or after the address computation with the effective address computed. See the instruction description for more details.
 
@@ -289,11 +248,27 @@ The \textbf{ADD}, \textbf{SUB}, \textbf{AND}, \textbf{OR}, \textbf{XOR}, \textbf
 
 \subsection*{Branch Instructions}
 
-B, BR, BV, BB, CBR, MBR
+Control flow is implemented through a set of branch instructions. They can be classified into unconditional and conditional instruction branches.
+
+\textbf{Unconditional branches} fetch the next instruction address from the computed branch target. The \textbf{B} instruction performs an instruction relative branch, the \textbf{BR} instruction a base register relative branch. Both optionally return the return address in a general register.
+
+The \textbf{BV} instruction is a vectored branch. The content of a general register is added to a base register, forming branch target. 
+
+The instructions \textbf{BB}, \textbf{CBR} and \textbf{MBR} implement the conditional branch instructions. If the condition is met a branch to the target address is performed. The target address is always a local address and the offset is instruction address relative. Conditional branches adopt a static prediction model. Forward branches are assumed not taken, backward branches are assumed taken.
+
+All branch address arithmetic is a 32-bit unsigned arithmetic with wraparound. Adding branch offsets will not overflow into the segment Id portion of the address..
 
 \subsection*{System Instructions}
 
-MFCR, MTCR, RSM, SSM, RFI, ITLB, PTLB, PCA, FCA, LDPA, PRBR, PRBW  
+The final instruction group is the \textbf{special/system} instruction group. The system control instructions are intended for the runtime designer to control the CPU resources such as TLB, Cache and so on. There are instruction to load a segment or control registers as well as instructions to store them. The TLB and the cache modules are controlled by instructions to insert and remove data in these two entities. Finally, the interrupt and exception system needs a place to store the address and instruction that was interrupted as well as a set of shadow registers to start processing an interrupt or exception. Most of the instructions found in this group require that the processor runs in privileged mode.
 
+The \textbf{MFCR} and \textbf{MTCR} instructions are used to transfer data to and from a control register. Access to some control registers requires privileged mode. The \textbf{RSM} and \textbf{SSM} instructions allow for setting or clearing an individual an accessible bit of the status part of the processor state. 
 
+The \textbf{LDPA}, \textbf{PRBR} and \textbf{PRBW} instructions are used to obtain information about the virtual memory system. The LDPA instruction returns the physical address of the virtual page, if present in memory. The PRB instruction tests whether the desired access mode to an address is allowed.
+
+The TLB and Caches are managed by the \textbf{ITLB}, \textbf{PTLB}, \textbf{FCA} and \textbf{PCA}  instruction. The ITLB and PTLB instructions insert into the TLB and remove translations from the TLB. The FCA and PCA instructions manages the instruction and data cache, featuring to flush and / or just purge a cache line. There is no instruction that inserts data into a cache as caching is completely controlled by hardware. 
+
+The \textbf{RFI} instruction is used to restore a processor state from the control registers holding the interrupted instruction address, the instruction itself and the processor status word. Optionally, general registers that have been stored into the reserved control registers will be restored.
+
+The **DIAG** instruction is a control instructions to issue hardware specific implementation commands. Example is the memory barrier command, which ensures that all memory access operations are completed after the execution of this DIAG instruction. The **BRK** instruction is transferring control to the breakpoint trap handler.
 

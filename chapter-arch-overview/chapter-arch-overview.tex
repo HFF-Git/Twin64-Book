@@ -7,7 +7,7 @@
 
 64 bit architecture
 
-only signed 64 bit math
+
 
 multi processor 
 
@@ -24,6 +24,22 @@ I/O Modules - System Bus
 instructions feature register memory and load / store concept
 
 register offset and register indexed, scalable
+
+
+
+
+\subsection*{A Register Memory Architecture}
+
+Twin-64 implements a \textbf{register memory architecture} offering few addressing modes for the operand combined with a fixed instruction word length. For most instructions one operand is the register, the other is a flexible operand which could be an immediate, a register content or a memory address from where the data is obtained or placed. The result is placed in the register which is also the first operand. These type of machines are also called two address machines.
+
+In contrast to similar historical register-memory designs, there is no operation which does a read and write operation to memory in the same instruction. For example, there is no "increment memory" instruction, since this would require two memory operations and is in general not pipeline friendly. Memory data access is performed on a machine word, half-word or byte basis. Besides the implicit operand fetch in a computational instruction, there are dedicated memory load / store instructions. In addition to the register-immediate operand and register memory-operand mode, one operand mode supports the three operand model ( Rs = Ra OP Rb ), specifying two registers and a result register, which allows to perform three address register for computational operations as well. The machine can therefore operate in a memory register model as well as a load / store register model.
+
+\subsection*{Signed arithmetic}
+
+
+only signed 64 bit math
+
+\subsection*{Virtual Memory}
 
 
 
