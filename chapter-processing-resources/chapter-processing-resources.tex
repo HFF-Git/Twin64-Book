@@ -11,7 +11,7 @@
 \section*{Data Types}
 \addcontentsline{toc}{section}{Data Types}
 
-Twin-64 is a big endian 64-bit machine. The fundamental data type is a 64-bit signed integer with the most significant bit being left. Bits are numbered from left to right, starting with bit 64 as the MSB bit down to bit 0 as LSB. Memory access is performed on a double, word, half-word or byte basis. All addresses are however always expressed as bytes addresses.
+Twin-64 is a big endian 64-bit machine. The fundamental data type is a 64-bit signed integer with the most significant bit being left. All computation is  performed on 64-bit signed integer numbers. Memory access is performed on a double, word, half-word or byte basis. Word, Half and Byte data loaded is sign-extended. Store operations just store the corresponding value in memory. 
 
 \begin{figure}[ht]
 \begin{center}
@@ -58,27 +58,21 @@ Twin-64 is a big endian 64-bit machine. The fundamental data type is a 64-bit si
 \label{fig:data types}
 \end{figure}
 
-
-lower sizes are sign extended before use
-
-address computation uses a 32-bit unsigned math, i.e. numbers wrap around in 32 bit space.
-
+All memory addresses are expressed as bytes addresses. Address computation uses a 32-bit unsigned math, i.e. numbers wrap around in a 32-bit space.
 
 \section*{Byte Ordering}
 \addcontentsline{toc}{section}{Byte Ordering}
 
-Twin-64 supports little endian and big endian byte ordering models.
-
-
+Twin-64 is internally a big-endian machine. It does however support little endian and big endian byte ordering models. 
 
 \section*{General Registers}
 \addcontentsline{toc}{section}{General Registers}
 
-Twin-64 features a set of 16 general purposes registers.
+Twin-64 features a set of 16 general purposes registers. They are used for data    and address values. 
 
 \begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.9, transform shape]
+\begin{tikzpicture}[scale=0.8, transform shape]
         
   	\draw[help lines, gray!70, dashed] (0,0) grid(12,9);
 
@@ -86,6 +80,7 @@ Twin-64 features a set of 16 general purposes registers.
 	\def\width{12}
 	\def\leftofs{2}
 	\def\rightofs{\leftofs + \width}
+	\def\middleofs{ \leftofs + \width / 2 }
 	
 	% Bits
 	\node at (\leftofs + 0.25,8 + 0.25) {\small 63};
@@ -100,23 +95,23 @@ Twin-64 features a set of 16 general purposes registers.
 	% Fields  		
   	\draw[thick] (\leftofs, 7) -- (\rightofs, 7);
   	\node at ({\leftofs - 0.75}, {7 + 0.5}) { GR0 };
-  	\node at (8, {7 + 0.5}) { Permanent zero };
+  	\node at (\middleofs, {7 + 0.5}) { Permanent zero };
   		
   	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
   	\node at ({\leftofs - 0.75}, {6 + 0.5}) { GR1};
-  	\node at (8, {6 + 0.5}) { Target for ADDIL or General use };	
+  	\node at (\middleofs, {6 + 0.5}) { Target for ADDIL or General use };	
   		
   	\draw[thick] (\leftofs, 5) -- (\rightofs, 5);
   	\node at ({\leftofs - 0.75}, {5 + 0.5}) { GR2};
-  	\node at (8, {5 + 0.5}) { General use };	
+  	\node at (\middleofs, {5 + 0.5}) { General use };	
   		
   	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
   	\node at ({\leftofs - 0.75}, {1 + 0.5}) { GR14};
-  	\node at (8, {1 + 0.5}) { General use };	
+  	\node at (\middleofs, {1 + 0.5}) { General use };	
   		
   	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);
   	\node at ({\leftofs - 0.75}, {0 + 0.5}) { GR15};
-  	\node at (8, {0 + 0.5}) { General use };	
+  	\node at (\middleofs, {0 + 0.5}) { General use };	
   
 \end{tikzpicture}
 \end{center}
@@ -129,6 +124,8 @@ Some general registers have a dedicated use. Register zero will always return a 
 \section*{Control Registers}
 \addcontentsline{toc}{section}{Control Registers}
 
+There are 16 control registers.
+
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
@@ -139,6 +136,7 @@ Some general registers have a dedicated use. Register zero will always return a 
 	\def\width{12}
 	\def\leftofs{2}
 	\def\rightofs{\leftofs + \width}
+  	\def\middleofs{ \leftofs + \width / 2 }
   	
   	% Bits
   	\node at (\leftofs + 0.25,16 + 0.25) {\small 63};
@@ -156,6 +154,7 @@ Some general registers have a dedicated use. Register zero will always return a 
 	% CR0
 	\draw[thick] (\leftofs, 15) -- (\rightofs, 15);
   	\node at ({\leftofs - 0.75}, {15 + 0.5}) { CR0 };
+  	\node at ( \middleofs, {15 + 0.5}) { Processor configuration };	
   	
   	% CR1
   	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
@@ -251,11 +250,19 @@ Some general registers have a dedicated use. Register zero will always return a 
 \label{fig:Control registers}
 \end{figure}
 
+\subsection*{Processor Configuration Register}
+\addcontentsline{toc}{subsection}{Processor Configuration Register}
+
+
+\subsection*{Protection Id Registers}
+\addcontentsline{toc}{subsection}{Protection Id Registers}
+
 
 
 \section*{Program State Register}
 \addcontentsline{toc}{section}{Processor State Register}
 
+??? finalize status bits, rework figure to have more room for them...
 
 \begin{figure}[H]
 \begin{center}
@@ -305,18 +312,27 @@ Some general registers have a dedicated use. Register zero will always return a 
    	 	
 \end{tikzpicture}
 \end{center}
-\caption{Program state register}
-\label{fig:Program state register}
+\caption{Program State Register}
+\label{fig:Program State Register}
 \end{figure}
+
+\subsection*{Instruction Address}
+\addcontentsline{toc}{subsection}{Instruction Address Register}
+
+
+\subsection*{Processor Status}
+\addcontentsline{toc}{subsection}{Protection Id Registers}
+
+M I E  and so on ...
 
 \begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
     \caption{Status Field Bits} \\
     \toprule
-    \textbf{Head 1} & \textbf{Head 2} \\
+    \textbf{Bit} & \textbf{Purpose} \\
     \midrule
     \endfirsthead
     \toprule
-    \textbf{Head 1} & \textbf{Head 2} \\
+    \textbf{Bit} & \textbf{Purpose} \\
     \midrule
     \endhead
     \midrule
@@ -325,9 +341,11 @@ Some general registers have a dedicated use. Register zero will always return a 
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{text 1} & text \\
+    \textbf{W} & When set, a memory reference is in little-endian format. \\
     \midrule
-    \textbf{text 2} & text \\
+    \textbf{P} & When set, the processor runs in privileged mode. \\
+    \midrule
+    \textbf{...} & ... \\
 \end{longtable}
 
 
@@ -391,36 +409,16 @@ For performance reasons, the virtual address translation result is stored in a t
 \label{fig: Tlb info}
 \end{figure}
 
-
-The first four segments, segment 0 to 3, are special in that they bypass the TLB entirely. The address range represents physical memory and can only be access in privileged mode. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range.
-
 To reduce TLB processing overhead, the TLB is capable of storing virtual address ranges. There is support for a large page size of 16Kb, 256 Kb, 4Mb and 64 Mb.
-
-
-
-38bit VPN, 20bit PPN, 4bit AR, 32 bit PID, 2bit size, xbit flags
-
-
-bits:
-
-V - valid
-
-L - entry locked
-
-M - modified trap
-
-B - branch taken trap
-
-U - uncacheable
 
 \begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
     \caption{TLB Fields} \\
     \toprule
-    \textbf{Head 1} & \textbf{Head 2} \\
+    \textbf{Bit/Field} & \textbf{Purpose} \\
     \midrule
     \endfirsthead
     \toprule
-    \textbf{Head 1} & \textbf{Head 2} \\
+    \textbf{Bit/Field} & \textbf{Purpose} \\
     \midrule
     \endhead
     \midrule
@@ -429,15 +427,28 @@ U - uncacheable
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{text 1} & text \\
+    \textbf{VPN} & The virtual page number. \\
     \midrule
-    \textbf{text 2} & text \\
+    \textbf{VPN} & The physical page number. \\
+    \midrule
+    \textbf{Access Rights} & The access rights of the page. \\
+    \midrule
+    \textbf{Protect Id} & The protection Id of the page. \\
+    \midrule
+    \textbf{V} & the entry is valid \\
+    \midrule
+    \textbf{U} & When set, the page represented by the TLB entry is not cached. \\
+    \midrule
+    \textbf{M} & When set, the page represented by the TLB entry has been modified. \\
+    \midrule
+    \textbf{B} & When set, a branch instruction executed from the page represented by the TLB will cause a branch taken trap. \\
+    \midrule
+    \textbf{L} & When set, the TLB entry is locked and will not be selected when replacing an entry. \\
+    \midrule
+    \textbf{Page Size} & The 2-bit field encodes the supported page size. A value of zero indicates a 16Kbyte page, a value of 1 a 256Kbyte, a value of 2 a 4Mbyte and a value of 3 a 64Mbyte page. \\
 \end{longtable}
 
-
-
-
-
+The first four segments, segment 0 to 3, are special in that their address translation bypasses the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
 
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
