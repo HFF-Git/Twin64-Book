@@ -257,12 +257,15 @@ There are 16 control registers.
 \subsection*{Protection Id Registers}
 \addcontentsline{toc}{subsection}{Protection Id Registers}
 
+contain the segment Id of the segment protected by the "P" bit...
 
+cross check the concept ? we still need the protect Id field in the TLB, but do we need to pass the segment Id in the protect field ? it is encoded in the segment part of the vAdr ...
 
 \section*{Program State Register}
 \addcontentsline{toc}{section}{Processor State Register}
 
 ??? finalize status bits, rework figure to have more room for them...
+
 
 \begin{figure}[H]
 \begin{center}
@@ -343,8 +346,10 @@ M I E  and so on ...
     \endlastfoot
     \textbf{W} & When set, a memory reference is in little-endian format. \\
     \midrule
-    \textbf{P} & When set, the processor runs in privileged mode. \\
+    \textbf{X} & When set, the processor runs in privileged mode. \\
     \midrule
+    \textbf{P} & When set, the processor does protection Id checking. \\
+    \midrule 
     \textbf{...} & ... \\
 \end{longtable}
 
@@ -414,11 +419,11 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
 \begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
     \caption{TLB Fields} \\
     \toprule
-    \textbf{Bit/Field} & \textbf{Purpose} \\
+    \textbf{Field} & \textbf{Purpose} \\
     \midrule
     \endfirsthead
     \toprule
-    \textbf{Bit/Field} & \textbf{Purpose} \\
+    \textbf{Field} & \textbf{Purpose} \\
     \midrule
     \endhead
     \midrule
@@ -438,6 +443,8 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \textbf{V} & the entry is valid \\
     \midrule
     \textbf{U} & When set, the page represented by the TLB entry is not cached. \\
+    \midrule
+    \textbf{P} & When set, the page represented by the TLB entry has protection checking enabled. \\
     \midrule
     \textbf{M} & When set, the page represented by the TLB entry has been modified. \\
     \midrule

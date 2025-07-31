@@ -1,11 +1,16 @@
 \chapter*{Introduction}
 \addcontentsline{toc}{chapter}{Introduction}
 
-Designers of the seventies and early eighties CPUs almost all used a micro-coded approach with hundreds of instructions. RISC was just starting to enter the stage. Registers were typically not really generic but often had a special function or meaning and many instructions were rather complicated and the designers felt they were useful. The compiler writers often used a small subset ignoring these complex instructions because they were so specialized. The later eighties and nineties shifted to RISC based designs with large sets of registers, fixed word instruction length, a large virtual memory address range and instructions that are in general much more pipeline friendly. What if some of these principles had found their way earlier into CPU designs? 
+Designers of the seventies and early eighties CPUs almost all used a micro-coded approach with hundreds of instructions. RISC was just starting to enter the stage. Registers were typically not really generic but often had a special function or meaning and many instructions were rather complicated and the designers felt they were useful. The compiler writers often used a small subset ignoring these complex instructions because they were so specialized. The later eighties and nineties shifted to RISC based designs with large sets of registers, fixed word instruction length, a large virtual memory address range and instructions that are in general much more pipeline friendly. Today, processors are highly complex with super-scalar deep pipelines and a multilevel cache hierarchy, just to name a few of the hallmarks of modern CPU design. 
 
-Welcome to Twin-64. Twin-64 is a simple 64-bit CPU with a register-memory model and segmented virtual memory. The design is heavily influenced by Hewlett Packard's PA\_RISC architecture, which was initially a 32 bit RISC-style register-register load-store machine. Almost all of the key architecture features come from there. However, other processors, such as the Data General MV8000, the DEC Alpha, and the IBM PowerPc, were also influential or at least investigated for their architectural design choices. The original design goal that started this work was to truly understand the design process and implementation tradeoffs for a simple pipelined CPU. 
+- what if there would be a simple design that one can completely understand ?  
 
-While it is not a design goal to build a modern, competitive CPU, the CPU should nevertheless be useful and largely follow established common design practices. For example, instructions should not be invented because they seem to be useful, but rather designed with the assembler and compilers in mind. Instruction set design is also CPU design. Register memory architectures were typically micro-coded complex instruction machines. In contrast, VCPU-32 instructions will be hard coded and are in general "pipeline friendly", avoiding data and control hazards and stalls where possible.
+
+Welcome to Twin-64. Twin-64 is a simple 64-bit CPU with a register-memory model and segmented virtual memory. The design is heavily influenced by Hewlett Packard's PA\_RISC architecture, which was initially a 32 bit RISC-style load-store machine. Almost all of the key architecture features come from there. However, other processors, such as the Data General MV8000, the DEC Alpha, and the IBM PowerPc, were also influential or at least investigated for their architectural design choices. In addition the Blitz-64 architecture was investigated.
+
+While it is not a design goal to build a modern, competitive CPU, the CPU should nevertheless be useful and largely follow established common design practices. For example, instructions should not be invented because they seem to be useful, but rather designed with the assembler and compilers in mind. Instruction set design is also CPU design. Register memory architectures were typically micro-coded complex instruction machines. In contrast, Twin-64 instructions will be hard coded and are in general "pipeline friendly", avoiding data and control hazards and stalls where possible.
+
+what is in the name ?
 
 
 \section*{Concepts}
@@ -62,11 +67,31 @@ Page size 16Kb to 64Mb.
 \subsection*{Security and Protection Support}
 \addcontentsline{toc}{subsection}{Security and Protection Support}
 
+Twin-64 implements a protection model along two dimensions. The first dimension is the \textbf{access control} and privilege level check. Each page is associated with a page type. There are read-only, read-write, execute and gateway pages. There are two privilege levels, user and supervisor mode. Access type and privilege level form the access control information field, which is checked for each instruction and data memory access. 
+
+The second dimension of protection is a \textbf{protection Id}. Twin-64 allows to record a set of segment Id values in the processor control registers. For each access to a segment that has the protection check bit set, one of the protection Id control registers must match the segment Id. If not, a protection violation trap is raised.
+
+Protection Id checking is typically used to form a grouping of access. A good example is the stack data segment, which is accessible at user privilege level. Since the CPU features a global virtual memory address space, every task could access a data stack of another task. With protection Id checking enabled and the segment Id loaded in one of the control registers, only the corresponding user task is allowed to access the stack data segment with a matching protection Id. 
+
+\subsection*{Privilege Changes}
+\addcontentsline{toc}{{Privilege Changes}
+
+Modern processors support the distinction between several privilege levels. Instructions can only access data or execute instructions when the privilege level matches the privilege level required. Two or four levels are the most common implementation. Changing between levels is often done with a kind of trap operation to a higher privilege level software, for example the operating system kernel. However, traps are expensive, as they cause a CPU pipeline to be flush when going through a trap handler.
+
+Twin-64 follows the PA-RISC route of using gateways for privilege promotion. Im contrast, VCPU-32 implements a two privilege level model with \textbf{user} and \textbf{priv} mode. A special option on the branch instruction will raise the privilege level when the instruction is executed on a gateway page to the level of the page. The branch target instruction continues execution with the privilege level specified by the gateway page. Return from a higher privilege level to a code page with lower privilege level, will automatically set the lower privilege level.
+
+Each instruction fetch compares the privilege level of the page where the instruction is fetched from with the status register "P" bit. A higher privilege level on an execution page results in a privilege violation trap. A lower level of the execute page and a higher level in the status register will in an automatic demotion of the privilege level. 
 
 \subsection*{Debugging Support}
 \addcontentsline{toc}{subsection}{Debugging Support}
 
+A fundamental requirement is the ability to set instruction and data breakpoints. An instruction breakpoint is encountering the BRK instruction in an instruction stream. The break instruction will cause an instruction break trap and pass control to the trap handler. Just like the other traps, the pipeline will be emptied by completing the instructions in flight and flushing all instructions after the break instruction. Since break instructions are normally not in the instruction stream, they need to be set dynamically in place of the instruction normally found at this instruction address. The key mechanism for a debugger is then to exchange the instruction where to set a break point, hit the breakpoint and replace again the break point instruction with the original instruction when the breakpoint is encountered. Upon continuation and a still valid breakpoint for that address, the break point needs to be set after the execution of the original instruction.
 
+Data breakpoints are traps that are taken when a data reference to the page is done. They do not modify the instruction stream. Depending on the data access, the trap could happen before or after the instruction that accesses the data. A write operation is trapped before the data is written, a read instruction is trapped after the instruction took place.
+
+instruction and data breakpoints...
+
+support for single step ...
 
 
 
@@ -79,26 +104,49 @@ Twin-64 features a memory-mapped I/O architecture. Control of I/O modules is acc
 \subsection*{Interrupt System}
 \addcontentsline{toc}{subsection}{Interrupt System}
 
+Interrupts and exceptions are events that occur asynchronously to the instruction execution. Depending on the type, they occur during the execution of an instruction or are checked in between instructions. Example for the former is the  arithmetic overflow tap, example for the latter is an external interrupt. Depending on the interrupt or exception type, the instruction is restarted or execution continues with the next instruction.
+
+simple interrupt sytem .... 
+
+interrupt mask ...
+
 
 \section*{Instruction Set Overview}
 \addcontentsline{toc}{section}{Instruction Set Overview}
 
-??? quick summary of instruction types...
+The instruction set is a fixed word length instruction format of one machine word. The instruction set is divided into five general groups of instructions. The \textbf{memory reference} group contains the instructions to load and store to virtual and physical memory. The \textbf{immediate} group contains the instructions for building an immediate value up to 32 bit. The \textbf{branch} group present the conditional and unconditional instructions. The \textbf{computational} instructions perform arithmetic, boolean and bit functions such as bit extract and deposit. Finally, the \textbf{control} instruction group contains all instructions for managing HW elements such as caches and TLBs, register movements, as well as traps and interrupt handling. 
 
 \subsection*{Computational instructions}
 \addcontentsline{toc}{subsection}{Computational instructions}
 
+The arithmetic, logical and bit field operations instruction represent the computation type instructions. Twin-64 offers 64-bit signed arithmetic operation only. 
+
+The logical instructions allow to negate one operand as well as the output. The bit field instructions will perform bit extraction and deposit as well as double register shifting. These instruction not only implement bit field manipulation, they are also the base for all shift and rotate operations.
+
+\subsection*{Immediate instructions}
+\addcontentsline{toc}{subsection}{Immediate instructions}
+
+Several instructions have within the instruction word bit fields for representing immediate values. Nevertheless, fixed length instruction word size architectures have one issue in that there is not enough room to embed a full word immediate value in the instruction. Typically, a combination of two or three instructions that concatenate the value from parts is used. 
+
 \subsection*{Memory reference instructions}
 \addcontentsline{toc}{subsection}{Computational instructions}
 
+Memory reference instruction operate on memory and a general register with a unit of transfer being a word, a half-word or a byte. In that sense the architecture is a typical load/store architecture. However, in contrast to a load/store architecture Twin-64 load / store instructions are not the only instructions that access memory. Being a register/memory architecture, all instructions with an operand field encoding may access memory as well. There are however no instructions that will access data memory access for reading and writing back an operand in the same instruction. Due to the operand instruction format and the requirement to offer a fixed length instruction word, the offset for an address operation is limited but still covers a large address range. 
+
+With the exception of the load reserved and store conditional instruction, memory reference instructions support a base register modification. When the option is set, the base register for an address computation will be adjusted before or after the data access. A negative offset will be added before the address computation, a positive offset after the address computation.
+
 \subsection*{Branch instructions}
 \addcontentsline{toc}{subsection}{Branch instructions}
+
+The control flow instructions are divided into unconditional and conditional branch type instructions. The unconditional branch type instructions allow in addition to altering the control flow the saving of the return point to a general register. A subroutine call would for example compute the target branch address and store this address + 4 in that register. Upon subroutine return, there is a branch instruction using this value to return via a general register content.
+
+branch targets are full virtual addresses...
 
 
 \subsection*{System control instructions}
 \addcontentsline{toc}{subsection}{System control instructions}
 
-
+The system control instructions are intended for the runtime designer to control the CPU resources such as TLB, Cache and so on. There are instruction to load a segment or control registers as well as instructions to store them. The TLB and the cache modules are controlled by instructions to insert and remove data in these two entities. Finally, the interrupt and exception system needs a place to store the address and instruction that was interrupted as well as a set of shadow registers to start processing an interrupt or exception. Most of the instructions found in this group require that the processor runs in privileged mode.
 
 \section*{This book}
 \addcontentsline{toc}{section}{This Book}
