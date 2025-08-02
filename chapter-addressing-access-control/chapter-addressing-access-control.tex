@@ -5,21 +5,74 @@
 \chapter*{Addressing and Access Control}
 \addcontentsline{toc}{chapter}{Addressing and Access Control}
 
-
+The CPU emits a 52-bit virtual addresses. Each virtual memory access needs to be translated and checked for valid access rights.
 
 \section*{Address Translation}
 \addcontentsline{toc}{section}{Address Translation}
 
 The Twin-64 CPU emits always a virtual address. Each memory access needs to be translated into a physical address.
 
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.9, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,8);
+  	
+ 	\def\vadrY{7}
+ 	\def\padrY{1}
+ 	
+  	\node[  tsRectangle, 
+            minimum width=12cm,
+            minimum height=1cm,
+            fill=white] at (8,\vadrY) { };
+                
+  	\draw[-] (11,\vadrY - 0.5) -- (11, \vadrY + 0.5);
+    \draw[-] (4,\vadrY - 0.5) -- (4, \vadrY + 0.5);
+    
+    \node at (13.75,\vadrY + 0.75) {0};
+	\node at (11.25,\vadrY + 0.75) {13};
+	\node at (10.75,\vadrY + 0.75) {12};
+	\node at (4.25,\vadrY + 0.75) {51};
+	\node at (3.75,\vadrY + 0.75) {52};
+	\node at (2.25,\vadrY + 0.75) {63};           	
+    \node at (3,\vadrY) {0};
+    \node at (7,\vadrY) {Virtual page};
+    \node at (12.5,\vadrY) {Page offset};
+
+  	
+  	\node[  tsRectangle, 
+            minimum width=12cm,
+            minimum height=1cm,
+            fill=white] at (8,\padrY) { };
+            
+   	\draw[-] (11,\padrY - 0.5) -- (11, \padrY + 0.5);
+    \draw[-] (6.5,\padrY - 0.5) -- (6.5, \padrY + 0.5);
+    
+    \node at (13.75,\padrY + 0.75) {0};
+	\node at (11.25,\padrY + 0.75) {13};
+	\node at (10.75,\padrY + 0.75) {12};
+	\node at (6.75,\padrY + 0.75) {33};
+	\node at (6.25,\padrY + 0.75) {34};
+	\node at (2.25,\padrY + 0.75) {63};           	
+    \node at (4.5,\padrY) {0};
+    \node at (8.5,\padrY) {Physical page};
+    \node at (12.5,\padrY) {Page offset};
+  	                
+      
+\end{tikzpicture}
+\end{center}
+\caption{Address translation}
+\label{fig:Address translation}
+\end{figure}
+
+
 virtual address for the first four segments directly map to the physical address space.
 
-Twin-64 implements a protection model along two dimensions. 
 
 \section*{Access Control}
 \addcontentsline{toc}{section}{Access Control}
 
-The first dimension is the \textbf{access control} and \textbf{privilege level} check. Each page is associated with a page type. There are read-only, read-write, execute and gateway pages. Each memory access is checked to be compatible with the allowed type of access set in the page descriptor. There are two privilege levels, user and supervisor mode. Access type and privilege level form the access control information field, which is checked for each instruction and data memory access. For read access the privilege level us be least as high as the PL1 field, for write access the privilege level must be as least as high as PL2. An exception are the execute and gateway pages, where a write access is only allowed for privilege code. For execute access the privilege level must be at least as high as PL1 and not higher than PL2. If the instruction privilege level is not within this bounds, a privilege violation trap is raised. If the page type does not match the instruction access type an access violation trap is raised. In both cases the instruction is aborted and a memory protection trap is raised.
+Twin-64 implements a protection model along two dimensions.  The first dimension is the \textbf{access control} and \textbf{privilege level} check. Each page is associated with a page type. There are read-only, read-write, execute and gateway pages. Each memory access is checked to be compatible with the allowed type of access set in the page descriptor. There are two privilege levels, user and supervisor mode. Access type and privilege level form the access control information field, which is checked for each instruction and data memory access. For read access the privilege level us be least as high as the PL1 field, for write access the privilege level must be as least as high as PL2. An exception are the execute and gateway pages, where a write access is only allowed for privilege code. For execute access the privilege level must be at least as high as PL1 and not higher than PL2. If the instruction privilege level is not within this bounds, a privilege violation trap is raised. If the page type does not match the instruction access type an access violation trap is raised. In both cases the instruction is aborted and a memory protection trap is raised.
 
 \section*{Access Protection}
 \addcontentsline{toc}{section}{Access Protection}

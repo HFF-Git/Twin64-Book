@@ -85,7 +85,7 @@
    	 	\node at (0.5,1) {\small 0};
 		\node at (2,1) {\small \OpCodeSUB};
 		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
+		\node at (5.75,1) {\small 1};
 		\node at (7.5,1) {\small Reg B};
 		\node at (11.5,1) {\small S-IMM-15};
    	 	
@@ -161,7 +161,7 @@
    	 	\node at (0.5,1) {\small 1};
 		\node at (2,1) {\small \OpCodeSUB};
 		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
+		\node at (5.75,1) {\small 1};
 		\node at (7.5,1) {\small Reg B};
 		\node at (9,1) {\small dw};
 		\node at (10.5,1) {\small Reg X};
@@ -187,11 +187,11 @@ The \texttt{SUB} instruction subtracts a signed 64-bit operand from a general re
 
 \instructionentry{Exceptions}{
 
- 	Integer Overflow \\
-	Data Alignment \\
-	Memory Access Violation \\
-	Memory Protection Violation \\
-	Data TLB miss
+ 	Integer Overflow Trap\\
+	Data Alignment Trap\\
+	Memory Access Violation Trap\\
+	Memory Protection Violation Trap\\
+	Data TLB Miss Trap
 }
 
 \instructionentry{Notes}{

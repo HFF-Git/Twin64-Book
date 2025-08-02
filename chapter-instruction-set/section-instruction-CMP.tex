@@ -3,25 +3,27 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{ADD — Integer Addition}
-\addcontentsline{toc}{section}{ADD - Integer Addition}
+\section*{CMP Integer Compare}
+\addcontentsline{toc}{section}{CMP Integer Compare}
 
 \instructionentry{Syntax}{
-  \texttt{ADD RegR, RegB, RegA} \\
-  \texttt{ADD RegR, RegB, SignedImmed15}
+  \texttt{CMP.<cond> RegR, RegB, RegA} \\
+  \texttt{CMP.<cond> RegR, RegB, SignedImmed15}
   
-  \texttt{ADD[.D/W/H/B] RegR, SignedImmed13( RegB )} \\
-  \texttt{ADD.D/W/H/B] RegR, RegX ( RegB )}
+  \texttt{CMP.<cond>[.C/N/D/W/H/B] RegR, SignedImmed13( RegB )} \\
+  \texttt{CMP.<cond>[.C/N/D/W/H/B] RegR, RegX ( RegB )}
+  
+  where <cond> is EQ, LT, NE or LE.
 }
 
 \instructionentry{Format}{
 
-	The ADD instruction uses the register, the immediate, the indexed and the register indexed instruction formats. \\
+	The CMP instruction uses the register, the immediate, the indexed and the register indexed instruction formats. \\
 
    	\begin{flushleft}
-    	\begin{tikzpicture}[scale=0.7, transform shape]
+    \begin{tikzpicture}[scale=0.7, transform shape]
         
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
         
         \node[  tsRectangle, 
                 minimum width=16cm,
@@ -32,6 +34,7 @@
      	\draw[-] (1,0.5) -- (1, 1.5);
      	\draw[-] (3,0.5) -- (3, 1.5);
      	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6,0.5) -- (6, 1.5);
      	\draw[-] (6.5,0.5) -- (6.5, 1.5);
      	\draw[-] (8.5,0.5) -- (8.5, 1.5);
      	\draw[-] (9.5,0.5) -- (9.5, 1.5);
@@ -47,9 +50,10 @@
    	 	\node at (13.75,0.25) {9};
    	 	
    	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeADD};
+		\node at (2,1) {\small \OpCodeCMP};
 		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
+		\node at (5.5,1) {\small cond};
+		\node at (6.25,1) {\small 0};
 		\node at (7.5,1) {\small Reg B};
 		\node at (9,1) {\small 0};
 		\node at (10.5,1) {\small Reg A};
@@ -72,9 +76,10 @@
      	\draw[-] (1,0.5) -- (1, 1.5);
      	\draw[-] (3,0.5) -- (3, 1.5);
      	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6,0.5) -- (6, 1.5);
      	\draw[-] (6.5,0.5) -- (6.5, 1.5);
      	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-          	
+               	
      	\node at (0.5,0.25) {2};
     	\node at (2,0.25) {4};
     	\node at (4,0.25) {4};
@@ -83,9 +88,10 @@
    	 	\node at (11.5,0.25) {15};
    	 	
    	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeADD};
+		\node at (2,1) {\small \OpCodeCMP};
 		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 1};
+		\node at (5.5,1) {\small cond};
+		\node at (6.25,1) {\small 1};
 		\node at (7.5,1) {\small Reg B};
 		\node at (11.5,1) {\small S-IMM-15};
    	 	
@@ -106,6 +112,7 @@
      	\draw[-] (1,0.5) -- (1, 1.5);
      	\draw[-] (3,0.5) -- (3, 1.5);
      	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6,0.5) -- (6, 1.5);
      	\draw[-] (6.5,0.5) -- (6.5, 1.5);
      	\draw[-] (8.5,0.5) -- (8.5, 1.5);
      	\draw[-] (9.5,0.5) -- (9.5, 1.5);
@@ -119,10 +126,11 @@
      	\node at (12.25,0.25) {13};
    	 	
    	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small \OpCodeADD};
+		\node at (2,1) {\small \OpCodeCMP};
 		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
-		\node at (7.5,1) {\small Reg B};
+		\node at (5.5,1) {\small cond};
+		\node at (6.25,1) {\small 0};	
+	    \node at (7.5,1) {\small Reg B};
 		\node at (9,1) {\small dw};
 		\node at (12.25,1) {\small S-IMM-13};
    	 	
@@ -144,6 +152,7 @@
      	\draw[-] (1,0.5) -- (1, 1.5);
      	\draw[-] (3,0.5) -- (3, 1.5);
      	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6,0.5) -- (6, 1.5);
      	\draw[-] (6.5,0.5) -- (6.5, 1.5);
      	\draw[-] (8.5,0.5) -- (8.5, 1.5);
      	\draw[-] (9.5,0.5) -- (9.5, 1.5);
@@ -159,9 +168,10 @@
    	 	\node at (13.75,0.25) {9};
    	 	
    	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small \OpCodeADD};
+		\node at (2,1) {\small \OpCodeCMP};
 		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 1};
+		\node at (5.5,1) {\small cond};
+		\node at (6.25,1) {\small 1};
 		\node at (7.5,1) {\small Reg B};
 		\node at (9,1) {\small dw};
 		\node at (10.5,1) {\small Reg X};
@@ -173,21 +183,23 @@
 
 \instructionentry{Description}{
 
-The \texttt{ADD} instruction adds two signed 64-bit operands and stores them to the target register \texttt{RegR}. The instruction supports the immediate, the register and the two memory reference instruction formats. An arithmetic overflow results in a numeric overflow trap. The indexed formats may cause a memory reference associated trap.
+The \texttt{CMP} instruction performs an integer comparison of the two 64bit signed operands and depending on the comparison stores a 0 or 1 in the target register. The indexed formats may cause a memory reference associated trap.
+
+	The condition field encodes the comparison options. The options are a 0 for equal, a 1 for less than, a 2 for not equal and a 3 for less than or equal.
 }
 
 \instructionentry{Operation}{
 
-  	\texttt{RegR <- RegB + RegA} {(register format)}\\
+	\texttt{cond <- instr.[cond];}\\
+  	\texttt{RegR <- cmpOp( cond, RegB, RegA )} {(register format)}\\
   	\smallskip
-  	\texttt{RegR <- RegB + immOperand( )} {(immediate format)}\\
+  	\texttt{RegR <- cmpOp( cond, RegB, immOperand( ))} {(immediate format)}\\
    	\smallskip
-  	\texttt{RegR <- RegR + memOperand( )} {(indexed formats)}\\
+  	\texttt{RegR <- cmpOp( cond, RegR, memOperand( ))} {(indexed formats)}\\
 }
 
 \instructionentry{Exceptions}{
 
- 	Integer Overflow Trap\\
 	Data Alignment Trap\\
 	Memory Access Violation Trap\\
 	Memory Protection Violation Trap\\

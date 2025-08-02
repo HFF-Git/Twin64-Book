@@ -8,63 +8,6 @@
 
 
 
-\section*{Data Types}
-\addcontentsline{toc}{section}{Data Types}
-
-Twin-64 is a big endian 64-bit machine. The fundamental data type is a 64-bit signed integer with the most significant bit being left. All computation is  performed on 64-bit signed integer numbers. Memory access is performed on a double, word, half-word or byte basis. Word, Half and Byte data loaded is sign-extended. Store operations just store the corresponding value in memory. 
-
-\begin{figure}[ht]
-\begin{center}
-\begin{tikzpicture}[scale=0.7, transform shape]
-        
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,8);
-  	
-  	\node[  tsRectangle, 
-            minimum width=4cm,
-            minimum height=0.75cm,
-            fill=white!50] (blocks) at (14,7) { Byte };
-                
-    \node at (15.75,7.75) {0};
-    \node at (12.25,7.75) {7};
-
-    \node[  tsRectangle, 
-            minimum width=8cm,
-            minimum height=0.75cm,
-            fill=white!50] (blocks) at (12,5) { Half };
-                
-    \node at (15.75,5.75) {0};
-    \node at (8.25,5.75) {15};
-       
-    \node[  tsRectangle, 
-            minimum width=12cm,
-            minimum height=0.75cm,
-            fill=white!50] (blocks) at (10,3) { Word };
-                
-    \node at (15.75,3.75) {0};
-    \node at (4.25,3.75) {31};
-    
-    \node[  tsRectangle, 
-            minimum width=16cm,
-            minimum height=0.75cm,
-            fill=white!50] (blocks) at (8,1) { Double };
-            
-    \node at (15.75,1.75) {0};
-    \node at (.25,1.75) {63};
-                
-      
-\end{tikzpicture}
-\end{center}
-\caption{Data types}
-\label{fig:data types}
-\end{figure}
-
-All memory addresses are expressed as bytes addresses. Address computation uses a 32-bit unsigned math, i.e. numbers wrap around in a 32-bit space.
-
-\section*{Byte Ordering}
-\addcontentsline{toc}{section}{Byte Ordering}
-
-Twin-64 is internally a big-endian machine. It does however support little endian and big endian byte ordering models. 
-
 \section*{General Registers}
 \addcontentsline{toc}{section}{General Registers}
 
@@ -105,6 +48,8 @@ Twin-64 features a set of 16 general purposes registers. They are used for data 
   	\node at ({\leftofs - 0.75}, {5 + 0.5}) { GR2};
   	\node at (\middleofs, {5 + 0.5}) { General use };	
   		
+  	\node at (\middleofs, {3 + 0.5}) { \huge{...}};
+  	
   	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
   	\node at ({\leftofs - 0.75}, {1 + 0.5}) { GR14};
   	\node at (\middleofs, {1 + 0.5}) { General use };	
@@ -124,7 +69,7 @@ Some general registers have a dedicated use. Register zero will always return a 
 \section*{Control Registers}
 \addcontentsline{toc}{section}{Control Registers}
 
-There are 16 control registers.
+Twin-64 has 16 control registers.
 
 \begin{figure}[H]
 \begin{center}
@@ -159,6 +104,7 @@ There are 16 control registers.
   	% CR1
   	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
   	\node at ({\leftofs - 0.75}, {14 + 0.5}) { CR1 };
+  	\node at ( \middleofs, {14 + 0.5}) { Recovery Counter };
   	
   	% CR2
   	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
@@ -215,34 +161,42 @@ There are 16 control registers.
   	% CR8
   	\draw[thick] (\leftofs, 7) -- (\rightofs, 7);
   	\node at ({\leftofs - 0.75}, {7 + 0.5}) { CR8 };
+  	\node at ( \middleofs, {7 + 0.5}) { Interrupt Vector Adress };
   	
   	% CR9
   	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
   	\node at ({\leftofs - 0.75}, {6 + 0.5}) { CR9 };
+  	\node at ( \middleofs, {6 + 0.5}) { External Interrupt Request Register };
   	
   	% CR10
   	\draw[thick] (\leftofs, 5) -- (\rightofs, 5);
   	\node at ({\leftofs - 0.75}, {5 + 0.5}) { CR10 };
+  	\node at ( \middleofs, {5 + 0.5}) { External Interrupt Mask };
   	
   	% CR11
   	\draw[thick] (\leftofs, 4) -- (\rightofs, 4);
   	\node at ({\leftofs - 0.75}, {4 + 0.5}) { CR11 };
+  	\node at ( \middleofs, {4 + 0.5}) { Interruption PSW };
   	
   	% CR12
   	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
   	\node at ({\leftofs - 0.75}, {3 + 0.5}) { CR12 };
+  	\node at ( \middleofs, {3 + 0.5}) { Interruption Instruction };
   	
   	% CR13
   	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
   	\node at ({\leftofs - 0.75}, {2 + 0.5}) { CR13 };
-  	
+  	\node at ( \middleofs, {2 + 0.5}) { Interruption Address };
+
   	% CR14
   	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);;
   	\node at ({\leftofs - 0.75}, {1 + 0.5}) { CR14 };
+  	\node at ( \middleofs, {1 + 0.5}) { Scratch Reg 0 };
   	
   	% CR15
   	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
   	\node at ({\leftofs - 0.75}, {0 + 0.5}) { CR15 };
+  	\node at ( \middleofs, {0 + 0.5}) { Scratch Reg 1 };
 			
 \end{tikzpicture}
 \end{center}
@@ -254,6 +208,9 @@ There are 16 control registers.
 \addcontentsline{toc}{subsection}{Processor Configuration Register}
 
 
+\subsection*{Recovery Counter}
+\addcontentsline{toc}{subsection}{Processor Configuration Register}
+
 \subsection*{Protection Id Registers}
 \addcontentsline{toc}{subsection}{Protection Id Registers}
 
@@ -261,10 +218,40 @@ contain the segment Id of the segment protected by the "P" bit...
 
 cross check the concept ? we still need the protect Id field in the TLB, but do we need to pass the segment Id in the protect field ? it is encoded in the segment part of the vAdr ...
 
+
+\subsection*{Interrupt Vector Address}
+\addcontentsline{toc}{subsection}{Interrupt Vector Address}
+
+
+
+\subsection*{External Interrupt Request Register}
+\addcontentsline{toc}{subsection}{External Interrupt Request Register}
+
+??? rather combine EIR and EIM in one register, 32bits each ?
+
+\subsection*{External Interrupt Mask}
+\addcontentsline{toc}{subsection}{External Interrupt Mask}
+
+\subsection*{Interruption PSW}
+\addcontentsline{toc}{subsection}{Interruption PSW}
+
+\subsection*{Interruption Instruction}
+\addcontentsline{toc}{subsection}{Interruption Instruction}
+
+\subsection*{Interruption Address}
+\addcontentsline{toc}{subsection}{Interruption Address}
+
+\subsection*{Scratch Registers}
+\addcontentsline{toc}{subsection}{External Interrupt Register}
+
+
+
 \section*{Program State Register}
 \addcontentsline{toc}{section}{Processor State Register}
 
-??? finalize status bits, rework figure to have more room for them...
+The processor state register contains the virtual address of the current instruction and the processor status flags.
+
+??? finalize status bits...
 
 
 \begin{figure}[H]
@@ -353,10 +340,63 @@ M I E  and so on ...
     \textbf{...} & ... \\
 \end{longtable}
 
+\section*{Data Types}
+\addcontentsline{toc}{section}{Data Types}
+
+Twin-64 is a big endian 64-bit machine. The fundamental data type is a 64-bit signed integer with the most significant bit being left. All computation is  performed on 64-bit signed integer numbers. Memory access is performed on a double, word, half-word or byte basis. Word, Half and Byte data loaded is sign-extended. Store operations just store the corresponding value in memory. 
+
+\begin{figure}[ht]
+\begin{center}
+\begin{tikzpicture}[scale=0.7, transform shape]
+        
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,5);
+  	
+  	\node[  tsRectangle, 
+            minimum width=4cm,
+            minimum height=0.75cm,
+            fill=white!50] (blocks) at (14,4) { Byte };
+                
+    \node at (15.75,4.75) {0};
+    \node at (12.25,4.75) {7};
+
+    \node[  tsRectangle, 
+            minimum width=8cm,
+            minimum height=0.75cm,
+            fill=white!50] (blocks) at (12,3) { Half };
+                
+    \node at (8.25,3.75) {15};
+       
+    \node[  tsRectangle, 
+            minimum width=12cm,
+            minimum height=0.75cm,
+            fill=white!50] (blocks) at (10,2) { Word };
+                
+    \node at (4.25,2.75) {31};
+    
+    \node[  tsRectangle, 
+            minimum width=16cm,
+            minimum height=0.75cm,
+            fill=white!50] (blocks) at (8,1) { Double };
+            
+    \node at (.25,1.75) {63};
+                
+      
+\end{tikzpicture}
+\end{center}
+\caption{Data types}
+\label{fig:data types}
+\end{figure}
+
+All memory addresses are expressed as bytes addresses. Address computation uses a 32-bit unsigned math, i.e. numbers wrap around in a 32-bit space.
+
+\section*{Byte Ordering}
+\addcontentsline{toc}{section}{Byte Ordering}
+
+Twin-64 is internally a big-endian machine. It does however support little endian and big endian byte ordering models. 
 
 
-\section*{TLB}
-\addcontentsline{toc}{section}{TLB}
+\section*{Translation Lookaside Buffer}
+\addcontentsline{toc}{section}{Translation Lookaside Buffer}
 
 For performance reasons, the virtual address translation result is stored in a translation look-aside buffer. The TLB is essentially a copy of the page table entry information that represents the virtual page currently loaded at the physical address. Depending on the hardware implementation, there can be a combined TLB or a separate instruction TLB and data TLB. A TLB is essentially a cache for address translations. The virtual page number, VPN, is stored along with attributes and the physical page number, PPN, in the TLB hardware. The current architecture allows for a 34-bit physical address space, which is a 16GB memory space.
 
@@ -364,49 +404,39 @@ For performance reasons, the virtual address translation result is stored in a t
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,6);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,4.5);
   	
     \node[  tsRectangle, 
             minimum width=9.5cm,
             minimum height=0.75cm,  
             fill=white,
-            anchor=west] at (0,5) { };
-    \node[anchor=west] at (0, 5) {\small Virtual page number};
-    \node[anchor=west] at (11,5) {38bit};
+            anchor=west] at (0,3.75) { };
+    \node[anchor=west] at (0, 3.75) {\small Virtual page number};
+    \node[anchor=west] at (11,3.75) {38bit};
             
   	\node[  tsRectangle, 
             minimum width=5cm,
             minimum height=0.75cm,  
             fill=white,
-            anchor=west] at (0,4) { };
-    \node[anchor=west] at (0, 4) {\small Physical page number};   
-     \node[anchor=west] at (11,4) {20bit};
-    
-    \node[  tsRectangle, 
-            minimum width=8cm,
-            minimum height=0.75cm,  
-            fill=white,
-            anchor=west] at (0,3) { };
-    \draw[-] (7.75,2.625) -- (7.75,3.35);
-    \node[anchor=west] at (0, 3) {\small Protection ID};  
-    \node[anchor=west] at (7.65, 3) {\tiny W};  
-    \node[anchor=west] at (11,3) {32bit};
+            anchor=west] at (0,2.75) { };
+    \node[anchor=west] at (0, 2.75) {\small Physical page number};   
+    \node[anchor=west] at (11,2.75) {20bit};
      
     \node[  tsRectangle, 
             minimum width=1cm,
             minimum height=0.75cm,  
             fill=white,
-            anchor=west] at (0,2) { };
-    \node[anchor=west] at (0, 2) {\small Acc}; 
-    \node[anchor=west] at (11,2) {4bit};
+            anchor=west] at (0,1.75) { };
+    \node[anchor=west] at (0, 1.75) {\small Acc}; 
+    \node[anchor=west] at (11,1.75) {4bit};
     
     \node[  tsRectangle, 
             minimum width=2cm,
             minimum height=0.75cm,  
             fill=white,
-            anchor=west] at (0,1) { };
-    \node[anchor=west] at (0,1) {\small Flags};
-    \node[anchor=west] at (11,1) {8bit};
+            anchor=west] at (0,0.75) { };
+    \node[anchor=west] at (0,0.75) {\small Flags};
+    \node[anchor=west] at (11,0.75) {8bit};
             
 \end{tikzpicture}
 \end{center}
@@ -434,11 +464,9 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \endlastfoot
     \textbf{VPN} & The virtual page number. \\
     \midrule
-    \textbf{VPN} & The physical page number. \\
+    \textbf{PPN} & The physical page number. \\
     \midrule
     \textbf{Access Rights} & The access rights of the page. \\
-    \midrule
-    \textbf{Protect Id} & The protection Id of the page. \\
     \midrule
     \textbf{V} & the entry is valid \\
     \midrule
