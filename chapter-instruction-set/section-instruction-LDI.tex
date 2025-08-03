@@ -1,0 +1,73 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\section*{LDI Load immediate}
+\addcontentsline{toc}{section}{LDI Load immediate}
+
+\instructionentry{Syntax}{
+  \texttt{LDI[.L/S/U] RegR, val }
+}
+
+\instructionentry{Format}{
+
+	The LDI instruction uses the immediate-20 instruction format. \\
+
+   	\begin{flushleft}
+	\begin{tikzpicture}[scale=0.7, transform shape]
+        
+        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text width=3cm,
+                text centered,
+                fill=white!50] (blocks) at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1,1.5);
+     	\draw[-] (3,0.5) -- (3,1.5);
+     	\draw[-] (5,0.5) -- (5,1.5);
+     	\draw[-] (6,0.5) -- (6,1.5);
+     	     	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.5,0.25) {2};
+   	 	\node at (11,0.25) {20};
+   	 	
+   	 	\node at (0.5,1) {\small 0};
+		\node at (2,1) {\small \OpCodeADDIL};
+		\node at (4,1) {\small Reg R};
+		\node at (5.5,1) {\small opt};
+		\node at (11,1) {\small val};
+   	 	
+	\end{tikzpicture}
+	\end{flushleft}
+}
+
+\instructionentry{Description}{
+
+The \texttt{LDI} instruction ... }
+
+\instructionentry{Operation}{
+
+  	\texttt{RegR <- (( val \& 0xFFFFF ) << 12 ); }  (.L option ) \\
+  	\texttt{RegR <- (( val \& 0xFFFFF ) << 32 ); }  (.S option ) \\
+  	\texttt{RegR <- (( val \& 0xFFF   ) << 52 ); }  (.U option ) \\
+} 
+
+\instructionentry{Exceptions}{
+
+	None.
+}
+
+\instructionentry{Notes}{
+
+	None. 
+}
+
+
+
+

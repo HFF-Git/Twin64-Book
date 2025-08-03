@@ -51,7 +51,7 @@ The second dimension of protection is a \textbf{protection Id}. Twin-64 allows t
 Protection Id checking is typically used to form a grouping of access. A good example is the stack data segment, which is accessible at user privilege level. Since the CPU features a global virtual memory address space, every task could access a data stack of another task. With protection Id checking enabled and the segment Id loaded in one of the control registers, only the corresponding user task is allowed to access the stack data segment with a matching protection Id. 
 
 \subsection*{Privilege Changes}
-\addcontentsline{toc}{{Privilege Changes}
+\addcontentsline{toc}{Privilege Changes}
 
 Modern processors support the distinction between several privilege levels. Instructions can only access data or execute instructions when the privilege level matches the privilege level required. Two or four levels are the most common implementation. Changing between levels is often done with a kind of trap operation to a higher privilege level software, for example the operating system kernel. However, traps are expensive, as they cause a CPU pipeline to be flush when going through a trap handler.
 
@@ -66,8 +66,8 @@ A fundamental requirement is the ability to set instruction and data breakpoints
 
 Data breakpoints are traps that are taken when a data reference to the page is done. They do not modify the instruction stream. Depending on the data access, the trap could happen before or after the instruction that accesses the data. A write operation is trapped before the data is written, a read instruction is trapped after the instruction took place.
 
-\subsection*{Input/Output}
-\addcontentsline{toc}{subsection}{Input/Output}
+\subsection*{Input / Output}
+\addcontentsline{toc}{subsection}{Input / Output}
 
 Twin-64 features a memory-mapped I/O architecture. A portion of the physical address space is dedicated to the I/O subsystem. Within this address range, I/O modules react to memory load and store instructions. Processors invoke I/O operations by executing load and store instructions to either virtual or absolute addresses. When implementing a driver, the standard page-level protection mechanism is applied during address translation. A driver, typically implemented running in privileged mode, can also grant a user program direct control by mapping an I/O page into virtual space without compromising system integrity. 
 
