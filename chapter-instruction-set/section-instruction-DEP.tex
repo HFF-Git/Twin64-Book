@@ -1,0 +1,98 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\section*{DEP Deposit Bit Field}
+\addcontentsline{toc}{section}{DEP Deposit Bit Field}
+
+\instructionentry{Syntax}{
+  \texttt{DEP[.Z/I] RegR, RegB, pos, len } \\
+  \texttt{DEP[.Z/I] RegR, RegB, SAR, len }
+}
+
+\instructionentry{Format}{
+
+	The DEP instruction instruction uses the register instruction format. \\
+
+   	\begin{flushleft}
+    \begin{tikzpicture}[scale=0.7, transform shape]
+        
+        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text centered,
+                fill=white!50] at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1, 1.5);
+     	\draw[-] (3,0.5) -- (3, 1.5);
+     	\draw[-] (5,0.5) -- (5, 1.5);
+     	
+     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
+     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
+     	\draw[-] (9,0.5) -- (9,1.5);
+     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
+     	\draw[-] (10,0.5) -- (10, 1.5);
+     	\draw[-] (13,0.5) -- (13, 1.5);
+     	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.75,0.25) {3};
+    	\node at (7.5,0.25) {4};
+    	\node at (9.25,0.25) {3};
+    	\node at (11.5,0.25) {4};
+   	 	\node at (14.25,0.25) {4};
+   	 	
+   	 	\node at (0.5,1) {\small 0};
+		\node at (2,1) {\small \OpCodeDEP};
+		\node at (4,1) {\small Reg R};
+		\node at (5.75,1) {\small 0};
+		
+		\node at (7.5,1) {\small Reg B};
+		\node at (8.75,1) {\small 1};
+		\node at (8.75,1) {\small I};
+		\node at (9.25,1) {\small A};
+		\node at (9.75,1) {\small Z};
+		\node at (11.5,1) {\small pos};
+		\node at (14.5,1) {\small len };
+   	 	
+       \end{tikzpicture}
+	\end{flushleft}
+}
+
+\instructionentry{Description}{
+
+The \texttt{DEP} instruction deposits the bit field of length "len" in general register RegB into the general register RegR at the specified position. The position field specifies the rightmost bit for the bit field to deposit. The length field specifies the bit size of the field to deposit. The Z  bit clears the target register before storing the bit field. If the A bit is set, the shift amount control register is used for obtaining the position value. The I bit specifies that the RegA field contains an immediate value instead of a register. 
+
+}
+
+\instructionentry{Operation}{
+
+	\texttt{if ( instr.[Z] ) RegR <- 0; } \\
+	\smallskip
+	\texttt{if ( instr.[A] ) pos <- shamt; } \\
+	\texttt{else pos <- instr.[pos]; } \\
+	\smallskip
+	\texttt{if ( instr.[I] ) }\\
+	\texttt{ RegR <- depositImm( RegR, RegB, pos, instr.[6:0] ); } \\
+	\texttt{ else } \\
+	\texttt{ RegR <- depositField( RegR, RegB, pos, instr.[6:0] ); } \\
+	\smallskip
+} 
+
+\instructionentry{Exceptions}{
+
+	None
+}
+
+\instructionentry{Notes}{
+
+	None. 
+}
+
+
+
+

@@ -1,0 +1,90 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\section*{DSR — Double Shift Right}
+\addcontentsline{toc}{section}{DSR — Double Shift Right}
+
+\instructionentry{Syntax}{
+  \texttt{DSR RegR, RegB, RegA, amt} \\
+   \texttt{DSR RegR, RegB, RegA, SAR } \\
+}
+
+\instructionentry{Format}{
+
+	The DSR instruction uses the register instruction format. \\
+
+   	\begin{flushleft}
+    	\begin{tikzpicture}[scale=0.7, transform shape]
+        
+        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+        
+        \node[  tsRectangle, 
+                minimum width=16cm,
+                minimum height=1cm,
+                text centered,
+                fill=white!50] at (8,1) { };
+                
+     	\draw[-] (1,0.5) -- (1, 1.5);
+     	\draw[-] (3,0.5) -- (3, 1.5);
+     	\draw[-] (5,0.5) -- (5, 1.5);
+     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
+     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
+     	\draw[-] (9,0.5) -- (9, 1.5);
+     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
+     	\draw[-] (12,0.5) -- (12, 1.5);
+     	\draw[-] (13,0.5) -- (13, 1.5);
+     	
+     	\node at (0.5,0.25) {2};
+    	\node at (2,0.25) {4};
+    	\node at (4,0.25) {4};
+    	\node at (5.75,0.25) {3};
+    	\node at (7.5,0.25) {4};
+    	\node at (9,0.25) {2};
+    	\node at (10.5,0.25) {4};
+    	\node at (12.5,0.25) {2};
+   	 	\node at (14.5,0.25) {6};
+   	 	
+   	 	\node at (0.5,1) {\small 0};
+		\node at (2,1) {\small \OpCodeDSR};
+		\node at (4,1) {\small Reg R};
+		\node at (5.75,1) {\small 3};
+		\node at (7.5,1) {\small Reg B};
+		\node at (8.75,1) {\small 0};
+		\node at (9.25,1) {\small A};
+		\node at (10.5,1) {\small Reg A};
+		\node at (12.5,1) {\small 0 };
+		\node at (14.5,1) {\small amt };
+   	 	
+       \end{tikzpicture}
+	\end{flushleft}
+}
+
+\instructionentry{Description}{
+
+The \texttt{DSR} instruction concatenates the general registers RegB and RegA and performs a right shift operation. Register RegB is the left part, register RegA the right part. The lower 64 bits of the result are stored in the general register RegR. The amount field contains the shift amount. If the A bit is set, the shift amount is taken from the shift amount control register.
+}
+
+\instructionentry{Operation}{
+
+	\texttt{if ( instr.[A] ) tmp <- shamtReg; } \\
+	\smallskip
+	\texttt{else tmp <- instr.[amt]; } \\
+	\smallskip
+	\texttt{RegR <- doubleShiftR( RegB, RegA, tmp ); } \\
+}
+
+\instructionentry{Exceptions}{
+
+ 	None.
+}
+
+\instructionentry{Notes}{
+
+	None. 
+}
+
+
+
+
