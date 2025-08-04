@@ -51,7 +51,7 @@ The second dimension of protection is a \textbf{protection Id}. Twin-64 allows t
 Protection Id checking is typically used to form a grouping of access. A good example is the stack data segment, which is accessible at user privilege level. Since the CPU features a global virtual memory address space, every task could access a data stack of another task. With protection Id checking enabled and the segment Id loaded in one of the control registers, only the corresponding user task is allowed to access the stack data segment with a matching protection Id. 
 
 \subsection*{Privilege Changes}
-\addcontentsline{toc}{Privilege Changes}
+\addcontentsline{toc}{subsection}{Privilege Changes}
 
 Modern processors support the distinction between several privilege levels. Instructions can only access data or execute instructions when the privilege level matches the privilege level required. Two or four levels are the most common implementation. Changing between levels is often done with a kind of trap operation to a higher privilege level software, for example the operating system kernel. However, traps are expensive, as they cause a CPU pipeline to be flush when going through a trap handler.
 

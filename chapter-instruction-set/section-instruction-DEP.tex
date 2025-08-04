@@ -13,7 +13,7 @@
 
 \instructionentry{Format}{
 
-	The DEP instruction instruction uses the register instruction format. \\
+	The DEP instruction uses the special-13 instruction format with special fields. \\
 
    	\begin{flushleft}
     \begin{tikzpicture}[scale=0.7, transform shape]
@@ -65,7 +65,7 @@
 
 \instructionentry{Description}{
 
-The \texttt{DEP} instruction deposits the bit field of length "len" in general register RegB into the general register RegR at the specified position. The position field specifies the rightmost bit for the bit field to deposit. The length field specifies the bit size of the field to deposit. The Z  bit clears the target register before storing the bit field. If the A bit is set, the shift amount control register is used for obtaining the position value. The I bit specifies that the RegA field contains an immediate value instead of a register. 
+The \texttt{DEP} instruction deposits the bit field with the specified length in general register RegB into the general register RegR at the specified position. The position field specifies the rightmost bit for the bit field to deposit. The length field specifies the bit size of the field to deposit. The Z  bit clears the target register before storing the bit field. If the A bit is set, the shift amount control register is used for obtaining the position value. The I bit specifies that the RegA field contains an immediate value instead of a register. 
 
 }
 
