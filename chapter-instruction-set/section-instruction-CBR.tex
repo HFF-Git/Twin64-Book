@@ -4,13 +4,13 @@
 %--------------------------------------------------------------------------------
 \pagebreak
 \section*{CBR compare and branch}
-\addcontentsline{toc}{section}{CBR load offset}
+\addcontentsline{toc}{section}{CBR compare and branch}
 
 \instructionentry{Syntax}{
 
-	 \texttt{CBR.<cond> RegR, RegB, target}
+	\texttt{CBR.<cond> RegR, RegB, target}
     
-   	where <cond> is EQ, LT, NE or LE.
+   	where cond is EQ, LT, NE or LE.
 }
 
 \instructionentry{Format}{
@@ -31,7 +31,8 @@
      	\draw[-] (1,0.5) -- (1, 1.5);
      	\draw[-] (3,0.5) -- (3, 1.5);
      	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
+     	\draw[-] (6,0.5) -- (6, 1.5);
+        \draw[-] (6.5,0.5) -- (6.5, 1.5);
      	\draw[-] (8.5,0.5) -- (8.5, 1.5);
           	
      	\node at (0.5,0.25) {2};
@@ -41,10 +42,11 @@
     	\node at (7.5,0.25) {4};
    	 	\node at (11.5,0.25) {15};
    	 	
-   	 	\node at (0.5,1) {\small 0};
+   	 	\node at (0.5,1) {\small \OpCodeGrpBR};
 		\node at (2,1) {\small \OpCodeCBR};
 		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
+		\node at (5.5,1) {\small cond};
+		\node at (6.25,1) {\small 0};
 		\node at (7.5,1) {\small Reg B};
 		\node at (11.5,1) {\small ofs};
    	 	
@@ -57,7 +59,7 @@ The \texttt{CBR} instruction ...}
 
 \instructionentry{Operation}{
 
-  	\texttt{RegR <- RegR + ofs; }
+  	...
 } 
 
 \instructionentry{Exceptions}{

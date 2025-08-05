@@ -7,12 +7,13 @@
 \addcontentsline{toc}{section}{BR branch register}
 
 \instructionentry{Syntax}{
-  \texttt{BR RegR, ofs ( RegB ) }
+
+  \texttt{BR RegB [, RegR ] }
 }
 
 \instructionentry{Format}{
 
-	The BR instruction uses the xxx instruction format. \\
+	The BR instruction uses the immediate-15 instruction format. \\
 
    	\begin{flushleft}
 	\begin{tikzpicture}[scale=0.7, transform shape]
@@ -38,12 +39,12 @@
     	\node at (7.5,0.25) {4};
    	 	\node at (11.5,0.25) {15};
    	 	
-   	 	\node at (0.5,1) {\small 0};
+   	 	\node at (0.5,1) {\small \OpCodeGrpBR};
 		\node at (2,1) {\small \OpCodeBR};
 		\node at (4,1) {\small Reg R};
 		\node at (5.75,1) {\small 0};
 		\node at (7.5,1) {\small Reg B};
-		\node at (11.5,1) {\small ofs};
+		\node at (11.5,1) {\small 0};
    	 	
        \end{tikzpicture}	\end{flushleft}
 }
@@ -54,7 +55,8 @@ The \texttt{BR} instruction ...}
 
 \instructionentry{Operation}{
 
-  	\texttt{RegR <- RegR + ofs; }
+  	\texttt{ RegR <- addOfs32( PSW.[IA], 4 ); }
+	\texttt{ PSW.[IA] <- addOfs32( RegB, target ); }
 } 
 
 \instructionentry{Exceptions}{

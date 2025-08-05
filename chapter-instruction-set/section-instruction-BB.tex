@@ -3,28 +3,27 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{BV — branch vectored}
-\addcontentsline{toc}{section}{BV — branch vectored}
+\section*{BB branch on bit}
+\addcontentsline{toc}{section}{BB branch on bit}
 
 \instructionentry{Syntax}{
 
-  	\texttt{RegR <- addOfs32( PSW.[IA], 4 )}; \\
-	\texttt{PSW.[IA] <- addOfs32( RegB, RegX )};
+	\texttt{BB [.T/F] ofs, pos } \\
+    \texttt{BB [.T/F] ofs, SAR }
 }
 
 \instructionentry{Format}{
 
-	The BV instruction uses the XXX instruction formats. \\
+	The BB instruction uses the the immediate-9 instruction formats \\
 
-   	\begin{flushleft}
-    \begin{tikzpicture}[scale=0.7, transform shape]
+  	 	\begin{flushleft}
+    	\begin{tikzpicture}[scale=0.7, transform shape]
         
         % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
         
         \node[  tsRectangle, 
                 minimum width=16cm,
                 minimum height=1cm,
-                text width=3cm,
                 text centered,
                 fill=white!50] (blocks) at (8,1) { };
                 
@@ -34,31 +33,25 @@
      	\draw[-] (5.5,0.5) -- (5.5, 1.5);
      	\draw[-] (6,0.5) -- (6, 1.5);
      	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
      	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
-     	
+               	
      	\node at (0.5,0.25) {2};
     	\node at (2,0.25) {4};
     	\node at (4,0.25) {4};
     	\node at (5.25,0.25) {1};
     	\node at (5.75,0.25) {1};
     	\node at (6.25,0.25) {1};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-   	 	\node at (13.75,0.25) {9};
+    	\node at (8,0.25) {6};
+   	 	\node at (12.5,0.25) {9};
    	 	
    	 	\node at (0.5,1) {\small \OpCodeGrpBR};
-		\node at (2,1) {\small \OpCodeLD};
+		\node at (2,1) {\small \OpCodeBB};
 		\node at (4,1) {\small Reg R};
 		\node at (5.25,1) {\small 0};
-		\node at (5.75,1) {\small M};
-		\node at (6.25,1) {\small 1};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small 0};
-		\node at (10.5,1) {\small Reg X};
-		\node at (13.75,1) {\small 0};
+		\node at (5.75,1) {\small A};
+		\node at (6.25,1) {\small V};
+		\node at (8,1) {\small pos};
+		\node at (12.5,1) {\small ofs};
    	 	
     \end{tikzpicture}
 	\end{flushleft}
@@ -66,20 +59,22 @@
 
 \instructionentry{Description}{
 
-The \texttt{BV} instruction ...
-
-The indexed formats may cause a memory reference type trap.
+The \texttt{BB} instruction ...
 
 }
 
 \instructionentry{Operation}{
 
-    \texttt{...}\\
+	\texttt{if ( instr.[A] ) tmp <- SAR; } \\
+	\texttt{else ( tmp <- instr.[pos]; } \\
+	\texttt{if ( checkBit( RegR, instr.[V] ) PSW.[IA] <- addOfs( PSW.[IA], ofs ); } \\
+	\texttt{else PSW.[IA] <- addOfs( PSW.[IA], 4 ); }
+	
 }
 
 \instructionentry{Exceptions}{
 
-	...
+	tbd...
 }
 
 \instructionentry{Notes}{

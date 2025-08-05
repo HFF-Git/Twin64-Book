@@ -3,19 +3,20 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{B branch inconditional}
+\section*{B branch unconditional}
 \addcontentsline{toc}{section}{B branch unconditional}
 
 \instructionentry{Syntax}{
-  \texttt{B[.G] target} \\
+
+  \texttt{B[.G] target [, RegR ]} \\
 }
 
 \instructionentry{Format}{
 
-	The B instruction uses the ... \\
+	The B instruction uses the immediate-19 format. \\
 	
   	\begin{flushleft}
-    	\begin{tikzpicture}[scale=0.7, transform shape]
+   	\begin{tikzpicture}[scale=0.7, transform shape]
         
         % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
         
@@ -34,17 +35,18 @@
      	\node at (0.5,0.25) {2};
     	\node at (2,0.25) {4};
     	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
+    	\node at (5.5,0.25) {2};
+    	\node at (6.25,0.25) {3};
    	 	\node at (11.5,0.25) {19};
    	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeCMP};
+   	 	\node at (0.5,1) {\small \OpCodeGrpBR};
+		\node at (2,1) {\small \OpCodeB};
 		\node at (4,1) {\small Reg R};
 		\node at (5.5,1) {\small 0};
-		\node at (6.25,1) {\small 1G};
+		\node at (6.25,1) {\small G};
 		\node at (11.5,1) {\small target};
    	 	
-       \end{tikzpicture}
+    \end{tikzpicture}
 	\end{flushleft}
 }
 
@@ -57,19 +59,15 @@ The \texttt{B} instruction ...
 
 \instructionentry{Operation}{
 
-  	\texttt{RegR <- cmpOp( cond, RegB, RegA )} {(register format)}\\
-  	\smallskip
-  	\texttt{RegR <- cmpOp( cond, RegB, immOperand( ))} {(immediate format)}\\
-   	\smallskip
-  	\texttt{RegR <- cmpOp( cond, RegR, memOperand( ))} {(indexed formats)}\\
+	\texttt{ RegR <- addOfs32( PSW.[IA], 4 ); }
+	\texttt{ PSW.[IA] <- addOfs32( PSW.[IA], target ); }
 }
 
 \instructionentry{Exceptions}{
 
-	Data Alignment Trap\\
-	Memory Access Violation Trap\\
-	Memory Protection Violation Trap\\
-	Data TLB Miss Trap
+	Instruction Address Trap
+	Instruction Privilege Violation Trap
+	Instruction TLB Miss Trap
 }
 
 \instructionentry{Notes}{
