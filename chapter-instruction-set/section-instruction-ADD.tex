@@ -16,7 +16,7 @@
 
 \instructionentry{Format}{
 
-	The ADD instruction uses the register, the immediate-19, the indexed and the register indexed instruction formats. \\
+	The ADD instruction uses the register, the immediate-15, the indexed and the register indexed instruction formats. \\
 
    	\begin{flushleft}
     	\begin{tikzpicture}[scale=0.7, transform shape]
@@ -173,7 +173,7 @@
 
 \instructionentry{Description}{
 
-The \texttt{ADD} instruction adds two signed 64-bit operands and stores them to the target register \texttt{RegR}. The instruction supports the immediate, the register and the two memory reference instruction formats. An arithmetic overflow results in a numeric overflow trap. The indexed formats may cause a memory reference associated trap.
+The \texttt{ADD} instruction adds two signed 64-bit operands and stores the result to the target register \texttt{RegR}. The instruction supports the immediate, the register and the two memory reference instruction formats. An arithmetic overflow results in a numeric overflow trap. The indexed instruction formats may cause a memory reference associated trap.
 }
 
 \instructionentry{Operation}{

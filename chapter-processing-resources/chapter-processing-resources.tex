@@ -64,7 +64,7 @@ Twin-64 features a set of 16 general purposes registers. They are used for data 
 \label{fig:General registers}
 \end{figure}
 
-Some general registers have a dedicated use. Register zero will always return a zero value when read and a write operation will have no effect. Although there are only 16 general registers in the CPU, implementing such a register greatly simplifies the instruction design, in that it for example provides a target when the result is not needed. General register one is a scratch register and also serves as an implicit target for some instructions. Other general registers may have dedicated purpose defined in the runtime architecture. 
+Some general registers have a dedicated use. Register zero will always return a zero value when read and a write operation will have no effect. Although there are only 16 general registers in the CPU, implementing such a register greatly simplifies the instruction design, in that it for example provides a target when the result is not needed. General register one is a scratch register and also serves as an implicit target for some instructions. Other general registers may have a dedicated purpose defined in the runtime architecture conventions.
 
 \section*{Control Registers}
 \addcontentsline{toc}{section}{Control Registers}
@@ -160,8 +160,10 @@ Twin-64 has 16 control registers.
   	
   	% CR8
   	\draw[thick] (\leftofs, 7) -- (\rightofs, 7);
+  	\draw[thick] (\middleofs, 7) -- (\middleofs, 8);
   	\node at ({\leftofs - 0.75}, {7 + 0.5}) { CR8 };
-  	\node at ( \middleofs, {7 + 0.5}) { Interrupt Vector Adress };
+  	\node at ( \leftofs + 3, {7 + 0.5}) { 0 };
+  	\node at ( \middleofs + 3, {7 + 0.5}) { Interrupt Vector Adress };
   	
   	% CR9
   	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
@@ -180,8 +182,10 @@ Twin-64 has 16 control registers.
   	
   	% CR12
   	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
+  	\draw[thick] (\middleofs, 3) -- (\middleofs, 4);
   	\node at ({\leftofs - 0.75}, {3 + 0.5}) { CR12 };
-  	\node at ( \middleofs, {3 + 0.5}) { Interruption Instruction };
+  	\node at ( \leftofs + 3, {3 + 0.5}) { 0 };
+  	\node at ( \rightofs - 3, {3 + 0.5}) { Interruption Instruction };
   	
   	% CR13
   	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
@@ -207,6 +211,8 @@ Twin-64 has 16 control registers.
 \subsection*{Processor Configuration Register}
 \addcontentsline{toc}{subsection}{Processor Configuration Register}
 
+fields with info. one is the actual physical memory size encoded.
+
 
 \subsection*{Recovery Counter}
 \addcontentsline{toc}{subsection}{Processor Configuration Register}
@@ -227,23 +233,27 @@ cross check the concept ? we still need the protect Id field in the TLB, but do 
 \subsection*{External Interrupt Request Register}
 \addcontentsline{toc}{subsection}{External Interrupt Request Register}
 
-??? rather combine EIR and EIM in one register, 32bits each ?
+I/O module sets a bit for service.
 
 \subsection*{External Interrupt Mask}
 \addcontentsline{toc}{subsection}{External Interrupt Mask}
 
-\subsection*{Interruption PSW}
+processor can mask of a position.
+
+\subsection*{Interruption PSW and instruction}
 \addcontentsline{toc}{subsection}{Interruption PSW}
 
-\subsection*{Interruption Instruction}
-\addcontentsline{toc}{subsection}{Interruption Instruction}
+interrupt instruction address and instruction.
 
-\subsection*{Interruption Address}
+\subsection*{Interruption Argument}
 \addcontentsline{toc}{subsection}{Interruption Address}
+
+additional data what happened.
 
 \subsection*{Scratch Registers}
 \addcontentsline{toc}{subsection}{External Interrupt Register}
 
+privileged ? split one each priv level ?
 
 \section*{Program State Register}
 \addcontentsline{toc}{section}{Processor State Register}
@@ -312,7 +322,7 @@ The processor state register contains the virtual address of the current instruc
 \subsection*{Processor Status}
 \addcontentsline{toc}{subsection}{Protection Id Registers}
 
-M I E  and so on ...
+M I E  and so on ... group by user and priv level.
 
 \begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
     \caption{Status Field Bits} \\
@@ -334,7 +344,13 @@ M I E  and so on ...
     \midrule
     \textbf{X} & When set, the processor runs in privileged mode. \\
     \midrule
-    \textbf{P} & When set, the processor does protection Id checking. \\
+    \textbf{S} & When set, the processor does protection Id checking for a virtual address. \\
+    \midrule 
+    \textbf{E} & When set, external interrupts are enabled. \\
+    \midrule 
+    \textbf{V} & When set, single step debug support enabled. \\
+    \midrule 
+    \textbf{P} & When set, data access is trapped.... \\
     \midrule 
     \textbf{...} & ... \\
 \end{longtable}
@@ -342,7 +358,7 @@ M I E  and so on ...
 \section*{Data Types}
 \addcontentsline{toc}{section}{Data Types}
 
-Twin-64 is a big endian 64-bit machine. The fundamental data type is a 64-bit signed integer with the most significant bit being left. All computation is  performed on 64-bit signed integer numbers. Memory access is performed on a double, word, half-word or byte basis. Word, Half and Byte data loaded is sign-extended. Store operations just store the corresponding value in memory. 
+The fundamental data type is a 64-bit signed integer with the most significant bit being left and the least significant bit being right. All computation is  performed on 64-bit signed integer numbers. Memory access is performed on a double, word, half-word or byte basis. Word, Half and Byte data loaded is sign-extended. Store operations just store the corresponding value in memory as is. 
 
 \begin{figure}[ht]
 \begin{center}
@@ -386,18 +402,22 @@ Twin-64 is a big endian 64-bit machine. The fundamental data type is a 64-bit si
 \label{fig:data types}
 \end{figure}
 
-All memory addresses are expressed as bytes addresses. Address computation uses a 32-bit unsigned math, i.e. numbers wrap around in a 32-bit space.
+All memory addresses are expressed as bytes addresses. Address computation uses a 32-bit unsigned math, i.e. numbers wrap around in a 32-bit space and never cross segment boundaries.
 
 \section*{Byte Ordering}
 \addcontentsline{toc}{section}{Byte Ordering}
 
 Twin-64 is internally a big-endian machine. It does however support little endian and big endian byte ordering models. 
 
+a picture ?
+
+affects only load and stores.
+
 
 \section*{Translation Lookaside Buffer}
 \addcontentsline{toc}{section}{Translation Lookaside Buffer}
 
-For performance reasons, the virtual address translation result is stored in a translation look-aside buffer. The TLB is essentially a copy of the page table entry information that represents the virtual page currently loaded at the physical address. Depending on the hardware implementation, there can be a combined TLB or a separate instruction TLB and data TLB. A TLB is essentially a cache for address translations. The virtual page number, VPN, is stored along with attributes and the physical page number, PPN, in the TLB hardware. The current architecture allows for a 34-bit physical address space, which is a 16GB memory space.
+Virtual address translations are stored in a translation look-aside buffer. The TLB is essentially a copy of the page table entry information that represents the virtual page currently loaded at the physical address. Depending on the hardware implementation, there can be a combined TLB or a separate instruction TLB and data TLB. The virtual page number, VPN, is stored along with attributes and the physical page number, PPN, in the TLB entry. The current architecture allows for a 36-bit physical address space, which is a maximum of 64GB memory space.
 
 \begin{figure}[H]
 \begin{center}
@@ -419,7 +439,7 @@ For performance reasons, the virtual address translation result is stored in a t
             fill=white,
             anchor=west] at (0,2.75) { };
     \node[anchor=west] at (0, 2.75) {\small Physical page number};   
-    \node[anchor=west] at (11,2.75) {20bit};
+    \node[anchor=west] at (11,2.75) {22bit};
      
     \node[  tsRectangle, 
             minimum width=1cm,
@@ -465,9 +485,11 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{PPN} & The physical page number. \\
     \midrule
-    \textbf{Access Rights} & The access rights of the page. \\
+    \textbf{Access Rights} & The access rights of the page. The field encodes the access type ( read, write and execute ) and the required priv level for the operation. \\
     \midrule
     \textbf{V} & the entry is valid \\
+    \midrule
+    \textbf{L} & When set, the TLB entry is locked and will not be selected when replacing an entry. \\
     \midrule
     \textbf{U} & When set, the page represented by the TLB entry is not cached. \\
     \midrule
@@ -477,15 +499,13 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{B} & When set, a branch instruction executed from the page represented by the TLB will cause a branch taken trap. \\
     \midrule
-    \textbf{L} & When set, the TLB entry is locked and will not be selected when replacing an entry. \\
-    \midrule
     \textbf{Page Size} & The 2-bit field encodes the supported page size. A value of zero indicates a 16Kbyte page, a value of 1 a 256Kbyte, a value of 2 a 4Mbyte and a value of 3 a 64Mbyte page. \\
 \end{longtable}
 
-The first four segments, segment 0 to 3, are special in that their address translation bypasses the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
+The first segments, segment 0 to 15, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
 
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
 
-Twin-64 is a cache visible architecture, featuring cache models for unified or separate instruction and data cache. While hardware directly controls the cache for cache line insertion and replacement, the software has explicit control on flushing and purging cache line entries. There are instructions to flush and purge cache lines. To speed up the entire memory access process, the cache uses the virtual address to index into the arrays, which can be done in parallel to the TLB lookup. When the physical address tag in the cache and the physical page address in the TLB match, there will be a cache hit. The architecture will not specify the size of cache lines or cache organization. Typically a cache line will hold four to eight machine words, the cache organization is in the simplest case a single set direct mapped cache. The Twin-64 architecture does not specify a particular cache and cache hierarchy model. The architecture just specifies instructions to handle cache operations, such as delete or flushing a cache.
+Twin-64 is a cache visible architecture, featuring cache models for unified or separate instruction and data cache. While hardware directly controls the cache for cache line insertion and replacement, the software has explicit control on flushing and purging cache line entries. Twin-64 caches are virtually indexed, physically tagged caches. To speed up the entire memory access process, the cache uses the virtual address to index into the arrays, which can be done in parallel to the TLB lookup. When the physical address tag in the cache and the physical page address in the TLB match, there will be a cache hit. The Twin-64 cache architecture will not specify the size of cache lines or cache organization. The Twin-64 architecture does not specify a particular cache design and hierarchy model. The architecture just specifies instructions to handle cache operations, such as delete or flushing a cache.
 
