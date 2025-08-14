@@ -17,7 +17,7 @@ Twin-64 features a set of 16 general purposes registers. They are used for data 
 \begin{center}
 \begin{tikzpicture}[scale=0.8, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(12,9);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(12,9);
 
 	% Rectangle dimensions
 	\def\width{12}
@@ -69,7 +69,7 @@ Some general registers have a dedicated use. Register zero will always return a 
 \section*{Control Registers}
 \addcontentsline{toc}{section}{Control Registers}
 
-Twin-64 has 16 control registers.
+Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}. There are two instructions to move the contents of a control register to a general register and vice versa. A move to a control register will always move the entire 64-bit word. A move to a general register from a control register will move the size of the control register right aligned to the general register. The following table depicts the control registers defined for Twin-64.
 
 \begin{figure}[H]
 \begin{center}
@@ -109,10 +109,12 @@ Twin-64 has 16 control registers.
   	% CR2
   	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
   	\node at ({\leftofs - 0.75}, {13 + 0.5}) { CR2 };
+  	\node at ( \middleofs, {13 + 0.5}) { Reserved };
   	
   	% CR3
   	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
   	\node at ({\leftofs - 0.75}, {12 + 0.5}) { CR3 };
+  	\node at ( \middleofs, {12 + 0.5}) { Reserved };
   	
   	% CR4
   	\draw[thick] (\leftofs, 11) -- (\rightofs, 11);
@@ -145,7 +147,7 @@ Twin-64 has 16 control registers.
   	\node at ({\leftofs + 3}, {9 + 0.5}) { Protection Id 5 };
   	\node at ({\leftofs + \width/2 - 0.25}, {9 + 0.5}) { W };
   	\node at ({\rightofs - 3}, {9 + 0.5}) { Protection Id 6 };
-  	\node at ({\rightofs - 0.25}, {11 + 0.5}) { W };
+  	\node at ({\rightofs - 0.25}, {9 + 0.5}) { W };
   	
   	% CR7
   	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
@@ -161,46 +163,46 @@ Twin-64 has 16 control registers.
   	% CR8
   	\draw[thick] (\leftofs, 7) -- (\rightofs, 7);
   	\draw[thick] (\middleofs, 7) -- (\middleofs, 8);
+  	\draw[thick] (\middleofs + 3.5, 7) -- (\middleofs + 3.5, 8);
   	\node at ({\leftofs - 0.75}, {7 + 0.5}) { CR8 };
   	\node at ( \leftofs + 3, {7 + 0.5}) { 0 };
-  	\node at ( \middleofs + 3, {7 + 0.5}) { Interrupt Vector Adress };
+  	\node at ( \middleofs + 4.5, {7 + 0.5}) { 0 };
+  	\node at ( \middleofs + 1, {7 + 0.5}) { IVA };
   	
   	% CR9
   	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
   	\node at ({\leftofs - 0.75}, {6 + 0.5}) { CR9 };
-  	\node at ( \middleofs, {6 + 0.5}) { External Interrupt Request Register };
+  	\node at ( \middleofs, {6 + 0.5}) { External Interrupt Enable Mask };
   	
   	% CR10
   	\draw[thick] (\leftofs, 5) -- (\rightofs, 5);
   	\node at ({\leftofs - 0.75}, {5 + 0.5}) { CR10 };
-  	\node at ( \middleofs, {5 + 0.5}) { External Interrupt Mask };
+  	\node at ( \middleofs, {5 + 0.5}) { Interruption PSW };
   	
   	% CR11
   	\draw[thick] (\leftofs, 4) -- (\rightofs, 4);
   	\node at ({\leftofs - 0.75}, {4 + 0.5}) { CR11 };
-  	\node at ( \middleofs, {4 + 0.5}) { Interruption PSW };
+  	\node at ( \middleofs, {4 + 0.5}) { Interruption Instruction };
   	
   	% CR12
   	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
-  	\draw[thick] (\middleofs, 3) -- (\middleofs, 4);
   	\node at ({\leftofs - 0.75}, {3 + 0.5}) { CR12 };
-  	\node at ( \leftofs + 3, {3 + 0.5}) { 0 };
-  	\node at ( \rightofs - 3, {3 + 0.5}) { Interruption Instruction };
+  	\node at ( \middleofs, {3 + 0.5}) { Interruption Address };
   	
   	% CR13
   	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
   	\node at ({\leftofs - 0.75}, {2 + 0.5}) { CR13 };
-  	\node at ( \middleofs, {2 + 0.5}) { Interruption Address };
+  	\node at ( \middleofs, {2 + 0.5}) { Scratch Reg 0 };
 
   	% CR14
   	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);;
   	\node at ({\leftofs - 0.75}, {1 + 0.5}) { CR14 };
-  	\node at ( \middleofs, {1 + 0.5}) { Scratch Reg 0 };
+  	\node at ( \middleofs, {1 + 0.5}) { Scratch Reg 1 };
   	
   	% CR15
   	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
   	\node at ({\leftofs - 0.75}, {0 + 0.5}) { CR15 };
-  	\node at ( \middleofs, {0 + 0.5}) { Scratch Reg 1 };
+  	\node at ( \middleofs, {0 + 0.5}) { Scratch Reg 2 };
 			
 \end{tikzpicture}
 \end{center}
@@ -213,61 +215,15 @@ Twin-64 has 16 control registers.
 
 fields with info. one is the actual physical memory size encoded.
 
+one field: 4Bit: Memory Size in 4 Gbyte increments.
 
-\subsection*{Recovery Counter}
-\addcontentsline{toc}{subsection}{Processor Configuration Register}
-
-\subsection*{Protection Id Registers}
-\addcontentsline{toc}{subsection}{Protection Id Registers}
-
-contain the segment Id of the segment protected by the "P" bit...
-
-cross check the concept ? we still need the protect Id field in the TLB, but do we need to pass the segment Id in the protect field ? it is encoded in the segment part of the vAdr ...
-
-
-\subsection*{Interrupt Vector Address}
-\addcontentsline{toc}{subsection}{Interrupt Vector Address}
-
-
-
-\subsection*{External Interrupt Request Register}
-\addcontentsline{toc}{subsection}{External Interrupt Request Register}
-
-I/O module sets a bit for service.
-
-\subsection*{External Interrupt Mask}
-\addcontentsline{toc}{subsection}{External Interrupt Mask}
-
-processor can mask of a position.
-
-\subsection*{Interruption PSW and instruction}
-\addcontentsline{toc}{subsection}{Interruption PSW}
-
-interrupt instruction address and instruction.
-
-\subsection*{Interruption Argument}
-\addcontentsline{toc}{subsection}{Interruption Address}
-
-additional data what happened.
-
-\subsection*{Scratch Registers}
-\addcontentsline{toc}{subsection}{External Interrupt Register}
-
-privileged ? split one each priv level ?
-
-\section*{Program State Register}
-\addcontentsline{toc}{section}{Processor State Register}
-
-The processor state register contains the virtual address of the current instruction and the processor status flags.
-
-??? finalize status bits...
-
+// ??? work on picture ....
 
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
   	
     \node[  tsRectangle, 
             minimum width=16cm,
@@ -289,18 +245,147 @@ The processor state register contains the virtual address of the current instruc
     \draw[-] (8,0.5) -- (8,1.5);
      	
     \def\flagOfs{0.125}
-	\node at (\flagOfs, 1) {\tiny X};
+	\node at (\flagOfs, 1) {\tiny E};
 	\node at (\flagOfs + 0.25, 1) {\tiny X};
-	\node at (\flagOfs + 0.5, 1) {\tiny X};
-	\node at (\flagOfs + 0.75, 1) {\tiny X};
-	\node at (\flagOfs + 1, 1) {\tiny X};
-	\node at (\flagOfs + 1.25, 1) {\tiny X};
-	\node at (\flagOfs + 1.5, 1) {\tiny X};
-	\node at (\flagOfs + 1.75, 1) {\tiny X};
-	\node at (\flagOfs + 2, 1) {\tiny X};
-	\node at (\flagOfs + 2.25, 1) {\tiny X};
-	\node at (\flagOfs + 2.5, 1) {\tiny X};
-	\node at (\flagOfs + 2.75, 1) {\tiny X};
+	\node at (\flagOfs + 0.5, 1) {\tiny T};
+	\node at (\flagOfs + 0.75, 1) {\tiny H};
+	\node at (\flagOfs + 1, 1) {\tiny L};
+	\node at (\flagOfs + 1.25, 1) {\tiny -};
+	\node at (\flagOfs + 1.5, 1) {\tiny -};
+	\node at (\flagOfs + 1.75, 1) {\tiny -};
+	\node at (\flagOfs + 2, 1) {\tiny -};
+	\node at (\flagOfs + 2.25, 1) {\tiny -};
+	\node at (\flagOfs + 2.5, 1) {\tiny P};
+	\node at (\flagOfs + 2.75, 1) {\tiny I};
+				
+	\node at (5.75,1) {\small ...};
+	\node at (11,1) {\small .... };
+		
+	\node at (1.5,0.25) {12};
+    \node at (5,0.25) {20};
+   	\node at (11,0.25) {32};
+   	 	
+\end{tikzpicture}
+\end{center}
+\caption{Processor Configuration Register}
+\label{fig:Processor Configuration Register}
+\end{figure}
+
+
+\begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
+    \caption{Processor Configuration Register Fields} \\
+    \toprule
+    \textbf{Field} & \textbf{Purpose} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{Field} & \textbf{Purpose} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    \textbf{Memory Size} & ... \\
+    \midrule
+    \textbf{Architecture Id} & ... \\
+    \midrule
+     \textbf{Processor Id Id} & ... \\
+    \midrule
+    \textbf{...} & ... \\
+\end{longtable}
+
+
+
+
+
+\subsection*{Recovery Counter}
+\addcontentsline{toc}{subsection}{Processor Configuration Register}
+
+
+decrements when the PSW status bit is set.
+
+
+\subsection*{Protection Id Registers}
+\addcontentsline{toc}{subsection}{Protection Id Registers}
+
+Twin-64 allows to record a set of up to 8 protection Id values in the processor control registers \texttt{CR4} to \texttt{CR7} which are accessible to the currently executing process. The protection Id is identical to a segment Id. For each access to a segment that has the protection check bit set, one of the protection Id control registers must match the segment Id. If not, a protection violation trap is raised. The rightmost bit of each of the eight PIDs is the write disable (W) bit. When the bit is set, that PID cannot be used to grant write access. See also the chapter on addressing and access control.
+
+\subsection*{Interrupt Vector Address}
+\addcontentsline{toc}{subsection}{Interrupt Vector Address}
+
+The Interruption Vector Address (\texttt{IVA}) control register \texttt{CR8} contains the address of the base of an array of service procedures assigned to the interruption classes. The lower 14 bits of the IVA are reserved and set to zero. The address written to it must therefore be aligned on a page size.  The IVA is always located in the first segment, segment 0. The array of interruption service procedures is indexed by the interruption numbers described in the chapter on interrupts.
+
+\subsection*{External Interrupt Enable Mask}
+\addcontentsline{toc}{subsection}{External Interrupt Enable Mask}
+
+The External Interrupt Enable Mask (\texttt{EIEM}) is stored in \texttt{CR15)}. It is 64-bit register containing a bit for each of the 64 external interrupts. A bit cleared in the EIEM masks external interrupts corresponding to that bit position.
+
+\subsection*{Interruption PSW}
+\addcontentsline{toc}{subsection}{Interruption PSW}
+
+Upon an interrupt the interrupted instruction address and the processor status bit are saved to this control register. 
+
+\subsection*{Interruption PSW}
+\addcontentsline{toc}{subsection}{Interruption PSW}
+
+Upon an interrupt the interrupted instruction address and the processor status bits are saved to this control register. 
+
+\subsection*{Interruption Argument Registers}
+\addcontentsline{toc}{subsection}{Argument Registers}
+
+The Interruption Argument Registers (\texttt{CR11} and \texttt{CR12}) are used to pass an instruction and a virtual address to an interruption handler. The values in these two control registers for each interruption class are described in the chapter on interrupts.
+
+\subsection*{Scratch Registers}
+\addcontentsline{toc}{subsection}{External Interrupt Register}
+
+The control registers \texttt{CR13}, \texttt{CR14}, \texttt{CR15} are scratch registers used by the interrupt handlers or alike. \texttt{CR12} and \texttt{CR13} are privileged register only accessible from code running at priv level, \texttt{CR15} is accessible from any priv level. 
+
+\section*{Program State Register}
+\addcontentsline{toc}{section}{Processor State Register}
+
+The processor state register contains the virtual address of the current instruction and the processor status flags.
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.9, transform shape]
+        
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+  	
+    \node[  tsRectangle, 
+            minimum width=16cm,
+            minimum height=1cm,  
+            fill=white!50] (blocks) at (8,1) { };
+                
+  	\draw[-] (0.25,0.5) -- (0.25,1.5);
+    \draw[-] (0.5,0.5) -- (0.5,1.5);
+    \draw[-] (0.75,0.5) -- (0.75,1.5);
+    \draw[-] (1,0.5) -- (1,1.5);
+  	\draw[-] (1.25,0.5) -- (1.25,1.5);
+    \draw[-] (1.5,0.5) -- (1.5,1.5);
+   	\draw[-] (1.75,0.5) -- (1.75,1.5);
+   	\draw[-] (2,0.5) -- (2,1.5);
+   	\draw[-] (2.25,0.5) -- (2.25,1.5);
+   	\draw[-] (2.5,0.5) -- (2.5,1.5);
+   	\draw[-] (2.75,0.5) -- (2.75,1.5);	     	
+   	\draw[-] (3,0.5) -- (3,1.5);
+    \draw[-] (8,0.5) -- (8,1.5);
+     	
+    \def\flagOfs{0.125}
+	\node at (\flagOfs, 1) {\tiny E};
+	\node at (\flagOfs + 0.25, 1) {\tiny X};
+	\node at (\flagOfs + 0.5, 1) {\tiny T};
+	\node at (\flagOfs + 0.75, 1) {\tiny H};
+	\node at (\flagOfs + 1, 1) {\tiny L};
+	\node at (\flagOfs + 1.25, 1) {\tiny R};
+	\node at (\flagOfs + 1.5, 1) {\tiny M};
+	\node at (\flagOfs + 1.75, 1) {\tiny -};
+	\node at (\flagOfs + 2, 1) {\tiny -};
+	\node at (\flagOfs + 2.25, 1) {\tiny -};
+	\node at (\flagOfs + 2.5, 1) {\tiny P};
+	\node at (\flagOfs + 2.75, 1) {\tiny I};
 				
 	\node at (5.75,1) {\small IA Segment};
 	\node at (11,1) {\small IA Offset};
@@ -340,18 +425,35 @@ M I E  and so on ... group by user and priv level.
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{W} & When set, a memory reference is in little-endian format. \\
+    \textbf{M} & High priority machine check. When set, high-priority machine checks are masked. This bit is set after an HPMC and cleared after all other interruptions. \\
+    \midrule
+    \textbf{E} & Little endian access enable. When set, memory access is in little endian format, else big endian format. Endian support is an optional feature. If not implemented, all access is in big endian format. \\
+    \midrule
+    \textbf{R} & Recovery counter enable. When set... \\
     \midrule
     \textbf{X} & When set, the processor runs in privileged mode. \\
     \midrule
-    \textbf{S} & When set, the processor does protection Id checking for a virtual address. \\
+    \textbf{H} & When set, a higher-privilege transfer trap occurs whenever the following instruction is of a higher privilege. \\
+    \midrule
+    \textbf{L} & When set, a lower-privilege transfer trap occurs whenever the following instruction is of a lower privilege. \\
+    \midrule
+    \textbf{I} & When set, external interrupts are enabled. \\
     \midrule 
-    \textbf{E} & When set, external interrupts are enabled. \\
+    
+    \textbf{V} & Reserved. \\
     \midrule 
-    \textbf{V} & When set, single step debug support enabled. \\
+    
+    \textbf{P} & Protection identifier validation enable. When set instruction and data references are checked for valid protection identifiers (PIDs). The \texttt{PRB} instruction checks for valid PIDs without causing a trap. \\
     \midrule 
-    \textbf{P} & When set, data access is trapped.... \\
-    \midrule 
+    \textbf{T} & When set, taken branch traps are enabled. Any branch taken will result in a trap. \\
+    \midrule
+    \textbf{B} & The B-bit is set by any taken branch instruction and cleared otherwise. \\
+    \midrule
+    \textbf{C} & When set, taken branch traps are enabled. \\
+    \midrule
+    \textbf{D} & Data memory break disable. The D-bit is cleared after the execution of each instruction, except for the \texttt{RFI} instruction which may set it. When set, data memory break traps are disabled. This bit allows a simple mechanism to trap on a data store and then proceed past the trapping instruction. \\
+    \midrule
+     
     \textbf{...} & ... \\
 \end{longtable}
 
@@ -508,4 +610,6 @@ The first segments, segment 0 to 15, are special in that they bypass the TLB ent
 \addcontentsline{toc}{section}{Caches}
 
 Twin-64 is a cache visible architecture, featuring cache models for unified or separate instruction and data cache. While hardware directly controls the cache for cache line insertion and replacement, the software has explicit control on flushing and purging cache line entries. Twin-64 caches are virtually indexed, physically tagged caches. To speed up the entire memory access process, the cache uses the virtual address to index into the arrays, which can be done in parallel to the TLB lookup. When the physical address tag in the cache and the physical page address in the TLB match, there will be a cache hit. The Twin-64 cache architecture will not specify the size of cache lines or cache organization. The Twin-64 architecture does not specify a particular cache design and hierarchy model. The architecture just specifies instructions to handle cache operations, such as delete or flushing a cache.
+
+when translation is done, the TLB has the U bit. For the physical segments, the address specifies whether cached or not. I/O range is always uncached. Memory cached. 
 

@@ -76,7 +76,7 @@ Interrupts and exceptions are events that occur asynchronously to the instructio
 
 Twin-64 implements a simple interrupt system. Each processor features an interrupt input register and an interrupt mask register. When an I/O module receives a command, it also receives information which interrupt bit to set and which target module Id to send the interrupt to upon completion of the request. The interrupt data is compared to the interrupt mask register. If the particular bit is enabled and interrupts are in general enabled, the target processor will enter the interrupt handler.
 
-Since causing an interrupt is actually just storing the interrupt request into the processor's interrupt register, I/O modules as well as processors themselves can raise an interrupt at the target processor. Processors can also send interrupts to their peers, implementing loww level processor to processor communication.
+Since causing an interrupt is actually just storing the interrupt request into the processor's interrupt register, I/O modules as well as processors themselves can raise an interrupt at the target processor. Processors can also send interrupts to their peers, implementing low level processor to processor communication.
 
 \section*{Instruction Set}
 \addcontentsline{toc}{section}{Instruction Set}
@@ -88,7 +88,7 @@ The instruction set is divided into five general groups of instructions. The \te
 \subsection*{Computational instructions}
 \addcontentsline{toc}{subsection}{Computational instructions}
 
-The arithmetic, logical and bit field operations instruction represent the computation type instructions. Twin-64 offers 64-bit signed arithmetic operation only. A numeric overflow always results in a trsap.
+The arithmetic, logical and bit field operations instruction represent the computation type instructions. Twin-64 offers 64-bit signed arithmetic operation only. A numeric overflow always results in a trap.
 
 The binary instructions allow to negate one operand as well as the output. Negating one operand is an efficient way to build complementary bit masks. The bit field instructions will perform bit extraction and deposit as well as double register shifting. These instructions are furthermore the base for all shift and rotate operations.
 

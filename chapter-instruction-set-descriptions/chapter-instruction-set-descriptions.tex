@@ -1,0 +1,63 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\chapter*{Instruction Set Descriptions}
+\addcontentsline{toc}{chapter}{Instruction Set Descriptions}
+
+This chapter presents the Twin-64 instruction set. Like typical RISC style instruction sets, it is a fixed length instruction set with very few regular formats. The instructions are group into four categories, arithmetic and logical, load and store, branch and special and system instructions.
+
+The instructions described in this chapter contains the instruction word layout, a short description of the instruction and also a high level pseudo code of what the instruction does. The pseudo code	routines used in the instruction descriptions are listed in the appendix. Each instruction operation is described in a C-style pseudo code operation. The pseudo code uses a register notation describing by their class and index. For example, GR[5] labels general register 5 and CR[1] the control register number 1. 
+
+In addition, some register also have dedicated names, such as for example the shift amount control register, labelled "SAR". A subfield of the instruction is selected by adding a "." and the field name in square brackets. For example the interrupt enable bit in the PSW register is described as "PSW.[E]". 
+
+Additional options for an instruction will be specified by a "." followed by a sequence of characters in the assembler syntax. Each character is one of the defined options for the instruction. As an example, the AND instruction can negate the result. The assembler notation would be "AND.N ...". The order of the individual characters does not matter. The defined options are listed as a list of characters.
+
+Reserved fields in an instruction word are reserved for future enhancements and should be filled with a zero. The instruction explicitly shows the numeric value of these fields. Any other value at that place will result in an undefined behavior.
+
+
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\input {chapter-instruction-set-descriptions/Twin-64-Opcodes}
+\input {chapter-instruction-set-descriptions/section-instruction-ABR}
+\input {chapter-instruction-set-descriptions/section-instruction-ADD}
+\input {chapter-instruction-set-descriptions/section-instruction-ADDIL}
+\input {chapter-instruction-set-descriptions/section-instruction-AND}
+\input {chapter-instruction-set-descriptions/section-instruction-B}
+\input {chapter-instruction-set-descriptions/section-instruction-BB}
+\input {chapter-instruction-set-descriptions/section-instruction-BR}
+\input {chapter-instruction-set-descriptions/section-instruction-BV}
+\input {chapter-instruction-set-descriptions/section-instruction-CBR}
+\input {chapter-instruction-set-descriptions/section-instruction-CMP}
+\input {chapter-instruction-set-descriptions/section-instruction-DEP}
+\input {chapter-instruction-set-descriptions/section-instruction-DIAG}
+\input {chapter-instruction-set-descriptions/section-instruction-DSR}
+\input {chapter-instruction-set-descriptions/section-instruction-EXTR}
+\input {chapter-instruction-set-descriptions/section-instruction-FCA}
+\input {chapter-instruction-set-descriptions/section-instruction-ITLB}
+\input {chapter-instruction-set-descriptions/section-instruction-LD}
+\input {chapter-instruction-set-descriptions/section-instruction-LDI}
+\input {chapter-instruction-set-descriptions/section-instruction-LDO}
+\input {chapter-instruction-set-descriptions/section-instruction-LDR}
+\input {chapter-instruction-set-descriptions/section-instruction-LPA}
+\input {chapter-instruction-set-descriptions/section-instruction-MBR}
+\input {chapter-instruction-set-descriptions/section-instruction-MFIA}
+\input {chapter-instruction-set-descriptions/section-instruction-MFCR}
+\input {chapter-instruction-set-descriptions/section-instruction-MTCR}
+\input {chapter-instruction-set-descriptions/section-instruction-NOP}
+\input {chapter-instruction-set-descriptions/section-instruction-OR}
+\input {chapter-instruction-set-descriptions/section-instruction-PCA}
+\input {chapter-instruction-set-descriptions/section-instruction-PRB}
+\input {chapter-instruction-set-descriptions/section-instruction-PTLB}
+\input {chapter-instruction-set-descriptions/section-instruction-RFI}
+\input {chapter-instruction-set-descriptions/section-instruction-RSM}
+\input {chapter-instruction-set-descriptions/section-instruction-SHLXA}
+\input {chapter-instruction-set-descriptions/section-instruction-SHRXA}
+\input {chapter-instruction-set-descriptions/section-instruction-SSM}
+\input {chapter-instruction-set-descriptions/section-instruction-ST}
+\input {chapter-instruction-set-descriptions/section-instruction-STC}
+\input {chapter-instruction-set-descriptions/section-instruction-SUB}
+\input {chapter-instruction-set-descriptions/section-instruction-TRAP}
+\input {chapter-instruction-set-descriptions/section-instruction-XOR}
