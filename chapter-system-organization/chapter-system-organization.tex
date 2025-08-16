@@ -1,0 +1,64 @@
+\chapter*{System Organization}
+\addcontentsline{toc}{chapter}{System Organization}
+
+This chapter introduces Twin-64 by highlighting the major components and design decisions taken.
+
+\section*{A Register–Memory Architecture}
+\addcontentsline{toc}{section}{A Register–Memory Architecture}
+
+Modern RISC CPUs are typically load/store designs and feature a large number of general-purpose registers. Operations take place between registers. Twin-64 follows a slightly different route. It has fewer general registers, and in addition to register–register computation, a register–memory model is also supported. However, there are no instructions that read from and write to memory in a single instruction cycle, since this would complicate the design considerably.
+
+Twin-64 implements a \textbf{register-memory architecture} offering only a few addressing modes for the operand, combined with a fixed instruction word length. For most instructions one operand is a register, while the other is a flexible operand that can be an immediate, another register, or a memory address from which data is obtained or stored. The result is placed in the register, which is also the first operand. These types of machines are also called two-address machines.
+
+In contrast to similar historical register–memory designs, Twin-64 has no operations that both read and write memory in the same instruction. For example, there is no “increment memory” instruction, since this would require two memory operations and is generally not pipeline-friendly. Memory data access is performed at the word, half-word, or byte level. Besides the implicit operand fetch in a computational instruction, there are dedicated load/store instructions. In addition to the register–immediate and register–memory operand modes, one operand mode supports the three-operand model ($R_s = R_a \,\text{OP}\, R_b$), specifying two source registers and a result register. This allows Twin-64 to support both register–memory and load/store operation styles.
+
+\section*{Processor}
+\addcontentsline{toc}{section}{Processor}
+
+The Twin-64 processor is only one element of a complete system. A system also includes memory, I/O modules, adapters, and interconnecting buses. The Central Processing Unit (CPU) includes a general register set and machine state registers. To support virtual memory addressing, a hardware translation lookaside buffer (TLB) is included to provide virtual-to-physical address translation. Instruction and data caches are optional, but for performance reasons are also key components of the processor. A processor will always emit virtual addresses that must be translated into physical addresses by the TLB. A Twin-64 system can consist of multiple processors.
+
+\section*{Virtual Memory}
+\addcontentsline{toc}{section}{Virtual Memory}
+
+Twin-64 offers a large global address range, organized in segments. A segment number and offset together form the global virtual address. Segments are also associated with access rights and protection identifiers. The CPU itself can run in user or privileged mode. Twin-64 always generates virtual addresses at the CPU level. The global virtual memory range is a 52-bit space organized into a 20-bit segment ID and a 32-bit byte offset. There are $2^{20}$ segments with $2^{32}$ bytes each.
+
+Virtual addresses are translated to physical addresses by the TLB when memory is referenced. For memory management purposes, the virtual address range can also be viewed as a set of pages. A segment therefore contains $2^{18}$ pages of 16 KB each. A virtual page number, combining the segment and the page number within that segment, is a $2^{38}$ value. Address translations are made at the page level. 
+
+The first segments in the virtual address space are special in that they also represent the physical address range. A virtual address in that range bypasses the TLB and accesses physical memory directly. 
+
+A TLB can optionally support different page sizes in addition to the architected 16 KB page size. Supported sizes are 16 bytes, 256 KB, 4 MB, and 64 MB. It is very common for the operating system and data to be mapped in consecutive physical pages, which can then be covered by a larger page size.
+
+\section*{Security and Protection Support}
+\addcontentsline{toc}{section}{Security and Protection Support}
+
+Twin-64 implements a protection model along two dimensions. The first dimension is \textbf{access control} and privilege-level checking. Each page is associated with a page type. Page types include read-only, read–write, execute, and gateway. There are two privilege levels: user and supervisor mode. Access type and privilege level together form the access control information, which is checked for each instruction and data memory access. 
+
+The second dimension of protection is the \textbf{protection ID}, which is the segment ID itself. Twin-64 allows a set of segment IDs to be recorded in processor control registers. For each access to a segment that has the protection check bit set, one of the protection ID control registers must match the segment ID. If not, a protection violation trap is raised.
+
+\section*{Privilege Changes}
+\addcontentsline{toc}{section}{Privilege Changes}
+
+Instructions can only access data or execute instructions when the privilege level matches the required privilege level. Two or four levels are the most common implementations. Changing between levels is often done with a kind of trap operation to higher-privilege software, for example the operating system kernel. However, traps are expensive, as they cause the CPU pipeline to be flushed when entering a trap handler.
+
+Twin-64 implements gateways for privilege promotion. A special option on the unconditional branch instruction raises the privilege level when the instruction is executed on a gateway page, setting the privilege level to that of the gateway page. Returning from a higher privilege level to a code page with lower privilege level automatically resets the lower privilege level. A branch to a higher-privilege page that is not a gateway page results in a privilege violation trap.
+
+\section*{Debugging Support}
+\addcontentsline{toc}{section}{Debugging Support}
+
+A fundamental requirement is the ability to set instruction and data breakpoints. An instruction breakpoint is triggered by encountering the \texttt{TRAP} instruction. The break instruction causes an instruction break trap and passes control to the trap handler. Since break instructions are normally not present in the instruction stream, they must be inserted dynamically in place of the instruction normally found at that address. Upon continuation, if the breakpoint is still valid, it must be reinserted after the original instruction is executed. To facilitate this mechanism, a bit in the status word provides an easy way to trap again after the instruction has been executed.
+
+Data breakpoints are traps taken when a data reference to a page occurs. They do not modify the instruction stream. Depending on the data access, the trap may occur before or after the instruction that accesses the data. A write operation is trapped before the data is written, while a read instruction is trapped after the original instruction has executed.
+
+\section*{Input/Output}
+\addcontentsline{toc}{section}{Input/Output}
+
+Twin-64 features a memory-mapped I/O architecture. A portion of the physical address space is dedicated to the I/O subsystem. Within this address range, I/O modules respond to memory load and store instructions directed to their assigned addresses. When implementing a driver, the standard page-level protection mechanism is applied during address translation. A driver, typically implemented to run in privileged mode, can also grant a user program direct control by mapping a user-level I/O page into virtual space without compromising system integrity. 
+
+\section*{Interrupt System}
+\addcontentsline{toc}{section}{Interrupt System}
+
+Interrupts and exceptions are events that occur asynchronously to instruction execution. Depending on the type, they occur either during the execution of an instruction or between instructions. An example of the former is an arithmetic overflow trap; an example of the latter is an external interrupt. Depending on the interrupt or exception type, the instruction is either restarted or execution continues with the next instruction.
+
+Twin-64 implements a simple interrupt system. Each processor features an interrupt input register and an interrupt mask register. When an I/O module receives a command, it also receives information about which interrupt bit to set and which target module ID to send the interrupt to upon completion of the request. The interrupt data is compared to the interrupt mask register. If the particular bit is enabled and interrupts are globally enabled, the target processor enters the interrupt handler.
+
+Since raising an interrupt is simply a matter of storing the interrupt request into the processor’s interrupt register, I/O modules as well as processors themselves can raise interrupts on a target processor. Processors can also send interrupts to their peers, enabling low-level processor-to-processor communication.

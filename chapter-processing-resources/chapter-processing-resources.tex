@@ -99,12 +99,12 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
 	% CR0
 	\draw[thick] (\leftofs, 15) -- (\rightofs, 15);
   	\node at ({\leftofs - 0.75}, {15 + 0.5}) { CR0 };
-  	\node at ( \middleofs, {15 + 0.5}) { Processor configuration };	
+  	\node at ( \middleofs, {15 + 0.5}) { Processor configuration (PCR)};	
   	
   	% CR1
   	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
   	\node at ({\leftofs - 0.75}, {14 + 0.5}) { CR1 };
-  	\node at ( \middleofs, {14 + 0.5}) { Recovery Counter };
+  	\node at ( \middleofs, {14 + 0.5}) { Recovery Counter (RCTR)};
   	
   	% CR2
   	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
@@ -122,9 +122,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 11) -- (\leftofs + \width / 2 - 0.5, 12);
   	\draw[thick] (\rightofs - 0.5, 11) -- (\rightofs - 0.5, 12);
   	\node at ({\leftofs - 0.75}, {11 + 0.5}) { CR4 };
-  	\node at ({\leftofs + 3}, {11 + 0.5}) { Protection Id 1 };
+  	\node at ({\leftofs + 3}, {11 + 0.5}) { Protection Id 1 (PID1)};
   	\node at ({\leftofs + \width/2 - 0.25}, {11 + 0.5}) { W };
-  	\node at ({\rightofs - 3}, {11 + 0.5}) { Protection Id 2 };
+  	\node at ({\rightofs - 3}, {11 + 0.5}) { Protection Id 2 (PID2)};
   	\node at ({\rightofs - 0.25}, {11 + 0.5}) { W };
   	
   	% CR5
@@ -133,9 +133,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 10) -- (\leftofs + \width / 2 - 0.5, 11);
   	\draw[thick] (\rightofs - 0.5, 10) -- (\rightofs - 0.5, 11);
   	\node at ({\leftofs - 0.75}, {10 + 0.5}) { CR5 };
-  	\node at ({\leftofs + 3}, {10 + 0.5}) { Protection Id 3 };
+  	\node at ({\leftofs + 3}, {10 + 0.5}) { Protection Id 3 (PID3)};
   	\node at ({\leftofs + \width/2 - 0.25}, {10 + 0.5}) { W };
-  	\node at ({\rightofs - 3}, {10 + 0.5}) { Protection Id 4 };
+  	\node at ({\rightofs - 3}, {10 + 0.5}) { Protection Id 4 (PID4)};
   	\node at ({\rightofs - 0.25}, {10 + 0.5}) { W };
   	
   	%CR6
@@ -144,9 +144,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 9) -- (\leftofs + \width / 2 - 0.5, 10);
   	\draw[thick] (\rightofs - 0.5, 9) -- (\rightofs - 0.5, 10);
   	\node at ({\leftofs - 0.75}, {9 + 0.5}) { CR6 };
-  	\node at ({\leftofs + 3}, {9 + 0.5}) { Protection Id 5 };
+  	\node at ({\leftofs + 3}, {9 + 0.5}) { Protection Id 5 (PID5)};
   	\node at ({\leftofs + \width/2 - 0.25}, {9 + 0.5}) { W };
-  	\node at ({\rightofs - 3}, {9 + 0.5}) { Protection Id 6 };
+  	\node at ({\rightofs - 3}, {9 + 0.5}) { Protection Id 6 (PID6)};
   	\node at ({\rightofs - 0.25}, {9 + 0.5}) { W };
   	
   	% CR7
@@ -155,9 +155,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 8) -- (\leftofs + \width / 2 - 0.5, 9);
   	\draw[thick] (\rightofs - 0.5, 8) -- (\rightofs - 0.5, 9);
   	\node at ({\leftofs - 0.75}, {8 + 0.5}) { CR7 };
-  	\node at ({\leftofs + 3}, {8 + 0.5}) { Protection Id 7 };
+  	\node at ({\leftofs + 3}, {8 + 0.5}) { Protection Id 7 (PID7)};
   	\node at ({\leftofs + \width/2 - 0.25}, {8 + 0.5}) { W };
-  	\node at ({\rightofs - 3}, {8 + 0.5}) { Protection Id 8 };
+  	\node at ({\rightofs - 3}, {8 + 0.5}) { Protection Id 8 (PID8)};
   	\node at ({\rightofs - 0.25}, {8 + 0.5}) { W };
   	
   	% CR8
@@ -167,27 +167,27 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\node at ({\leftofs - 0.75}, {7 + 0.5}) { CR8 };
   	\node at ( \leftofs + 3, {7 + 0.5}) { 0 };
   	\node at ( \middleofs + 4.5, {7 + 0.5}) { 0 };
-  	\node at ( \middleofs + 1, {7 + 0.5}) { IVA };
+  	\node at ( \middleofs + 1.5, {7 + 0.5}) { IVA };
   	
   	% CR9
   	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
   	\node at ({\leftofs - 0.75}, {6 + 0.5}) { CR9 };
-  	\node at ( \middleofs, {6 + 0.5}) { External Interrupt Enable Mask };
+  	\node at ( \middleofs, {6 + 0.5}) { External Interrupt Enable Mask (EIEM)};
   	
   	% CR10
   	\draw[thick] (\leftofs, 5) -- (\rightofs, 5);
   	\node at ({\leftofs - 0.75}, {5 + 0.5}) { CR10 };
-  	\node at ( \middleofs, {5 + 0.5}) { Interruption PSW };
+  	\node at ( \middleofs, {5 + 0.5}) { Interruption PSW (IPSW) };
   	
   	% CR11
   	\draw[thick] (\leftofs, 4) -- (\rightofs, 4);
   	\node at ({\leftofs - 0.75}, {4 + 0.5}) { CR11 };
-  	\node at ( \middleofs, {4 + 0.5}) { Interruption Instruction };
+  	\node at ( \middleofs, {4 + 0.5}) { Interruption Instruction (IARG0)};
   	
   	% CR12
   	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
   	\node at ({\leftofs - 0.75}, {3 + 0.5}) { CR12 };
-  	\node at ( \middleofs, {3 + 0.5}) { Interruption Address };
+  	\node at ( \middleofs, {3 + 0.5}) { Interruption Address (IARG1)};
   	
   	% CR13
   	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
@@ -223,47 +223,18 @@ one field: 4Bit: Memory Size in 4 Gbyte increments.
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
   	
     \node[  tsRectangle, 
             minimum width=16cm,
             minimum height=1cm,  
             fill=white!50] (blocks) at (8,1) { };
                 
-  	\draw[-] (0.25,0.5) -- (0.25,1.5);
-    \draw[-] (0.5,0.5) -- (0.5,1.5);
-    \draw[-] (0.75,0.5) -- (0.75,1.5);
-    \draw[-] (1,0.5) -- (1,1.5);
-  	\draw[-] (1.25,0.5) -- (1.25,1.5);
-    \draw[-] (1.5,0.5) -- (1.5,1.5);
-   	\draw[-] (1.75,0.5) -- (1.75,1.5);
-   	\draw[-] (2,0.5) -- (2,1.5);
-   	\draw[-] (2.25,0.5) -- (2.25,1.5);
-   	\draw[-] (2.5,0.5) -- (2.5,1.5);
-   	\draw[-] (2.75,0.5) -- (2.75,1.5);	     	
-   	\draw[-] (3,0.5) -- (3,1.5);
-    \draw[-] (8,0.5) -- (8,1.5);
-     	
-    \def\flagOfs{0.125}
-	\node at (\flagOfs, 1) {\tiny E};
-	\node at (\flagOfs + 0.25, 1) {\tiny X};
-	\node at (\flagOfs + 0.5, 1) {\tiny T};
-	\node at (\flagOfs + 0.75, 1) {\tiny H};
-	\node at (\flagOfs + 1, 1) {\tiny L};
-	\node at (\flagOfs + 1.25, 1) {\tiny -};
-	\node at (\flagOfs + 1.5, 1) {\tiny -};
-	\node at (\flagOfs + 1.75, 1) {\tiny -};
-	\node at (\flagOfs + 2, 1) {\tiny -};
-	\node at (\flagOfs + 2.25, 1) {\tiny -};
-	\node at (\flagOfs + 2.5, 1) {\tiny P};
-	\node at (\flagOfs + 2.75, 1) {\tiny I};
-				
-	\node at (5.75,1) {\small ...};
-	\node at (11,1) {\small .... };
-		
-	\node at (1.5,0.25) {12};
-    \node at (5,0.25) {20};
-   	\node at (11,0.25) {32};
+  	\draw[-] (14,0.5) -- (14,1.5);
+  		
+	\node at (15,1) {\small{ MemSize}};
+	
+	\node at (15,0.25) {\small{4}};
    	 	
 \end{tikzpicture}
 \end{center}
@@ -298,9 +269,6 @@ one field: 4Bit: Memory Size in 4 Gbyte increments.
 \end{longtable}
 
 
-
-
-
 \subsection*{Recovery Counter}
 \addcontentsline{toc}{subsection}{Processor Configuration Register}
 
@@ -326,11 +294,6 @@ The External Interrupt Enable Mask (\texttt{EIEM}) is stored in \texttt{CR15)}. 
 \subsection*{Interruption PSW}
 \addcontentsline{toc}{subsection}{Interruption PSW}
 
-Upon an interrupt the interrupted instruction address and the processor status bit are saved to this control register. 
-
-\subsection*{Interruption PSW}
-\addcontentsline{toc}{subsection}{Interruption PSW}
-
 Upon an interrupt the interrupted instruction address and the processor status bits are saved to this control register. 
 
 \subsection*{Interruption Argument Registers}
@@ -352,47 +315,56 @@ The processor state register contains the virtual address of the current instruc
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+    \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
   	
     \node[  tsRectangle, 
             minimum width=16cm,
             minimum height=1cm,  
             fill=white!50] (blocks) at (8,1) { };
+    
+    \def\fw{0.4}           
                 
-  	\draw[-] (0.25,0.5) -- (0.25,1.5);
-    \draw[-] (0.5,0.5) -- (0.5,1.5);
-    \draw[-] (0.75,0.5) -- (0.75,1.5);
-    \draw[-] (1,0.5) -- (1,1.5);
-  	\draw[-] (1.25,0.5) -- (1.25,1.5);
-    \draw[-] (1.5,0.5) -- (1.5,1.5);
-   	\draw[-] (1.75,0.5) -- (1.75,1.5);
-   	\draw[-] (2,0.5) -- (2,1.5);
-   	\draw[-] (2.25,0.5) -- (2.25,1.5);
-   	\draw[-] (2.5,0.5) -- (2.5,1.5);
-   	\draw[-] (2.75,0.5) -- (2.75,1.5);	     	
-   	\draw[-] (3,0.5) -- (3,1.5);
-    \draw[-] (8,0.5) -- (8,1.5);
-     	
-    \def\flagOfs{0.125}
-	\node at (\flagOfs, 1) {\tiny E};
-	\node at (\flagOfs + 0.25, 1) {\tiny X};
-	\node at (\flagOfs + 0.5, 1) {\tiny T};
-	\node at (\flagOfs + 0.75, 1) {\tiny H};
-	\node at (\flagOfs + 1, 1) {\tiny L};
-	\node at (\flagOfs + 1.25, 1) {\tiny R};
-	\node at (\flagOfs + 1.5, 1) {\tiny M};
-	\node at (\flagOfs + 1.75, 1) {\tiny -};
-	\node at (\flagOfs + 2, 1) {\tiny -};
-	\node at (\flagOfs + 2.25, 1) {\tiny -};
-	\node at (\flagOfs + 2.5, 1) {\tiny P};
-	\node at (\flagOfs + 2.75, 1) {\tiny I};
-				
-	\node at (5.75,1) {\small IA Segment};
-	\node at (11,1) {\small IA Offset};
+  	\draw[-] (\fw*1,0.5) -- (\fw*1,1.5);
+  	\draw[-] (\fw*2,0.5) -- (\fw*2,1.5);
+  	\draw[-] (\fw*3,0.5) -- (\fw*3,1.5);
+  	\draw[-] (\fw*4,0.5) -- (\fw*4,1.5);
+  	\draw[-] (\fw*5,0.5) -- (\fw*5,1.5);
+  	\draw[-] (\fw*6,0.5) -- (\fw*6,1.5);
+  	\draw[-] (\fw*7,0.5) -- (\fw*7,1.5);
+  	\draw[-] (\fw*8,0.5) -- (\fw*8,1.5);
+  	\draw[-] (\fw*9,0.5) -- (\fw*9,1.5);
+  	\draw[-] (\fw*10,0.5) -- (\fw*10,1.5);
+  	\draw[-] (\fw*11,0.5) -- (\fw*11,1.5);
+   	\draw[-] (9,0.5) -- (9,1.5);
+  	        	
+  	\node at (\fw * 1 - 0.2, 1) {E};
+	\node at (\fw * 2 - 0.2, 1) {X};
+	\node at (\fw * 3 - 0.2, 1) {T};
+	\node at (\fw * 4 - 0.2, 1) {H};
+	\node at (\fw * 5 - 0.2, 1) {L};
+	\node at (\fw * 6 - 0.2, 1) {R};
+	\node at (\fw * 7 - 0.2, 1) {M};
+	\node at (\fw * 8 - 0.2, 1) {-};
+	\node at (\fw * 9 - 0.2, 1) {-};
+	\node at (\fw * 10 - 0.2, 1) {P};
+	\node at (\fw * 11 - 0.2, 1) {I};
+			
+	\node at (6.5,1) {\small IA Segment};
+	\node at (12.5,1) {\small IA Offset};
 		
-	\node at (1.5,0.25) {12};
-    \node at (5,0.25) {20};
-   	\node at (11,0.25) {32};
+	\node at (\fw * 1 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 2 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 3 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 4 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 5 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 6 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 7 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 8 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 9 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 10 - 0.2,0.25) {\small{1}};
+	\node at (\fw * 11 - 0.2,0.25) {\small{1}};
+    \node at (7,0.25) {\small{20}};
+   	\node at (12.5,0.25) {\small{32}};
    	 	
 \end{tikzpicture}
 \end{center}
@@ -407,7 +379,6 @@ The processor state register contains the virtual address of the current instruc
 \subsection*{Processor Status}
 \addcontentsline{toc}{subsection}{Protection Id Registers}
 
-M I E  and so on ... group by user and priv level.
 
 \begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
     \caption{Status Field Bits} \\
@@ -433,6 +404,8 @@ M I E  and so on ... group by user and priv level.
     \midrule
     \textbf{X} & When set, the processor runs in privileged mode. \\
     \midrule
+     \textbf{T} & When set, taken branch traps are enabled. Any branch taken will result in a trap. \\
+    \midrule
     \textbf{H} & When set, a higher-privilege transfer trap occurs whenever the following instruction is of a higher privilege. \\
     \midrule
     \textbf{L} & When set, a lower-privilege transfer trap occurs whenever the following instruction is of a lower privilege. \\
@@ -445,12 +418,6 @@ M I E  and so on ... group by user and priv level.
     
     \textbf{P} & Protection identifier validation enable. When set instruction and data references are checked for valid protection identifiers (PIDs). The \texttt{PRB} instruction checks for valid PIDs without causing a trap. \\
     \midrule 
-    \textbf{T} & When set, taken branch traps are enabled. Any branch taken will result in a trap. \\
-    \midrule
-    \textbf{B} & The B-bit is set by any taken branch instruction and cleared otherwise. \\
-    \midrule
-    \textbf{C} & When set, taken branch traps are enabled. \\
-    \midrule
     \textbf{D} & Data memory break disable. The D-bit is cleared after the execution of each instruction, except for the \texttt{RFI} instruction which may set it. When set, data memory break traps are disabled. This bit allows a simple mechanism to trap on a data store and then proceed past the trapping instruction. \\
     \midrule
      
@@ -511,10 +478,168 @@ All memory addresses are expressed as bytes addresses. Address computation uses 
 
 Twin-64 is internally a big-endian machine. It does however support little endian and big endian byte ordering models. 
 
-a picture ?
+The optional E-bit in the PSW register controls whether loads and stores use big endian or little endian byte ordering. When the E-bit is cleared, all larger-than-byte load and store operations are in big endian ordering. The lower addressed bytes in memory correspond to the higher-order bytes in the register. When the E-bit is set, all larger-than-byte load and store operations are in little endian mode. The lower-addressed bytes in memory correspond to
+the lower-order bytes in the register. 
 
-affects only load and stores.
+In addition, the E-bit also controls the instruction fetch. Processors that implement byte ordering, must also provide a default setting to be set by software. The default setting is stored in the processor configuration register \texttt{CR0}. The default endian bit setting controls whether the PSW E-bit is set to 0 or 1 on interruptions and also controls how to interpret the data in the address translation related tables. 
 
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.9, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,10);
+  	
+  	\def\leftofs{2};
+  	
+  	\node at (2.5,9.5) {\LARGE{Memory}};
+  	\node at (12,9.5) {\LARGE{Register}};
+
+  	
+  	\node at (2+0.125, 8+0.25) {7};
+	\node at (3-0.125, 8+0.25) {0};
+  	\node at (1, 8 - 0.5) {0};
+  	\node at (1, 1 - 0.5) {7};
+
+  	\node[  tsRectangle, 
+            minimum width=1cm,
+            minimum height=8cm,
+            anchor=west] at ( \leftofs, 4) { };
+            
+    \draw[-] (\leftofs, 7) -- (\leftofs+1, 7);
+    \draw[-] (\leftofs, 6) -- (\leftofs+1, 6);
+    \draw[-] (\leftofs, 5) -- (\leftofs+1, 5);
+    \draw[-] (\leftofs, 4) -- (\leftofs+1, 4);
+    \draw[-] (\leftofs, 3) -- (\leftofs+1, 3);
+    \draw[-] (\leftofs, 2) -- (\leftofs+1, 2);
+    \draw[-] (\leftofs, 1) -- (\leftofs+1, 1);
+    
+    \node at (\leftofs + 0.5, 7.5) {a};
+    \node at (\leftofs + 0.5, 6.5) {b};
+	\node at (\leftofs + 0.5, 5.5) {c};
+	\node at (\leftofs + 0.5, 4.5) {d};
+	\node at (\leftofs + 0.5, 3.5) {e};
+	\node at (\leftofs + 0.5, 2.5) {f};
+	\node at (\leftofs + 0.5, 1.5) {g};
+	\node at (\leftofs + 0.5, 0.5) {h};
+	
+	\node at (8 + 0.25, 8+0.25) {63};
+	\node at (16 - 0.25, 8+0.25) {0};
+
+ 	\node[  tsRectangle, 
+            minimum width=8cm,
+            minimum height=1cm,  
+            anchor=west] at (8,7.5) { };
+            
+    \node at ( 7, 7.5 ) { Byte };        
+            
+    \draw[-] (9, 8) -- (9, 7);
+    \draw[-] (10, 8) -- (10, 7);
+    \draw[-] (11, 8) -- (11, 7);
+    \draw[-] (12, 8) -- (12, 7);
+    \draw[-] (13, 8) -- (13, 7);
+    \draw[-] (14, 8) -- (14, 7);
+    \draw[-] (15, 8) -- (15, 7);
+    
+    \node at ( 8.5, 7.5 ) {0};
+    \node at ( 9.5, 7.5 ) {0};
+    \node at ( 10.5, 7.5 ) {0};
+    \node at ( 11.5, 7.5 ) {0};
+    \node at ( 12.5, 7.5 ) {0};
+    \node at ( 13.5, 7.5 ) {0};
+    \node at ( 14.5, 7.5 ) {0};
+    \node at ( 15.5, 7.5 ) {0};
+    
+    
+    \node[  tsRectangle, 
+            minimum width=8cm,
+            minimum height=1cm,  
+            anchor=west] at (8,5.5) { };
+            
+    \node at ( 7, 5.5 ) { Half }; 
+            
+    \draw[-] (9, 6) -- (9, 5);
+    \draw[-] (10, 6) -- (10, 5);
+    \draw[-] (11, 6) -- (11, 5);
+    \draw[-] (12, 6) -- (12, 5);
+    \draw[-] (13, 6) -- (13, 5);
+    \draw[-] (14, 6) -- (14, 5);
+    \draw[-] (15, 6) -- (15, 5);
+    
+    \node at ( 8.5, 5.5 ) {0};
+    \node at ( 9.5, 5.5 ) {0};
+    \node at ( 10.5, 5.5 ) {0};
+    \node at ( 11.5, 5.5 ) {0};
+    \node at ( 12.5, 5.5 ) {0};
+    \node at ( 13.5, 5.5 ) {0};
+    \node at ( 14.5, 5.5 ) {0};
+    \node at ( 15.5, 5.5 ) {0};
+    
+    \node[  tsRectangle, 
+            minimum width=8cm,
+            minimum height=1cm,  
+            anchor=west] at (8,3.5) { };
+            
+    \node at ( 7, 3.5 ) { Word }; 
+            
+    \draw[-] (9, 4) -- (9, 3);
+    \draw[-] (10, 4) -- (10, 3);
+    \draw[-] (11, 4) -- (11, 3);
+    \draw[-] (12, 4) -- (12, 3);
+    \draw[-] (13, 4) -- (13, 3);
+    \draw[-] (14, 4) -- (14, 3);
+    \draw[-] (15, 4) -- (15, 3);
+    
+    \node at ( 8.5, 3.5 ) {0};
+    \node at ( 9.5, 3.5 ) {0};
+    \node at ( 10.5, 3.5 ) {0};
+    \node at ( 11.5, 3.5 ) {0};
+    \node at ( 12.5, 3.5 ) {0};
+    \node at ( 13.5, 3.5 ) {0};
+    \node at ( 14.5, 3.5 ) {0};
+    \node at ( 15.5, 3.5 ) {0};
+
+  
+   \node[  tsRectangle, 
+            minimum width=8cm,
+            minimum height=1cm,  
+            anchor=west] at (8, 1.5) { };
+            
+    \node at ( 7, 1.5 ) { Double }; 
+            
+    \draw[-] (9, 2) -- (9, 1);
+    \draw[-] (10, 2) -- (10, 1);
+    \draw[-] (11, 2) -- (11, 1);
+    \draw[-] (12, 2) -- (12, 1);
+    \draw[-] (13, 2) -- (13, 1);
+    \draw[-] (14, 2) -- (14, 1);
+    \draw[-] (15, 2) -- (15, 1);
+    
+    \node at ( 8.5, 1.5 ) {0};
+    \node at ( 9.5, 1.5 ) {0};
+    \node at ( 10.5, 1.5 ) {0};
+    \node at ( 11.5, 1.5 ) {0};
+    \node at ( 12.5, 1.5 ) {0};
+    \node at ( 13.5, 1.5 ) {0};
+    \node at ( 14.5, 1.5 ) {0};
+    \node at ( 15.5, 1.5 ) {0};
+       
+            
+\end{tikzpicture}
+\end{center}
+\caption{Big endian mode}
+\label{fig:Big endian mode}
+\end{figure}
+
+
+??? need another one of this picture for little endian mode
+
+The PSW E-bit also affects instruction fetch. When the E-bit is cleared, instruction fetch is performed in big endian mode. The lower addressed bytes in memory correspond to the higher-order bytes in the instruction. When the E-bit is set the instruction fetch is performed in little endian mode. The lower-addressed bytes in memory correspond to the lower-order bytes in the instruction.
+
+??? impact, how to realize ?
+
+??? do we support the feature of keeping both modes dynamically ?
+
+??? is it set at software start and then never changes ?
 
 \section*{Translation Lookaside Buffer}
 \addcontentsline{toc}{section}{Translation Lookaside Buffer}
@@ -525,39 +650,39 @@ Virtual address translations are stored in a translation look-aside buffer. The 
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,4.5);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,4.5);
   	
     \node[  tsRectangle, 
             minimum width=9.5cm,
             minimum height=0.75cm,  
             fill=white,
-            anchor=west] at (0,3.75) { };
-    \node[anchor=west] at (0, 3.75) {\small Virtual page number};
-    \node[anchor=west] at (11,3.75) {38bit};
+            anchor=west] at (0,3.5) { };
+    \node[anchor=west] at (0, 3.5) {\small Virtual page number};
+    \node[anchor=west] at (11,3.5) {38bit};
             
   	\node[  tsRectangle, 
             minimum width=5cm,
             minimum height=0.75cm,  
             fill=white,
-            anchor=west] at (0,2.75) { };
-    \node[anchor=west] at (0, 2.75) {\small Physical page number};   
-    \node[anchor=west] at (11,2.75) {22bit};
+            anchor=west] at (0,2.5) { };
+    \node[anchor=west] at (0, 2.5) {\small Physical page number};   
+    \node[anchor=west] at (11,2.5) {22bit};
      
     \node[  tsRectangle, 
             minimum width=1cm,
             minimum height=0.75cm,  
             fill=white,
-            anchor=west] at (0,1.75) { };
-    \node[anchor=west] at (0, 1.75) {\small Acc}; 
-    \node[anchor=west] at (11,1.75) {4bit};
+            anchor=west] at (0,1.5) { };
+    \node[anchor=west] at (0, 1.5) {\small Acc}; 
+    \node[anchor=west] at (11,1.5) {4bit};
     
     \node[  tsRectangle, 
             minimum width=2cm,
             minimum height=0.75cm,  
             fill=white,
-            anchor=west] at (0,0.75) { };
-    \node[anchor=west] at (0,0.75) {\small Flags};
-    \node[anchor=west] at (11,0.75) {8bit};
+            anchor=west] at (0,0.5) { };
+    \node[anchor=west] at (0,0.5) {\small Flags};
+    \node[anchor=west] at (11,0.5) {8bit};
             
 \end{tikzpicture}
 \end{center}
@@ -609,7 +734,8 @@ The first segments, segment 0 to 15, are special in that they bypass the TLB ent
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
 
-Twin-64 is a cache visible architecture, featuring cache models for unified or separate instruction and data cache. While hardware directly controls the cache for cache line insertion and replacement, the software has explicit control on flushing and purging cache line entries. Twin-64 caches are virtually indexed, physically tagged caches. To speed up the entire memory access process, the cache uses the virtual address to index into the arrays, which can be done in parallel to the TLB lookup. When the physical address tag in the cache and the physical page address in the TLB match, there will be a cache hit. The Twin-64 cache architecture will not specify the size of cache lines or cache organization. The Twin-64 architecture does not specify a particular cache design and hierarchy model. The architecture just specifies instructions to handle cache operations, such as delete or flushing a cache.
+Twin-64 is a cache visible architecture, featuring cache models for unified or separate instruction and data cache. While hardware directly controls the cache for cache line insertion and replacement, the software has explicit control on flushing and purging cache line entries. Twin-64 caches are virtually indexed, physically tagged caches. To speed up the entire memory access process, the cache uses the virtual address to index into the arrays, which can be done in parallel to the TLB lookup. When the physical address tag in the cache and the physical page address in the TLB match, there will be a cache hit. 
 
-when translation is done, the TLB has the U bit. For the physical segments, the address specifies whether cached or not. I/O range is always uncached. Memory cached. 
+The Twin-64 cache architecture will not specify the size of cache lines or cache organization. The Twin-64 architecture does not specify a particular cache design and hierarchy model. The architecture just specifies instructions to handle cache operations, such as delete or flushing a cache.
 
+The TLB entry contains information whether the data accessed should be cached or not. For segments 0 to 15, where the TLB is bypassed, the hardware decides on the caching option. The memory address ranges are always cached. The I7O address range is not cached.

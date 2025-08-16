@@ -5,9 +5,7 @@
 \chapter*{Instruction Set Descriptions}
 \addcontentsline{toc}{chapter}{Instruction Set Descriptions}
 
-This chapter presents the Twin-64 instruction set. Like typical RISC style instruction sets, it is a fixed length instruction set with very few regular formats. The instructions are group into four categories, arithmetic and logical, load and store, branch and special and system instructions.
-
-The instructions described in this chapter contains the instruction word layout, a short description of the instruction and also a high level pseudo code of what the instruction does. The pseudo code	routines used in the instruction descriptions are listed in the appendix. Each instruction operation is described in a C-style pseudo code operation. The pseudo code uses a register notation describing by their class and index. For example, GR[5] labels general register 5 and CR[1] the control register number 1. 
+This chapter describes the Twin-64 instruction set. The instruction descriptions includes the instruction word layout, a short description of the instruction and also a high level pseudo code of what the instruction does. The pseudo code	routines used in the instruction descriptions are listed in the appendix. Each instruction operation is described in a C-style pseudo code operation. The pseudo code uses a register notation describing by their class and index. For example, GR[5] labels general register 5 and CR[1] the control register number 1. 
 
 In addition, some register also have dedicated names, such as for example the shift amount control register, labelled "SAR". A subfield of the instruction is selected by adding a "." and the field name in square brackets. For example the interrupt enable bit in the PSW register is described as "PSW.[E]". 
 

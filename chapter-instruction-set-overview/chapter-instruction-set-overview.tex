@@ -212,50 +212,50 @@ The \textbf{unsigned immediate U20} format is used by the immediate instruction 
 \section*{Arithmetic Instructions}
 \addcontentsline{toc}{section}{Arithmetic Instructions}
 
-The arithmetic instruction operate on two signed 64-bit operands and stores the result to the target register. There are two instruction layouts, signed immediate S15 and register based. The \textbf{immediate operand instruction format} will add the sign extended 15-bit value to \texttt{RegB}. The \textbf{register instruction format} type instruction uses two registers as input operands, performs the operation and stores the result in a third register. The following figure shows the instruction layout.
+The arithmetic instruction operate on two signed 64-bit operands and stores the result to the target register. There are two instruction layouts, signed immediate S15 and register based. The \textbf{immediate operand instruction format} will add the sign extended 15-bit value to \texttt{RegB}. The \textbf{register instruction format}  type instruction uses two registers as input operands, performs the operation and stores the result in a third register. 
 
-The \textbf{ADD} and \textbf{SUB} instructions perform signed integer 64-bit arithmetic with a numeric overflow resulting in an overflow trap. There are no operations on unsigned quantities. The \textbf{SHLxA} and \textbf{SHRxA} perform an arithmetic left shift operation and add an operand to the shifted input, storing the result in the target register. The \textbf{CMP} compares two registers for being equal, not equal, less than and les or equal than. The result of this comparison is store din the target register.
+The \texttt{ADD} and \texttt{SUB} instructions perform signed integer 64-bit arithmetic with a numeric overflow resulting in an overflow trap. There are no operations on unsigned quantities. The \texttt{SHLxA} and \texttt{SHRxA} perform an arithmetic left shift operation and add an operand to the shifted input, storing the result in the target register. The \texttt{CMP} compares two registers for being equal, not equal, less than and les or equal than. The result of this comparison is store din the target register.
 
 \section*{Bit Operations Instructions}
 \addcontentsline{toc}{section}{Bit Operations Instructions}
 
 The bit operation instruction fall into two groups. The 
-\textbf{AND}, \textbf{OR} and \textbf{XOR} instructions implement the logical operations as their name suggest. Like the arithmetic instructions, there is an immediate instruction and a register instruction layout.
+\texttt{AND}, \texttt{OR} and \texttt{XOR} instructions implement the logical operations as their name suggest. Like the arithmetic instructions, there is an immediate instruction and a register instruction layout.
 
-The second group implements the bit manipulation operations. The \textbf{EXTR} instruction extracts a bit field from a register and places the field in another register. Optionally, the extracted field is signed extended. The \textbf{DEP} instruction deposits a bit field into a target register. The \textbf{DSR} instruction concatenates two general registers, shifts the 128-bit quantity to the right and stores the lower 64 bits in a target register.
+The second group implements the bit manipulation operations. The \texttt{EXTR} instruction extracts a bit field from a register and places the field in another register. Optionally, the extracted field is signed extended. The \texttt{DEP} instruction deposits a bit field into a target register. The \texttt{DSR} instruction concatenates two general registers, shifts the 128-bit quantity to the right and stores the lower 64 bits in a target register.
 
 \section*{Immediate Instructions}
 \addcontentsline{toc}{section}{Immediate Instructions}
 
-The \textbf{LDI}, and \textbf{ADDIL} are instruction for forming large constants. With a 32-bit instruction word, even 32-bit constants are not possible in one instruction. The \textbf{LDI} instruction has a qualifier to load a constant value at a defined position in the target register. The opt field allow to select fields in the target register where the constant value is stored. With a short instruction sequence of any 64-bit value can be loaded.
+The \texttt{LDI}, and \texttt{ADDIL} are instruction for forming large constants. With a 32-bit instruction word, even 32-bit constants are not possible in one instruction. The \texttt{LDI} instruction has a qualifier to load a constant value at a defined position in the target register. The opt field allow to select fields in the target register where the constant value is stored. With a short instruction sequence of any 64-bit value can be loaded.
 
-The \textbf{ADDIL} instruction adds the upper portion of a 32-bit immediate value to the lower 32-bit half of a general register. This instruction is used primarily for address arithmetic to allow reaching any location in a segment. The \textbf{LDO} instruction loads an offset into a general register. The address loaded is formed by adding the signed immediate value to the base register. Address arithmetic is an unsigned 32-bit arithmetic with wrapping around in the 32-bit range.
+The \texttt{ADDIL} instruction adds the upper portion of a 32-bit immediate value to the lower 32-bit half of a general register. This instruction is used primarily for address arithmetic to allow reaching any location in a segment. The \texttt{LDO} instruction loads an offset into a general register. The address loaded is formed by adding the signed immediate value to the base register. Address arithmetic is an unsigned 32-bit arithmetic with wrapping around in the 32-bit range.
 
 \section*{Memory Reference Instructions}
 \addcontentsline{toc}{section}{Memory Reference Instructions}
 
 Twin-64 is a register memory architecture. It has the common load/store instructions as well as instructions that combined an operation with a memory reference. Memory reference instructions feature two addressing modes. The first is the base register and offset instruction. the second the base register and register index instruction. 
 
-The \textbf{indexed instruction format} will load the content of memory address formed by adding the scaled immediate 13-bit field to the base register \texttt{RegB} and add the data value to \texttt{RegA}. The \textbf{dw} field indicates the data value width. A \textbf{dw} value of zero loads an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. In addition, the \textbf{dw} field will scale the offset value by left shifting the immediate field according to the data width. A dw value of 3, for example, will load an double value from an address formed by shifting the offset index in the instruction by three bits before adding to the base register.
+The \textbf{indexed instruction format} will load the content of memory address formed by adding the scaled immediate 13-bit field to the base register \texttt{RegB} and add the data value to \texttt{RegA}. The \texttt{dw} field indicates the data value width. A \texttt{dw} value of zero loads an 8-bit, a value of 1 a 16-bit value, value of 2 a 32-bit value and a value of 3 a 64-bit value. In any case, the data value fetched is signed extended to a 64-bit value. In addition, the \texttt{dw} field will scale the offset value by left shifting the immediate field according to the data width. A dw value of 3, for example, will load a double value from an address formed by shifting the offset index in the instruction by three bits before adding to the base register.
 
-The \textbf{register indexed instruction format} will load the content of memory address formed by adding \texttt{RegX} to the base register \texttt{RegB}. The \textbf{dw} field to specify the data value width as in the indexed instruction format. The offset in \texttt{RegX} is interpreted as a byte offset, independent of the actual \textbf{dw} field value. In both instruction cases, the data value fetched is signed extended to a 64-bit value. 
+The \textbf{register indexed instruction format} will load the content of memory address formed by adding \texttt{RegX} to the base register \texttt{RegB}. The \texttt{dw} field to specify the data value width as in the indexed instruction format. The offset in \texttt{RegX} is interpreted as a byte offset, independent of the actual \texttt{dw} field value. In both instruction cases, the data value fetched is signed extended to a 64-bit value. 
 
-The \textbf{LD} and \textbf{ST} instruction are the load and store instructions. In addition to the two addressing modes presented above, they furthermore feature a base register address modification. Depending on the offset sign, the base register is updated before or after the address computation with the effective address computed. See the instruction description for more details.
+The \texttt{LD} and \texttt{ST} instruction are the load and store instructions. In addition to the two addressing modes presented above, they furthermore feature a base register address modification. Depending on the offset sign, the base register is updated before or after the address computation with the effective address computed. See the instruction description for more details.
 
-The \textbf{LDR} and \textbf{STC} instruction implement the base support for a pipeline friendly method for semaphore operations. They only support the indexed instruction mode on a double word. Also, there is no base register modification option.
+The \texttt{LDR} and \texttt{STC} instruction implement the base support for a pipeline friendly method for semaphore operations. They only support the indexed instruction mode on a double word. Also, there is no base register modification option.
 
-The \textbf{ADD}, \textbf{SUB}, \textbf{AND}, \textbf{OR}, \textbf{XOR}, \textbf{CMP} instructions perform the respective operation as described above with one operand being fetched from memory using the indexed addressing modes described above.
+The \texttt{ADD}, \texttt{SUB}, \texttt{AND}, \texttt{OR}, \texttt{XOR}, \texttt{CMP} instructions perform the respective operation as described above with one operand being fetched from memory using the indexed addressing modes described above.
 
 \section*{Control Flow Instructions}
 \addcontentsline{toc}{section}{Control Flow Instructions}
 
 Control flow is implemented through a set of branch instructions. They can be classified into unconditional and conditional instruction branches.
 
-\textbf{Unconditional branches} fetch the next instruction address from the computed branch target. The \textbf{B} instruction performs an instruction relative branch, the \textbf{BR} instruction a base register relative branch. Both optionally return the return address in a general register.
+Unconditional branches fetch the next instruction address from the computed branch target. The \texttt{B} and \texttt{BR} instruction perform an instruction relative branch. Both optionally return the return address in a general register.
 
-The \textbf{BV} instruction is a vectored branch. The content of a general register is added to a base register, forming branch target. 
+The \texttt{BV} instruction is a vectored branch. The content of a general register is added to a base register, forming the branch target. 
 
-The instructions \textbf{BB}, \textbf{CBR}, \textbf{MBR} and \textbf{ABR} implement the conditional branch instructions. If the condition is met a branch to the target address is performed. The target address is always a local address and the offset is instruction address relative. Conditional branches adopt a static prediction model. Forward branches are assumed not taken, backward branches are assumed taken.
+The instructions \texttt{BB}, \texttt{CBR}, \texttt{MBR} and \texttt{ABR} implement the conditional branch instructions. If the condition is met a branch to the target address is performed. The target address is always a local address and the offset is instruction address relative. Conditional branches adopt a static prediction model. Forward branches are assumed not taken, backward branches are assumed taken.
 
 All branch address arithmetic is a 32-bit unsigned arithmetic with wraparound. Adding branch offsets will not overflow into the segment Id portion of the address..
 
@@ -264,14 +264,14 @@ All branch address arithmetic is a 32-bit unsigned arithmetic with wraparound. A
 
 The final instruction group is the \textbf{special/system} instruction group. The system control instructions control the CPU resources such as TLB, Cache and so on. Most of the instructions found in this group require that the processor runs in privileged mode.
 
-The \textbf{MFCR}  and \textbf{MTCR} instructions are used to transfer data to and from a control register. Access to some control registers requires privileged mode. The \textbf{MFIA} instruction accesses the current instruction address offset, a key instruction for position independent code aspects.  The \textbf{RSM}  and \textbf{SSM} instructions allow for setting or clearing an individual an accessible bit of the status part of the processor state. 
+The \texttt{MFCR}  and \texttt{MTCR} instructions are used to transfer data to and from a control register. Access to some control registers requires privileged mode. The \texttt{MFIA} instruction accesses the current instruction address offset, a key instruction for position independent code aspects.  The \texttt{RSM}  and \texttt{SSM} instructions allow for setting or clearing an individual an accessible bit of the status part of the processor state. 
 
-The \textbf{LDPA}, \textbf{PRBR} and \textbf{PRBW} instructions are used to obtain information about the virtual memory system. The LDPA instruction returns the physical address of the virtual page, if present in memory. The PRB instruction tests whether the desired access mode to an address is allowed.
+The \texttt{LDPA}, \texttt{PRBR} and \texttt{PRBW} instructions are used to obtain information about the virtual memory system. The \texttt{LDPA} instruction returns the physical address of the virtual page, if present in memory. The \texttt{PRBx} instruction tests whether the desired access mode to an address is allowed.
 
-The TLB and Caches are managed by the \textbf{ITLB}, \textbf{PTLB}, \textbf{FCA} and \textbf{PCA}  instruction. The ITLB and PTLB instructions insert into the TLB and remove translations from the TLB. The FCA and PCA instructions manages the instruction and data cache, featuring to flush and / or just purge a cache line. There is no instruction that inserts data into a cache as cache insertion is completely controlled by hardware. 
+The translation lookaside buffers and caches are managed by the \texttt{ITLB}, \texttt{PTLB}, \texttt{FCA} and \texttt{PCA}  instruction. The \texttt{ITLB} and \texttt{PTLB} instructions insert into the TLB and remove translations from the TLB. The \texttt{FCA} and \texttt{PCA} instructions manages the instruction and data cache, featuring to flush and / or just purge a cache line. There is no instruction that inserts data into a cache as cache insertion is completely controlled by hardware. 
 
-The \textbf{RFI} instruction is used to restore a processor state from the control registers. Optionally, general registers that have been stored into the reserved control registers will be restored.
+The \texttt{RFI} instruction is used to restore a processor state from the control registers. Optionally, general registers that have been stored into the reserved control registers will be restored.
 
-The \textbf{DIAG} instruction is a control instructions to issue hardware specific implementation commands. Example is the memory barrier command, which ensures that all memory access operations are completed after the execution of this DIAG instruction. 
+The \texttt{DIAG} instruction is a control instructions to issue hardware specific implementation commands. Example is the memory barrier command, which ensures that all memory access operations are completed after the execution of this DIAG instruction. 
 
-The \textbf{TRAP} instruction ...
+The \texttt{TRAP} instruction is used to raise a software exception. It is typically used to implement a debugging breakpoint.

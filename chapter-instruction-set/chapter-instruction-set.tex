@@ -1,0 +1,42 @@
+
+\chapter*{Instruction Set}
+\addcontentsline{toc}{chapter}{Instruction Set}
+
+Twin-64 features a simple and efficient instruction set. All instructions are of fixed length, specifically a 32-bit word. There are relatively few instructions in total; however, depending on the instruction, several execution options are encoded to make each instruction more versatile. Great emphasis is placed on ensuring that such options do not overly complicate the pipeline and only increase the overall data path length slightly, if at all. Instead of a multitude of addressing modes, typically found in CISC-style CPUs, Twin-64 offers two virtual memory addressing modes with a simple base address–offset calculation model. No indirection or addressing mode that requires reading a memory item for address calculation is part of the architecture.
+
+The instruction set is divided into five groups. The memory reference group contains the instructions to load and store from virtual and physical memory. The immediate group contains the instructions for building immediate values up to 64 bits. The control flow group contains the conditional and unconditional branch instructions. The computational instructions perform arithmetic, Boolean, and bit operations such as bit extract and deposit. Finally, the system control instruction group contains all instructions for managing hardware elements such as caches and TLBs, register movement, traps, and interrupt handling. 
+
+\section*{Computational Instructions}
+\addcontentsline{toc}{section}{Computational Instructions}
+
+The arithmetic, logical, and bit-field instructions represent the computation class. Twin-64 offers only 64-bit signed arithmetic operations. A numeric overflow always results in a trap.
+
+The binary instructions allow negation of one operand as well as the output. Negating one operand is an efficient way to build complementary bit masks. The bit-field instructions perform bit extraction and deposit as well as double-register shifts. These instructions are also the basis for all shift and rotate operations.
+
+\section*{Immediate Instructions}
+\addcontentsline{toc}{section}{Immediate Instructions}
+
+Several instructions contain bit fields for representing immediate values within the instruction word. However, fixed-length instruction word architectures have the drawback that there is not enough room to embed a full-word immediate value in a single instruction. Typically, a combination of two or three instructions is used to concatenate the value from parts. 
+
+There are also immediate instructions for performing 32-bit address arithmetic. Address calculations wrap around within the 32-bit offset and never overflow into the segment ID part.
+
+\section*{Memory Reference Instructions}
+\addcontentsline{toc}{section}{Memory Reference Instructions}
+
+Memory reference instructions operate on memory and a general register, with the unit of transfer being a word, half-word, or byte. In this sense the architecture is similar to a typical load/store design. However, in contrast to pure load/store architectures, Twin-64 load/store instructions are not the only instructions that access memory. Being a register–memory architecture, all instructions with an operand field encoding may access memory as well. However, no instruction reads and writes data memory in the same operation.
+
+With the exception of the load-reserved and store-conditional instructions, memory reference instructions support base register modification. When the option is set, the base register used in address computation is adjusted before or after the data access. A negative offset is applied before address computation, and a positive offset after. Finally, indexed addressing mode scales the index according to the data type, providing a wider address reach.
+
+\section*{Control Flow Instructions}
+\addcontentsline{toc}{section}{Control Flow Instructions}
+
+Control flow instructions are divided into unconditional and conditional branches. The unconditional branch instructions can also save the return point in a general register. Upon subroutine return, a branch instruction using this register value provides the return mechanism.
+
+Often, code sequences compare two values and then perform a branch. Conditional branch instructions allow comparing two operands and branching if the condition is met.  
+
+Branch instructions are further grouped into instruction-address-relative and global-address-relative branches. The former computes an offset using the current instruction address, while the latter uses a global virtual address as the base for branch target computation.
+
+\section*{System Control Instructions}
+\addcontentsline{toc}{section}{System Control Instructions}
+
+System control instructions manage CPU resources such as the TLB, cache, and control registers. There are instructions to access control registers directly. The TLB is managed by instructions to insert and remove entries. The cache is managed by instructions to flush and purge data. Additional instructions generate traps and provide general-purpose diagnostic functions for controlling and examining processor resources. Most of the instructions in this group require the processor to be running in privileged mode.
