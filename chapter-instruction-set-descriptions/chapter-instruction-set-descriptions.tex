@@ -5,14 +5,13 @@
 \chapter*{Instruction Set Descriptions}
 \addcontentsline{toc}{chapter}{Instruction Set Descriptions}
 
-This chapter describes the Twin-64 instruction set. The instruction descriptions includes the instruction word layout, a short description of the instruction and also a high level pseudo code of what the instruction does. The pseudo code	routines used in the instruction descriptions are listed in the appendix. Each instruction operation is described in a C-style pseudo code operation. The pseudo code uses a register notation describing by their class and index. For example, GR[5] labels general register 5 and CR[1] the control register number 1. 
+This chapter describes the Twin-64 instruction set. Each instruction description includes the instruction word layout, a brief description of the instruction, and a high-level pseudo code representation of its operation. The pseudo code routines used in the instruction descriptions are listed in the appendix. Each instruction operation is described using C-style pseudo code. The pseudo code references registers by their class and index. For example, \texttt{GR[5]} denotes general register 5, and \texttt{CR[1]} denotes control register 1.  
 
-In addition, some register also have dedicated names, such as for example the shift amount control register, labelled "SAR". A subfield of the instruction is selected by adding a "." and the field name in square brackets. For example the interrupt enable bit in the PSW register is described as "PSW.[E]". 
+Some registers also have dedicated names. For example, the shift amount control register is labelled \texttt{SAR}. A subfield of an instruction is selected by adding a dot and the field name in square brackets. For instance, the interrupt enable bit in the PSW register is described as \texttt{PSW.[I]}.  
 
-Additional options for an instruction will be specified by a "." followed by a sequence of characters in the assembler syntax. Each character is one of the defined options for the instruction. As an example, the AND instruction can negate the result. The assembler notation would be "AND.N ...". The order of the individual characters does not matter. The defined options are listed as a list of characters.
+Additional options for an instruction are specified by a dot followed by a sequence of characters in the assembler syntax. Each character represents a defined option for the instruction. For example, the \texttt{AND} instruction can negate its result; in assembler notation, this is written as \texttt{AND.N ...}. The order of the individual characters does not matter. All defined options are listed as a character set.  
 
-Reserved fields in an instruction word are reserved for future enhancements and should be filled with a zero. The instruction explicitly shows the numeric value of these fields. Any other value at that place will result in an undefined behavior.
-
+Reserved fields in an instruction word are reserved for future enhancements and should be filled with zero. The instruction explicitly shows the numeric value of these fields. Any other value in a reserved field will result in undefined behavior.
 
 %--------------------------------------------------------------------------------
 %

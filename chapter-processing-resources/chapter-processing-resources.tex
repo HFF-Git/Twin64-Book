@@ -5,13 +5,13 @@
 \chapter*{Processing Resources}
 \addcontentsline{toc}{chapter}{Processing Resources}
 
-
+This chapter describes the processing resources and data types in a Twin-64 system. 
 
 
 \section*{General Registers}
 \addcontentsline{toc}{section}{General Registers}
 
-Twin-64 features a set of 16 general purposes registers. They are used for data    and address values. 
+Twin-64 features a set of 16 general purposes registers. They are used for all computations. 
 
 \begin{figure}[H]
 \begin{center}
@@ -64,12 +64,12 @@ Twin-64 features a set of 16 general purposes registers. They are used for data 
 \label{fig:General registers}
 \end{figure}
 
-Some general registers have a dedicated use. Register zero will always return a zero value when read and a write operation will have no effect. Although there are only 16 general registers in the CPU, implementing such a register greatly simplifies the instruction design, in that it for example provides a target when the result is not needed. General register one is a scratch register and also serves as an implicit target for some instructions. Other general registers may have a dedicated purpose defined in the runtime architecture conventions.
+Some general registers have dedicated purposes. Register zero always returns a zero value when read, and writing to it has no effect. Although the CPU has only 16 general registers, implementing such a register greatly simplifies instruction design, for example by providing a target when the result is not needed. General register one is a scratch register and also serves as an implicit target for certain instructions. Other general registers may have dedicated roles as defined by the runtime architecture conventions.
 
 \section*{Control Registers}
 \addcontentsline{toc}{section}{Control Registers}
 
-Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}. There are two instructions to move the contents of a control register to a general register and vice versa. A move to a control register will always move the entire 64-bit word. A move to a general register from a control register will move the size of the control register right aligned to the general register. The following table depicts the control registers defined for Twin-64.
+Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}. Two instructions allow moving data between a control register and a general register in either direction. A move to a control register always transfers the full 64-bit word. A move from a control register to a general register transfers the value right-aligned to the size of the control register. The following table shows the control registers defined for Twin-64.
 
 \begin{figure}[H]
 \begin{center}
@@ -213,28 +213,34 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
 \subsection*{Processor Configuration Register}
 \addcontentsline{toc}{subsection}{Processor Configuration Register}
 
-fields with info. one is the actual physical memory size encoded.
-
-one field: 4Bit: Memory Size in 4 Gbyte increments.
-
-// ??? work on picture ....
+The processor configuration register contains information about the current system and processor hardware setup. Some of its fields are read-only and set directly by the hardware, while others can be modified by processor-dependent code routines.
 
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,2);
   	
     \node[  tsRectangle, 
             minimum width=16cm,
             minimum height=1cm,  
             fill=white!50] (blocks) at (8,1) { };
+            
+    % Bits
+  	\node at (0.25,1.75) {\small 63};
+  	\node at (8 - 0.25,1.75) {\small 32};
+  	\node at (8 + 0.25,1.75) {\small 31};
+	\node at (14 + 0.25,1.75) {\small 3};
+	\node at (16 - 0.25,1.75) {\small 0};
                 
   	\draw[-] (14,0.5) -- (14,1.5);
+  	\draw[-] (8,0.5) -- (8,1.5);
   		
 	\node at (15,1) {\small{ MemSize}};
+	\node at (4,1) {\small{ Cycles per millisecond }};
 	
 	\node at (15,0.25) {\small{4}};
+	\node at (4,0.25) {\small{32}};
    	 	
 \end{tikzpicture}
 \end{center}
@@ -243,7 +249,7 @@ one field: 4Bit: Memory Size in 4 Gbyte increments.
 \end{figure}
 
 
-\begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
+\begin{longtable}{@{}p{0.4\linewidth}p{0.5\linewidth}@{}}
     \caption{Processor Configuration Register Fields} \\
     \toprule
     \textbf{Field} & \textbf{Purpose} \\
@@ -259,11 +265,17 @@ one field: 4Bit: Memory Size in 4 Gbyte increments.
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{Memory Size} & ... \\
+    \textbf{Memory Size} & The available physical memory in 4Gbyte increments. The minimum size is 4Gbyte, encoded as a zero. The maximum size is 64Gbyte encoded as a 15. \\
+    \midrule
+    \textbf{Flags} & e.g default endian, etc. \\
     \midrule
     \textbf{Architecture Id} & ... \\
     \midrule
-     \textbf{Processor Id Id} & ... \\
+    \textbf{Processor Id Id} & ... \\
+    \midrule
+    \textbf{Processor Core Num} & ... \\
+    \midrule
+    \textbf{Cycles per millisecond} & ... \\
     \midrule
     \textbf{...} & ... \\
 \end{longtable}
@@ -284,32 +296,32 @@ Twin-64 allows to record a set of up to 8 protection Id values in the processor 
 \subsection*{Interrupt Vector Address}
 \addcontentsline{toc}{subsection}{Interrupt Vector Address}
 
-The Interruption Vector Address (\texttt{IVA}) control register \texttt{CR8} contains the address of the base of an array of service procedures assigned to the interruption classes. The lower 14 bits of the IVA are reserved and set to zero. The address written to it must therefore be aligned on a page size.  The IVA is always located in the first segment, segment 0. The array of interruption service procedures is indexed by the interruption numbers described in the chapter on interrupts.
+The Interruption Vector Address (IVA) control register, \texttt{CR8}, holds the base address of an array of service routines assigned to the different interruption classes. The lower 14 bits of the IVA are reserved and must be set to zero, meaning any address written to it must be aligned to a page boundary. The IVA is always located in the first segment, segment 0. The array of interruption service routines is indexed by interruption numbers, as described in the chapter on interrupts.
 
 \subsection*{External Interrupt Enable Mask}
 \addcontentsline{toc}{subsection}{External Interrupt Enable Mask}
 
-The External Interrupt Enable Mask (\texttt{EIEM}) is stored in \texttt{CR15)}. It is 64-bit register containing a bit for each of the 64 external interrupts. A bit cleared in the EIEM masks external interrupts corresponding to that bit position.
+The External Interrupt Enable Mask (EIEM) is stored in \texttt{CR15)}. It is a 64-bit register, with each bit corresponding to one of the 64 external interrupts. A cleared bit in the EIEM masks the external interrupt associated with that position.
 
 \subsection*{Interruption PSW}
 \addcontentsline{toc}{subsection}{Interruption PSW}
 
-Upon an interrupt the interrupted instruction address and the processor status bits are saved to this control register. 
+Upon an interrupt, the address of the interrupted instruction and the processor status bits are saved to this control register.
 
 \subsection*{Interruption Argument Registers}
 \addcontentsline{toc}{subsection}{Argument Registers}
 
-The Interruption Argument Registers (\texttt{CR11} and \texttt{CR12}) are used to pass an instruction and a virtual address to an interruption handler. The values in these two control registers for each interruption class are described in the chapter on interrupts.
+The Interruption Argument Registers (\texttt{CR11} and \texttt{CR12}) are used to pass an instruction and a virtual address to an interruption handler. The values of these registers for each interruption class are described in the chapter on interrupts.
 
 \subsection*{Scratch Registers}
 \addcontentsline{toc}{subsection}{External Interrupt Register}
 
-The control registers \texttt{CR13}, \texttt{CR14}, \texttt{CR15} are scratch registers used by the interrupt handlers or alike. \texttt{CR12} and \texttt{CR13} are privileged register only accessible from code running at priv level, \texttt{CR15} is accessible from any priv level. 
+Control registers \texttt{CR13}, \texttt{CR14}, and C\texttt{CR15} are scratch registers used by interrupt handlers or similar routines. \texttt{CR13} and \texttt{CR14} are privileged and can only be accessed from code running at a privileged level, whereas \texttt{CR15} is accessible from any privilege level. 
 
 \section*{Program State Register}
 \addcontentsline{toc}{section}{Processor State Register}
 
-The processor state register contains the virtual address of the current instruction and the processor status flags.
+The processor state register contains the virtual address of the current instruction along with the processor status flags.
 
 \begin{figure}[H]
 \begin{center}
@@ -322,21 +334,14 @@ The processor state register contains the virtual address of the current instruc
             minimum height=1cm,  
             fill=white!50] (blocks) at (8,1) { };
     
-    \def\fw{0.4}           
+    \def\fw{0.4}    
+    
+    \foreach \i in {1,...,11} {
+    	\draw (\fw*\i,0.5) -- (\fw*\i,1.5);
+	}       
                 
-  	\draw[-] (\fw*1,0.5) -- (\fw*1,1.5);
-  	\draw[-] (\fw*2,0.5) -- (\fw*2,1.5);
-  	\draw[-] (\fw*3,0.5) -- (\fw*3,1.5);
-  	\draw[-] (\fw*4,0.5) -- (\fw*4,1.5);
-  	\draw[-] (\fw*5,0.5) -- (\fw*5,1.5);
-  	\draw[-] (\fw*6,0.5) -- (\fw*6,1.5);
-  	\draw[-] (\fw*7,0.5) -- (\fw*7,1.5);
-  	\draw[-] (\fw*8,0.5) -- (\fw*8,1.5);
-  	\draw[-] (\fw*9,0.5) -- (\fw*9,1.5);
-  	\draw[-] (\fw*10,0.5) -- (\fw*10,1.5);
-  	\draw[-] (\fw*11,0.5) -- (\fw*11,1.5);
    	\draw[-] (9,0.5) -- (9,1.5);
-  	        	
+   	        	
   	\node at (\fw * 1 - 0.2, 1) {E};
 	\node at (\fw * 2 - 0.2, 1) {X};
 	\node at (\fw * 3 - 0.2, 1) {T};
@@ -427,7 +432,7 @@ The processor state register contains the virtual address of the current instruc
 \section*{Data Types}
 \addcontentsline{toc}{section}{Data Types}
 
-The fundamental data type is a 64-bit signed integer with the most significant bit being left and the least significant bit being right. All computation is  performed on 64-bit signed integer numbers. Memory access is performed on a double, word, half-word or byte basis. Word, Half and Byte data loaded is sign-extended. Store operations just store the corresponding value in memory as is. 
+The fundamental data type is a 64-bit signed integer, with the most significant bit on the left and the least significant bit on the right. All computations are performed on 64-bit signed integers. Memory accesses can be performed at the granularity of a doubleword, word, halfword, or byte. Data loaded as a word, halfword, or byte is sign-extended to 64 bits. Store operations write the corresponding value to memory without modification.
 
 \begin{figure}[ht]
 \begin{center}
@@ -476,54 +481,38 @@ All memory addresses are expressed as bytes addresses. Address computation uses 
 \section*{Byte Ordering}
 \addcontentsline{toc}{section}{Byte Ordering}
 
-Twin-64 is internally a big-endian machine. It does however support little endian and big endian byte ordering models. 
-
-The optional E-bit in the PSW register controls whether loads and stores use big endian or little endian byte ordering. When the E-bit is cleared, all larger-than-byte load and store operations are in big endian ordering. The lower addressed bytes in memory correspond to the higher-order bytes in the register. When the E-bit is set, all larger-than-byte load and store operations are in little endian mode. The lower-addressed bytes in memory correspond to
-the lower-order bytes in the register. 
-
-In addition, the E-bit also controls the instruction fetch. Processors that implement byte ordering, must also provide a default setting to be set by software. The default setting is stored in the processor configuration register \texttt{CR0}. The default endian bit setting controls whether the PSW E-bit is set to 0 or 1 on interruptions and also controls how to interpret the data in the address translation related tables. 
+Twin-64 is a big-endian machine. The following figure shows the memory access for load operations.
 
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,10);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,9.5);
   	
   	\def\leftofs{2};
   	
-  	\node at (2.5,9.5) {\LARGE{Memory}};
-  	\node at (12,9.5) {\LARGE{Register}};
+  	\node at (2.5,9) {\LARGE{Memory}};
+  	\node at (12,9) {\LARGE{Register}};
 
   	
   	\node at (2+0.125, 8+0.25) {7};
 	\node at (3-0.125, 8+0.25) {0};
-  	\node at (1, 8 - 0.5) {0};
-  	\node at (1, 1 - 0.5) {7};
+  	\node at (1.5, 8 - 0.5) {0};
+  	\node at (1.5, 1 - 0.5) {7};
+  	
+  	% Memory block
+  	\node[tsRectangle, minimum width=1cm, minimum height=8cm, anchor=west] 
+  	    at (\leftofs, 4) {};
 
-  	\node[  tsRectangle, 
-            minimum width=1cm,
-            minimum height=8cm,
-            anchor=west] at ( \leftofs, 4) { };
-            
-    \draw[-] (\leftofs, 7) -- (\leftofs+1, 7);
-    \draw[-] (\leftofs, 6) -- (\leftofs+1, 6);
-    \draw[-] (\leftofs, 5) -- (\leftofs+1, 5);
-    \draw[-] (\leftofs, 4) -- (\leftofs+1, 4);
-    \draw[-] (\leftofs, 3) -- (\leftofs+1, 3);
-    \draw[-] (\leftofs, 2) -- (\leftofs+1, 2);
-    \draw[-] (\leftofs, 1) -- (\leftofs+1, 1);
-    
-    \node at (\leftofs + 0.5, 7.5) {a};
-    \node at (\leftofs + 0.5, 6.5) {b};
-	\node at (\leftofs + 0.5, 5.5) {c};
-	\node at (\leftofs + 0.5, 4.5) {d};
-	\node at (\leftofs + 0.5, 3.5) {e};
-	\node at (\leftofs + 0.5, 2.5) {f};
-	\node at (\leftofs + 0.5, 1.5) {g};
-	\node at (\leftofs + 0.5, 0.5) {h};
-	
-	\node at (8 + 0.25, 8+0.25) {63};
-	\node at (16 - 0.25, 8+0.25) {0};
+    % Horizontal separators
+    \foreach \y in {1,...,7} {
+        \draw (\leftofs,\y) -- (\leftofs+1,\y);
+    }
+
+    % Memory labels a–h
+    \foreach \i/\lbl in {7.5/a,6.5/b,5.5/c,4.5/d,3.5/e,2.5/f,1.5/g,0.5/h} {
+        \node at (\leftofs+0.5,\i) {\lbl};
+    }
 
  	\node[  tsRectangle, 
             minimum width=8cm,
@@ -531,24 +520,14 @@ In addition, the E-bit also controls the instruction fetch. Processors that impl
             anchor=west] at (8,7.5) { };
             
     \node at ( 7, 7.5 ) { Byte };        
-            
-    \draw[-] (9, 8) -- (9, 7);
-    \draw[-] (10, 8) -- (10, 7);
-    \draw[-] (11, 8) -- (11, 7);
-    \draw[-] (12, 8) -- (12, 7);
-    \draw[-] (13, 8) -- (13, 7);
-    \draw[-] (14, 8) -- (14, 7);
-    \draw[-] (15, 8) -- (15, 7);
     
-    \node at ( 8.5, 7.5 ) {0};
-    \node at ( 9.5, 7.5 ) {0};
-    \node at ( 10.5, 7.5 ) {0};
-    \node at ( 11.5, 7.5 ) {0};
-    \node at ( 12.5, 7.5 ) {0};
-    \node at ( 13.5, 7.5 ) {0};
-    \node at ( 14.5, 7.5 ) {0};
-    \node at ( 15.5, 7.5 ) {0};
+    \foreach \i in {9,...,15} {
+    	\draw[-] (\i, 8) -- (\i, 7);
+    } 
     
+    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/0,13.5/0,14.5/0,15.5/a} {
+        \node at (\i, 7.5) {\lbl};
+    }
     
     \node[  tsRectangle, 
             minimum width=8cm,
@@ -556,134 +535,120 @@ In addition, the E-bit also controls the instruction fetch. Processors that impl
             anchor=west] at (8,5.5) { };
             
     \node at ( 7, 5.5 ) { Half }; 
-            
-    \draw[-] (9, 6) -- (9, 5);
-    \draw[-] (10, 6) -- (10, 5);
-    \draw[-] (11, 6) -- (11, 5);
-    \draw[-] (12, 6) -- (12, 5);
-    \draw[-] (13, 6) -- (13, 5);
-    \draw[-] (14, 6) -- (14, 5);
-    \draw[-] (15, 6) -- (15, 5);
     
-    \node at ( 8.5, 5.5 ) {0};
-    \node at ( 9.5, 5.5 ) {0};
-    \node at ( 10.5, 5.5 ) {0};
-    \node at ( 11.5, 5.5 ) {0};
-    \node at ( 12.5, 5.5 ) {0};
-    \node at ( 13.5, 5.5 ) {0};
-    \node at ( 14.5, 5.5 ) {0};
-    \node at ( 15.5, 5.5 ) {0};
+    \foreach \i in {9,...,15} {
+    	\draw[-] (\i, 6) -- (\i, 5);
+    } 
     
+    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/0,13.5/0,14.5/a,15.5/b} {
+        \node at (\i, 5.5) {\lbl};
+    }
+        
     \node[  tsRectangle, 
             minimum width=8cm,
             minimum height=1cm,  
             anchor=west] at (8,3.5) { };
             
     \node at ( 7, 3.5 ) { Word }; 
-            
-    \draw[-] (9, 4) -- (9, 3);
-    \draw[-] (10, 4) -- (10, 3);
-    \draw[-] (11, 4) -- (11, 3);
-    \draw[-] (12, 4) -- (12, 3);
-    \draw[-] (13, 4) -- (13, 3);
-    \draw[-] (14, 4) -- (14, 3);
-    \draw[-] (15, 4) -- (15, 3);
     
+    \foreach \i in {9,...,15} {
+    	\draw[-] (\i, 4) -- (\i, 3);
+    } 
+    
+    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/a,13.5/b,14.5/c,15.5/d} {
+        \node at (\i, 3.5) {\lbl};
+    }
+
     \node at ( 8.5, 3.5 ) {0};
     \node at ( 9.5, 3.5 ) {0};
     \node at ( 10.5, 3.5 ) {0};
     \node at ( 11.5, 3.5 ) {0};
-    \node at ( 12.5, 3.5 ) {0};
-    \node at ( 13.5, 3.5 ) {0};
-    \node at ( 14.5, 3.5 ) {0};
-    \node at ( 15.5, 3.5 ) {0};
+    \node at ( 12.5, 3.5 ) {a};
+    \node at ( 13.5, 3.5 ) {b};
+    \node at ( 14.5, 3.5 ) {c};
+    \node at ( 15.5, 3.5 ) {d};
 
-  
-   \node[  tsRectangle, 
+ 	\node[  tsRectangle, 
             minimum width=8cm,
             minimum height=1cm,  
             anchor=west] at (8, 1.5) { };
             
     \node at ( 7, 1.5 ) { Double }; 
-            
-    \draw[-] (9, 2) -- (9, 1);
-    \draw[-] (10, 2) -- (10, 1);
-    \draw[-] (11, 2) -- (11, 1);
-    \draw[-] (12, 2) -- (12, 1);
-    \draw[-] (13, 2) -- (13, 1);
-    \draw[-] (14, 2) -- (14, 1);
-    \draw[-] (15, 2) -- (15, 1);
     
-    \node at ( 8.5, 1.5 ) {0};
-    \node at ( 9.5, 1.5 ) {0};
-    \node at ( 10.5, 1.5 ) {0};
-    \node at ( 11.5, 1.5 ) {0};
-    \node at ( 12.5, 1.5 ) {0};
-    \node at ( 13.5, 1.5 ) {0};
-    \node at ( 14.5, 1.5 ) {0};
-    \node at ( 15.5, 1.5 ) {0};
-       
-            
+    \foreach \i in {9,...,15} {
+    	\draw[-] (\i, 2) -- (\i, 1);
+    } 
+    
+    \foreach \i/\lbl in {8.5/a,9.5/b,10.5/c,11.5/d,12.5/e,13.5/f,14.5/g,15.5/h} {
+        \node at (\i, 1.5) {\lbl};
+    }
+    
 \end{tikzpicture}
 \end{center}
 \caption{Big endian mode}
 \label{fig:Big endian mode}
 \end{figure}
 
-
-??? need another one of this picture for little endian mode
-
-The PSW E-bit also affects instruction fetch. When the E-bit is cleared, instruction fetch is performed in big endian mode. The lower addressed bytes in memory correspond to the higher-order bytes in the instruction. When the E-bit is set the instruction fetch is performed in little endian mode. The lower-addressed bytes in memory correspond to the lower-order bytes in the instruction.
-
-??? impact, how to realize ?
-
-??? do we support the feature of keeping both modes dynamically ?
-
-??? is it set at software start and then never changes ?
+The processor status register reserves a bit position, "E", for future support of mixed big and little endian memory access. Currently this bit is always set to zero.
 
 \section*{Translation Lookaside Buffer}
 \addcontentsline{toc}{section}{Translation Lookaside Buffer}
 
-Virtual address translations are stored in a translation look-aside buffer. The TLB is essentially a copy of the page table entry information that represents the virtual page currently loaded at the physical address. Depending on the hardware implementation, there can be a combined TLB or a separate instruction TLB and data TLB. The virtual page number, VPN, is stored along with attributes and the physical page number, PPN, in the TLB entry. The current architecture allows for a 36-bit physical address space, which is a maximum of 64GB memory space.
+Virtual address translations are stored in a translation lookaside buffer (TLB). The TLB is essentially a cache of page table entries representing the virtual pages currently mapped to physical addresses. Depending on the hardware implementation, there may be a single combined TLB or separate instruction and data TLBs. Each TLB entry stores the virtual page number (VPN) along with its attributes and the corresponding physical page number (PPN). The current architecture supports a 36-bit physical address space, allowing a maximum of 64 GB of memory.
 
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,4.5);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,5.5);
   	
     \node[  tsRectangle, 
-            minimum width=9.5cm,
+            minimum width=10cm,
+            minimum height=0.75cm,  
+            fill=white,
+            anchor=west] at (0,4.5) { };
+    \node[anchor=west] at (0, 4.5) {Virtual page number};
+    \node[anchor=west] at (11,4.5) {38bit};
+            
+  	\node[  tsRectangle, 
+            minimum width=6cm,
             minimum height=0.75cm,  
             fill=white,
             anchor=west] at (0,3.5) { };
-    \node[anchor=west] at (0, 3.5) {\small Virtual page number};
-    \node[anchor=west] at (11,3.5) {38bit};
-            
-  	\node[  tsRectangle, 
-            minimum width=5cm,
-            minimum height=0.75cm,  
-            fill=white,
-            anchor=west] at (0,2.5) { };
-    \node[anchor=west] at (0, 2.5) {\small Physical page number};   
-    \node[anchor=west] at (11,2.5) {22bit};
+    \node[anchor=west] at (0, 3.5) {Physical page number};   
+    \node[anchor=west] at (11,3.5) {22bit};
      
-    \node[  tsRectangle, 
-            minimum width=1cm,
-            minimum height=0.75cm,  
-            fill=white,
-            anchor=west] at (0,1.5) { };
-    \node[anchor=west] at (0, 1.5) {\small Acc}; 
-    \node[anchor=west] at (11,1.5) {4bit};
-    
     \node[  tsRectangle, 
             minimum width=2cm,
             minimum height=0.75cm,  
             fill=white,
+            anchor=west] at (0,2.5) { };
+    \node[anchor=west] at (0, 2.5) {AccRights}; 
+    \node[anchor=west] at (11,2.5) {4bit};
+    
+    \node[  tsRectangle, 
+            minimum width=1.1cm,
+            minimum height=0.75cm,  
+            fill=white,
+            anchor=west] at (0,1.5) { };
+    \node[anchor=west] at (0, 1.5) {PSize}; 
+    \node[anchor=west] at (11,1.5) {2bit};
+    
+    \def\fw{0.4} 
+    
+    \node[  tsRectangle, 
+            minimum width=6*\fw cm,
+            minimum height=0.75cm,  
+            fill=white,
             anchor=west] at (0,0.5) { };
-    \node[anchor=west] at (0,0.5) {\small Flags};
-    \node[anchor=west] at (11,0.5) {8bit};
+           
+    \foreach \i/\lbl in {0/V,1/L,2/U,3/P,4/M,5/B } {
+    	\draw (\fw*\i,0.125) -- (\fw*\i,1 - 0.125);
+    	\node at (\fw*\i + 0.2, 0.5 ) {\lbl};
+	}         
             
+    \node[anchor=west] at (11,0.5) {6bit};
+    
 \end{tikzpicture}
 \end{center}
 \caption{Tlb info}
@@ -712,21 +677,21 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{PPN} & The physical page number. \\
     \midrule
-    \textbf{Access Rights} & The access rights of the page. The field encodes the access type ( read, write and execute ) and the required priv level for the operation. \\
+    \textbf{Access Rights} & Encodes the access type (read, write, and execute) and the required privilege level for the operation. \\
     \midrule
-    \textbf{V} & the entry is valid \\
+    \textbf{Page Size} & 2-bit field encoding the supported page size: 0 = 16 KByte, 1 = 256 KByte, 2 = 4 MByte, 3 = 64 MByte. \\
     \midrule
-    \textbf{L} & When set, the TLB entry is locked and will not be selected when replacing an entry. \\
+    \textbf{V} & Indicates if the entry is valid. \\
+    \midrule
+    \textbf{L} & When set, the TLB entry is locked and will not be selected during replacement. \\
     \midrule
     \textbf{U} & When set, the page represented by the TLB entry is not cached. \\
     \midrule
-    \textbf{P} & When set, the page represented by the TLB entry has protection checking enabled. \\
+    \textbf{P} & When set, the page has protection checking enabled. \\
     \midrule
-    \textbf{M} & When set, the page represented by the TLB entry has been modified. \\
+    \textbf{M} & When set, the page has been modified. \\
     \midrule
-    \textbf{B} & When set, a branch instruction executed from the page represented by the TLB will cause a branch taken trap. \\
-    \midrule
-    \textbf{Page Size} & The 2-bit field encodes the supported page size. A value of zero indicates a 16Kbyte page, a value of 1 a 256Kbyte, a value of 2 a 4Mbyte and a value of 3 a 64Mbyte page. \\
+    \textbf{B} & When set, a branch instruction executed from this page will cause a branch-taken trap. \\
 \end{longtable}
 
 The first segments, segment 0 to 15, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
@@ -734,8 +699,8 @@ The first segments, segment 0 to 15, are special in that they bypass the TLB ent
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
 
-Twin-64 is a cache visible architecture, featuring cache models for unified or separate instruction and data cache. While hardware directly controls the cache for cache line insertion and replacement, the software has explicit control on flushing and purging cache line entries. Twin-64 caches are virtually indexed, physically tagged caches. To speed up the entire memory access process, the cache uses the virtual address to index into the arrays, which can be done in parallel to the TLB lookup. When the physical address tag in the cache and the physical page address in the TLB match, there will be a cache hit. 
+Twin-64 is a cache-visible architecture that supports both unified and separate instruction and data caches. While the hardware directly manages cache line insertion and replacement, software has explicit control over flushing and purging cache line entries. Twin-64 caches are virtually indexed and physically tagged. To accelerate memory access, the cache uses the virtual address to index into the arrays in parallel with the TLB lookup. A cache hit occurs when the physical address tag in the cache matches the physical page address from the TLB.
 
-The Twin-64 cache architecture will not specify the size of cache lines or cache organization. The Twin-64 architecture does not specify a particular cache design and hierarchy model. The architecture just specifies instructions to handle cache operations, such as delete or flushing a cache.
+The architecture does not mandate specific cache line sizes, cache organization, or hierarchy models. Instead, it defines instructions for cache operations, such as deletion or flushing of cache lines.
 
-The TLB entry contains information whether the data accessed should be cached or not. For segments 0 to 15, where the TLB is bypassed, the hardware decides on the caching option. The memory address ranges are always cached. The I7O address range is not cached.
+Each TLB entry indicates whether the corresponding data should be cached. For segments 0 to 15, where the TLB is bypassed, the hardware determines the caching behavior. Memory address ranges are always cached, whereas the I7O address range is not cached.
