@@ -1,41 +1,69 @@
 \chapter*{Control Flow}
 \addcontentsline{toc}{chapter}{Control Flow}
 
-alter instruction flow
+In Twin-64, control flow normally passes to the next sequential instruction in memory unless altered by branch instructions or interruptions. To the programmer, the CPU appears to execute instructions in the order in which they are stored in memory. However, hardware implementations may internally execute instructions out of order. This chapter provides a logical view of the execution model. The sections on branching and interruptions describe how control flow can be altered during program execution.
 
-no delayed branching concepts
+\section*{Unconditional Branches}
+\addcontentsline{toc}{section}{Unconditional Branches}
 
-branching and segments
+Unconditional branch instructions alter control flow, and may optionally save the return point to a general register. The branch target address can be computed in two modes:
 
-target address computation
+\begin{itemize}
+  \item \textbf{Instruction-relative branches:} The target address is computed by adding an offset to the current instruction address.
+  \item \textbf{Segment-relative branches:} The target address is computed relative to the start of the segment, which is address zero.
+\end{itemize}
 
+Both methods use 32-bit unsigned arithmetic, with wrap-around on overflow. Fo example suppose the current instruction is at address \texttt{0xFFFF\_FFFC} and the branch offset is \texttt{0x10}. The target address is calculated as:
 
-\section*{Unconditional branches}
-\addcontentsline{toc}{section}{Unconditional branches}
+\begin{flushleft}
+\hspace*{2em}$\texttt{0xFFFF\_FFFC} + \texttt{0x10} = \texttt{0x1\_0000\_000C}$
+\end{flushleft}
 
-unconditional branches
+Since addresses are 32-bit, the high-order carry is discarded, producing: \texttt{0x0000\_000C}. Thus, execution continues at address \texttt{0x0000\_000C}.
 
-\section*{Conditional branches}
-\addcontentsline{toc}{section}{Conditional branches}
+\section*{Conditional Branches}
+\addcontentsline{toc}{section}{Conditional Branches}
 
-conditional branches
+Conditional branch instructions combine a comparison or test operation with an instruction-relative branch. If the condition is met, control transfers to the target instruction. Otherwise, execution continues with the next sequential instruction.
 
+\section*{Linkage}
+\addcontentsline{toc}{section}{Linkage}
 
-linkage
+Certain branch instructions provide a return path for procedure calls. The return
+point is the instruction following the branch instruction. The linkage mechanism applies to both intra-segment and inter-segment branches. The return point (segment and offset) is saved in the specified target general register. 
 
-\section*{Privilege level changes}
-\addcontentsline{toc}{section}{Privilege level changes}
+\section*{Branching and Segments}
+\addcontentsline{toc}{section}{Branching and Segments}
 
-privilege level changes
+A branch address consists of a segment identifier and an offset:
 
-\section*{Traps associated with branches}
-\addcontentsline{toc}{section}{Traps associated with branches}
+\begin{itemize}
+  \item \textbf{Intra-segment branches:} Unconditional branches within the same segment.
+  \item \textbf{Inter-segment branches:} Unconditional branches into another segment, performed by setting the register portion of the target address.
+\end{itemize}
 
-traps associated with branches
+\section*{Privilege Level Changes}
+\addcontentsline{toc}{section}{Privilege Level Changes}
 
-\section*{Instruction execution}
-\addcontentsline{toc}{section}{Instruction execution}
+Branch instructions may change the privilege level. Modern processors support multiple privilege levels. Instructions may only access data or execute code when the current privilege level matches the required level. Switching between levels is often implemented using a trap operation to higher-privileged software such as the operating system kernel. However, traps are expensive, as they flush the CPU pipeline when invoking a trap handler.
 
-instruction execution
+Twin-64 implements a gateway mechanism for privilege changes. An unconditional branch instruction with the \texttt{.G} gateway option raises the privilege level when executed on a gateway page. The branch target continues execution with the privilege level specified by the gateway page, and the privilege bit in the PSW is set. Returning from a higher privilege level to a lower-privilege code page automatically lowers the privilege level.
 
-instruction pipelining
+Each instruction fetch compares the privilege level of the code page with the status register’s \texttt{P} bit:
+
+\begin{itemize}
+  \item If the page requires a higher privilege level than the PSW, a privilege violation trap occurs.
+  \item If the page requires a lower privilege level than the PSW, the CPU automatically demotes execution to the lower level.
+\end{itemize}
+
+\section*{Traps Associated with Branches}
+\addcontentsline{toc}{section}{Traps Associated with Branches}
+
+Branch instructions may cause traps based on PSW bits. If the PSW \texttt{T}-bit is set and a branch is taken, a \textit{taken-branch trap} occurs. This mechanism is primarily intended for debugging. 
+
+\section*{Instruction Execution}
+\addcontentsline{toc}{section}{Instruction Execution}
+
+At a high level, instruction flow consists of calculating the current instruction address, followed by fetching, decoding, and executing the instruction. This process involves the same sequence of events regardless of instruction type.
+
+% TODO: Insert diagram of instruction flow, interruptions, and traps.

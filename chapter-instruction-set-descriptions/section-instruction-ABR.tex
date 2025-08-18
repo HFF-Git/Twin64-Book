@@ -10,7 +10,7 @@
 
 	\texttt{ABR.<cond> RegR, RegB, target}
     
-   	where cold is EQ, LT, NE or LE.
+   	where cond is EQ, LT, NE or LE.
 }
 
 \instructionentry{Format}{
@@ -28,29 +28,27 @@
                 text centered,
                 fill=white!50] (blocks) at (8,1) { };
                 
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-        \draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-          	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-   	 	\node at (11.5,0.25) {15};
-   	 	
-   	 	\node at (0.5,1) {\small \OpCodeGrpBR};
-		\node at (2,1) {\small \OpCodeCBR};
-		\node at (4,1) {\small Reg R};
-		\node at (5.5,1) {\small cond};
-		\node at (6.25,1) {\small 0};
-		\node at (7.5,1) {\small Reg B};
-		\node at (11.5,1) {\small ofs};
-   	 	
-       \end{tikzpicture}	\end{flushleft}
+        \foreach \i in {1, 3, 5, 6, 6.5, 8.5} {
+        	\draw[-] (\i,0.5) -- (\i, 1.5);
+    	}
+    	
+    	\foreach \i/\lbl in {0.5/2, 2/4, 4/4, 5.75/3, 7.5/4, 11.5/15} {
+        	\node at (\i,0.25) {\lbl};
+    	}
+    	
+    	\foreach \i/\lbl in {0.5/\OpCodeGrpBR, 
+    						 2/\OpCodeABR, 
+    	                     4/Reg R, 
+    	                     5.5/cond, 
+    	                     6.25/0, 
+    	                     7.5/Reg B, 
+    	                     11.5/ofs} {
+    	                     
+        	\node at (\i,1) {\lbl};
+    	}
+    	 	
+    \end{tikzpicture}	
+  	\end{flushleft}
 }
 
 \instructionentry{Description}{

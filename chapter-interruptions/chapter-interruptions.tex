@@ -5,31 +5,10 @@
 \chapter*{Interruptions}
 \addcontentsline{toc}{chapter}{Interruptions}
 
+
+
 \section*{Traps}
 \addcontentsline{toc}{section}{Traps}
-
-
-\begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
-    \caption{Traps} \\
-    \toprule
-    \textbf{Head 1} & \textbf{Head 2} \\
-    \midrule
-    \endfirsthead
-    \toprule
-    \textbf{Head 1} & \textbf{Head 2} \\
-    \midrule
-    \endhead
-    \midrule
-    \multicolumn{2}{r}{\textit{Continued on next page}} \\
-    \midrule
-    \endfoot
-    \bottomrule
-    \endlastfoot
-    \textbf{text 1} & text \\
-    \midrule
-    \textbf{text 2} & text \\
-\end{longtable}
-
 
 
 \section*{External Interrupts}
@@ -45,3 +24,67 @@ EIR in I/O space ...
 EIM in CR
 
 status bit in PSW
+
+
+\section*{Interrupt Vector Table}
+\addcontentsline{toc}{section}{Interrupt Vector Table}
+
+The control register IVA holds the virtual address of the interrupt vector table. Upon an interrupt, the current instruction address and the instruction is saved to the respective control registers and control branches then to the interrupt handler in the interrupt vector table. Each entry is just a set of instructions that can be executed.
+
+\begin{longtable}{@{}p{0.075\linewidth}p{0.25\linewidth}p{0.2\linewidth}p{0.15\linewidth}p{0.15\linewidth}@{}}
+    \caption{Trap Table} \\
+    \toprule
+    \textbf{Trap} & \textbf{Name} & \textbf{Instruction Adr} & \textbf{Arg0} & \textbf{Arg1}\\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{Trap} & \textbf{Name} & \textbf{IA} & \textbf{Arg0} & \textbf{Arg1}\\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    \textbf{1} & Machine Check & current instruction & check type & - \\
+    \midrule
+    \textbf{2} & Power Failure & current instruction & - & - \\
+    \midrule
+    \textbf{3} & Recovery Counter & current instruction & - & - \\
+    \midrule
+    \textbf{4} & External Interrupt & next instruction & - & - \\
+    \midrule
+    \textbf{5} & Illegal instruction & current instruction & instruction & - \\
+    \midrule
+    \textbf{6} & Privileged operation & current instruction & instruction & - \\
+    \midrule
+    \textbf{7} & Privileged register & current instruction & instruction & - \\
+    \midrule
+    \textbf{8} & Integer Overflow& current instruction & instruction & - \\
+    \midrule
+    \textbf{9} & Instruction TLB miss& current instruction & - & - \\
+    \midrule
+    \textbf{10} & Non-access Instruction TLB miss & current instruction & - & - \\
+    \midrule
+    \textbf{11} & Instruction memory protection & current instruction & - & - \\
+    \midrule
+    \textbf{12} & Data TLB miss& current instruction & instruction & target address \\
+    \midrule
+    \textbf{13} & Non-access Data TLB miss & current instruction & instruction & target address \\
+    \midrule
+    \textbf{14} & Data memory access rights & current instruction & instruction & target address \\
+    \midrule
+    \textbf{15} & Data memory protection & current instruction & instruction & target address \\
+    \midrule
+     \textbf{16} & Page reference & current instruction & instruction & target address \\
+    \midrule
+    \textbf{17} & Alignment & current instruction & instruction & target address \\
+    \midrule
+    \textbf{18} & Break Instruction & current instruction & instruction & - \\
+    \midrule
+     \textbf{19..31} & reserved & - & - & - \\
+    \midrule
+\end{longtable}
+
+
