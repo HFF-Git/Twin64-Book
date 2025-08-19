@@ -5,31 +5,32 @@
 \chapter*{Interruptions}
 \addcontentsline{toc}{chapter}{Interruptions}
 
+Twin-64 features a simple but powerful interrupt system. Interruptions are grouped in to four different classes, faults, traps, interrupts, and checks that may happen during instruction processing:
 
+\begin{itemize} 
 
-\section*{Traps}
-\addcontentsline{toc}{section}{Traps}
+\item{Fault - The current instruction requests a legitimate action which cannot be carried out due to a system problem, such as the absence of a page from main memory. After the system problem has been corrected, the faulting instruction will execute normally. Faults are synchronous with respect to the instruction stream.}
 
+\item{Trap - Traps include two sorts of possibilities: either the function requested by the current
+instruction cannot or should not be carried out, or system intervention is desired by
+the user before or after the instruction is executed. Examples of the first type include arithmetic operations that result in signed overflow and instructions executed with insufficient privilege for their intended function. Such instructions are normally not re-executed. Examples of the second type include the debugging support traps. Traps are synchronous with respect to the instruction stream}
 
-\section*{External Interrupts}
-\addcontentsline{toc}{section}{External Interrupts}
+\item{Interrupt - An external entity (for example, an I/O device or the power supply) requires attention. Interrupts are asynchronous with respect to the instruction stream.}
 
+\item{ Check - The processor has detected an internal malfunction. Checks can be either
+synchronous or asynchronous with respect to the instruction stream.
+All four classes of interruptions are handled in the same way.}
 
-picture 
-
-mask and request
-
-EIR in I/O space ...
-
-EIM in CR
-
-status bit in PSW
+\end{itemize}
 
 
 \section*{Interrupt Vector Table}
 \addcontentsline{toc}{section}{Interrupt Vector Table}
 
 The control register IVA holds the virtual address of the interrupt vector table. Upon an interrupt, the current instruction address and the instruction is saved to the respective control registers and control branches then to the interrupt handler in the interrupt vector table. Each entry is just a set of instructions that can be executed.
+
+The interruptions are categorized into four
+groups based on their priorities:
 
 \begin{longtable}{@{}p{0.075\linewidth}p{0.25\linewidth}p{0.2\linewidth}p{0.15\linewidth}p{0.15\linewidth}@{}}
     \caption{Trap Table} \\
@@ -86,5 +87,19 @@ The control register IVA holds the virtual address of the interrupt vector table
      \textbf{19..31} & reserved & - & - & - \\
     \midrule
 \end{longtable}
+
+\section*{Interruption Handling}
+\addcontentsline{toc}{section}{Interruption Handling}
+
+mask and request
+
+EIR in I/O space ...
+
+EIM in CR
+
+status bit in PSW
+
+
+
 
 
