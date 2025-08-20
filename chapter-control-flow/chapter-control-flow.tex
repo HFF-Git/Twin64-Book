@@ -13,24 +13,23 @@ Unconditional branch instructions alter control flow, and may optionally save th
   \item \textbf{Segment-relative branches:} The target address is computed relative to the start of the segment, which is address zero.
 \end{itemize}
 
-Both methods use 32-bit unsigned arithmetic, with wrap-around on overflow. Fo example suppose the current instruction is at address \texttt{0xFFFF\_FFFC} and the branch offset is \texttt{0x10}. The target address is calculated as:
+Both methods use 32-bit unsigned arithmetic, with wrap-around on overflow. For example, suppose the current instruction is at address \texttt{0xFFFF\_FFFC} and the branch offset is \texttt{0x10}. The target address is:
 
 \begin{flushleft}
 \hspace*{2em}$\texttt{0xFFFF\_FFFC} + \texttt{0x10} = \texttt{0x1\_0000\_000C}$
 \end{flushleft}
 
-Since addresses are 32-bit, the high-order carry is discarded, producing: \texttt{0x0000\_000C}. Thus, execution continues at address \texttt{0x0000\_000C}.
+Because address arithmetic is performed modulo $2^{32}$, the high-order carry is discarded. The effective target is therefore \texttt{0x0000\_000C}, and execution continues at that address.
 
 \section*{Conditional Branches}
 \addcontentsline{toc}{section}{Conditional Branches}
 
-Conditional branch instructions combine a comparison or test operation with an instruction-relative branch. If the condition is met, control transfers to the target instruction. Otherwise, execution continues with the next sequential instruction.
+Conditional branch instructions combine a comparison or test operation with an Instruction-relative branch. If the condition is met, control transfers to the target instruction. Otherwise, execution continues with the next sequential instruction.
 
 \section*{Linkage}
 \addcontentsline{toc}{section}{Linkage}
 
-Certain branch instructions provide a return path for procedure calls. The return
-point is the instruction following the branch instruction. The linkage mechanism applies to both intra-segment and inter-segment branches. The return point (segment and offset) is saved in the specified target general register. 
+Certain branch instructions provide a return path for procedure calls. The return point is the instruction following the branch instruction. The linkage mechanism applies to both intra-segment and inter-segment branches. The return point (segment and offset) is saved in the specified target general register. 
 
 \section*{Branching and Segments}
 \addcontentsline{toc}{section}{Branching and Segments}
@@ -38,18 +37,18 @@ point is the instruction following the branch instruction. The linkage mechanism
 A branch address consists of a segment identifier and an offset:
 
 \begin{itemize}
-  \item \textbf{Intra-segment branches:} Unconditional branches within the same segment.
-  \item \textbf{Inter-segment branches:} Unconditional branches into another segment, performed by setting the register portion of the target address.
+  \item \textbf{Intra-segment branches:} Unconditional branches within the same segment. Unconditional branches are always within the same segment. 
+  \item \textbf{Inter-segment branches:} Unconditional branches into another segment, performed by setting the target address segment and offset portion.
 \end{itemize}
 
 \section*{Privilege Level Changes}
 \addcontentsline{toc}{section}{Privilege Level Changes}
 
-Branch instructions may change the privilege level. Modern processors support multiple privilege levels. Instructions may only access data or execute code when the current privilege level matches the required level. Switching between levels is often implemented using a trap operation to higher-privileged software such as the operating system kernel. However, traps are expensive, as they flush the CPU pipeline when invoking a trap handler.
+Branch instructions may change the privilege level. Instructions may only access data or execute code when the current privilege level matches the required level. Switching between levels is often implemented using a trap operation to higher-privileged software such as the operating system kernel. However, traps are expensive, as they typically flush the CPU pipeline when invoking a trap handler.
 
-Twin-64 implements a gateway mechanism for privilege changes. An unconditional branch instruction with the \texttt{.G} gateway option raises the privilege level when executed on a gateway page. The branch target continues execution with the privilege level specified by the gateway page, and the privilege bit in the PSW is set. Returning from a higher privilege level to a lower-privilege code page automatically lowers the privilege level.
+Twin-64 implements a gateway mechanism for privilege changes. An unconditional branch instruction with the \texttt{.G} gateway option raises the privilege level when executed on a gateway page. The branch target continues execution with the privilege level specified by the gateway page, and the privilege bit in the PSW is set. Returning from a higher privilege level to code in a lower-privilege page automatically lowers the current privilege level.
 
-Each instruction fetch compares the privilege level of the code page with the status register’s \texttt{P} bit:
+Each instruction fetch compares the privilege level of the code page with the PSW \texttt{P}-bit:
 
 \begin{itemize}
   \item If the page requires a higher privilege level than the PSW, a privilege violation trap occurs.
@@ -60,10 +59,3 @@ Each instruction fetch compares the privilege level of the code page with the st
 \addcontentsline{toc}{section}{Traps Associated with Branches}
 
 Branch instructions may cause traps based on PSW bits. If the PSW \texttt{T}-bit is set and a branch is taken, a \textit{taken-branch trap} occurs. This mechanism is primarily intended for debugging. 
-
-\section*{Instruction Execution}
-\addcontentsline{toc}{section}{Instruction Execution}
-
-At a high level, instruction flow consists of calculating the current instruction address, followed by fetching, decoding, and executing the instruction. This process involves the same sequence of events regardless of instruction type.
-
-% TODO: Insert diagram of instruction flow, interruptions, and traps.

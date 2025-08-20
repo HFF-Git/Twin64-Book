@@ -12,202 +12,44 @@ This chapter presents the Twin-64 instruction set. Following the typical RISC de
 
 Twin-64 employs a small number of instruction formats, which are classified according to the number of register operands and the length of the immediate value field. The \textbf{signed immediate S19 / special} format provides one register operand and a 19-bit signed immediate field. This format is typically used for branch instructions.
 
-\begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.7, transform shape]
-        
-   	% \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-  	\node[  tsRectangle, 
-            minimum width=16cm,
-            minimum height=1cm,
-            text width=3cm,
-            text centered,
-            fill=white] at (8,1) { };
-                
-   	\draw[-] (1,0.5) -- (1,1.5);
-   	\draw[-] (3,0.5) -- (3,1.5);
-   	\draw[-] (5,0.5) -- (5,1.5);
-   	\draw[-] (6.5,0.5) -- (6.5,1.5);
-     	
-   	\node at (0.5,0.25) {2};
-   	\node at (2,0.25) {4}; 
-   	\node at (4,0.25) {4};
-   	\node at (5.75,0.25) {3};
-   	\node at (11,0.25) {19};
-   	 	
-  	\node at (0.5,1) {\small Grp};
-	\node at (2,1) {\small OpCode};
-	\node at (4,1) {\small Reg R};
-	\node at (5.75,1) {\small Opt 1};
-	\node at (11,1) {\small S-IMM-19/special};
-   	 	
-\end{tikzpicture}
+\drawInstrFormat
+  	{0,1,3,5,6.5, 16}
+  	{Grp, OpCode, RegR, Opt1, S-IMM-19/special}
 \end{center}
-\end{figure}
 
 The \textbf{signed immediate S15 / special} instruction format provides two register operands and a 15-bit signed immediate field. This format is used both by conditional branch instructions and by instructions that operate on a register and an immediate value.
 
-\begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.7, transform shape]
-        
-   	% \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-  	\node[  tsRectangle, 
-          	minimum width=16cm,
-           	minimum height=1cm,
-           	text width=3cm,
-           	text centered,
-           	fill=white!50] (blocks) at (8,1) { };
-                
-   	\draw[-] (1,0.5) -- (1, 1.5);
-    \draw[-] (3,0.5) -- (3, 1.5);
-    \draw[-] (5,0.5) -- (5, 1.5);
-    \draw[-] (6.5,0.5) -- (6.5, 1.5);
-   	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-          	
-  	\node at (0.5,0.25) {2};
-   	\node at (2,0.25) {4};
-   	\node at (4,0.25) {4};
-  	\node at (5.75,0.25) {3};
-   	\node at (7.5,0.25) {4};
-  	\node at (11.5,0.25) {15};
-   	 	
-  	\node at (0.5,1) {\small Grp};
-	\node at (2,1) {\small OpCode};
-	\node at (4,1) {\small Reg R};
-	\node at (5.75,1) {\small Opt 1};
-	\node at (7.5,1) {\small Reg B};
-	\node at (11.5,1) {\small S-IMM-15/special };
-   	 	
-\end{tikzpicture}
+\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,16}
+  	{Grp, OpCode, RegR, Opt1, RegB, S-IMM-15/special}
 \end{center}
-\end{figure}
 
 The \textbf{signed immediate S13 / special} instruction format provides two registers, an additional option field, and a 13-bit signed immediate field. Some instructions use the S-IMM-13 field for special encodings instead of a signed value. This format is used by memory reference instructions, where the address is formed by a base register plus a 13-bit signed offset.
 
-\begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-     	\node at (12.25,0.25) {13};
-   	 	
-   	 	\node at (0.5,1) {\small Grp};
-		\node at (2,1) {\small OpCode};
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small Opt 1};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small Opt 2};
-		\node at (12.25,1) {\small S-IMM-13/special};
-   	 	
-\end{tikzpicture}
+
+\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,9.5,16}
+  	{Grp, OpCode, RegR, Opt1, RegB, Opt2, S-IMM-13/special}
 \end{center}
-\end{figure}
 
 The \textbf{register/signed immediate S9 / special} instruction format provides three registers, an additional option field, and a 9-bit signed immediate field. Some instructions use the S-IMM-9 field for special encodings instead of a signed value. This instruction format is used for all computational instructions that require three registers.
 
-\begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-   	 	\node at (13.75,0.25) {9};
-   	 	
-   	 	\node at (0.5,1) {\small Grp};
-		\node at (2,1) {\small OpCode};
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small Opt 1};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small Opt 2};
-		\node at (10.5,1) {\small Reg A};
-		\node at (13.75,1) {\small S-IMM-9/special};
-   	 	
-\end{tikzpicture}
+\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,9.5,11.5,16}
+  	{Grp, OpCode, RegR, Opt1, RegB, Opt2, RegA, S-IMM-9/special}
 \end{center}
-\end{figure}
 
 The \textbf{unsigned immediate U20} format is used by the immediate instruction group to provide a 20-bit unsigned value. This value is then placed at specific positions in the target register \texttt{Reg R}.
 
-\begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1,1.5);
-     	\draw[-] (3,0.5) -- (3,1.5);
-     	\draw[-] (5,0.5) -- (5,1.5);
-     	\draw[-] (6,0.5) -- (6,1.5);
-     	     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.5,0.25) {2};
-   	 	\node at (11,0.25) {20};
-   	 	
-   	 	\node at (0.5,1) {\small Grp};
-		\node at (2,1) {\small OpCode};
-		\node at (4,1) {\small Reg R};
-		\node at (5.5,1) {\small 0};
-		\node at (11,1) {\small U-IMM-20};
-   	 	
-\end{tikzpicture}
+\drawInstrFormat
+  	{0,1,3,5,6,16}
+  	{Grp, OpCode, RegR, 0, U-IMM-20/special}
 \end{center}
-\end{figure}
-
 
 \section*{Arithmetic Instructions}
 \addcontentsline{toc}{section}{Arithmetic Instructions}

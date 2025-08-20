@@ -115,7 +115,64 @@
 ]
 
 %--------------------------------------------------------------------------------
-% Instruction format pages use this layout.
+% Instruction format.
+%
+% We have a rectangle field of 16cm width. Positions start left with 0 and end
+% at 16 on the right. The first parameter to the macro is the position of the 
+% separators. The second parameter is a list of labels to put into the fields 
+% created by the separators.
+%
+%--------------------------------------------------------------------------------
+\newcommand{\drawInstrFormat}[2]{%
+  	
+  	\begin{tikzpicture}[scale=0.7, transform shape]
+    	% Outer box
+    	\node[	tsRectangle, 
+    			minimum width=16cm, 
+    			minimum height=1cm, 
+    			fill=white!50] at (8,1) {};
+
+    	% Initialize
+    	\pgfmathsetmacro{\last}{0}
+
+   	 	% First split labels into individual macros
+    	\foreach [count=\i] \l in {#2} {%
+      		\expandafter\xdef\csname label@\i\endcsname{\l}%
+    	}
+
+    	% Iterate over positions
+    	\foreach \p [count=\i] in {#1} {%
+      		
+      		\ifnum\i>1
+        
+        		% Width of field
+        		\pgfmathsetmacro{\width}{\p-\last}
+        
+        		% Center of field
+        		\pgfmathsetmacro{\center}{(\p+\last)/2}
+        
+        		% Convert width to integer bit size (0.5 cm = 1 bit)
+        		\pgfmathtruncatemacro{\bits}{round(\width*2)}
+
+        		% Vertical separator line
+        		\draw[-] (\p,0.5) -- (\p,1.5);
+
+        		% Place width number
+        		\node at (\center,0.25) {\bits};
+
+        		% Place corresponding label
+        		\node at (\center,1) {\csname label@\the\numexpr\i-1\relax\endcsname};
+      
+      		\fi
+      	\xdef\last{\p}
+    }%
+    
+  	\end{tikzpicture}%
+}
+
+
+%--------------------------------------------------------------------------------
+% Instruction description pages use this layout.
 %
 %--------------------------------------------------------------------------------
 \newcommand{\instructionentry}[2]{%

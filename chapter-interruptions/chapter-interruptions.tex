@@ -5,32 +5,63 @@
 \chapter*{Interruptions}
 \addcontentsline{toc}{chapter}{Interruptions}
 
-Twin-64 features a simple but powerful interrupt system. Interruptions are grouped in to four different classes, faults, traps, interrupts, and checks that may happen during instruction processing:
+Twin-64 features a simple but powerful interrupt system. Interruptions in Twin-64 are divided into four classes—faults, traps, interrupts, and checks—that may occur during instruction execution.
 
 \begin{itemize} 
 
-\item{Fault - The current instruction requests a legitimate action which cannot be carried out due to a system problem, such as the absence of a page from main memory. After the system problem has been corrected, the faulting instruction will execute normally. Faults are synchronous with respect to the instruction stream.}
+\item{Fault - The current instruction cannot be carried out due to a system problem, such as the absence of a page from main memory. After the system problem has been corrected, the faulting instruction should execute as intended. Faults are synchronous with respect to the instruction stream.}
 
-\item{Trap - Traps include two sorts of possibilities: either the function requested by the current
-instruction cannot or should not be carried out, or system intervention is desired by
-the user before or after the instruction is executed. Examples of the first type include arithmetic operations that result in signed overflow and instructions executed with insufficient privilege for their intended function. Such instructions are normally not re-executed. Examples of the second type include the debugging support traps. Traps are synchronous with respect to the instruction stream}
+\item \textbf{Trap} - There are two kind of traps. The types are traps raised because the function requested by the current instruction cannot or should not be carried out. A good example is the arithmetic signed overflow trap. Such an instruction is normally not re-executed. The second type of traps are raised so that the system can intervene before the or after the instruction is executed. An example for this type of trap is the debugging breakpoint trap. Traps are synchronous with respect to the instruction stream.
 
-\item{Interrupt - An external entity (for example, an I/O device or the power supply) requires attention. Interrupts are asynchronous with respect to the instruction stream.}
+\item \textbf{Interrupt} - An external entity such as an I/O module requires attention. Interrupts are asynchronous with respect to the instruction stream.
 
-\item{ Check - The processor has detected an internal malfunction. Checks can be either
+\item \textbf{Check} - The processor has detected an internal fault or malfunction. Checks can be either
 synchronous or asynchronous with respect to the instruction stream.
-All four classes of interruptions are handled in the same way.}
 
 \end{itemize}
 
 
+All four classes of interruptions are handled in the same way. 
+
+
+
+
+\section*{Interrupt Handling}
+\addcontentsline{toc}{section}{Interrupt Handling}
+
+Handling of an interrupt is implemented as a fast context switch. When an interruption occurs, the hardware saves the PSW at the time of the interrupt to the IPSW control register.  PSW in effect at the time of the interruption is saved in the IPSW. Depending on the interrupt type, this can be the current instruction of the next instruction. All status bits, which are part of the PSW, are saved too. The hardware will then set the PSW status bits as follows. The M bit is set if the interruption is a high priority machine check. All other bits are set to zero. Depending on the trap type, additional data is saved to the interrupt argument control registers IARG0 and IARG1.
+
+The control register \texttt{IVA} holds the virtual address of the interrupt vector table. Execution of the interrupt handler begins at the address computed using the trap number:
+
+\begin{flushleft}
+\hspace*{2em}%
+\(
+\texttt{IVA} + ( 32 * \texttt{trap number} )
+\)
+\end{flushleft}
+
+Each entry consists of 8 instructions that can be executed. It is the responsibility of interruption handlers to unmask external interrupts as soon as possible, so as to minimize interrupt latency. The interruptions are categorized into four groups.
+
+\paragraph{Example.}  
+Suppose the interrupt vector table base address is:  
+
+\begin{flushleft}
+\hspace*{2em}%
+\(\texttt{IVA} = \texttt{0x0000\_1000}\)
+\end{flushleft}
+
+Now, if a \textbf{trap number 5} (Illegal Instruction) occurs, the handler entry point is calculated as:  
+
+\begin{flushleft}
+\hspace*{2em}%
+\(\texttt{0x0000\_1000} + ( 32 * 5 ) = \texttt{0x0000\_10A0}\)
+\end{flushleft}
+
+Execution of the interrupt handler starts at \texttt{0x0000\_10A0}.
+
 \section*{Interrupt Vector Table}
 \addcontentsline{toc}{section}{Interrupt Vector Table}
 
-The control register IVA holds the virtual address of the interrupt vector table. Upon an interrupt, the current instruction address and the instruction is saved to the respective control registers and control branches then to the interrupt handler in the interrupt vector table. Each entry is just a set of instructions that can be executed.
-
-The interruptions are categorized into four
-groups based on their priorities:
 
 \begin{longtable}{@{}p{0.075\linewidth}p{0.25\linewidth}p{0.2\linewidth}p{0.15\linewidth}p{0.15\linewidth}@{}}
     \caption{Trap Table} \\
@@ -50,11 +81,13 @@ groups based on their priorities:
     \endlastfoot
     \textbf{1} & Machine Check & current instruction & check type & - \\
     \midrule
+    \midrule
     \textbf{2} & Power Failure & current instruction & - & - \\
     \midrule
     \textbf{3} & Recovery Counter & current instruction & - & - \\
     \midrule
     \textbf{4} & External Interrupt & next instruction & - & - \\
+    \midrule
     \midrule
     \textbf{5} & Illegal instruction & current instruction & instruction & - \\
     \midrule
@@ -84,20 +117,11 @@ groups based on their priorities:
     \midrule
     \textbf{18} & Break Instruction & current instruction & instruction & - \\
     \midrule
-     \textbf{19..31} & reserved & - & - & - \\
+    \midrule
+    \textbf{19} & Taken branch & next instruction & instruction & - \\
     \midrule
 \end{longtable}
 
-\section*{Interruption Handling}
-\addcontentsline{toc}{section}{Interruption Handling}
-
-mask and request
-
-EIR in I/O space ...
-
-EIM in CR
-
-status bit in PSW
 
 
 
