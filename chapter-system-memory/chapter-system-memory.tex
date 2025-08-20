@@ -60,7 +60,7 @@ Twin-64 architecture features a 36-bit physical memory address range which allow
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(12,16);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(12,16);
 
 	% Rectangle dimensions
 	\def\width{8}
@@ -70,37 +70,42 @@ Twin-64 architecture features a 36-bit physical memory address range which allow
 	% Left side
 	\draw[thick] (\leftofs, 0) -- (\leftofs, 1);
 	\draw[thick, dashed] (\leftofs, 1) -- (\leftofs, 6); 
-	\draw[thick] (\leftofs, 6) -- (\leftofs, 11);
-	\draw[thick, dashed] (\leftofs, 11) -- (\leftofs, 13); 	
-	\draw[thick] (\leftofs, 13) -- (\leftofs, 16);
+	\draw[thick] (\leftofs, 6) -- (\leftofs, 8);
+	\draw[thick, dashed] (\leftofs, 8) -- (\leftofs, 10); 	
+	\draw[thick] (\leftofs, 10) -- (\leftofs, 14);
+	\draw[thick, dashed] (\leftofs, 14) -- (\leftofs, 15); 	
+	\draw[thick] (\leftofs, 15) -- (\leftofs, 16);
 
 	% Right side
-	\draw[thick] (\rightofs, 0) -- (\rightofs, 1);
+	draw[thick] (\rightofs, 0) -- (\rightofs, 1);
 	\draw[thick, dashed] (\rightofs, 1) -- (\rightofs, 6); 
-	\draw[thick] (\rightofs, 6) -- (\rightofs, 11);
-	\draw[thick, dashed] (\rightofs, 11) -- (\rightofs, 13); 	
-	\draw[thick] (\rightofs, 13) -- (\rightofs, 16);
-		
+	\draw[thick] (\rightofs, 6) -- (\rightofs, 8);
+	\draw[thick, dashed] (\rightofs, 8) -- (\rightofs, 10); 	
+	\draw[thick] (\rightofs, 10) -- (\rightofs, 14);
+	\draw[thick, dashed] (\rightofs, 14) -- (\rightofs, 15); 	
+	\draw[thick] (\rightofs, 15) -- (\rightofs, 16);
+			
 	% Edges
 	\draw[thick] (\leftofs, 0) -- (\rightofs, 0); 
 	\draw[thick] (\leftofs, 7) -- (\rightofs, 7); 
-	\draw[thick] (\leftofs, 9) -- (\rightofs, 9);
-	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
+	\draw[thick] (\leftofs, 11) -- (\rightofs, 11);
+	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
 	\draw[thick] (\leftofs, 16) -- (\rightofs, 16);
+	
 	
 	% Labels 
 	\node[left] at (\leftofs, 16 - 0.2) {\texttt{0x00\_0000\_0000}};
-	\node[left] at (\leftofs, 14 + 0.2) {\texttt{0x0F\_0000\_0000}};
-	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0x10\_0000\_0000}};
-	\node[left] at (\leftofs, 9 + 0.2) {\texttt{0x00\_EFFF\_FFFF}};
-	\node[left] at (\leftofs, 9 - 0.2) {\texttt{0x00\_F000\_0000}};
-	\node[left] at (\leftofs, 7 + 0.2) {\texttt{0x00\_FFFF\_FFFF}};
-	\node[left] at (\leftofs, 7 - 0.2) {\texttt{0x01\_0000\_0000}};
-	\node[left] at (\leftofs, 0 + 0.2) {\texttt{0x0F\_FFFF\_FFFF}};
+	\node[left] at (\leftofs, 13 + 0.2) {\texttt{0x00\_EFFF\_FFFF}};	
+	\node[left] at (\leftofs, 13 - 0.2) {\texttt{0x00\_F000\_0000}};
+	\node[left] at (\leftofs, 11 + 0.2) {\texttt{0x00\_FFFF\_FFFF}};
+	\node[left] at (\leftofs, 11 - 0.2) {\texttt{0x01\_0000\_0000}};
+	\node[left] at (\leftofs, 7 + 0.2) {\texttt{0x0F\_FFFF\_FFFF}};
+	\node[left] at (\leftofs, 7 - 0.2) {\texttt{0x10\_0000\_0000}};
+	\node[left] at (\leftofs, 0 + 0.2) {\texttt{0xF\_FFFF\_FFFF\_FFFF}};
 		
-	\node at (\leftofs + \width / 2, 15) {\textbf{Physical Memory Address Space}};
-	\node at (\leftofs + \width / 2, 12) {\textbf{Virtual Memory Address Space}};
-	\node at (\leftofs + \width / 2, 8) {\textbf{I/O Address Space}};
+	\node at (\leftofs + \width / 2, 14.5) {\textbf{Physical Memory Address Space}};
+	\node at (\leftofs + \width / 2, 12) {\textbf{I/O Address Space}};
+	\node at (\leftofs + \width / 2, 9) {\textbf{Physical Memory Address Space}};
 	\node at (\leftofs + \width / 2, 4) {\textbf{Virtual Memory Address Space}};
 
 \end{tikzpicture}

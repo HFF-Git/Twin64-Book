@@ -17,173 +17,25 @@
 \instructionentry{Format}{
 
 	The AND instruction uses the register, the immediate-19, the indexed and the register indexed instruction formats. \\
+	
+	\begin{flushleft}	
 
-   	\begin{flushleft}
-    \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (5.5,0.5) -- (5.5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-   	 	\node at (13.75,0.25) {9};
-   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeAND};
-		\node at (4,1) {\small Reg R};
-		\node at (5.25,1) {\small N};
-		\node at (5.75,1) {\small C};
-		\node at (6.25,1) {\small 0};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small 0};
-		\node at (10.5,1) {\small Reg A};
-		\node at (13.75,1) {\small 0 };
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
- 	\medskip
- 	\begin{flushleft}
-    	\begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (5.5,0.5) -- (5.5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-               	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-   	 	\node at (11.5,0.25) {15};
-   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeADD};
-		\node at (4,1) {\small Reg R};
-		\node at (5.25,1) {\small N};
-		\node at (5.75,1) {\small C};
-		\node at (6.25,1) {\small 1};
-		\node at (7.5,1) {\small Reg B};
-		\node at (11.5,1) {\small S-IMM-15};
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
-	\medskip
-	\begin{flushleft}
-        \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (5.5,0.5) -- (5.5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-     	\node at (12.25,0.25) {13};
-   	 	
-   	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small \OpCodeADD};
-		\node at (4,1) {\small Reg R};
-		\node at (5.25,1) {\small N};
-		\node at (5.75,1) {\small C};
-		\node at (6.25,1) {\small 0};	
-	    \node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small dw};
-		\node at (12.25,1) {\small S-IMM-13};
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
- 	\medskip
-	\begin{flushleft}
-        \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (5.5,0.5) -- (5.5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-   	 	\node at (13.75,0.25) {9};
-   	 	
-   	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small \OpCodeADD};
-		\node at (4,1) {\small Reg R};
-		\node at (5.25,1) {\small N};
-		\node at (5.75,1) {\small C};
-		\node at (6.25,1) {\small 1};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small dw};
-		\node at (10.5,1) {\small Reg X};
-		\node at (13.75,1) {\small 0};
-   	 	
-       \end{tikzpicture}
+	\drawInstrFormat
+  	{0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
+  	{\OpCodeGrpALU,\OpCodeAND, RegR, N, C, 0, RegB,  RegA, 0}
+	
+	\drawInstrFormat
+  	{0,1,3,5,5.5,6,6.5,8.5,16}
+  	{\OpCodeGrpALU,\OpCodeAND, RegR, N, C, 1, RegB, val}
+
+	\drawInstrFormat
+  	{0,1,3,5,5.5,6,6.5,8.5,9.5,16}
+  	{\OpCodeGrpMEM,\OpCodeAND, RegR, N, C, 0, RegB, dw, ofs}
+ 
+	\drawInstrFormat
+  	{0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
+  	{\OpCodeGrpMEM,\OpCodeAND, RegR, N, C, 1, RegB, dw, RegX, 0}
+
 	\end{flushleft}
 }
 
@@ -194,13 +46,11 @@ The \texttt{AND} instruction performs the binary AND operation on two 64-bit ope
 
 \instructionentry{Operation}{
 
-	\texttt{if ( instr.[C] RegB <- not( RegB ); } \\
-  	\texttt{RegR <- RegB \& RegA} {(register format)}\\
-  	\smallskip
-  	\texttt{RegR <- RegB \& immOperand( )} {(immediate format)}\\
-   	\smallskip
-  	\texttt{RegR <- RegR \& memOperand( )} {(indexed formats)}\\
-  	\texttt{if ( instr.[N] RegR <- not( RegR ); }
+	\texttt{if ( instr.[C] ) RegB <- not( RegB );} \\
+	\texttt{RegR <- RegB \& RegA;}           (register format)\\
+	\texttt{RegR <- RegB \& immOperand();}   (immediate format)\\
+	\texttt{RegR <- RegR \& memOperand();}   (indexed formats)\\
+	\texttt{if ( instr.[N] ) RegR <- not( RegR );}
 }
 
 \instructionentry{Exceptions}{
