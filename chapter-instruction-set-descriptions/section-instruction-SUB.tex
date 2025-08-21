@@ -6,19 +6,21 @@
 \section*{SUB — Integer Subtraction}
 \addcontentsline{toc}{section}{SUB - Integer Subtraction}
 
-\instructionentry{Syntax}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax} 
   \texttt{SUB RegR, RegB, RegA} \\
-  \texttt{SUB RegR, RegB, SignedImmed15}
+  \texttt{SUB RegR, RegB, val}
   
-  \texttt{SUB[.D/W/H/B] RegR, SignedImmed13( RegB )} \\
+  \texttt{SUB[.D/W/H/B] RegR, ofs ( RegB )} \\
   \texttt{SUB[.D/W/H/B] RegR, RegX ( RegB )}
-}
+\end{iPageDescEntry}
 
-\instructionentry{Format}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
 
-	The SUB instruction uses the register, the immediate, the indexed and the register indexed instruction formats. \\
+The SUB instruction uses the register, the immediate-15, the indexed and the register indexed instruction formats. \\
 	
-	\begin{flushleft}	
+\begin{flushleft}	
 
 	\drawInstrFormat
   	{0,1,3,5,6.5,8.5,9.5,11.5,16}
@@ -36,24 +38,27 @@
   	{0,1,3,5,6.5,8.5,9.5,11.5,16}
   	{\OpCodeGrpMEM,\OpCodeSUB, RegR, 1, RegB, dw, RegX, 0}
 
-	\end{flushleft}  
-}
+\end{flushleft}  
 
-\instructionentry{Description}{
+\end{iPageDescEntry}
 
-The \texttt{SUB} instruction subtracts a signed 64-bit operand from a general register \texttt{RegB} and stores the result to the target register \texttt{RegR}. The instruction supports the immediate, the register and the two memory reference instruction formats. An arithmetic overflow results in a numeric overflow trap. The indexed formats may cause a memory reference associated trap.
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
 
-\instructionentry{Operation}{
+The \texttt{SUB} instruction subtracts two signed 64-bit operands and stores the result in the target register \texttt{RegR}. This instruction supports the immediate, register, and both memory-reference formats. An arithmetic overflow triggers a numeric overflow trap, and indexed instruction formats may cause a memory-reference–related trap.
+\end{iPageDescEntry}
 
-  	\texttt{RegR <- RegB - RegA} {(register format)}\\
-  	\smallskip
-  	\texttt{RegR <- RegB - immOperand( )} {(immediate format)}\\
-   	\smallskip
-  	\texttt{RegR <- RegR - memOperand( )} {(indexed formats)}\\
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- RegB - RegA;          ( register format )
+RegR <- RegB - immOperand( ); (immediate format)
+RegR <- RegR - memOperand( ); (indexed formats)
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
-\instructionentry{Exceptions}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}{
 
  	Integer Overflow Trap\\
 	Data Alignment Trap\\
@@ -61,12 +66,11 @@ The \texttt{SUB} instruction subtracts a signed 64-bit operand from a general re
 	Memory Protection Violation Trap\\
 	Data TLB Miss Trap
 }
+\end{iPageDescEntry}
 
-\instructionentry{Notes}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}{
 
 	None. 
 }
-
-
-
-
+\end{iPageDescEntry}
