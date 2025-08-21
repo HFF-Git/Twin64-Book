@@ -6,68 +6,64 @@
 \section*{OR Boolean Operation}
 \addcontentsline{toc}{section}{OR Boolean Operation}
 
-\instructionentry{Syntax}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
   \texttt{OR[.C/N] RegR, RegB, RegA} \\
-  \texttt{OR[.C/N] RegR, RegB, SignedImmed15}
+  \texttt{OR[.C/N] RegR, RegB, val}
   
-  \texttt{OR[.C/N/D/W/H/B] RegR, SignedImmed13( RegB )} \\
+  \texttt{OR[.C/N/D/W/H/B] RegR, ofs( RegB )} \\
   \texttt{OR[.C/N/D/W/H/B] RegR, RegX ( RegB )}
-}
+\end{iPageDescEntry}
 
-\instructionentry{Format}{
-
-	The OR instruction uses the register, the immediate-19, the indexed and the register indexed instruction formats. \\
-
-   \begin{flushleft}	
-
-	\drawInstrFormat
-  	{0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
-  	{\OpCodeGrpALU,\OpCodeOR, RegR, N, C, 0, RegB,  RegA, 0}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+  The OR instruction uses the register, the immediate-19, the indexed and the register indexed instruction formats. \\
 	
-	\drawInstrFormat
+  \begin{flushleft}	
+  \drawInstrFormat
+  	{0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
+  	{\OpCodeGrpALU,\OpCodeOR, RegR, N, C, 0, RegB, 0, RegA, 0}
+	
+  \drawInstrFormat
   	{0,1,3,5,5.5,6,6.5,8.5,16}
   	{\OpCodeGrpALU,\OpCodeOR, RegR, N, C, 1, RegB, val}
 
-	\drawInstrFormat
+  \drawInstrFormat
   	{0,1,3,5,5.5,6,6.5,8.5,9.5,16}
   	{\OpCodeGrpMEM,\OpCodeOR, RegR, N, C, 0, RegB, dw, ofs}
  
-	\drawInstrFormat
+  \drawInstrFormat
   	{0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
   	{\OpCodeGrpMEM,\OpCodeOR, RegR, N, C, 1, RegB, dw, RegX, 0}
+  \end{flushleft}
+\end{iPageDescEntry}
 
-	\end{flushleft}
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+  The \texttt{OR} instruction performs a bitwise OR operation on two 64-bit operands and stores the result in the target register \texttt{RegR}. The second operand, \texttt{RegB}, can be negated by setting the "C" bit, and the result can be negated by setting the "N" bit. This instruction supports the immediate, register, and both memory-reference formats. The Boolean operation itself does not trigger any traps, but the indexed formats may cause a memory-reference–related trap.
+\end{iPageDescEntry}
 
-\instructionentry{Description}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( instr.[C] ) RegB <- not( RegB );
+RegR <- RegB | RegA;           (register format)
+RegR <- RegB | immOperand();   (immediate format)
+RegR <- RegR | memOperand();   (indexed formats)
+if ( instr.[N] ) RegR <- not( RegR );
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
-The \texttt{OR} instruction performs the binary OR operation on two 64-bit operands and stores the result to the target register \texttt{RegR}. Upon input the general register \texttt{regB} can be negated. The result can also be negated by setting the "C" bit. The result can be negated by setting the "N" bit. The instruction supports the immediate, the register and the two memory reference instruction formats. The boolean operation itself does not cause any traps.The indexed formats may cause a memory reference associated trap.
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+  Data Alignment Trap\\
+  Memory Access Violation Trap\\
+  Memory Protection Violation Trap\\
+  Data TLB Miss Trap
+\end{iPageDescEntry}
 
-\instructionentry{Operation}{
-
-	\texttt{if ( instr.[C] RegB <- not( RegB ); } \\
-  	\texttt{RegR <- RegB | RegA} {(register format)}\\
-  	\smallskip
-  	\texttt{RegR <- RegB | immOperand( )} {(immediate format)}\\
-   	\smallskip
-  	\texttt{RegR <- RegR | memOperand( )} {(indexed formats)}\\
-  	\texttt{if ( instr.[N] RegR <- not( RegR ); }
-}
-
-\instructionentry{Exceptions}{
-
-	Data Alignment Trap\\
-	Memory Access Violation Trap\\
-	Memory Protection Violation Trap\\
-	Data TLB Miss Trap
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
-
-
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+  None. 
+\end{iPageDescEntry}
 

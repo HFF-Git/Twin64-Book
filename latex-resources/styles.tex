@@ -58,7 +58,7 @@
     backgroundcolor=\color{gray!5},
     basicstyle={\ttfamily\tiny}, % Try \relsize{-2} if this is still too large
     keywordstyle=\color{magenta},
-    identifierstyle={\ttfamily\color{blue}},
+    identifierstyle={\ttfamily\color{gray}},
     numberstyle={\ttfamily\footnotesize\color{gray}},
     commentstyle={\ttfamily\color{teal}},
     showstringspaces=false,
@@ -170,21 +170,49 @@
   	\end{tikzpicture}%
 }
 
-
 %--------------------------------------------------------------------------------
-% Instruction description pages use this layout.
+% Instruction description pages use these layout definitions.
 %
 %--------------------------------------------------------------------------------
-\newcommand{\instructionentry}[2]{%
+\newenvironment{iPageDescEntry}[1]{%
   \noindent
   \begin{minipage}[t]{0.22\textwidth}
-    \textbf{\large\textcolor{blue}{#1}}%
+    \textbf{\large\textcolor{gray}{#1}}%
   \end{minipage}%
   \hfill
   \begin{minipage}[t]{0.74\textwidth}
-  \setlength{\parskip}{1em}  % add spacing between paragraphs
-  \setlength{\parindent}{0pt} % optional: no indent
-    #2
-  \end{minipage}\par\vspace{0.75em}
+    \setlength{\parskip}{1em}  
+    \setlength{\parindent}{0pt} 
+}{\end{minipage}\par\vspace{0.75em}}
+
+\newenvironment{iPageDescOpEntry}[1]{%
+	\noindent
+  	\begin{minipage}[t]{0.22\textwidth}
+    	\textbf{\large\textcolor{gray}{#1}}%
+  	\end{minipage}%
+  	\hfill
+  	\begin{minipage}[t]{0.74\textwidth}
+    	\setlength{\parskip}{1em}  
+    	\setlength{\parindent}{0pt} 
+    	\footnotesize
+    	\begin{minipage}[t]{0.97\textwidth}%
+	}{%
+	
+	\end{minipage}%
+ 	\end{minipage}\par\vspace{0.75em}%
 }
 
+\lstdefinestyle{iPageOpStyle}{
+    basicstyle=\ttfamily\footnotesize,
+    showstringspaces=false,
+    keepspaces=true,
+    breaklines=true,
+    columns=fullflexible,
+    frame=single,
+    aboveskip=0pt, 
+    belowskip=0pt,
+    xleftmargin=0pt,
+    xrightmargin=0pt,
+    linewidth=\dimexpr0.95\textwidth\relax,
+    floatplacement=H,                      
+}

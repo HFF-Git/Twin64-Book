@@ -6,66 +6,40 @@
 \section*{ADDIL Add immediate left}
 \addcontentsline{toc}{section}{ADDIL Add immediate left}
 
-\instructionentry{Syntax}{
-  \texttt{ADDIL RegR, val }
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{ADDIL RegR, val }
+\end{iPageDescEntry}
 
-\instructionentry{Format}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
 
-	The ADDIL instruction uses the immediate-20 instruction format. \\
+The ADDIL instruction uses the immediate-20 instruction format. \\
+	
+\begin{flushleft}
+\drawInstrFormat
+  	{0,1,3,5,6,16}
+  	{\OpCodeGrpALU,\OpCodeADDIL, Reg R, 0, val }
+\end{flushleft}	
+\end{iPageDescEntry}
 
-   	\begin{flushleft}
-	\begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1,1.5);
-     	\draw[-] (3,0.5) -- (3,1.5);
-     	\draw[-] (5,0.5) -- (5,1.5);
-     	\draw[-] (6,0.5) -- (6,1.5);
-     	     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.5,0.25) {2};
-   	 	\node at (11,0.25) {20};
-   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeADDIL};
-		\node at (4,1) {\small Reg R};
-		\node at (5.5,1) {\small 0};
-		\node at (11,1) {\small val};
-   	 	
-	\end{tikzpicture}
-	\end{flushleft}
-}
+\begin{iPageDescEntry}{Description}
+The \texttt{ADDIL} instruction adds an immediate value to a general register using 32-bit unsigned arithmetic. The 20-bit immediate value is shifted left by 12 bits (padded with zeros on the right) before being added to \texttt{RegR}. The resulting value is stored in the general register \texttt{GR1}. Any overflow that occurs during the addition is ignored.
 
-\instructionentry{Description}{
+\end{iPageDescEntry}
 
-The \texttt{ADDIL} instruction ...}
-
-\instructionentry{Operation}{
-
-  	\texttt{RegR <- RegR + ( val << 12 ); }
-} 
-
-\instructionentry{Exceptions}{
-
-	None.
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- RegR + ( val << 12 );
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
 
+\begin{iPageDescEntry}{Exceptions}
+None.
+\end{iPageDescEntry}
 
 
+\begin{iPageDescEntry}{Notes}
+None. 
+\end{iPageDescEntry}

@@ -541,7 +541,7 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
     	\draw[-] (\i, 3.875 + 0.375) -- (\i, 3.875 - 0.375);
     } 
     
-    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/0,13.5/0,14.5/a,15.5/b} {
+    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/0,13.5/0,14.5/b,15.5/a} {
         \node at (\i, 3.875) {\lbl};
     }
         
@@ -557,7 +557,7 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
     	\draw[-] (\i, 2.25 + 0.375) -- (\i, 2.25 - 0.375);
     } 
     
-    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/a,13.5/b,14.5/c,15.5/d} {
+    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/d,13.5/c,14.5/b,15.5/a} {
         \node at (\i, 2.25) {\lbl};
     }
 
@@ -573,7 +573,7 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
     	\draw[-] (\i, 1 - 0.125) -- (\i, 0 + 0.125);
     } 
     
-    \foreach \i/\lbl in {8.5/a,9.5/b,10.5/c,11.5/d,12.5/e,13.5/f,14.5/g,15.5/h} {
+    \foreach \i/\lbl in {8.5/h,9.5/g,10.5/f,11.5/e,12.5/d,13.5/c,14.5/b,15.5/a} {
         \node at (\i, 0.5) {\lbl};
     }
     
@@ -594,7 +594,7 @@ Virtual address translations are stored in a translation lookaside buffer (TLB).
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,5.5);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,5);
   	
     \node[  tsRectangle, 
             minimum width=10cm,

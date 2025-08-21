@@ -7,17 +7,16 @@
 \addcontentsline{toc}{section}{ADD - Integer Addition}
 
 %--------------------------------------------------------------------------------
-\instructionentry{Syntax}{
-
+\begin{iPageDescEntry}{Syntax} 
   \texttt{ADD RegR, RegB, RegA} \\
   \texttt{ADD RegR, RegB, val}
   
   \texttt{ADD[.D/W/H/B] RegR, ofs ( RegB )} \\
   \texttt{ADD[.D/W/H/B] RegR, RegX ( RegB )}
-}
+\end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-\instructionentry{Format}{
+\begin{iPageDescEntry}{Format}
 
 The ADD instruction uses the register, the immediate-15, the indexed and the register indexed instruction formats. \\
 	
@@ -40,26 +39,26 @@ The ADD instruction uses the register, the immediate-15, the indexed and the reg
   	{\OpCodeGrpMEM,\OpCodeADD, RegR, 1, RegB, dw, RegX, 0}
 
 \end{flushleft}  
-}
+
+\end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-\instructionentry{Description}{
+\begin{iPageDescEntry}{Description}
 
-The \texttt{ADD} instruction adds two signed 64-bit operands and stores the result to the target register \texttt{RegR}. The instruction supports the immediate, the register and the two memory reference instruction formats. An arithmetic overflow results in a numeric overflow trap. The indexed instruction formats may cause a memory reference associated trap.
-}
-
-%--------------------------------------------------------------------------------
-\instructionentry{Operation}{
-
-  	\texttt{RegR <- RegB + RegA} {(register format)}\\
-  	\smallskip
-  	\texttt{RegR <- RegB + immOperand( )} {(immediate format)}\\
-   	\smallskip
-  	\texttt{RegR <- RegR + memOperand( )} {(indexed formats)}\\
-}
+The \texttt{ADD} instruction adds two signed 64-bit operands and stores the result in the target register \texttt{RegR}. This instruction supports the immediate, register, and both memory-reference formats. An arithmetic overflow triggers a numeric overflow trap, and indexed instruction formats may cause a memory-reference–related trap.
+\end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-\instructionentry{Exceptions}{
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- RegB + RegA;          ( register format )
+RegR <- RegB + immOperand( ); (immediate format)
+RegR <- RegR + memOperand( ); (indexed formats)
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}{
 
  	Integer Overflow Trap\\
 	Data Alignment Trap\\
@@ -67,9 +66,11 @@ The \texttt{ADD} instruction adds two signed 64-bit operands and stores the resu
 	Memory Protection Violation Trap\\
 	Data TLB Miss Trap
 }
+\end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-\instructionentry{Notes}{
+\begin{iPageDescEntry}{Notes}{
 
 	None. 
 }
+\end{iPageDescEntry}
