@@ -36,7 +36,18 @@ The \texttt{ABR} instruction adds \texttt{RegB} to \texttt{RegR} and stores the 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Conditions}
 
-...
+The \texttt{cond} field encodes the branch condition as follows:
+
+\begin{flushleft}
+\begin{tabular}{|c|c|l|}
+\hline
+\textbf{Value} & \textbf{Mnemonic} & \textbf{Branch if} \\ \hline
+0 & \texttt{EQ} & \texttt{RegR == 0} \\ \hline
+1 & \texttt{LT} & \texttt{RegR < 0}  \\ \hline
+2 & \texttt{NE} & \texttt{RegR != 0} \\ \hline
+3 & \texttt{LE} & \texttt{RegR <= 0} \\ \hline
+\end{tabular}
+\end{flushleft}
 
 \end{iPageDescEntry}
 
