@@ -1,87 +1,72 @@
 %--------------------------------------------------------------------------------
-%
-%
-%--------------------------------------------------------------------------------
 \pagebreak
-\section*{BB branch on bit}
-\addcontentsline{toc}{section}{BB branch on bit}
+\section*{BB — Branch on Bit}
+\addcontentsline{toc}{section}{BB — Branch on Bit}
 
-\instructionentry{Syntax}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax} 
+  \texttt{BB[.T/F] ofs, pos} \\
+  \texttt{BB[.T/F] ofs, SAR}
+\end{iPageDescEntry}
 
-	\texttt{BB [.T/F] ofs, pos } \\
-    \texttt{BB [.T/F] ofs, SAR }
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+
+The \texttt{BB} instruction uses the immediate-9 format. \\
+
+\begin{flushleft}
+  \drawInstrFormat
+    {0,1,3,5,5.5,6,6.5,9.5,16}
+    {\OpCodeGrpBR,\OpCodeBB,RegR,0,A,V,pos,ofs}
+\end{flushleft}
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{BB} instruction tests a bit in register \texttt{RegR}.  
+The bit position can be specified directly by the \texttt{pos} field,  
+or indirectly through the Shift Amount Register (\texttt{SAR}) if the \texttt{A} option is set.  
+
+If the \texttt{V} bit is set, the test succeeds when the selected bit is \texttt{1}.  
+If the \texttt{V} bit is clear, the test succeeds when the selected bit is \texttt{0}.  
+
+When the condition is satisfied, execution branches to the target address,  
+computed by sign-extending the 9-bit offset, shifting it left by two bits,  
+and adding it to the current instruction address.  
+If the condition is not satisfied, execution continues with the next sequential instruction.  
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( instr.[A] )
+    pos <- SAR;
+else
+    pos <- instr.[pos];
+
+bit_val <- testBit( RegR, pos );
+
+cond <- ( instr.[V] ? (bit_val == 1) : (bit_val == 0) );
+
+if ( cond )
+    PSW.[IA] <- addOfs32( PSW.[IA], ofs );
+else
+    PSW.[IA] <- addOfs32( PSW.[IA], 4 );
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}{
+  Instruction Address Trap\\
+  Instruction TLB Miss Trap
 }
+\end{iPageDescEntry}
 
-\instructionentry{Format}{
-
-	The BB instruction uses the the immediate-9 instruction formats \\
-
-  	 	\begin{flushleft}
-    	\begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (5.5,0.5) -- (5.5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-               	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.25,0.25) {1};
-    	\node at (5.75,0.25) {1};
-    	\node at (6.25,0.25) {1};
-    	\node at (8,0.25) {6};
-   	 	\node at (12.5,0.25) {9};
-   	 	
-   	 	\node at (0.5,1) {\small \OpCodeGrpBR};
-		\node at (2,1) {\small \OpCodeBB};
-		\node at (4,1) {\small Reg R};
-		\node at (5.25,1) {\small 0};
-		\node at (5.75,1) {\small A};
-		\node at (6.25,1) {\small V};
-		\node at (8,1) {\small pos};
-		\node at (12.5,1) {\small ofs};
-   	 	
-    \end{tikzpicture}
-	\end{flushleft}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}{
+  None.
 }
-
-\instructionentry{Description}{
-
-The \texttt{BB} instruction ...
-
-}
-
-\instructionentry{Operation}{
-
-	\texttt{if ( instr.[A] ) tmp <- SAR; } \\
-	\texttt{else ( tmp <- instr.[pos]; } \\
-	\texttt{if ( checkBit( RegR, instr.[V] ) PSW.[IA] <- addOfs( PSW.[IA], ofs ); } \\
-	\texttt{else PSW.[IA] <- addOfs( PSW.[IA], 4 ); }
-	
-}
-
-\instructionentry{Exceptions}{
-
-	tbd...
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
-
-
-
+\end{iPageDescEntry}

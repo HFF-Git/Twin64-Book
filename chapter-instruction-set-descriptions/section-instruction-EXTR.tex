@@ -3,88 +3,57 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{EXTR Extract Bit Field}
-\addcontentsline{toc}{section}{EXTR Extract Bit Field}
+\section*{EXTR - Extract Bit Field}
+\addcontentsline{toc}{section}{EXTR - Extract Bit Field}
 
-\instructionentry{Syntax}{
-  \texttt{EXTR[.S] RegR, RegB, pos, len } \\
-  \texttt{EXTR[.S] RegR, RegB, SAR, len }
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{EXTR[.S] RegR, RegB, pos, len} \\
+\texttt{EXTR[.S] RegR, RegB, SAR, len}
+\end{iPageDescEntry}
 
-\instructionentry{Format}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{EXTR} instruction uses the special-9 instruction format. \\
 
-	The EXTR instruction uses the special-9 instruction format with special fields. \\
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,9,9.5,10,13,16}
+    {0,\OpCodeEXTR,RegR,0,RegB,0,A,S,pos,len}
+\end{flushleft}
+\end{iPageDescEntry}
 
-   	\begin{flushleft}
-    \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9,0.5) -- (9,1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (10,0.5) -- (10, 1.5);
-     	\draw[-] (13,0.5) -- (13, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-   	 	\node at (13.75,0.25) {9};
-   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeEXTR};
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
-		
-		\node at (7.5,1) {\small Reg B};
-		\node at (8.75,1) {\small 0};
-		\node at (9.25,1) {\small A};
-		\node at (9.75,1) {\small S};
-		\node at (11.5,1) {\small pos};
-		\node at (14.5,1) {\small len };
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{EXTR} instruction extracts a bit field from general register \texttt{RegB}.  
 
-\instructionentry{Description}{
+The rightmost bit of the field is specified by the \texttt{pos} instruction field. If the \texttt{A} bit is set, the position value is taken from the Shift Amount Register (\texttt{SAR}) instead of the instruction field.
 
-The \texttt{EXTR} instruction performs a bit field extract specified by the position and length instruction field from general register RegB. The position field specifies the rightmost bit of the bitfield to extract. The length field specifies the bit size if the field to extract. The extracted bit field is stored right justified in the general register RegR. If the S bit is set, the result is sign extended. If the A bit is set, the shift amount control register is used for obtaining the position value instead of the length instruction field.
-}
+The length of the field is specified by the \texttt{len} instruction field. The extracted bit field is stored right-justified in \texttt{RegR}. If the \texttt{S} bit is set, the extracted value is sign-extended.  
 
-\instructionentry{Operation}{
+\end{iPageDescEntry}
 
-	\texttt{if ( instr.[A] tmp <- shamt; } \\
-	\texttt{else tmp <- instr.[pos]; } \\
-  	\texttt{RegR <- extractField( RegB, pos, len ); } \\
-  	\texttt{if ( instr.[S] ) RegR <- signExtend( RegR, pos ); } \\
-} 
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( instr.[A] ) 
+    tmp <- SAR; 
+else 
+    tmp <- instr.[pos];
 
-\instructionentry{Exceptions}{
+RegR <- extractField( RegB, tmp, len );
 
-	None
-}
+if ( instr.[S] ) 
+    RegR <- signExtend( RegR, len );
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
-\instructionentry{Notes}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+None
+\end{iPageDescEntry}
 
-	None. 
-}
-
-
-
-
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None
+\end{iPageDescEntry}

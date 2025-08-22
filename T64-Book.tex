@@ -1,76 +1,79 @@
 %--------------------------------------------------------------------------------
 %
+% Main TWIN-64 Architecture Document
 %
 %--------------------------------------------------------------------------------
 \documentclass[a4paper,11pt]{book} 
 
 %--------------------------------------------------------------------------------
-% Get all packages and styles.
-%
+% Load packages and styles
 %--------------------------------------------------------------------------------
 \input{latex-resources/packages}
 \input{latex-resources/styles}
 
 %--------------------------------------------------------------------------------
-% Document start.
-%
+% Document start
 %--------------------------------------------------------------------------------
 \begin{document}
-	
-	%----------------------------------------------------------------------------
-    % Options to deal with how a line is filled.
-    %
-    %----------------------------------------------------------------------------
-    \setlength{\emergencystretch}{3em}
-    \raggedbottom
-     
-    %----------------------------------------------------------------------------
-    % Title page.
-    %
-    %----------------------------------------------------------------------------
-  	\pagestyle{empty}
-  	\pagenumbering{gobble}
-    \begin{center}
-    		    			
-     	{\Huge \textbf{TWIN-64}} \\
-      	{\LARGE \textbf{Architecture Document}} 
 
-      	\vspace{2cm}
+%----------------------------------------------------------------------------
+% Page formatting options
+%----------------------------------------------------------------------------
+\setlength{\emergencystretch}{3em}  % Allow line breaks in long lines
+\raggedbottom
 
-      	{\LARGE Helmut Fieres} \\
-      	{\large \today}
-    \end{center}
-		
-    %----------------------------------------------------------------------------
-    % Book body.
-    %
-    %----------------------------------------------------------------------------
-   	\frontmatter 
-    \pagestyle{fancy}      
-	\tableofcontents   
-	\markboth{ } { }
-		
-	\mainmatter   
-    \pagestyle{fancy}
-    
-    \include {chapter-introduction/chapter-introduction}
-    \include {chapter-system-organization/chapter-system-organization}
-    \include {chapter-instruction-set/chapter-instruction-set}
-    \include {chapter-processing-resources/chapter-processing-resources}
-    \include {chapter-system-memory/chapter-system-memory}
-    \include {chapter-addressing-access-control/chapter-addressing-access-control}
-    \include {chapter-control-flow/chapter-control-flow}
-    \include {chapter-interruptions/chapter-interruptions}
-    \include {chapter-instruction-set-overview/chapter-instruction-set-overview}
-    \include {chapter-instruction-set-descriptions/chapter-instruction-set-descriptions}
-    \include {chapter-input-output/chapter-input-output}
-  
-    \appendix
-    
-  	\include {appendix-instruction-commentary/appendix-instruction-commentary}
-  	\include {appendix-instruction-notation-routines/appendix-instruction-notation-routines}
-  	\include {appendix-tlb-and-caches/appendix-tlb-and-caches}
-    
-    \backmatter         
-    
+%----------------------------------------------------------------------------
+% Title page
+%----------------------------------------------------------------------------
+\pagestyle{empty}
+\pagenumbering{gobble}
+\begin{center}
+    {\Huge \textbf{TWIN-64}} \\
+    {\LARGE \textbf{Architecture Document}} 
+
+    \vspace{2cm}
+
+    {\LARGE Helmut Fieres} \\
+    {\large \today}
+\end{center}
+
+%----------------------------------------------------------------------------
+% Front matter (table of contents, etc.)
+%----------------------------------------------------------------------------
+\frontmatter
+\pagestyle{fancy}
+\tableofcontents
+\markboth{ }{ }
+
+%----------------------------------------------------------------------------
+% Main matter (chapters)
+%----------------------------------------------------------------------------
+\mainmatter
+\pagestyle{fancy}
+
+\include{chapter-introduction/chapter-introduction}
+\include{chapter-system-organization/chapter-system-organization}
+\include{chapter-instruction-set/chapter-instruction-set}
+\include{chapter-processing-resources/chapter-processing-resources}
+\include{chapter-system-memory/chapter-system-memory}
+\include{chapter-addressing-access-control/chapter-addressing-access-control}
+\include{chapter-control-flow/chapter-control-flow}
+\include{chapter-interruptions/chapter-interruptions}
+\include{chapter-instruction-set-overview/chapter-instruction-set-overview}
+\include{chapter-instruction-set-descriptions/chapter-instruction-set-descriptions}
+\include{chapter-input-output/chapter-input-output}
+
+%----------------------------------------------------------------------------
+% Appendices
+%----------------------------------------------------------------------------
+\appendix
+\include{appendix-instruction-commentary/appendix-instruction-commentary}
+\include{appendix-instruction-notation-routines/appendix-instruction-notation-routines}
+\include{appendix-tlb-and-caches/appendix-tlb-and-caches}
+
+%----------------------------------------------------------------------------
+% Back matter
+%----------------------------------------------------------------------------
+\backmatter
+
 \end{document}

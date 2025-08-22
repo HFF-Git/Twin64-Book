@@ -3,57 +3,56 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{SHRxA - Shift Right and Add}
-\addcontentsline{toc}{section}{SHRxA - Shift Right and Add}
+\section*{LDIL - Load Immediate left}
+\addcontentsline{toc}{section}{LDIL - Load Immediate left}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{SHRxA RegR, RegB, RegA} \\
-\texttt{SHRxA RegR, RegB, val}
+\texttt{LDIL[.L/S/U] RegR, val}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Format}
-The \texttt{SHRxA} instruction supports both register and immediate formats. \\
+The \texttt{LDIL} instruction uses the immediate-20 instruction format. \\
 
 \begin{flushleft}
 \drawInstrFormat
-    {0,1,3,5,6,6.5,8.5,9,9.5,11.5,16}
-    {0,\OpCodeSHRxA,RegR,amt,0,RegB,0,0,RegA,0}
-\end{flushleft}
-
-\medskip
-\begin{flushleft}
-\drawInstrFormat
-    {0,1,3,5,6,6.5,8.5,9,9.5,16}
-    {0,\OpCodeSHRxA,RegR,amt,0,RegB,1,0,val}
+    {0,1,3,5,6,16}
+    {\OpCodeGrpALU,\OpCodeLDIL, RegR, opt, val}
 \end{flushleft}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{SHRxA} instruction shifts the contents of \texttt{RegB} right by the amount specified in the \texttt{amt} field.  
+The \texttt{LDIL} instruction loads an immediate value into the general register \texttt{RegR}.  
+The optional suffix specifies how the immediate is positioned in the register:  
 
-In register format, \texttt{RegA} is added to the shifted value. In immediate format, if the I bit is set, the sign-extended \texttt{val} field is added instead.  
+??? unclear text ... 
 
-The resulting value is stored in \texttt{RegR}.
+\begin{itemize}
+    \item \texttt{.L} — Load into lower 20 bits and shift left by 12.  
+    \item \texttt{.S} — Load into middle 20 bits and shift left by 32.  
+    \item \texttt{.U} — Load into upper 12 bits and shift left by 52.
+\end{itemize}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- (RegB >> amt) + RegA;                (Register format)
-RegR <- (RegB >> amt) + immOperand();        (Immediate format)
+RegR <- ((val & 0xFFFFF) << 12)   // .L option
+RegR <- ((val & 0xFFFFF) << 32)   // .S option
+RegR <- ((val & 0xFFF)   << 52)   // .U option
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-Integer Overflow Trap
+None
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
 None
 \end{iPageDescEntry}
+
 

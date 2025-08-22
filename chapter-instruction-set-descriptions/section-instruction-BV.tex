@@ -1,92 +1,56 @@
 %--------------------------------------------------------------------------------
-%
-%
-%--------------------------------------------------------------------------------
 \pagebreak
-\section*{BV — branch vectored}
-\addcontentsline{toc}{section}{BV — branch vectored}
+\section*{BV — Branch Vectored}
+\addcontentsline{toc}{section}{BV — Branch Vectored}
 
-\instructionentry{Syntax}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{BV RegB [, RegR, RegX ]}
+\end{iPageDescEntry}
 
-  	\texttt{RegR <- addOfs32( PSW.[IA], 4 )}; \\
-	\texttt{PSW.[IA] <- addOfs32( RegB, RegX )};
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{BV} instruction uses the register + register indexed instruction format. \\
 
-\instructionentry{Format}{
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,9.5,11.5,16}
+    {\OpCodeGrpBR,\OpCodeBV, RegR, 1, RegB, 0, RegX, 0}
+\end{flushleft}
+\end{iPageDescEntry}
 
-	The BV instruction uses the XXX instruction formats. \\
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{BV} instruction performs an unconditional branch to the address stored in \texttt{RegB}.  
 
-   	\begin{flushleft}
-    \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (5.5,0.5) -- (5.5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.25,0.25) {1};
-    	\node at (5.75,0.25) {1};
-    	\node at (6.25,0.25) {1};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-   	 	\node at (13.75,0.25) {9};
-   	 	
-   	 	\node at (0.5,1) {\small \OpCodeGrpBR};
-		\node at (2,1) {\small \OpCodeLD};
-		\node at (4,1) {\small Reg R};
-		\node at (5.25,1) {\small 0};
-		\node at (5.75,1) {\small M};
-		\node at (6.25,1) {\small 1};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small 0};
-		\node at (10.5,1) {\small Reg X};
-		\node at (13.75,1) {\small 0};
-   	 	
-    \end{tikzpicture}
-	\end{flushleft}
-}
+The target is interpreted as an instruction address within the current code segment. If code translation is disabled, the target address is the absolute physical address.  
 
-\instructionentry{Description}{
+Before branching, the next instruction address (\texttt{IA + 4}) is stored in \texttt{RegR}.  
 
-The \texttt{BV} instruction ...
+Because \texttt{BV} is a segment base relative branch, branching to a page with a different privilege level is possible.  
+Branching from a lower privilege level to a higher one triggers an instruction protection trap.  
+Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register.  
+If no change is required, the privilege level remains unchanged.  
 
-The indexed formats may cause a memory reference type trap.
+Indexed formats may cause a memory-reference–related trap. ( ??? )
+\end{iPageDescEntry}
 
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- addOfs32( PSW.[IA], 4 );
+PSW.[IA] <- computeTarget( RegB, RegX );
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
-\instructionentry{Operation}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+Instruction Protection Trap\\
+Memory Reference Trap (if indexed) ( ??? )
+\end{iPageDescEntry}
 
-    \texttt{...}\\
-}
-
-\instructionentry{Exceptions}{
-
-	...
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
-
-
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None.
+\end{iPageDescEntry}
 

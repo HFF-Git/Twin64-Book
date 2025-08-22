@@ -6,84 +6,51 @@
 \section*{DSR — Double Shift Right}
 \addcontentsline{toc}{section}{DSR — Double Shift Right}
 
-\instructionentry{Syntax}{
-  \texttt{DSR RegR, RegB, RegA, amt} \\
-   \texttt{DSR RegR, RegB, RegA, SAR } \\
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{DSR RegR, RegB, RegA, amt} \\
+\texttt{DSR RegR, RegB, RegA, SAR}
+\end{iPageDescEntry}
 
-\instructionentry{Format}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{DSR} instruction uses the special-9 instruction format. \\
 
-	The DSR instruction uses the special-9 instruction format. \\
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,9,9.5,11.5,13, 16}
+    {0,\OpCodeDSR, RegR, 2, RegB, 0, A, RegA, 0, amt}
+\end{flushleft}
+\end{iPageDescEntry}
 
-   	\begin{flushleft}
-    	\begin{tikzpicture}[scale=0.7, transform shape]
-        
-        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9,0.5) -- (9, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (12,0.5) -- (12, 1.5);
-     	\draw[-] (13,0.5) -- (13, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-    	\node at (12.5,0.25) {2};
-   	 	\node at (14.5,0.25) {6};
-   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeDSR};
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 3};
-		\node at (7.5,1) {\small Reg B};
-		\node at (8.75,1) {\small 0};
-		\node at (9.25,1) {\small A};
-		\node at (10.5,1) {\small Reg A};
-		\node at (12.5,1) {\small 0 };
-		\node at (14.5,1) {\small amt };
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{DSR} instruction concatenates the contents of registers \texttt{RegB} (left) and \texttt{RegA} (right) and performs a right shift operation. The lower 64 bits of the shifted result are stored in \texttt{RegR}.  
 
-\instructionentry{Description}{
+The shift amount is specified by the \texttt{amt} instruction field, or by the Shift Amount Register (\texttt{SAR}) if the \texttt{A} bit is set.
+\end{iPageDescEntry}
 
-The \texttt{DSR} instruction concatenates the general registers RegB and RegA and performs a right shift operation. Register RegB is the left part, register RegA the right part. The lower 64 bits of the result are stored in the general register RegR. The amount field contains the shift amount. If the A bit is set, the shift amount is taken from the shift amount control register.
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( instr.[A] ) 
+    tmp <- shamtReg;
+else 
+    tmp <- instr.[amt];
 
-\instructionentry{Operation}{
+RegR <- doubleShiftR( RegB, RegA, tmp );
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
-	\texttt{if ( instr.[A] ) tmp <- shamtReg; } \\
-	\smallskip
-	\texttt{else tmp <- instr.[amt]; } \\
-	\smallskip
-	\texttt{RegR <- doubleShiftR( RegB, RegA, tmp ); } \\
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+None
+\end{iPageDescEntry}
 
-\instructionentry{Exceptions}{
-
- 	None.
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None
+\end{iPageDescEntry}
 
 
 

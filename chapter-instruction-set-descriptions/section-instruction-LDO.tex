@@ -3,70 +3,48 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{LDO load offset}
-\addcontentsline{toc}{section}{LDO load offset}
+\section*{LDO — Load Offset}
+\addcontentsline{toc}{section}{LDO — Load Offset}
 
-\instructionentry{Syntax}{
-  \texttt{LDO RegR, ofs ( RegB ) }
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{LDO RegR, ofs(RegB)}
+\end{iPageDescEntry}
 
-\instructionentry{Format}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{LDO} instruction uses the immediate-15 instruction format. \\
 
-	The LDO instruction uses the immediate-15 instruction format. \\
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,16}
+    {0,\OpCodeLDO,RegR,0,RegB,ofs}
+\end{flushleft}
+\end{iPageDescEntry}
 
-   	\begin{flushleft}
-	\begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-          	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-   	 	\node at (11.5,0.25) {15};
-   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeLDO};
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
-		\node at (7.5,1) {\small Reg B};
-		\node at (11.5,1) {\small ofs};
-   	 	
-       \end{tikzpicture}	\end{flushleft}
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{LDO} instruction loads a value from memory using an offset addressing mode.  
+The effective address is calculated by adding the signed immediate offset \texttt{ofs} to the contents of \texttt{RegB}.  
+The loaded value is then stored in \texttt{RegR}.
+\end{iPageDescEntry}
 
-\instructionentry{Description}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- addOfs32(RegB, ofs);
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
-The \texttt{LDO} instruction ...}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+None.
+\end{iPageDescEntry}
 
-\instructionentry{Operation}{
-
-  	\texttt{RegR <- RegR + ofs; }
-} 
-
-\instructionentry{Exceptions}{
-
-	None.
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None
+\end{iPageDescEntry}
 
 
 

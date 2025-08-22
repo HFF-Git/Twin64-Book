@@ -3,96 +3,59 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{DEP Deposit Bit Field}
-\addcontentsline{toc}{section}{DEP Deposit Bit Field}
+\section*{DEP - Deposit Bit Field}
+\addcontentsline{toc}{section}{DEP - Deposit Bit Field}
 
-\instructionentry{Syntax}{
-  \texttt{DEP[.Z/I] RegR, RegB, pos, len } \\
-  \texttt{DEP[.Z/I] RegR, RegB, SAR, len }
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{DEP[.Z/I] RegR, RegB, pos, len} \\
+\texttt{DEP[.Z/I] RegR, RegB, SAR, len}
+\end{iPageDescEntry}
 
-\instructionentry{Format}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{DEP} instruction uses the special-13 instruction format. \\
 
-	The DEP instruction uses the special-13 instruction format with special fields. \\
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,9,9.5,10,13,16}
+    {0,\OpCodeDEP,RegR,1,RegB,I,A,Z,pos,len}
+\end{flushleft}
+\end{iPageDescEntry}
 
-   	\begin{flushleft}
-    \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9,0.5) -- (9,1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (10,0.5) -- (10, 1.5);
-     	\draw[-] (13,0.5) -- (13, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-    	\node at (9.25,0.25) {3};
-    	\node at (11.5,0.25) {4};
-   	 	\node at (14.25,0.25) {4};
-   	 	
-   	 	\node at (0.5,1) {\small 0};
-		\node at (2,1) {\small \OpCodeDEP};
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
-		
-		\node at (7.5,1) {\small Reg B};
-		\node at (8.75,1) {\small 1};
-		\node at (8.75,1) {\small I};
-		\node at (9.25,1) {\small A};
-		\node at (9.75,1) {\small Z};
-		\node at (11.5,1) {\small pos};
-		\node at (14.5,1) {\small len };
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{DEP} instruction deposits a bit field from general register \texttt{RegB} into \texttt{RegR} at the specified position.  
 
-\instructionentry{Description}{
+The rightmost bit of the target field is specified by the \texttt{pos} instruction field, or by the Shift Amount Register (\texttt{SAR}) if the \texttt{A} bit is set. The length of the field is specified by the \texttt{len} instruction field.  
 
-The \texttt{DEP} instruction deposits the bit field with the specified length in general register RegB into the general register RegR at the specified position. The position field specifies the rightmost bit for the bit field to deposit. The length field specifies the bit size of the field to deposit. The Z  bit clears the target register before storing the bit field. If the A bit is set, the shift amount control register is used for obtaining the position value. The I bit specifies that the RegA field contains an immediate value instead of a register. 
+If the \texttt{Z} bit is set, the target register \texttt{RegR} is cleared before depositing the field. If the \texttt{I} bit is set, the value to deposit is taken from the RegB field rather than a register in \texttt{RegB}.
+\end{iPageDescEntry}
 
-}
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( instr.[Z] ) 
+    RegR <- 0;
 
-\instructionentry{Operation}{
+if ( instr.[A] ) 
+    pos <- shamt; 
+else 
+    pos <- instr.[pos];
 
-	\texttt{if ( instr.[Z] ) RegR <- 0; } \\
-	\smallskip
-	\texttt{if ( instr.[A] ) pos <- shamt; } \\
-	\texttt{else pos <- instr.[pos]; } \\
-	\smallskip
-	\texttt{if ( instr.[I] ) }\\
-	\texttt{ RegR <- depositImm( RegR, RegB, pos, instr.[6:0] ); } \\
-	\texttt{ else } \\
-	\texttt{ RegR <- depositField( RegR, RegB, pos, instr.[6:0] ); } \\
-	\smallskip
-} 
+if ( instr.[I] ) 
+    RegR <- depositImm( RegR, RegB, pos, instr.[6:0] ); 
+else 
+    RegR <- depositField( RegR, RegB, pos, instr.[6:0] );
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
-\instructionentry{Exceptions}{
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+None
+\end{iPageDescEntry}
 
-	None
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
-
-
-
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None
+\end{iPageDescEntry}
