@@ -3,82 +3,53 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{STC — Store register conditional}
-\addcontentsline{toc}{section}{ST — Store register conditional}
+\section*{STC — Store Register Conditional}
+\addcontentsline{toc}{section}{STC — Store Register Conditional}
 
-\instructionentry{Syntax}{
+\begin{iPageDescEntry}{Syntax}
+  \texttt{STC RegR, SignedImmed13(RegB)}
+\end{iPageDescEntry}
 
-  \texttt{STC RegR, SignedImmed13( RegB )} \\
-}
+\begin{iPageDescEntry}{Format}
+    The \texttt{STC} instruction uses the indexed instruction format. \\
 
-\instructionentry{Format}{
+    \begin{flushleft}
+    \drawInstrFormat
+        {0, 1, 3, 5, 6.5, 8.5, 9.5, 16}
+        {\OpCodeGrpMEM, \OpCodeSTC, RegR, 0, RegB, 3, S-IMM-13}
+    \end{flushleft}
+\end{iPageDescEntry}
 
-	The STC instruction uses the indexed instruction format. \\
+\begin{iPageDescEntry}{Description}
+    The \texttt{STC} instruction stores a value from a general-purpose register to memory
+    only if the memory address is still reserved by a prior \texttt{LDR} instruction.
+    - If the reservation is valid, the store succeeds and clears the reservation.
+    - If the reservation has been lost (e.g., another processor wrote to the address), the store fails and the memory is unchanged.
+    
+    May cause a memory reference trap if the address is invalid.
+\end{iPageDescEntry}
 
-   	 \begin{flushleft}
-        \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {0};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-     	\node at (12.25,0.25) {13};
-   	 	
-   	 	\node at (0.5,1) {\small \OpCodeGrpMEM};
-		\node at (2,1) {\small \OpCodeST};
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small 3};
-		\node at (12.25,1) {\small S-IMM-13};
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
-}
+\begin{iPageDescEntry}{Operation}
+    \texttt{if (isAddressReserved(memOperand())) \{ } \\
+    \quad \texttt{memStore(memOperand(), RegR);} \\
+    \quad \texttt{clearReservation(memOperand());} \\
+    \texttt{\} else \{ } \\
+    \quad \texttt{storeFailedFlag <- 1;} \\
+    \texttt{\}}
+\end{iPageDescEntry}
 
-\instructionentry{Description}{
+\begin{iPageDescEntry}{Exceptions}
+    - Data Alignment Trap \\
+    - Memory Access Violation Trap \\
+    - Memory Protection Violation Trap \\
+    - Data TLB Miss Trap
+\end{iPageDescEntry}
 
-The \texttt{ST} instruction ...
-
-The indexed formats may cause a memory reference type trap.
-
-}
-
-\instructionentry{Operation}{
-
-    \texttt{RegR <- memLoad( memOperand( ))} {(indexed formats)}\\
-}
-
-\instructionentry{Exceptions}{
-
-	Data Alignment Trap\\
-	Memory Access Violation Trap\\
-	Memory Protection Violation Trap\\
-	Data TLB Miss Trap
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
+\begin{iPageDescEntry}{Notes}
+    - This instruction is the second part of a *load-reserved / store-conditional* pair for atomic memory updates. \\
+    - Success or failure of the store is typically tested via a status flag. \\
+    - Commonly used for implementing spinlocks, mutexes, and atomic counters in multiprocessor systems.
+\end{iPageDescEntry}
 
 
 

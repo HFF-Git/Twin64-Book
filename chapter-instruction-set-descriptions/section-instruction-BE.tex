@@ -1,16 +1,16 @@
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{BV - Branch Vectored}
-\addcontentsline{toc}{section}{BV — Branch Vectored}
+\section*{BE - Branch External}
+\addcontentsline{toc}{section}{BE - Branch External}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{BV RegB [, RegR, RegX ]}
+\texttt{BE RegB [, ofs ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Format}
-The \texttt{BV} instruction uses the register + register indexed instruction format. \\
+The \texttt{BE} instruction uses the ... format. \\
 
 \begin{flushleft}
 \drawInstrFormat
@@ -21,18 +21,17 @@ The \texttt{BV} instruction uses the register + register indexed instruction for
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{BV} instruction performs an unconditional branch to the address stored in \texttt{RegB}.  
+The \texttt{BE} instruction performs an unconditional branch to another segment. 
 
-The target is interpreted as an instruction address within the current code segment. If code translation is disabled, the target address is the absolute physical address.  
 
 Before branching, the next instruction address (\texttt{IA + 4}) is stored in \texttt{RegR}.  
 
-Because \texttt{BV} is a segment base relative branch, branching to a page with a different privilege level is possible.  
+Because \texttt{BE} is a segment base relative branch, branching to a page with a different privilege level is possible.  
 Branching from a lower privilege level to a higher one triggers an instruction protection trap.  
 Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register.  
 If no change is required, the privilege level remains unchanged.  
 
-Indexed formats may cause a memory-reference–related trap. ( ??? )
+
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -45,7 +44,7 @@ PSW.[IA] <- computeTarget( RegB, RegX );
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-Instruction Protection Trap\\
+Instruction Protection Trap \\
 Memory Reference Trap (if indexed) ( ??? )
 \end{iPageDescEntry}
 

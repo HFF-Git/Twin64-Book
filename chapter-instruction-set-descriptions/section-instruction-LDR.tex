@@ -3,84 +3,46 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{LDR — Load register reserved}
-\addcontentsline{toc}{section}{LDR — Load register reserved}
+\section*{LDR — Load Register Reserved}
+\addcontentsline{toc}{section}{LDR — Load Register Reserved}
 
-\instructionentry{Syntax}{
+\begin{iPageDescEntry}{Syntax}
+  \texttt{LDR RegR, SignedImmed13(RegB)}
+\end{iPageDescEntry}
 
-  \texttt{LDR RegR, SignedImmed13( RegB )} \\
-}
+\begin{iPageDescEntry}{Format}
+    The \texttt{LDR} instruction uses the indexed instruction format. \\
 
-\instructionentry{Format}{
+    \begin{flushleft}
+    \drawInstrFormat
+        {0, 1, 3, 5, 6.5, 8.5, 9.5, 16}
+        {\OpCodeGrpMEM, \OpCodeLDR, RegR, 0, RegB, 3, S-IMM-13}
+    \end{flushleft}
+\end{iPageDescEntry}
 
-	The LDR instruction uses the indexed instruction format. \\
+\begin{iPageDescEntry}{Description}
+    The \texttt{LDR} instruction loads a value from memory into a general-purpose register
+    and marks the address as "reserved" for a subsequent conditional store.
+    - Only the first step of an atomic read-modify-write pair.
+    - Subsequent \texttt{STRC} (store conditional) will succeed only if the reservation is still valid.
+    
+    May cause a memory reference trap if the address is invalid.
+\end{iPageDescEntry}
 
-   	 \begin{flushleft}
-        \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {0};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-     	\node at (12.25,0.25) {13};
-   	 	
-   	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small \OpCodeLDR};
-		\node at (4,1) {\small Reg R};
-		\node at (5.75,1) {\small 0};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small 3};
-		\node at (12.25,1) {\small S-IMM-13};
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
- 	}
+\begin{iPageDescEntry}{Operation}
+    \texttt{RegR <- memLoad(memOperand());} \\
+    \texttt{markAddressReserved(memOperand());}  (sets reservation for STRC)
+\end{iPageDescEntry}
 
-\instructionentry{Description}{
+\begin{iPageDescEntry}{Exceptions}
+    - Data Alignment Trap \\
+    - Memory Access Violation Trap \\
+    - Memory Protection Violation Trap \\
+    - Data TLB Miss Trap
+\end{iPageDescEntry}
 
-The \texttt{LDR} instruction ...
-
-The indexed formats may cause a memory reference type trap.
-
-}
-
-\instructionentry{Operation}{
-
-	??? fix ... 
-	
-    \texttt{RegR <- memLoad( memOperand( ))} {(indexed formats)}\\
-}
-
-\instructionentry{Exceptions}{
-
-	Data Alignment Trap\\
-	Memory Access Violation Trap\\
-	Memory Protection Violation Trap\\
-	Data TLB Miss Trap
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
-
-
-
+\begin{iPageDescEntry}{Notes}
+    - This instruction is part of a *load-reserved / store-conditional* pair for atomic memory updates. \\
+    - Reservation may be cleared by other stores to the same address by another processor. \\
+    - Often used for implementing locks or atomic counters.
+\end{iPageDescEntry}

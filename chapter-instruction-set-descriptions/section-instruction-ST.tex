@@ -3,135 +3,52 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{ST — Store register}
-\addcontentsline{toc}{section}{ST — Store register}
+\section*{ST — Store Register}
+\addcontentsline{toc}{section}{ST — Store Register}
 
-\instructionentry{Syntax}{
-  \texttt{ST[.D/W/H/B] RegR, SignedImmed13( RegB )} \\
-  \texttt{ST.D/W/H/B] RegR, RegX ( RegB )}
-}
+\begin{iPageDescEntry}{Syntax}
+    \texttt{ST[.D/W/H/B] RegR, SignedImmed13( RegB )} \\
+    \texttt{ST[.D/W/H/B] RegR, RegX( RegB )}
+\end{iPageDescEntry}
 
-\instructionentry{Format}{
+\begin{iPageDescEntry}{Format}
+    The \texttt{ST} instruction uses the indexed and register-indexed instruction formats. \\
 
-	The ST instruction uses the indexed and the register indexed instruction formats. \\
+    \begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,5,5.5,6,6.5,8.5,9.5,16}
+        {\OpCodeGrpMEM, \OpCodeST, RegR, 0, M, 0, RegB, dw, S-IMM-13}
+    \end{flushleft}
 
-   	 \begin{flushleft}
-        \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (5.5,0.5) -- (5.5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.25,0.25) {1};
-    	\node at (5.75,0.25) {1};
-    	\node at (6.25,0.25) {1};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-     	\node at (12.25,0.25) {13};
-   	 	
-   	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small \OpCodeST};
-		\node at (4,1) {\small Reg R};
-		\node at (5.25,1) {\small 0};
-		\node at (5.75,1) {\small M};
-		\node at (6.25,1) {\small 0};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small dw};
-		\node at (12.25,1) {\small S-IMM-13};
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
- 	\medskip
-	\begin{flushleft}
-        \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (5.5,0.5) -- (5.5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.25,0.25) {1};
-    	\node at (5.75,0.25) {1};
-    	\node at (6.25,0.25) {1};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-   	 	\node at (13.75,0.25) {9};
-   	 	
-   	 	\node at (0.5,1) {\small 1};
-		\node at (2,1) {\small \OpCodeST};
-		\node at (4,1) {\small Reg R};
-		\node at (5.25,1) {\small 0};
-		\node at (5.75,1) {\small M};
-		\node at (6.25,1) {\small 1};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small dw};
-		\node at (10.5,1) {\small Reg X};
-		\node at (13.75,1) {\small 0};
-   	 	
-       \end{tikzpicture}
-	\end{flushleft}
-}
+    \begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpMEM, \OpCodeST, RegR, 0, M, 1, RegB, dw, RegX, 0}
+    \end{flushleft}
+\end{iPageDescEntry}
 
-\instructionentry{Description}{
+\begin{iPageDescEntry}{Description}
+    The \texttt{ST} instruction stores a value from a general-purpose register into memory.
+    - The indexed format adds a signed immediate to \texttt{RegB} to form the effective address.
+    - The register-indexed format adds \texttt{RegX} to \texttt{RegB} to form the effective address.
 
-The \texttt{ST} instruction ...
+    The instruction may trigger a memory reference trap if the address is invalid.
+\end{iPageDescEntry}
 
-The indexed formats may cause a memory reference type trap.
+\begin{iPageDescEntry}{Operation}
+    \texttt{memStore( memOperand(), RegR );} \quad (for indexed formats)
+\end{iPageDescEntry}
 
-}
+\begin{iPageDescEntry}{Exceptions}
+    - Data Alignment Trap \\
+    - Memory Access Violation Trap \\
+    - Memory Protection Violation Trap \\
+    - Data TLB Miss Trap
+\end{iPageDescEntry}
 
-\instructionentry{Operation}{
-
-    \texttt{RegR <- memLoad( memOperand( ))} {(indexed formats)}\\
-}
-
-\instructionentry{Exceptions}{
-
-	Data Alignment Trap\\
-	Memory Access Violation Trap\\
-	Memory Protection Violation Trap\\
-	Data TLB Miss Trap
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
-
+\begin{iPageDescEntry}{Notes}
+    - The instruction supports different sizes: byte (.B), halfword (.H), word (.W), doubleword (.D). \\
+    - Often used in loops to write data back to memory.
+\end{iPageDescEntry}
 
 

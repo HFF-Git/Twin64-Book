@@ -3,73 +3,38 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{NOP  - No operation}
-\addcontentsline{toc}{section}{NOP  - No operation}
+\section*{NOP — No Operation}
+\addcontentsline{toc}{section}{NOP — No Operation}
 
-\instructionentry{Syntax}{
+\begin{iPageDescEntry}{Syntax}
+    \texttt{NOP}
+\end{iPageDescEntry}
 
-	\texttt{NOP]}
-}
+\begin{iPageDescEntry}{Format}
+    The \texttt{NOP} instruction uses no format. \\
 
-\instructionentry{Format}{
+    \begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,16}
+        {\OpCodeGrpALU, \OpCodeNOP, 0}
+    \end{flushleft}
+\end{iPageDescEntry}
 
-	The RFI instruction uses the xxx  instruction format. \\
+\begin{iPageDescEntry}{Description}
+    The \texttt{NOP} (No Operation) instruction does nothing. 
+    It is typically used for timing, alignment, or to occupy a pipeline slot.
+\end{iPageDescEntry}
 
-   	\begin{flushleft}
-	\begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-        \draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-          	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.75,0.25) {3};
-    	\node at (7.5,0.25) {4};
-   	 	\node at (11.5,0.25) {15};
-   	 	
-   	 	\node at (0.5,1) {\small \OpCodeGrpBR};
-		\node at (2,1) {\small \OpCodeCBR};
-		\node at (4,1) {\small Reg R};
-		\node at (5.5,1) {\small cond};
-		\node at (6.25,1) {\small 0};
-		\node at (7.5,1) {\small Reg B};
-		\node at (11.5,1) {\small ofs};
-   	 	
-       \end{tikzpicture}	\end{flushleft}
-}
+\begin{iPageDescEntry}{Operation}
+    \texttt{// no changes to registers or memory}
+\end{iPageDescEntry}
 
-\instructionentry{Description}{
+\begin{iPageDescEntry}{Exceptions}
+    None.
+\end{iPageDescEntry}
 
-The \texttt{NOP} instruction ...}
-
-\instructionentry{Operation}{
-
-  	...
-} 
-
-\instructionentry{Exceptions}{
-
-	None.
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
-
-
+\begin{iPageDescEntry}{Notes}
+    - Often used for delay loops or to align instructions in memory. \\
+    - Safe to execute in any mode, does not trigger traps or exceptions.
+\end{iPageDescEntry}
 

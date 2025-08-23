@@ -3,89 +3,43 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{LPA -  load physical address}
-\addcontentsline{toc}{section}{LPA -  load physical address}
+\section*{LPA — Load Physical Address}
+\addcontentsline{toc}{section}{LPA — Load Physical Address}
 
-\instructionentry{Syntax}{
+\begin{iPageDescEntry}{Syntax}
+    \texttt{LPA RegR, (RegB, RegX)}
+\end{iPageDescEntry}
 
-	\texttt{ LPA ... }
-}
+\begin{iPageDescEntry}{Format}
+    The \texttt{LPA} instruction uses the indexed load instruction format. \\
 
-\instructionentry{Format}{
+    \begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpSYS, \OpCodeLPA, RegR, 0, RegB, 0, RegX, 0}
+    \end{flushleft}
+\end{iPageDescEntry}
 
-	The BV instruction uses the XXX instruction formats. \\
+\begin{iPageDescEntry}{Description}
+    The \texttt{LPA} (Load Physical Address) instruction computes the physical 
+    address corresponding to the given virtual address and loads it into 
+    \texttt{RegR}.  
+    The virtual address is formed from the contents of \texttt{RegB} and 
+    (optionally) \texttt{RegX}, using the same addressing modes as normal loads.  
+    No memory access is performed.
+\end{iPageDescEntry}
 
-   	\begin{flushleft}
-    \begin{tikzpicture}[scale=0.7, transform shape]
-        
-        % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
-        
-        \node[  tsRectangle, 
-                minimum width=16cm,
-                minimum height=1cm,
-                text width=3cm,
-                text centered,
-                fill=white!50] (blocks) at (8,1) { };
-                
-     	\draw[-] (1,0.5) -- (1, 1.5);
-     	\draw[-] (3,0.5) -- (3, 1.5);
-     	\draw[-] (5,0.5) -- (5, 1.5);
-     	\draw[-] (5.5,0.5) -- (5.5, 1.5);
-     	\draw[-] (6,0.5) -- (6, 1.5);
-     	\draw[-] (6.5,0.5) -- (6.5, 1.5);
-     	\draw[-] (8.5,0.5) -- (8.5, 1.5);
-     	\draw[-] (9.5,0.5) -- (9.5, 1.5);
-     	\draw[-] (11.5,0.5) -- (11.5, 1.5);
-     	
-     	\node at (0.5,0.25) {2};
-    	\node at (2,0.25) {4};
-    	\node at (4,0.25) {4};
-    	\node at (5.25,0.25) {1};
-    	\node at (5.75,0.25) {1};
-    	\node at (6.25,0.25) {1};
-    	\node at (7.5,0.25) {4};
-    	\node at (9,0.25) {2};
-    	\node at (10.5,0.25) {4};
-   	 	\node at (13.75,0.25) {9};
-   	 	
-   	 	\node at (0.5,1) {\small \OpCodeGrpBR};
-		\node at (2,1) {\small \OpCodeLD};
-		\node at (4,1) {\small Reg R};
-		\node at (5.25,1) {\small 0};
-		\node at (5.75,1) {\small M};
-		\node at (6.25,1) {\small 1};
-		\node at (7.5,1) {\small Reg B};
-		\node at (9,1) {\small 0};
-		\node at (10.5,1) {\small Reg X};
-		\node at (13.75,1) {\small 0};
-   	 	
-    \end{tikzpicture}
-	\end{flushleft}
-}
+\begin{iPageDescEntry}{Operation}
+    \texttt{RegR ← translateVA(RegB + RegX);}
+\end{iPageDescEntry}
 
-\instructionentry{Description}{
+\begin{iPageDescEntry}{Exceptions}
+    - Page fault if the virtual address is not mapped. \\
+    - Privileged instruction trap if executed in user mode.
+\end{iPageDescEntry}
 
-The \texttt{LPA} instruction ...
-
-The indexed formats may cause a memory reference type trap.
-
-}
-
-\instructionentry{Operation}{
-
-    \texttt{...}\\
-}
-
-\instructionentry{Exceptions}{
-
-	...
-}
-
-\instructionentry{Notes}{
-
-	None. 
-}
-
-
-
-
+\begin{iPageDescEntry}{Notes}
+    - Useful for operating systems to probe or manage virtual→physical mappings. \\
+    - No data is loaded from memory; only the translation is returned. \\
+    - May be used with TLB management instructions such as \texttt{ITLB}.
+\end{iPageDescEntry}
