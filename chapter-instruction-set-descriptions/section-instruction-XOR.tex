@@ -22,19 +22,19 @@
   \begin{flushleft}	
   \drawInstrFormat
   	{0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
-  	{\OpCodeGrpALU,\OpCodeXOR, RegR, N, C, 0, RegB, 0, RegA, 0}
+  	{\OpCodeGrpALU,\OpCodeXOR, RegR, N, 0, 0, RegB, 0, RegA, 0}
 	
   \drawInstrFormat
   	{0,1,3,5,5.5,6,6.5,8.5,16}
-  	{\OpCodeGrpALU,\OpCodeXOR, RegR, N, C, 1, RegB, val}
+  	{\OpCodeGrpALU,\OpCodeXOR, RegR, N, 0, 1, RegB, val}
 
   \drawInstrFormat
   	{0,1,3,5,5.5,6,6.5,8.5,9.5,16}
-  	{\OpCodeGrpMEM,\OpCodeXOR, RegR, N, C, 0, RegB, dw, ofs}
+  	{\OpCodeGrpMEM,\OpCodeXOR, RegR, N, 0, 0, RegB, dw, ofs}
  
   \drawInstrFormat
   	{0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
-  	{\OpCodeGrpMEM,\OpCodeXOR, RegR, N, C, 1, RegB, dw, RegX, 0}
+  	{\OpCodeGrpMEM,\OpCodeXOR, RegR, N, 0, 1, RegB, dw, RegX, 0}
   \end{flushleft}
 \end{iPageDescEntry}
 
@@ -46,7 +46,6 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[C] ) RegB <- not( RegB );
 RegR <- RegB ^ RegA;           (register format)
 RegR <- RegB ^ immOperand();   (immediate format)
 RegR <- RegR ^ memOperand();   (indexed formats)

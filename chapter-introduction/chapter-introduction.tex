@@ -13,4 +13,19 @@ While it is not a design goal to build an industry-strength, competitive CPU, th
 
 Where does the name Twin-64 come from? Obviously, the “64” indicates that the CPU is a 64-bit CPU. The “Twin” part will become clearer when implementations of the CPU are described in later chapters. One implementation represents a dual-issue instruction design with two ALUs for computation. Nevertheless, a very basic implementation could just offer single-issue, single-ALU execution as well. 
 
-This document describes the overall architecture, instruction set, and runtime model for Twin-64. It is structured into several parts. The first part gives an overview of the system organization and architecture. The main part of the document presents the instruction set. Memory reference instructions, immediate instructions, branch instructions, computational instructions, and system control instructions are described in detail. These chapters are the authoritative reference for the instruction set. The next part presents the major components such as the processor itself, the I/O module architecture, and finally the runtime model and calling conventions. An appendix provides additional design details and complementary notes.
+\section*{This book}
+\addcontentsline{toc}{section}{This book}
+
+This document describes the overall architecture, instruction set, and runtime model for Twin-64. It is structured into several parts. 
+
+The first part gives an overview of the overall Twin-64 architecture. 
+
+The main part of the document presents the instruction set. Memory reference instructions, immediate instructions, branch instructions, computational instructions, and system control instructions are described in detail. These chapters are the authoritative reference for the instruction set. 
+
+The next part presents the I/O subsystem.
+
+The next part is the runtime environment and software calling conventions.
+
+The next part is the processor design. While there certainly many ways to design a processor for Twin-64 ... a reference design to underline the key architectural ideas.  
+
+The final part is the appendix which provides additional design details and complementary notes.

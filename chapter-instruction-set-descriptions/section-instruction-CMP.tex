@@ -18,7 +18,7 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Format}
 
-The CMP instruction uses the register, the immediate-15, the indexed and the register indexed instruction formats. \\
+The CMP instruction uses the register, the signed immediate S15, the indexed and the register indexed instruction formats. \\
 	
 \begin{flushleft}	
 
@@ -50,9 +50,18 @@ The \texttt{CMP} instruction compares two signed 64-bit operands. In register mo
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Conditions}
+The \texttt{cond} field encodes the branch condition as follows:
 
-...
-	
+\begin{center}
+\begin{tabular}{|c|c|l|}
+\hline
+\textbf{Value} & \textbf{Mnemonic} & \textbf{Branch if} \\ \hline
+0 & \texttt{EQ} & \texttt{RegR == 0} \\ \hline
+1 & \texttt{LT} & \texttt{RegR < 0}  \\ \hline
+2 & \texttt{NE} & \texttt{RegR != 0} \\ \hline
+3 & \texttt{LE} & \texttt{RegR <= 0} \\ \hline
+\end{tabular}
+\end{center}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

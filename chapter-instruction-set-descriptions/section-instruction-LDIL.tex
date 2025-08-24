@@ -3,12 +3,12 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{LDIL - Load Immediate left}
-\addcontentsline{toc}{section}{LDIL - Load Immediate left}
+\section*{LDIL — Load Immediate Left}
+\addcontentsline{toc}{section}{LDIL — Load Immediate Left}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{LDIL[.L/S/U] RegR, val}
+\texttt{LDIL[.L/.S/.U] RegR, val}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -18,41 +18,40 @@ The \texttt{LDIL} instruction uses the immediate-20 instruction format. \\
 \begin{flushleft}
 \drawInstrFormat
     {0,1,3,5,6,16}
-    {\OpCodeGrpALU,\OpCodeLDIL, RegR, opt, val}
+    {\OpCodeGrpALU,\OpCodeLDIL, RegR, mode, val}
 \end{flushleft}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{LDIL} instruction loads an immediate value into the general register \texttt{RegR}.  
-The optional suffix specifies how the immediate is positioned in the register:  
-
-??? unclear text ... 
+The \texttt{LDIL} instruction deposits an immediate value into the general register \texttt{RegR}.  
+The optional suffix selects how the immediate field is positioned within the register.  
+If no suffix is given, the default is \texttt{.L} mode (mode value = 1).  
 
 \begin{itemize}
-    \item \texttt{.L} — Load into lower 20 bits and shift left by 12.  
-    \item \texttt{.S} — Load into middle 20 bits and shift left by 32.  
-    \item \texttt{.U} — Load into upper 12 bits and shift left by 52.
+    \item \texttt{.L} (mode = 1) — Deposits 20 bits of \texttt{val} into bits [31..12] of \texttt{RegR}.  
+    \item \texttt{.S} (mode = 2) — Deposits 20 bits of \texttt{val} into bits [51..32] of \texttt{RegR}.  
+    \item \texttt{.U} (mode = 3) — Deposits the lower 12 bits of \texttt{val} into bits [63..52] of \texttt{RegR}.
 \end{itemize}
+
+A mode value of zero is reserved and must not be used.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- ((val & 0xFFFFF) << 12)   // .L option
-RegR <- ((val & 0xFFFFF) << 32)   // .S option
-RegR <- ((val & 0xFFF)   << 52)   // .U option
+RegR <- ((val & 0xFFFFF) << 12)   // .L mode (1)
+RegR <- ((val & 0xFFFFF) << 32)   // .S mode (2)
+RegR <- ((val & 0xFFF)   << 52)   // .U mode (3)
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-None
+None.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None
+None.
 \end{iPageDescEntry}
-
-

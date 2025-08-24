@@ -10,12 +10,12 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Format}
-The \texttt{BE} instruction uses the ... format. \\
+The \texttt{BE} instruction uses the signed immediate S15 format. \\
 
 \begin{flushleft}
 \drawInstrFormat
-    {0,1,3,5,6.5,8.5,9.5,11.5,16}
-    {\OpCodeGrpBR,\OpCodeBV, RegR, 1, RegB, 0, RegX, 0}
+    {0,1,3,5,6.5,8.5,16}
+    {\OpCodeGrpBR,\OpCodeBV, RegR, 0, RegB, ofs}
 \end{flushleft}
 \end{iPageDescEntry}
 

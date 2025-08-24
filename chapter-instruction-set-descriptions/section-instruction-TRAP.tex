@@ -8,7 +8,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{TRAP ...}
+\texttt{TRAP tid, regB, regA}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -18,15 +18,13 @@ The \texttt{TRAP} instruction uses the standard indexed instruction format. \\
 \begin{flushleft}
 \drawInstrFormat
     {0,1,3,5,6.5,8.5,9.5,11.5,16}
-    {\OpCodeGrpSYS,\OpCodeTRAP, 0, info1, RegB, info2, RegA, 0}
+    {\OpCodeGrpSYS,\OpCodeTRAP, 0, tid1, RegB, tid2, RegA, 0}
 \end{flushleft}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{TRAP} instruction generates a synchronous trap to handle exceptional conditions.  
-Indexed formats may trigger a memory reference type trap depending on the operands and addressing mode.  
-The instruction may be used to invoke operating system routines or exception handlers.
+The \texttt{TRAP} instruction generates a synchronous trap to handle exceptional conditions.  The \texttt{tid1} and \texttt{tid2} are concatenated to form the trap Id. The instruction may be used to invoke operating system routines or exception handlers.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

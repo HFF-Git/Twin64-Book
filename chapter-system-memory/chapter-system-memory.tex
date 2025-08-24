@@ -51,8 +51,8 @@ Twin-64 features a 52-bit virtual address range, organized into a 20-bit segment
 
 A virtual address is translated into a physical address. For translation purposes, the virtual address range can also be viewed as a set of virtual pages. The architected page size is 16 KB, with a 38-bit virtual page number and a 14-bit page offset. 
 
-\section*{Physical Address Space}
-\addcontentsline{toc}{section}{Physical Address Space}
+\section*{Address Space Layout}
+\addcontentsline{toc}{section}{Address Space Layout}
 
 Twin-64 architecture features a 36-bit physical memory address range which allows a maximum physical memory of up to 64 GBytes.  
 
@@ -60,11 +60,11 @@ Twin-64 architecture features a 36-bit physical memory address range which allow
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(12,16);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(17,16);
 
 	% Rectangle dimensions
 	\def\width{8}
-	\def\leftofs{4}
+	\def\leftofs{3}
 	\def\rightofs{\leftofs + \width}
 
 	% Left side
@@ -77,7 +77,7 @@ Twin-64 architecture features a 36-bit physical memory address range which allow
 	\draw[thick] (\leftofs, 15) -- (\leftofs, 16);
 
 	% Right side
-	draw[thick] (\rightofs, 0) -- (\rightofs, 1);
+	\draw[thick] (\rightofs, 0) -- (\rightofs, 1);
 	\draw[thick, dashed] (\rightofs, 1) -- (\rightofs, 6); 
 	\draw[thick] (\rightofs, 6) -- (\rightofs, 8);
 	\draw[thick, dashed] (\rightofs, 8) -- (\rightofs, 10); 	
@@ -107,11 +107,18 @@ Twin-64 architecture features a 36-bit physical memory address range which allow
 	\node at (\leftofs + \width / 2, 12) {\textbf{I/O Address Space}};
 	\node at (\leftofs + \width / 2, 9) {\textbf{Physical Memory Address Space}};
 	\node at (\leftofs + \width / 2, 4) {\textbf{Virtual Memory Address Space}};
+	
+	% bracket
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,7) -- (\rightofs + 0.5,16)
+	node[midway, right=1cm, anchor=west]{Physical Address range};
+	
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,0) -- (\rightofs + 0.5,7)
+	node[midway, right=1cm, anchor=west]{Virtual Address range};
 
 \end{tikzpicture}
 \end{center}
-\caption{Physical Memory Address Range}
-\label{fig:Physical Memory Address Range}
+\caption{Memory Address Ranges}
+\label{fig:Memory Address Ranges}
 \end{figure}
 
 Segment IDs 0–15 represent the physical address space, with a maximum size of 64 GB. These segments are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these segments. Control Register 0 contains a field that encodes the actual memory size installed in the system.
