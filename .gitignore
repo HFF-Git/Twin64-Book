@@ -311,4 +311,6 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
-T64-Book.pdf
+
+#the output file ....
+../T64-Book.pdf
