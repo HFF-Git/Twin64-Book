@@ -7,7 +7,13 @@
 
 Designers of CPUs in the seventies and early eighties almost all used a microcoded approach with hundreds of instructions. RISC was just beginning to emerge. Registers were typically not fully general-purpose but often had special functions or meanings, and many instructions were rather complicated, though designers believed them useful. Compiler writers, however, often used only a small subset, ignoring these complex instructions because they were too specialized. In the late eighties and nineties the shift moved to RISC-based designs, with large sets of registers, fixed instruction word lengths, large virtual memory address ranges, and instructions that were in general much more pipeline-friendly. Today, processors are highly complex, with superscalar deep pipelines and multilevel cache hierarchies—just a few of the hallmarks of modern CPU design. CPU designs have become so large and complex that no single person can completely understand them. But what if there were a simple design that one person could fully understand?
 
+\section*{Twin-64}
+\addcontentsline{toc}{section}{Twin-64}
+
 Welcome to Twin-64. Twin-64 is a simple 64-bit CPU with a register–memory model and segmented virtual memory. The design is heavily influenced by Hewlett-Packard’s PA\_RISC architecture, which was initially a 32-bit RISC-style load/store machine. Almost all of the key architectural features come from there. However, other processors—such as the Data General MV8000, the DEC Alpha, and the IBM PowerPC—were also influential or at least investigated for their design choices. In addition, the Blitz-64 architecture was studied. Blitz-64, a design developed at Portland State University, offered an interesting approach in that it only supported 64-bit signed arithmetic, avoiding common errors from mixing signed and unsigned arithmetic.
+
+\section*{Design Goals}
+\addcontentsline{toc}{section}{Design Goals}
 
 While it is not a design goal to build an industry-strength, competitive CPU, the CPU should nevertheless be useful and largely follow established design practices. For example, instructions should not be invented just because they seem useful, but rather designed with the assembler and compilers in mind. Instruction set design is CPU design. Register–memory architectures were typically microcoded, complex-instruction machines. In contrast, Twin-64 instructions will be hardwired and are in general pipeline-friendly, avoiding data and control hazards and stalls where possible.
 
@@ -16,16 +22,16 @@ Where does the name Twin-64 come from? Obviously, the “64” indicates that th
 \section*{This book}
 \addcontentsline{toc}{section}{This book}
 
-This document describes the overall architecture, instruction set, and runtime model for Twin-64. It is structured into several parts. 
+This document serves as a comprehensive guide to the Twin-64 processor, its instruction set, and runtime environment. It is organized into several parts, each focusing on a key aspect of the system.
 
-The first part gives an overview of the overall Twin-64 architecture. 
+\textbf{Part Two} introduces the Twin-64 architecture, providing an overview of the processor’s structure, core components, and design philosophy. This sets the stage for understanding how instructions are executed and how data moves through the system.
 
-The main part of the document presents the instruction set. Memory reference instructions, immediate instructions, branch instructions, computational instructions, and system control instructions are described in detail. These chapters are the authoritative reference for the instruction set. 
+\textbf{Part Three} presents the instruction set in detail. It covers memory reference, immediate, branch, computational, and system control instructions. These chapters serve as the definitive reference for programmers and designers alike, offering precise information on encoding, operation, and usage.
 
-The next part presents the I/O subsystem.
+\textbf{Part Four} explores the I/O subsystem, detailing the mechanisms by which the processor communicates with external devices and handles input/output operations efficiently.
 
-The next part is the runtime environment and software calling conventions.
+\textbf{Part Five} discusses the runtime environment and software conventions. It explains program interaction with Twin-64, including calling conventions, exception handling, and runtime support for higher-level languages.
 
-The next part is the processor design. While there certainly many ways to design a processor for Twin-64 ... a reference design to underline the key architectural ideas.  
+\textbf{Part Six} examines processor design. While multiple design approaches are possible, this section provides a reference implementation that highlights key architectural concepts, practical trade-offs, and performance considerations.
 
-The final part is the appendix which provides additional design details and complementary notes.
+Finally, the \textbf{Appendix} provides supplementary material, including additional design notes, tables, and clarifications to support the main text and offer deeper insight into the Twin-64 system.

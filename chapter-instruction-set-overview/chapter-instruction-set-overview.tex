@@ -85,7 +85,7 @@ The \texttt{TRAP} instruction raises a software exception and is typically used 
 \section*{Instruction Formats}
 \addcontentsline{toc}{section}{Instruction Formats}
 
-Twin-64 employs a small number of instruction formats, which are classified according to the number of register operands and the length of the immediate value field. The \textbf{signed immediate S19 / special} format provides one register operand and a 19-bit signed immediate field. This format is typically used for branch instructions.
+Twin-64 employs a small number of instruction formats, which are classified according to the number of register operands and the length of the immediate value field. The \textbf{signed immediate S19 / special (S19)} format provides one register operand and a 19-bit signed immediate field. This format is typically used for branch instructions.
 
 \begin{center}
 \drawInstrFormat
@@ -93,7 +93,7 @@ Twin-64 employs a small number of instruction formats, which are classified acco
   	{Grp, OpCode, RegR, Opt1, S-IMM-19/special}
 \end{center}
 
-The \textbf{signed immediate S15 / special} instruction format provides two register operands and a 15-bit signed immediate field. This format is used both by conditional branch instructions and by instructions that operate on a register and an immediate value.
+The \textbf{signed immediate S15 / special (S15)} instruction format provides two register operands and a 15-bit signed immediate field. This format is used both by conditional branch instructions and by instructions that operate on a register and an immediate value.
 
 \begin{center}
 \drawInstrFormat
@@ -101,7 +101,7 @@ The \textbf{signed immediate S15 / special} instruction format provides two regi
   	{Grp, OpCode, RegR, Opt1, RegB, S-IMM-15/special}
 \end{center}
 
-The \textbf{signed immediate S13 / special} instruction format provides two registers, an additional option field, and a 13-bit signed immediate field. Some instructions use the S-IMM-13 field for special encodings instead of a signed value. This format is used by memory reference instructions, where the address is formed by a base register plus a 13-bit signed offset.
+The \textbf{signed immediate S13 / special (S13)} instruction format provides two registers, an additional option field, and a 13-bit signed immediate field. Some instructions use the S-IMM-13 field for special encodings instead of a signed value. This format is used by memory reference instructions, where the address is formed by a base register plus a 13-bit signed offset.
 
 \begin{center}
 
@@ -110,7 +110,7 @@ The \textbf{signed immediate S13 / special} instruction format provides two regi
   	{Grp, OpCode, RegR, Opt1, RegB, Opt2, S-IMM-13/special}
 \end{center}
 
-The \textbf{register/signed immediate S9 / special} instruction format provides three registers, an additional option field, and a 9-bit signed immediate field. Some instructions use the S-IMM-9 field for special encodings instead of a signed value. This instruction format is used for all computational instructions that require three registers.
+The \textbf{register / signed immediate S9 / special (S9)} instruction format provides three registers, an additional option field, and a 9-bit signed immediate field. Some instructions use the S-IMM-9 field for special encodings instead of a signed value. This instruction format is used for all computational instructions that require three registers.
 
 \begin{center}
 \drawInstrFormat
@@ -118,7 +118,7 @@ The \textbf{register/signed immediate S9 / special} instruction format provides 
   	{Grp, OpCode, RegR, Opt1, RegB, Opt2, RegA, S-IMM-9/special}
 \end{center}
 
-The \textbf{unsigned immediate U20} format is used by the immediate instruction group to provide a 20-bit unsigned value. This value is then placed at specific positions in the target register \texttt{Reg R}.
+The \textbf{unsigned immediate U20 (U20)} format is used by the immediate instruction group to provide a 20-bit unsigned value. This value is then placed at specific positions in the target register \texttt{Reg R}.
 
 \begin{center}
 \drawInstrFormat
@@ -126,4 +126,5 @@ The \textbf{unsigned immediate U20} format is used by the immediate instruction 
   	{Grp, OpCode, RegR, 0, U-IMM-20/special}
 \end{center}
 
+In the instruction descriptions, each instruction format is referred to by its abbreviation (such as S9, S15, and so on). These formats specify the arrangement of operands, control bits, and optional immediate values within the instruction word. For some instructions, the immediate field directly encodes a constant, while in others the field is reserved or implicitly set according to the instruction’s encoding rules.
 

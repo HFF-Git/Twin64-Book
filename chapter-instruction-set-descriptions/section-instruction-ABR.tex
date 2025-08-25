@@ -45,6 +45,10 @@ The \texttt{cond} field encodes the branch condition as follows:
 1 & \texttt{LT} & \texttt{RegR < 0}  \\ \hline
 2 & \texttt{NE} & \texttt{RegR != 0} \\ \hline
 3 & \texttt{LE} & \texttt{RegR <= 0} \\ \hline
+4 & \texttt{EV} & \texttt{RegR.[63] == 0} \\ \hline
+5 & \texttt{OD} & \texttt{RegR.[63] != 0} \\ \hline
+6 & \texttt{rv} & reserved \\ \hline
+7 & \texttt{rv} & reserved \\ \hline
 \end{tabular}
 \end{flushleft}
 
@@ -54,8 +58,8 @@ The \texttt{cond} field encodes the branch condition as follows:
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 RegR <- RegR + RegB;
-if ( cond( RegR )) IA <- Ia + ofs;
-else               IA <- Ia + 4;
+if ( cond( RegR )) IA <- IA + ofs;
+else               IA <- IA + 4;
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

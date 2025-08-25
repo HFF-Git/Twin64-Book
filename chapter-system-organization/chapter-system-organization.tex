@@ -5,16 +5,16 @@
 \chapter*{System Organization}
 \addcontentsline{toc}{chapter}{System Organization}
 
-This chapter introduces Twin-64 by highlighting the major components and design decisions taken.
+This chapter introduces Twin-64 by highlighting the major components and design concepts.
 
 \section*{A Register–Memory Architecture}
 \addcontentsline{toc}{section}{A Register–Memory Architecture}
 
-Modern RISC CPUs are typically load/store designs and feature a large number of general-purpose registers. Operations take place between registers. Twin-64 follows a slightly different route. It has fewer general registers, and in addition to register–register computation, a register–memory model is also supported. However, there are no instructions that read from and write to memory in a single instruction cycle, since this would complicate the design considerably.
+Modern RISC CPUs are typically load / store designs and feature a large number of general-purpose registers. Operations take place between registers. Twin-64 follows a slightly different route. It has fewer general registers, and in addition to register–register computation, a register–memory model is also supported. However, there are no instructions that read from and write to memory in a single instruction cycle, since this would complicate the design considerably.
 
 Twin-64 implements a \textbf{register-memory architecture} offering only a few addressing modes for the operand, combined with a fixed instruction word length. For most instructions one operand is a register, while the other is a flexible operand that can be an immediate, another register, or a memory address from which data is obtained or stored. The result is placed in the register, which is also the first operand. These types of machines are also called two-address machines.
 
-In contrast to similar historical register–memory designs, Twin-64 has no operations that both read and write memory in the same instruction. For example, there is no “increment memory” instruction, since this would require two memory operations and is generally not pipeline-friendly. Memory data access is performed at the word, half-word, or byte level. Besides the implicit operand fetch in a computational instruction, there are dedicated load/store instructions. In addition to the register–immediate and register–memory operand modes, one operand mode supports the three-operand model ($R_s = R_a \,\text{OP}\, R_b$), specifying two source registers and a result register. This allows Twin-64 to support both register–memory and load/store operation styles.
+In contrast to similar historical register–-memory designs, Twin-64 has no operations that both read from and write to memory in the same instruction. For example, there is no “increment memory” instruction, since this would require two memory operations and is generally not pipeline-friendly. Memory data access is performed at the word, half-word, or byte level. Besides the implicit operand fetch in a computational instruction, there are dedicated load/store instructions. In addition to the register–immediate and register–memory operand modes, one operand mode supports the three-operand model ($R_s = R_a \,\text{OP}\, R_b$), specifying two source registers and a result register. This allows Twin-64 to support both register–memory and load/store operation styles.
 
 \section*{Processor}
 \addcontentsline{toc}{section}{Processor}

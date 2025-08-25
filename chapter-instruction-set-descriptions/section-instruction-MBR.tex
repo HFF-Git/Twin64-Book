@@ -11,7 +11,6 @@
 
 	\texttt{MBR.<cond> RegR, RegB, target}
     
-   	where cond is EQ, LT, NE or LE.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -47,6 +46,10 @@ The \texttt{cond} field encodes the branch condition as follows:
 1 & \texttt{LT} & \texttt{RegR < 0}  \\ \hline
 2 & \texttt{NE} & \texttt{RegR != 0} \\ \hline
 3 & \texttt{LE} & \texttt{RegR <= 0} \\ \hline
+4 & \texttt{EV} & \texttt{RegR.[63] == 0} \\ \hline
+5 & \texttt{OD} & \texttt{RegR.[63] != 0} \\ \hline
+6 & \texttt{rv} & reserved \\ \hline
+7 & \texttt{rv} & reserved \\ \hline
 \end{tabular}
 \end{center}
 

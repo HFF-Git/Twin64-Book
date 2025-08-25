@@ -18,7 +18,7 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Formats}
 
-The ADD instruction uses the register, the signed immediate-15, the indexed and the register indexed instruction formats. \\
+The ADD instruction uses the register, the signed immediate S15, the indexed and the register indexed instruction formats. \\
 	
 \begin{flushleft}	
 
@@ -51,9 +51,10 @@ The \texttt{ADD} instruction adds two signed 64-bit operands and stores the resu
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- RegB + RegA;          ( register format )
-RegR <- RegB + immOperand( ); (immediate format)
-RegR <- RegR + memOperand( ); (indexed formats)
+RegR <- RegB + RegA;                                   (S9 )
+RegR <- RegB + signExt( val );                         (S15)
+RegR <- RegR + memLoad( RegB + signExt( ofs << dw ));  (S13)
+RegR <- RegR + memLoad( RegB + RegX );                 (S9 )
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

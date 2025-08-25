@@ -5,7 +5,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{BE RegB [, ofs ]}
+\texttt{BE [ ofs ] ( RegB ) [, RegR ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -23,8 +23,7 @@ The \texttt{BE} instruction uses the signed immediate S15 format. \\
 \begin{iPageDescEntry}{Description}
 The \texttt{BE} instruction performs an unconditional branch to another segment. 
 
-
-Before branching, the next instruction address (\texttt{IA + 4}) is stored in \texttt{RegR}.  
+If \texttt{RegR} is specified, it is loaded with the address of the following instruction before the branch occurs. If no register is specified, this field must be set to zero.  
 
 Because \texttt{BE} is a segment base relative branch, branching to a page with a different privilege level is possible.  
 Branching from a lower privilege level to a higher one triggers an instruction protection trap.  
