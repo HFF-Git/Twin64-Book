@@ -9,7 +9,7 @@ Twin-64 features a simple but powerful interrupt system. Interruptions in Twin-6
 
 \begin{itemize} 
 
-\item{Fault - The current instruction cannot be carried out due to a system problem, such as the absence of a page from main memory. After the system problem has been corrected, the faulting instruction should execute as intended. Faults are synchronous with respect to the instruction stream.}
+\item \textbf{Fault} - The current instruction cannot be carried out due to a system problem, such as the absence of a page from main memory. After the system problem has been corrected, the faulting instruction should execute as intended. Faults are synchronous with respect to the instruction stream.
 
 \item \textbf{Trap} - There are two kind of traps. The types are traps raised because the function requested by the current instruction cannot or should not be carried out. A good example is the arithmetic signed overflow trap. Such an instruction is normally not re-executed. The second type of traps are raised so that the system can intervene before the or after the instruction is executed. An example for this type of trap is the debugging breakpoint trap. Traps are synchronous with respect to the instruction stream.
 

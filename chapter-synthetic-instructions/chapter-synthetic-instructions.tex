@@ -1,0 +1,73 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\chapter*{Synthetic Instructions}
+\addcontentsline{toc}{chapter}{Synthetic Instructions}
+
+The Twin-64 instruction set provides a rich set of options for individual instructions. Setting a defined option bit in an instruction can enable additional functionality with minimal impact on the overall data path. Similarly, instructions that use general register zero as an argument can take advantage of predefined behaviors. 
+
+For better readability and convenience, an assembler can offer \emph{synthetic instructions}, which are higher-level mnemonics generated from the base instruction set. These synthetic instructions simplify programming by providing a more natural or concise representation of commonly used instruction patterns.
+
+Synthetic instructions are also useful when a single instruction cannot fully express the desired operation. For example, loading an immediate value larger than the instruction field allows requires an instruction sequence. An assembler can provide a generic "load immediate" synthetic instruction that automatically emits such an instruction sequence depending on the size of the value. Similarly, if the offset to a base register is too small to reach a desired data item, the assembler can transparently emit an additional `ADDIL` instruction to compute the correct address.
+
+The synthetic instruction set can be organized into several groups:
+
+\begin{itemize}
+ 
+ 	\item \textbf{Immediate Operations:} yyy.  
+ 	\item \textbf{Register Operations:} yyy.
+ 	\item \textbf{Arithmetic Operations:} yyy. 
+	\item \textbf{Shift and Rotate Operations:} yyy. 
+	\item \textbf{Memory Reference Operations:} yyy.
+\end{itemize}
+
+\section*{Immediate Operations}
+\addcontentsline{toc}{section}{Immediate Operations}
+
+LDI
+
+\section*{Register Operations}
+\addcontentsline{toc}{section}{Register Operations}
+
+CLR
+
+CPY
+
+COM
+
+NEG
+
+
+\section*{Arithmetic Operations}
+\addcontentsline{toc}{section}{Arithmetic Operations}
+
+INC
+
+DEC
+
+EXT8
+
+EXT16
+
+EXT32
+
+\section*{Shift and Rotate Operations}
+\addcontentsline{toc}{section}{Shift and Rotate Operations}
+
+
+ASR
+
+LSR
+
+ROR
+
+ROL
+
+
+\section*{Memory Reference Operations}
+\addcontentsline{toc}{section}{Memory Reference Operations}
+
+LOAD
+
+STOR
