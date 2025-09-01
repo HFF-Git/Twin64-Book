@@ -11,7 +11,7 @@ This chapter describes the processing resources and data types in a Twin-64 syst
 \begin{center}
 \begin{tikzpicture}[scale=0.8, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,6);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,4);
   	
   	\def\leftofs{1}
   	
@@ -360,7 +360,7 @@ The processor state register contains the virtual address of the current instruc
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-    \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
+    % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
   	
     \node[  tsRectangle, 
             minimum width=16cm,
@@ -373,11 +373,11 @@ The processor state register contains the virtual address of the current instruc
     	\draw (\fw*\i,0.5) -- (\fw*\i,1.5);
 	}       
                 
-  	\node at (\fw * 1 - 0.2, 1) {E};
-	\node at (\fw * 2 - 0.2, 1) {X};
-	\node at (\fw * 3 - 0.2, 1) {T};
+  	\node at (\fw * 1 - 0.2, 1) {M};
+	\node at (\fw * 2 - 0.2, 1) {E};
+	\node at (\fw * 3 - 0.2, 1) {X};
 	\node at (\fw * 4 - 0.2, 1) {R};
-	\node at (\fw * 5 - 0.2, 1) {M};
+	\node at (\fw * 5 - 0.2, 1) {-};
 	\node at (\fw * 6 - 0.2, 1) {-};
 	\node at (\fw * 7 - 0.2, 1) {-};
 	\node at (\fw * 8 - 0.2, 1) {-};
@@ -447,10 +447,6 @@ The instruction address portion of the PSW registers contains the segment id and
     \textbf{X} & When set, the processor runs in privileged mode. \\
     \midrule
      \textbf{T} & When set, taken branch traps are enabled. Any branch taken will result in a trap. \\
-    \midrule
-    \textbf{H} & When set, a higher-privilege transfer trap occurs whenever the following instruction is of a higher privilege. \\
-    \midrule
-    \textbf{L} & When set, a lower-privilege transfer trap occurs whenever the following instruction is of a lower privilege. \\
     \midrule
     \textbf{I} & When set, external interrupts are enabled. \\
     \midrule 

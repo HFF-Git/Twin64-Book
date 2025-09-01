@@ -16,15 +16,17 @@ Twin-64 implements a \textbf{register-memory architecture} offering only a few a
 
 In contrast to similar historical register–-memory designs, Twin-64 has no operations that both read from and write to memory in the same instruction. For example, there is no “increment memory” instruction, since this would require two memory operations and is generally not pipeline-friendly. Memory data access is performed at the word, half-word, or byte level. Besides the implicit operand fetch in a computational instruction, there are dedicated load/store instructions. In addition to the register–immediate and register–memory operand modes, one operand mode supports the three-operand model ($R_s = R_a \,\text{OP}\, R_b$), specifying two source registers and a result register. This allows Twin-64 to support both register–memory and load/store operation styles.
 
-\section*{Systen}
-\addcontentsline{toc}{section}{Systen}
+\section*{System}
+\addcontentsline{toc}{section}{System}
 
-??? high level structure ( Processor, Bus, I/O ) and a picture ?
+A Twin-64 system is organized around a central system bus that interconnects the key components of the architecture. Processors, main memory modules, and I/O modules are all attached as peers to this bus, enabling uniform communication and data exchange. Larger configurations may also include I/O adapters, which bridge slower peripheral buses to the central system bus while preserving a consistent programming model.
+
+Processors initiate memory and I/O transactions via the bus and can also receive external events such as interrupts or system resets through the same interface. This modular structure provides flexibility in system design, allowing configurations to scale from simple processor–memory systems to complex multiprocessor environments with diverse I/O subsystems.
 
 \section*{Processor}
 \addcontentsline{toc}{section}{Processor}
 
-The Twin-64 processor is only one element of a complete system. A system also includes memory, I/O modules, adapters, and interconnecting buses. The Central Processing Unit (CPU) includes a general register set and machine state registers. To support virtual memory addressing, a hardware translation lookaside buffer (TLB) is included to provide virtual-to-physical address translation. Instruction and data caches are optional, but for performance reasons are also key components of the processor. A processor will always emit virtual addresses that must be translated into physical addresses by the TLB. A Twin-64 system can consist of multiple processors.
+The Twin-64 processor implements the instruction set architecture and provides the computational resources of the system. It contains a general register set, control and status registers, and the program state word. To support virtual memory, each processor includes a Translation Lookaside Buffer (TLB) that translates virtual addresses into physical addresses. Instruction and data caches, while optional in principle, are essential for performance and tightly integrated with the memory interface. Regardless of configuration, all processor-generated addresses are virtual and must be resolved by the TLB before memory access.
 
 \section*{Virtual Memory}
 \addcontentsline{toc}{section}{Virtual Memory}
@@ -40,7 +42,7 @@ A TLB can optionally support different page sizes in addition to the architected
 \section*{Security and Protection Support}
 \addcontentsline{toc}{section}{Security and Protection Support}
 
-Twin-64 implements a protection model along two dimensions. The first dimension is \textbf{access control} and privilege-level checking. Each page is associated with a page type. Page types include read-only, read–write, execute, and gateway. There are two privilege levels: user and supervisor mode. Access type and privilege level together form the access control information, which is checked for each instruction and data memory access. 
+Twin-64 implements a protection model along two dimensions. The first dimension is \textbf{access type control} and privilege-level checking. Each page is associated with a page type. Page types include read-only, read–write, execute, and gateway. There are two privilege levels: user and supervisor mode. Access type and privilege level together form the access control information, which is checked for each instruction and data memory access. 
 
 The second dimension of protection is the \textbf{protection ID}, which is the segment ID itself. Twin-64 allows a set of segment IDs to be recorded in processor control registers. For each access to a segment that has the protection check bit set, one of the protection ID control registers must match the segment ID. If not, a protection violation trap is raised.
 
@@ -61,7 +63,11 @@ Data breakpoints are traps taken when a data reference to a page occurs. They do
 \section*{Input/Output}
 \addcontentsline{toc}{section}{Input/Output}
 
-Twin-64 features a memory-mapped I/O architecture. A portion of the physical address space is dedicated to the I/O subsystem. Within this address range, I/O modules respond to memory load and store instructions directed to their assigned addresses. When implementing a driver, the standard page-level protection mechanism is applied during address translation. A driver, typically implemented to run in privileged mode, can also grant a user program direct control by mapping a user-level I/O page into virtual space without compromising system integrity. 
+Twin-64 implements a memory-mapped I/O architecture. A portion of the physical address space is reserved for I/O modules, which respond to memory load and store instructions directed to their assigned addresses. Standard page-level protection applies during address translation, ensuring that only privileged software (typically device drivers) can safely access I/O regions. User programs may be granted direct access to I/O by mapping a user-level I/O page into virtual memory, without compromising overall system integrity.
+
+\textbf{Direct I/O} is performed using the standard load and store instructions to access I/O modules. These operations are entirely controlled by software and may be executed in user mode if the virtual mapping allows it.
+
+\textbf{Direct Memory Access} (DMA) modules can transfer data between memory and I/O devices independently of the processor. DMA transfers operate on physical memory, requiring that the relevant pages be locked and protected from conflicting access by the operating system. DMA transactions are initiated by issuing DMA commands, and command chaining is supported to enable complex or continuous data transfers without processor intervention.
 
 \section*{Interrupt System}
 \addcontentsline{toc}{section}{Interrupt System}
