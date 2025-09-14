@@ -59,6 +59,31 @@
 \setlength{\cftsecindent}{0em} 
 
 %--------------------------------------------------------------------------------
+%
+%
+%
+%--------------------------------------------------------------------------------
+\newtcolorbox{fancyNote}{
+  colback=yellow!10,
+  colframe=orange!80!black,
+  boxrule=0.8pt,
+  arc=4pt,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt,
+  title=\textbf{Note}
+}
+
+\newcommand{\simpleNote}[1]{%
+%  \noindent
+  \textbf{Note:}\hspace{0.5em}%
+  \hangindent=3em
+  \hangafter=0
+  #1\par
+}
+
+%--------------------------------------------------------------------------------
 % Listing style for showing code snippets. This style is used for showing 
 % short code sequences.
 %

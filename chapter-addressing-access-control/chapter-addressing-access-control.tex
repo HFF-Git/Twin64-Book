@@ -182,6 +182,11 @@ When protection ID checking is enabled, the eight protection identifiers are com
 
 Protection ID checking is typically used to enforce controlled access to shared or private memory regions. A common example is the stack data segment, which is accessible at user privilege level. Since the CPU implements a global virtual memory address space, any task could potentially access the stack of another task. By enabling protection ID checking and loading the segment ID into one of the protection ID registers for the stack owner process, only the corresponding user task is allowed to access its stack data segment with a matching protection ID.
 
+\simpleNote{Is the protection Id bit in the processor status word required? When we have the rule that privilege code can access anything, and user code will always be subject to protection Id checking, the bit is not needed.
+}
+
+\section*{Access Check Flow}
+\addcontentsline{toc}{section}{Access Check Flow}
 
 
 ??? a summary picture ?
