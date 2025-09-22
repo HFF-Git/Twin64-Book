@@ -19,7 +19,7 @@ The \texttt{B} instruction uses the singed immediate S19 format. \\
 \begin{flushleft}
   \drawInstrFormat
   	{0,1,3,5,6,6.5,16}
-  	{\OpCodeGrpBR,\OpCodeB,RegR,0,G,target}
+  	{\OpCodeGrpBR,\OpCodeB,RegR,0,G,ofs}
 \end{flushleft}
 
 \end{iPageDescEntry}
@@ -27,12 +27,10 @@ The \texttt{B} instruction uses the singed immediate S19 format. \\
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{B} instruction performs an instruction-address–relative branch.  
-The target address is computed by sign-extending the immediate offset, shifting it left by two bits, and adding the result to the current instruction address.  
+The \texttt{B} instruction performs an unconditional instruction-address–relative branch.  
+The target address is computed by sign-extending the immediate offset, shifting it left by two bits, and adding the result to the current instruction address. The return link is stored in \texttt{RegR}. 
 
-If \texttt{RegR} is specified, it is loaded with the address of the following instruction before the branch occurs. If no register is specified, this field must be set to zero.  
-
-The optional \texttt{.G} form enables the \emph{gateway branch} option. In this case, the processor’s privilege level may be raised to the privilege level stored in the TLB entry of the page from which the gateway instruction is fetched. The change is only performed if it results in a higher privilege level; otherwise, the current privilege level remains unchanged. If code translation is disabled, the privilege level is set to zero. The gateway instruction’s privilege level is also deposited into the general register \texttt{RegR}. Execution then continues at the computed target address with the (possibly new) privilege level.  
+The optional \texttt{.G} form enables the \emph{gateway branch} option. In this case, the processor’s privilege level may be raised to the privilege level stored in the TLB entry of the page from which the gateway instruction is fetched. The change is only performed if it results in a higher privilege level; otherwise, the current privilege level remains unchanged. Execution then continues at the computed target address with the (possibly new) privilege level.  
 
 \end{iPageDescEntry}
 
@@ -41,27 +39,25 @@ The optional \texttt{.G} form enables the \emph{gateway branch} option. In this 
 \begin{lstlisting}[style=iPageOpStyle]
 ??? revise
 
-if ( RegR != 0 ) 
-    RegR <- addOfs32( PSW.[IA], 4 );
+if ( RegR != 0 ) RegR <- addOfs32( PSW.[IA], 4 );
 
 if ( instr.[G] ) {
-    new_priv <- TLB[PSW.[IA]].priv;
-    if ( !code_translation_enabled ) 
-        new_priv <- 0;
-    if ( new_priv > PSW.[PL] ) 
-        PSW.[PL] <- new_priv;
+    
+    if ( TLB[PSW.[IA]].priv > PSW.[PL] ) 
+        PSW.[PL] <- TLB[PSW.[IA]].priv;
+    
     RegR <- new_priv;   // deposit privilege level into RegR
 }
 
-PSW.[IA] <- addOfs32( PSW.[IA], target );
+PSW.[IA] <- addOfs32( PSW.[IA], ofs << 2 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}{
-  Instruction Address Trap\\
-  Instruction Privilege Violation Trap\\
-  Instruction TLB Miss Trap
+  Instruction Privilege Violation Trap \\
+  Instruction TLB Miss Trap \\
+  Taken Branch Trap
 }
 \end{iPageDescEntry}
 

@@ -21,11 +21,29 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{ITLB} instruction inserts a new entry into the translation lookaside
-    buffer (TLB). The effective address is formed from \texttt{RegR} and
-    \texttt{RegB}, and additional control information is provided by \texttt{RegX}.
+    The \texttt{ITLB} instruction inserts a new entry into the translation lookaside buffer (TLB). The effective address is stored in \texttt{RegB} and additional control information is provided by \texttt{RegX}. This is a privileged instruction.
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{TLB Arguments}
+	\texttt{RegB}  and \texttt{RegA} contain the arguments passed to the TLB subsystem. \texttt{RegB} contains the virtual address. The address is always o a page boundary and in the case of address ranges marks the starting page.
+	
+	\begin{flushleft}
+	\drawInstrFormatSixtyFour
+        {0, 3, 13,16}
+        {0, VPN, 0}
+    \end{flushleft}
     
-    Depending on the addressing mode, the instruction may also cause a memory reference trap.
+    \texttt{RegA} contains the flags and the physical address of the address range. 
+    
+    // ?? to do ...
+    
+    \begin{flushleft}
+	\drawInstrFormatSixtyFour
+        {0, 3, 13,16}
+        {0, VPN, 0}
+    \end{flushleft}
+ 
+	
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
@@ -33,14 +51,9 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}
-    - Memory reference trap (if address invalid) \\
-    - Privilege violation (if executed in user mode)
+    Privilege Violation Trap.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    Only available in supervisor mode.  
+    None.  
 \end{iPageDescEntry}
-
-
-
-

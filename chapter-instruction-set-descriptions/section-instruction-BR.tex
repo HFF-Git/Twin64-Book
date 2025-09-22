@@ -21,13 +21,7 @@ The \texttt{BR} instruction uses the immediate-15 instruction format. \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{BR} instruction performs an unconditional branch to a target  
-address computed relative to the current instruction address (\texttt{IA}). The target address is formed by taking the contents of \texttt{RegB},  
-shifting it left by two bits, and adding it to \texttt{IA}.  
-
-If \texttt{RegR} is specified, it receives the return address (\texttt{IA + 4})  
-before the branch is taken.  
-
+The \texttt{BR} instruction performs an unconditional branch to a target address computed relative to the current instruction address segment (\texttt{IA}). The target address is formed by taking the contents of \texttt{RegB}, shifting it left by two bits, and adding it to the \texttt{IA} offset portion. The return link is stored in \texttt{RegR}.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -40,7 +34,8 @@ PSW.[IA] <- addOfs32( PSW.[IA], RegB << 2 );
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-None.
+Taken Branch Trap\\
+Instruction TLB Miss Trap
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

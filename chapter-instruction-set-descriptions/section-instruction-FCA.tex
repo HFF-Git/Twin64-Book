@@ -22,8 +22,7 @@
 
 \begin{iPageDescEntry}{Description}
     The \texttt{FCA} instruction flushes a cache line, selected by the effective address
-    formed from \texttt{RegR} and \texttt{RegB}. This can be used by privileged code 
-    for cache management.
+    in \texttt{RegB}. This is a privileged instruction.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
@@ -31,9 +30,9 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}
-    None.
+    Privilege violation trap.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    Typically only allowed in supervisor mode.
+    We may enhance this instruction with another register to for the target address by adding RegB with RegX, so that we can better support flushing cache ranges.
 \end{iPageDescEntry}

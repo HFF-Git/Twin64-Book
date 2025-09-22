@@ -24,7 +24,7 @@ The \texttt{DIAG} instruction uses the signed immediate S9 instruction format. \
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{DIAG} instruction provides a mechanism for diagnostic and privileged operations.  
+The \texttt{DIAG} instruction provides a mechanism for diagnostic and system level operations.  
 
 The concatenated \texttt{id1} and \texttt{id2} fields specify the diagnostic function. The \texttt{RegB} and \texttt{RegA} fields may provide operands or data required by the diagnostic function. Any result is returned in \texttt{RegR}.
  
@@ -33,13 +33,13 @@ The concatenated \texttt{id1} and \texttt{id2} fields specify the diagnostic fun
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-... // Implementation depends on diagnostic function code and operands
+RegR <- diagOperation( id, RegB, RegA );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-Depends on diagnostic function, operands, and addressing mode; may include memory reference or privilege level traps.
+Exceptions depend on diagnostic function and operands.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

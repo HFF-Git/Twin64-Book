@@ -45,7 +45,7 @@ The CMP instruction uses the register, the signed immediate S15, the indexed and
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{CMP} instruction compares two signed 64-bit operands. In register mode, it compares \texttt{RegB} and \texttt{RegA}; in immediate mode, it compares \texttt{RegB} and the immediate value; and in memory-reference formats, it compares \texttt{RegR} with the memory operand. The result of the comparison i stored in RegR. The instruction does not cause an arithmetic overflow but indexed instruction formats may cause a memory-reference–related trap.
+The \texttt{CMP} instruction compares two signed 64-bit operands. In register mode, it compares \texttt{RegB} and \texttt{RegA}; in immediate mode, it compares \texttt{RegB} and the immediate value; and in memory-reference formats, it compares \texttt{RegR} with the memory operand. The operands are called op1 and op2. The result of the comparison is stored in RegR. The instruction does not cause an arithmetic overflow but indexed instruction formats may cause a memory-reference–related trap.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -56,10 +56,10 @@ The \texttt{cond} field encodes the branch condition as follows:
 \begin{tabular}{|c|c|l|}
 \hline
 \textbf{Value} & \textbf{Mnemonic} & \textbf{Branch if} \\ \hline
-0 & \texttt{EQ} & \texttt{RegR == 0} \\ \hline
-1 & \texttt{LT} & \texttt{RegR < 0}  \\ \hline
-2 & \texttt{NE} & \texttt{RegR != 0} \\ \hline
-3 & \texttt{LE} & \texttt{RegR <= 0} \\ \hline
+0 & \texttt{EQ} & \texttt{op1 == op2} \\ \hline
+1 & \texttt{LT} & \texttt{op1 < op2}  \\ \hline
+2 & \texttt{NE} & \texttt{op1 != op2} \\ \hline
+3 & \texttt{LE} & \texttt{op1 <= op2} \\ \hline
 \end{tabular}
 \end{center}
 \end{iPageDescEntry}
@@ -69,7 +69,7 @@ The \texttt{cond} field encodes the branch condition as follows:
 \begin{lstlisting}[style=iPageOpStyle]
 RegR <- compare( RegB, RegA );          (register format)
 RegR <- compare( RegB, immOperand());   (immediate format)
-RegR <- compare( RegR - memOperand());  (indexed formats)
+RegR <- compare( RegR, memOperand());   (indexed formats)
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

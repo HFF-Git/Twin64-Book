@@ -29,8 +29,7 @@ The CBR instruction uses the signed immediate S15 format:
 \begin{iPageDescEntry}{Description}
 
 The \texttt{CBR} instruction compares the contents of \texttt{RegB} with \texttt{RegR}.  
-If the condition specified in the \texttt{cond} field is satisfied, execution continues at the current instruction plus the offset. Otherwise, execution proceeds with the next instruction.  
-The registers themselves are not modified.
+If the condition specified in the \texttt{cond} field is satisfied, execution continues at the current instruction plus the sign extended offset shifted by two. Otherwise, execution proceeds with the next instruction. The registers themselves are not modified.
 
 \end{iPageDescEntry}
 
@@ -55,14 +54,17 @@ The \texttt{cond} field encodes the branch condition as follows:
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( cond( RegR, RegB )) IA <- IA + ofs;
-else                     IA <- IA + 4;
+if ( cond( RegR, RegB )) 
+   psw.[IA] <- addOfs32( psw.[IA] + ofs << 2 );
+else                     
+   psw.[IA] <- addOfs32( psw.[IA] + 4 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-	None.
+	Taken Branch Tap.\\
+	Instruction TLB Miss.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

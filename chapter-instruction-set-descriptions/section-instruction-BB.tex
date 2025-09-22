@@ -33,34 +33,29 @@ If the \texttt{V} bit is set, the test succeeds when the selected bit is \texttt
 If the \texttt{V} bit is clear, the test succeeds when the selected bit is \texttt{0}.  
 
 When the condition is satisfied, execution branches to the target address,  
-computed by sign-extending the 9-bit offset, shifting it left by two bits,  
-and adding it to the current instruction address.  
-If the condition is not satisfied, execution continues with the next sequential instruction.  
+computed by sign-extending the offset, shifting it left by two bits,  
+and adding it to the current instruction address. If the condition is not satisfied, execution continues with the next sequential instruction.  
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[A] )
-    pos <- SAR;
-else
-    pos <- instr.[pos];
+if ( instr.[A] )  pos <- SAR;
+else              pos <- instr.[pos];
 
 bit_val <- testBit( RegR, pos );
 
 cond <- ( instr.[V] ? (bit_val == 1) : (bit_val == 0) );
 
-if ( cond )
-    PSW.[IA] <- addOfs32( PSW.[IA], ofs );
-else
-    PSW.[IA] <- addOfs32( PSW.[IA], 4 );
+if ( cond ) PSW.[IA] <- addOfs32( PSW.[IA], ofs << 2 );
+else        PSW.[IA] <- addOfs32( PSW.[IA], 4 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}{
-  Instruction Address Trap\\
+  Taken Branch Trap\\
   Instruction TLB Miss Trap
 }
 \end{iPageDescEntry}

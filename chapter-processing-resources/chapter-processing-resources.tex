@@ -114,7 +114,7 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(12,17);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(12,17);
   	
   	% Rectangle dimensions
 	\def\width{12}
@@ -254,7 +254,7 @@ The processor configuration register contains information about the current syst
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,2);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,2);
   	
     \node[  tsRectangle, 
             minimum width=16cm,
@@ -377,7 +377,7 @@ The processor state register contains the virtual address of the current instruc
 	\node at (\fw * 2 - 0.2, 1) {E};
 	\node at (\fw * 3 - 0.2, 1) {X};
 	\node at (\fw * 4 - 0.2, 1) {R};
-	\node at (\fw * 5 - 0.2, 1) {-};
+	\node at (\fw * 5 - 0.2, 1) {T};
 	\node at (\fw * 6 - 0.2, 1) {-};
 	\node at (\fw * 7 - 0.2, 1) {-};
 	\node at (\fw * 8 - 0.2, 1) {-};
@@ -520,17 +520,17 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
 \begin{center}
 \begin{tikzpicture}[scale=0.9, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,7);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(15,7);
   	
   	\def\leftofs{2};
   	
-  	\node at (2.5,6.75) {\large{Memory}};
-  	\node at (12,6.75) {\large{Register}};
+  	\node at (1.5,6.75) {\large{Memory}};
+  	\node at (11,6.75) {\large{Register}};
 
-  	\node at (2+0.125, 6+0.25) {7};
-	\node at (3-0.375, 6+0.25) {0};
-  	\node at (1.5, 6 - 0.2) {0};
-  	\node at (1.5, 0.2) {7};
+  	\node at (1+0.125, 6+0.25) {7};
+	\node at (2-0.375, 6+0.25) {0};
+  	\node at (0.5, 6 - 0.2) {0};
+  	\node at (0.5, 0.2) {7};
   	
   	% Memory block
   	\node[tsRectangle, minimum width=0.75cm, minimum height=8*0.75cm, anchor=west] 
@@ -550,15 +550,15 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
  	\node[  tsRectangle, 
             minimum width=8cm,
             minimum height=0.75cm,  
-            anchor=west] at (8,5.5) { };
+            anchor=west] at (7,5.5) { };
             
-    \node[anchor=west] at ( 5, 5.5 ) { LD.B R3,7(R4) };        
+    \node[anchor=west] at ( 4, 5.5 ) { LD.B R3,7(R4) };        
     
-    \foreach \i in {9,...,15} {
+    \foreach \i in {8,...,14} {
     	\draw[-] (\i, 5.5+0.375 ) -- (\i, 5.5 - 0.375);
     } 
     
-    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/0,13.5/0,14.5/0,15.5/a} {
+    \foreach \i/\lbl in {7.5/0,8.5/0,9.5/0,10.5/0,11.5/0,12.5/0,13.5/0,14.5/a} {
         \node at (\i, 5.5) {\lbl};
     }
     
@@ -566,15 +566,15 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
     \node[  tsRectangle, 
             minimum width=8cm,
             minimum height=0.75cm,  
-            anchor=west] at (8, 3.875) { };
+            anchor=west] at (7, 3.875) { };
             
-    \node[anchor=west] at ( 5, 3.875 ) { LD.H R3,2(R4) };
+    \node[anchor=west] at ( 4, 3.875 ) { LD.H R3,2(R4) };
     
-    \foreach \i in {9,...,15} {
+    \foreach \i in {8,...,14} {
     	\draw[-] (\i, 3.875 + 0.375) -- (\i, 3.875 - 0.375);
     } 
     
-    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/0,13.5/0,14.5/f,15.5/e} {
+    \foreach \i/\lbl in {7.5/0,8.5/0,9.5/0,10.5/0,11.5/0,12.5/0,13.5/f,14.5/e} {
         \node at (\i, 3.875) {\lbl};
     }
         
@@ -582,15 +582,15 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
     \node[  tsRectangle, 
             minimum width=8cm,
             minimum height=0.75cm,  
-            anchor=west] at (8,2.25) { };
+            anchor=west] at (7,2.25) { };
             
-    \node[anchor=west] at ( 5, 2.25 ) { LD.W R3,4(R4) };
+    \node[anchor=west] at ( 4, 2.25 ) { LD.W R3,4(R4) };
     
-    \foreach \i in {9,...,15} {
+    \foreach \i in {8,...,14} {
     	\draw[-] (\i, 2.25 + 0.375) -- (\i, 2.25 - 0.375);
     } 
     
-    \foreach \i/\lbl in {8.5/0,9.5/0,10.5/0,11.5/0,12.5/d,13.5/c,14.5/b,15.5/a} {
+    \foreach \i/\lbl in {7.5/0,8.5/0,9.5/0,10.5/0,11.5/d,12.5/c,13.5/b,14.5/a} {
         \node at (\i, 2.25) {\lbl};
     }
 
@@ -598,15 +598,15 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
     \node[  tsRectangle, 
             minimum width=8cm,
             minimum height=0.75cm,  
-            anchor=west] at (8, 0.5) { };
+            anchor=west] at (7, 0.5) { };
             
-    \node[anchor=west] at ( 5, 0.5 ) { LD.D R3,0(R4) }; 
+    \node[anchor=west] at ( 4, 0.5 ) { LD.D R3,0(R4) }; 
     
-    \foreach \i in {9,...,15} {
+    \foreach \i in {8,...,14} {
     	\draw[-] (\i, 1 - 0.125) -- (\i, 0 + 0.125);
     } 
     
-    \foreach \i/\lbl in {8.5/h,9.5/g,10.5/f,11.5/e,12.5/d,13.5/c,14.5/b,15.5/a} {
+    \foreach \i/\lbl in {7.5/h,8.5/g,9.5/f,10.5/e,11.5/d,12.5/c,13.5/b,14.5/a} {
         \node at (\i, 0.5) {\lbl};
     }
     
@@ -645,7 +645,7 @@ Virtual address translations are stored in a translation lookaside buffer (TLB).
             fill=white,
             anchor=west] at (0,3.5) { };
     \node[anchor=west] at (0, 3.5) {Physical page number};   
-    \node[anchor=west] at (11,3.5) {22bit};
+    \node[anchor=west] at (11,3.5) {24bit};
      
     \node[  tsRectangle, 
             minimum width=2cm,
@@ -718,9 +718,9 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{P} & When set, the page has protection checking enabled. \\
     \midrule
-    \textbf{M} & When set, the page has been modified. \\
+    \textbf{M} & When set, the page has been modified. This only applies to data TLBs or unified TLBs. \\
     \midrule
-    \textbf{B} & When set, a branch instruction executed from this page will cause a branch-taken trap. \\
+    \textbf{B} & When set, a branch instruction executed from this page will cause a branch-taken trap. This inly applies for instruction TLBs or unified TLBs.\\
 \end{longtable}
 
 The first segments, segment 0 to 15, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
@@ -755,4 +755,4 @@ The instruction set is organized into five groups:
   \item \textbf{System control instructions:} Instructions for managing processor resources such as the TLB, cache, and control registers. Control registers can be accessed directly; the TLB can be updated with insert and remove operations; and the cache can be flushed or purged. Additional instructions generate traps or provide diagnostic functions for examining processor state. Most system instructions require execution in privileged mode.
 \end{itemize}
 
-This book section on the instruction set will describe each instruction group in detail, with formats, descriptions, and examples.
+The book section on the instruction set will describe each instruction group in detail, with formats, descriptions, and examples.

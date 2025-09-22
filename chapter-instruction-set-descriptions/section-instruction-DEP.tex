@@ -35,18 +35,15 @@ If the \texttt{Z} bit is set, the target register \texttt{RegR} is cleared befor
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[Z] ) 
-    RegR <- 0;
+if ( instr.[Z] ) RegR <- 0;
 
-if ( instr.[A] ) 
-    pos <- shamt; 
-else 
-    pos <- instr.[pos];
+if ( instr.[A] ) pos <- SAR; 
+else             pos <- instr.[pos];
 
 if ( instr.[I] ) 
-    RegR <- depositImm( RegR, RegB, pos, instr.[6:0] ); 
+    RegR <- depositImm( RegR, RegB, pos, instr.[len] ); 
 else 
-    RegR <- depositField( RegR, RegB, pos, instr.[6:0] );
+    RegR <- depositField( RegR, RegB, pos, instr.[len] );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

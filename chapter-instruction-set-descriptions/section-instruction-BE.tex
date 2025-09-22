@@ -21,14 +21,9 @@ The \texttt{BE} instruction uses the signed immediate S15 format. \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{BE} instruction performs an unconditional branch to another segment. 
+The \texttt{BE} instruction performs an unconditional branch to another segment. \texttt{RegB} contains a target segment and offset base to which the sign extended offset shifted by two is added. The return link is stored in \texttt{RegR}.
 
-If \texttt{RegR} is specified, it is loaded with the address of the following instruction before the branch occurs. If no register is specified, this field must be set to zero.  
-
-Because \texttt{BE} is a segment base relative branch, branching to a page with a different privilege level is possible.  
-Branching from a lower privilege level to a higher one triggers an instruction protection trap.  
-Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register.  
-If no change is required, the privilege level remains unchanged.  
+Because \texttt{BE} is a segment base relative branch, branching to a page with a different privilege level is possible. Branching from a lower privilege level to a higher one triggers an instruction protection trap. Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register. If no change is required, the privilege level remains unchanged.  
 
 
 \end{iPageDescEntry}
@@ -37,14 +32,14 @@ If no change is required, the privilege level remains unchanged.
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 RegR <- addOfs32( PSW.[IA], 4 );
-PSW.[IA] <- computeTarget( RegB, RegX );
+PSW.[IA] <- addOfs32( RegB, RegX << 2 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-Instruction Protection Trap \\
-Memory Reference Trap (if indexed) ( ??? )
+Taken Branch Trap\\
+Instruction TLB Miss Trap
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

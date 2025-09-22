@@ -204,6 +204,45 @@
   	\end{tikzpicture}%
 }
 
+
+\newcommand{\drawInstrFormatSixtyFour}[2]{%
+  	\begin{tikzpicture}[scale=0.7, transform shape]
+    	% Outer box
+    	\node[tsRectangle, 
+    		minimum width=16cm, 
+    		minimum height=1cm, 
+    		fill=white!50] at (8,1) {};
+
+    	% Initialize
+    	\pgfmathsetmacro{\last}{0}
+
+    	% Split labels into individual macros
+    	\foreach [count=\i] \l in {#2} {%
+      		\expandafter\xdef\csname label@\i\endcsname{\l}%
+    	}
+
+    	% Iterate over positions
+    	\foreach \p [count=\i] in {#1} {%
+      		\ifnum\i>1
+        		\pgfmathsetmacro{\width}{\p-\last}
+        		\pgfmathsetmacro{\center}{(\p+\last)/2}
+
+        		% Adjust bit calculation for 64-bit word (1 unit = 4 bits)
+        		\pgfmathtruncatemacro{\bits}{round(\width*4)}
+
+        		% Draw vertical separator
+        		\draw[-] (\p,0.5) -- (\p,1.5);
+
+        		% Place width number and label
+        		\node at (\center,0.25) {\bits};
+        		\node at (\center,1) {\csname label@\the\numexpr\i-1\relax\endcsname};
+      		\fi
+      		\xdef\last{\p}
+    	}%
+  	\end{tikzpicture}%
+}
+
+
 %--------------------------------------------------------------------------------
 % Instruction description pages use these layout definitions.
 %

@@ -36,15 +36,12 @@ The length of the field is specified by the \texttt{len} instruction field. The 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[A] ) 
-    tmp <- SAR; 
-else 
-    tmp <- instr.[pos];
+if ( instr.[A] ) tmp <- SAR; 
+else             tmp <- instr.[pos];
 
-RegR <- extractField( RegB, tmp, len );
+RegR <- extractField( RegB, tmp, instr.[len] );
 
-if ( instr.[S] ) 
-    RegR <- signExtend( RegR, len );
+if ( instr.[S] ) RegR <- signExtend( RegR, instr.[len] );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

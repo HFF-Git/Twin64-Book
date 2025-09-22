@@ -21,32 +21,23 @@ The \texttt{BV} instruction uses the register instruction format. \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{BV} instruction performs an unconditional branch to the address stored in \texttt{RegB}.  
+The \texttt{BV} instruction performs an unconditional segment relative branch. The content of \texttt{RegX} is sign extended and shifted by two and added to \texttt{RegB}, forming the target offset in the current segment. The return link is store in \texttt{RegR}.  
 
-The target is interpreted as an instruction address within the current code segment. If code translation is disabled, the target address is the absolute physical address.  
-
-Before branching, the next instruction address (\texttt{IA + 4}) is stored in \texttt{RegR}.  
-
-Because \texttt{BV} is a segment base relative branch, branching to a page with a different privilege level is possible.  
-Branching from a lower privilege level to a higher one triggers an instruction protection trap.  
-Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register.  
-If no change is required, the privilege level remains unchanged.  
-
-Indexed formats may cause a memory-reference–related trap. ( ??? )
+Because \texttt{BV} is a segment base relative branch, branching to a page with a different privilege level is possible. Branching from a lower privilege level to a higher one triggers an instruction protection trap. Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register. If no change is required, the privilege level remains unchanged.  
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 RegR <- addOfs32( PSW.[IA], 4 );
-PSW.[IA] <- computeTarget( RegB, RegX );
+PSW.[IA] <- addOfs32( RegB, RegX << 2 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-Instruction Protection Trap\\
-Memory Reference Trap (if indexed) ( ??? )
+Taken Branch Trap\\
+Instruction TLB Miss Trap
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
