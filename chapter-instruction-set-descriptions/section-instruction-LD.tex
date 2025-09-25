@@ -17,7 +17,7 @@
     \begin{flushleft}
     \drawInstrFormat
         {0,1,3,5,5.5,6,6.5,8.5,9.5,16}
-        {\OpCodeGrpMEM, \OpCodeLD, RegR, 0, M, 0, RegB, dw, S-IMM-13}
+        {\OpCodeGrpMEM, \OpCodeLD, RegR, 0, M, 0, RegB, dw, ofs}
     \end{flushleft}
 
     \begin{flushleft}
@@ -28,15 +28,22 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{LD} instruction loads a value from memory into a general-purpose register.
-    - The indexed format adds a signed immediate to \texttt{RegB} to form the effective address.
-    - The register-indexed format adds \texttt{RegX} to \texttt{RegB} to form the effective address.
-
-    The instruction may trigger a memory reference trap if the address is invalid.
+    The \texttt{LD} instruction loads a data value from memory into a general-purpose register.  
+    Two formats are available: the immediate-offset format and the register-indexed format. 
+    
+    In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address.  
+    In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
+    
+    Optionally, the computed effective address may also be written back to the base register \texttt{RegB}. When this option is enabled, the sign of the offset determines the update behavior:  
+    – A negative offset causes the base register itself to be used as the fetch address.  
+    – A positive offset causes the sum of the base register and offset to be used.  
+    In both cases, the base register is updated.
+    
+    The fetch address must be aligned to the data width specified. The value read from memory is sign-extended and placed in general register \texttt{RegR}.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-    \texttt{RegR <- memLoad( memOperand() );} \quad (for indexed formats)
+    \texttt{RegR <- memLoad( memOperand( instr ));} 
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}
@@ -47,8 +54,9 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    - The instruction supports different sizes: byte (.B), halfword (.H), word (.W), doubleword (.D). \\
-    - Often used in loops to fetch data from memory.
+    The option to update the base register is often used in loops to fetch data from memory.
 \end{iPageDescEntry}
+
+
 
 

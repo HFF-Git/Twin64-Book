@@ -30,13 +30,13 @@ The \texttt{TRAP} instruction generates a synchronous trap to handle exceptional
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-... // Implementation depends on the trap vector and type
+raiseTrap( id1, RegB, RegA );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-Depends on trap type and addressing mode; may include memory reference trap.
+The trap raised.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

@@ -21,7 +21,7 @@ The MBR instruction uses the following format:
 \begin{flushleft}
 \drawInstrFormat
   	{0,1,3,5,6.5,8.5,16}
-  	{\OpCodeGrpBR,\OpCodeMBR,Reg R, cond, Reg B, ofs }
+  	{\OpCodeGrpBR,\OpCodeMBR,RegR, cond, RegB, ofs }
 \end{flushleft}
 \end{iPageDescEntry}
 
@@ -29,7 +29,7 @@ The MBR instruction uses the following format:
 \begin{iPageDescEntry}{Description}
 
 The \texttt{MBR} instruction copies the contents of \texttt{RegB} into \texttt{RegR}.  
-If the condition specified in the \texttt{cond} field evaluates true for the new value in \texttt{RegR}, execution continues at the current instruction plus the offset. Otherwise, execution resumes with the next instruction.
+If the condition specified in the \texttt{cond} field evaluates true for the new value in \texttt{RegR}, execution continues at the current instruction address plus the sign-extended offset. Otherwise, execution resumes with the next instruction.
 
 \end{iPageDescEntry}
 
@@ -59,8 +59,8 @@ The \texttt{cond} field encodes the branch condition as follows:
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 RegR <- RegB;
-if ( cond( RegR )) IA <- IA + ofs;
-else               IA <- IA + 4;
+if ( cond( RegR )) psw.[IA] <- psw.[IA] + signExtend( ofs << 2 );
+else               psw.[IA] <- psw.[IA] + 4;
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

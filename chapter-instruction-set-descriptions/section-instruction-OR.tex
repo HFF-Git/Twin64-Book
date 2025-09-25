@@ -40,16 +40,19 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-  The \texttt{OR} instruction performs a bitwise OR operation on two 64-bit operands and stores the result in the target register \texttt{RegR}. The second operand, \texttt{RegB}, can be negated by setting the "C" bit, and the result can be negated by setting the "N" bit. This instruction supports the immediate, register, and both memory-reference formats. The Boolean operation itself does not trigger any traps, but the indexed formats may cause a memory-reference–related trap.
+  The \texttt{OR} instruction performs a bitwise OR operation on two 64-bit operands and stores the result in the target register \texttt{RegR}. The \texttt{AND} instruction performs a bitwise AND operation on two 64-bit operands and stores the result in the target register \texttt{RegR}. The second operand, \texttt{RegB} or the loaded content, can be negated by setting the "C" bit, and the result can be negated by setting the "N" bit. This instruction supports the immediate, register, and both memory-reference formats. The Boolean operation itself does not trigger any traps, but the indexed formats may cause a memory-reference related trap.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[C] ) RegB <- not( RegB );
-RegR <- RegB | RegA;           (register format)
-RegR <- RegB | immOperand();   (immediate format)
-RegR <- RegR | memOperand();   (indexed formats)
+
+tmp <- RegA;                  (register format)
+tmp <- immOperand( instr );   (immediate format)
+tmp <- memOperand( instr );   (indexed formats)
+
+if ( instr.[C] ) tmp <- not( tmp );
+RegR <- RegB | tmp;
 if ( instr.[N] ) RegR <- not( RegR );
 \end{lstlisting}
 \end{iPageDescOpEntry}
@@ -66,4 +69,6 @@ if ( instr.[N] ) RegR <- not( RegR );
 \begin{iPageDescEntry}{Notes}
   None. 
 \end{iPageDescEntry}
+
+// ??? what exactly does immediate do ? signExtend ?
 

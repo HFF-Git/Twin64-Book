@@ -33,18 +33,14 @@ The \texttt{SHLxA} instruction supports both register and immediate formats. \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{SHLxA} instruction shifts the contents of \texttt{RegB} left by the amount specified in the \texttt{amt} field.  
-
-In register format, \texttt{RegA} is added to the shifted value. In immediate format, if the I bit is set, the sign-extended \texttt{val} field is added instead.  
-
-The resulting value is stored in \texttt{RegR}.
+The \texttt{SHLxA} instruction shifts the contents of \texttt{RegB} left by the amount specified in the \texttt{amt} field. In register format, \texttt{RegA} is added to the shifted value. In immediate format, if the I bit is set, the sign-extended \texttt{val} field is added instead.  The resulting value is stored in \texttt{RegR}.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- (RegB << amt) + RegA;        		(Register format)
-RegR <- (RegB << amt) + immOperand(); 		(Immediate format)
+RegR <- ( RegB << instr.[amt] ) + RegA;               (Register )
+RegR <- ( RegB << instr.[amt] ) + immOperand( instr );(Immediate)
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

@@ -22,9 +22,7 @@
 
 \begin{iPageDescEntry}{Description}
     The \texttt{PCA} instruction purges a cache line, selected by the effective address
-    formed from \texttt{RegR} and \texttt{RegB}. This can be used by privileged code 
-    for cache management. Unlike \texttt{FCA}, purge may also invalidate dirty lines 
-    without writing them back.
+    in \texttt{RegB}. This can be used by privileged code for cache management. Unlike \texttt{FCA}, purge may also invalidate dirty lines without writing them back.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
@@ -38,5 +36,7 @@
 \begin{iPageDescEntry}{Notes}
     Typically only allowed in supervisor mode.
 \end{iPageDescEntry}
+
+// ??? also uses the index and register indexed formats ?
 
 

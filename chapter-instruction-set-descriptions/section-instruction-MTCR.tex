@@ -8,7 +8,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{MTCR CRegB, RegR}
+\texttt{MTCR CReg, RegR}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -24,20 +24,20 @@ The \texttt{MTCR} instruction uses the control-register instruction format. \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{MTCR} instruction copies the contents of general register \texttt{RegR} to control register \texttt{CRegB}.  
-Some control registers are privileged; attempting to write them in user mode may cause a privilege exception.
+The \texttt{MTCR} instruction copies the contents of general register \texttt{RegR} to control register \texttt{CReg}.  
+Some control registers are privileged. Attempting to write them in user mode results in a privilege exception.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-CRegN <- RegR;    
+CReg <- RegR;    
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-Privilege exception if a privileged control register is written in user mode.
+Privilege operation trap for some control registers.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

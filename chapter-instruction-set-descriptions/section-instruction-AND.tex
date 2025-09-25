@@ -46,10 +46,12 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[C] ) RegB <- not( RegB );
-RegR <- RegB & RegA;           (register format)
-RegR <- RegB & immOperand();   (immediate format)
-RegR <- RegR & memOperand();   (indexed formats)
+tmp <- RegA;                  (register format)
+tmp <- immOperand( instr );   (immediate format)
+tmp <- memOperand( instr );   (indexed formats)
+
+if ( instr.[C] ) tmp <- not( tmp );
+RegR <- RegB & tmp;
 if ( instr.[N] ) RegR <- not( RegR );
 \end{lstlisting}
 \end{iPageDescOpEntry}

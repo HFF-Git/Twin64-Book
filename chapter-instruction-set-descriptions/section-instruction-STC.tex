@@ -25,17 +25,15 @@
     only if the memory address is still reserved by a prior \texttt{LDR} instruction.
     - If the reservation is valid, the store succeeds and clears the reservation.
     - If the reservation has been lost (e.g., another processor wrote to the address), the store fails and the memory is unchanged.
-    
-    May cause a memory reference trap if the address is invalid.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-    \texttt{if (isAddressReserved(memOperand())) \{ } \\
-    \quad \texttt{memStore(memOperand(), RegR);} \\
-    \quad \texttt{clearReservation(memOperand());} \\
-    \texttt{\} else \{ } \\
-    \quad \texttt{storeFailedFlag <- 1;} \\
-    \texttt{\}}
+    if (isAddressReserved( memOperand( instr ))) \{ \\ 
+       memStore( memOperand( instr ), RegR );  \\
+       clearReservation( memOperand( instr )); \\
+    \} else \{ \\
+       storeFailedFlag <- 1; \\
+    \}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}
@@ -46,9 +44,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    - This instruction is the second part of a *load-reserved / store-conditional* pair for atomic memory updates. \\
-    - Success or failure of the store is typically tested via a status flag. \\
-    - Commonly used for implementing spinlocks, mutexes, and atomic counters in multiprocessor systems.
+    This instruction is the second part of a "load-reserved / store-conditional" pair for atomic memory updates and commonly used for implementing spinlocks, mutexes, and atomic counters in multiprocessor systems.
 \end{iPageDescEntry}
 
 

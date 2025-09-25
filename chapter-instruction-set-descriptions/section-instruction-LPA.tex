@@ -7,39 +7,46 @@
 \addcontentsline{toc}{section}{LPA — Load Physical Address}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{LPA RegR, (RegB, RegX)}
+    \texttt{LPA [.B/H/W/D] RegR, (RegB, RegX)}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{LPA} instruction uses the indexed load instruction format. \\
+The \texttt{LD} instruction uses the indexed and register-indexed instruction formats. \\
+
+    \begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,5,6.5,8.5,9.5,16}
+        {\OpCodeGrpSYS, \OpCodeLPA, RegR, 0, RegB, dw, ofs}
+    \end{flushleft}
 
     \begin{flushleft}
     \drawInstrFormat
         {0,1,3,5,6.5,8.5,9.5,11.5,16}
-        {\OpCodeGrpSYS, \OpCodeLPA, RegR, 0, RegB, 0, RegX, 0}
+        {\OpCodeGrpSYS, \OpCodeLPA, RegR, 1, RegB, dw, RegX, 0}
     \end{flushleft}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
     The \texttt{LPA} (Load Physical Address) instruction computes the physical 
     address corresponding to the given virtual address and loads it into 
-    \texttt{RegR}.  
-    The virtual address is formed from the contents of \texttt{RegB} and 
-    (optionally) \texttt{RegX}, using the same addressing modes as normal loads.  
-    No memory access is performed.
+    \texttt{RegR}. If there is no translation, a value of zero is returned. Two formats are available: the immediate-offset format and the register-indexed format. 
+    
+    In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address.  
+    In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
+
+    The virtual address is returned from the information in the TLB. No memory access is performed.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-    \texttt{RegR ← translateVA(RegB + RegX);}
+	\texttt{RegR <- tanslateAdr(memOperand( instr )));} 
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}
-    - Page fault if the virtual address is not mapped. \\
-    - Privileged instruction trap if executed in user mode.
+	- Alignment Trap \\
+    - Privileged instruction trap.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
     - Useful for operating systems to probe or manage virtual→physical mappings. \\
-    - No data is loaded from memory; only the translation is returned. \\
     - May be used with TLB management instructions such as \texttt{ITLB}.
 \end{iPageDescEntry}

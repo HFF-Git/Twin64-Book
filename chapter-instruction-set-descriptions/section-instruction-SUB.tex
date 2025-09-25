@@ -51,9 +51,9 @@ The \texttt{SUB} instruction subtracts two signed 64-bit operands and stores the
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- RegB - RegA;          ( register format )
-RegR <- RegB - immOperand( ); (immediate format)
-RegR <- RegR - memOperand( ); (indexed formats)
+RegR <- RegB - RegA;                ( register format )
+RegR <- RegB - immOperand( instr ); (immediate format)
+RegR <- RegR - memOperand( instr ); (indexed formats)
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

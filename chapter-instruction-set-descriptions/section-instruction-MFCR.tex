@@ -8,7 +8,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{MFCR RegR, CRegB}
+\texttt{MFCR RegR, CReg}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -25,19 +25,19 @@ The \texttt{MFCR} instruction uses the control-register instruction format. \\
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 The \texttt{MFCR} instruction copies the contents of control register \texttt{CRegB} to general register \texttt{RegR}.  
-Some control registers are privileged; attempting to read them in user mode may cause a privilege exception.
+Some control registers are privileged. Attempting to read them in user mode results in a privilege exception.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- CRegN;
+RegR <- CReg;
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-Privilege exception if a privileged control register is accessed in user mode.
+- Privileged Operation Trap for some control registers.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

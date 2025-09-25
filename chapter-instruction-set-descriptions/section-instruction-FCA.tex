@@ -26,7 +26,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-    \texttt{RegR <- flushFromCache( RegR );}
+    \texttt{RegR <- flushFromCache( RegB );}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}
@@ -36,3 +36,5 @@
 \begin{iPageDescEntry}{Notes}
     We may enhance this instruction with another register to for the target address by adding RegB with RegX, so that we can better support flushing cache ranges.
 \end{iPageDescEntry}
+
+// ??? also uses the index and register indexed formats ?

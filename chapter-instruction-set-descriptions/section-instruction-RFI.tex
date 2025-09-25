@@ -22,26 +22,22 @@
 
 \begin{iPageDescEntry}{Description}
     The \texttt{RFI} instruction restores processor state after an interrupt
-    or exception handler has completed.  
-
-    Execution resumes at the program counter saved during the interrupt,
-    and the processor state (including privilege level, interrupt enable flags,
-    and other PSR fields) is restored from the saved copy.
+    or exception handler has completed. Execution resumes at the program counter saved during the interrupt and the processor state (including privilege level, interrupt enable flags, and other PSR fields) is restored from the saved copy.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-    \texttt{PSW ← IPSW;} 
+    \texttt{PSW <- IPSW;} 
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}
-    None.
+    Privileged operation trap.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    - Only valid in supervisor mode. \\
-    - \texttt{RegR} may optionally hold the return address if software requires. \\
-    - Typically paired with \texttt{INT} / \texttt{TRAP} entry sequences.
+   None.
 \end{iPageDescEntry}
+
+// ??? what is RegR used for ?
 
 
 
