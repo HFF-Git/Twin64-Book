@@ -7,7 +7,8 @@
 \addcontentsline{toc}{section}{LPA — Load Physical Address}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{LPA [.B/H/W/D] RegR, (RegB, RegX)}
+    \texttt{LPA[.D/W/H/B] RegR, ofs ( RegB )} \\
+    \texttt{LPA[.D/W/H/B] RegR, RegX( RegB )}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
@@ -34,19 +35,24 @@ The \texttt{LD} instruction uses the indexed and register-indexed instruction fo
     In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address.  
     In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
 
-    The virtual address is returned from the information in the TLB. No memory access is performed.
+    The physical address, if found, is returned from the information in the TLB. If there is a separate instruction and data TLB is used. No memory access is performed. For direct mapped segments the virtual address is the physical address.
+    
+    Optionally, the computed effective address may also be written back to the base register \texttt{RegB}. When this option is enabled, the sign of the offset determines the update behavior:  
+    – A negative offset causes the base register itself to be used as the fetch address.  
+    – A positive offset causes the sum of the base register and offset to be used.  
+    In both cases, the base register is updated.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-	\texttt{RegR <- tanslateAdr(memOperand( instr )));} 
+	\texttt{RegR <- tanslateAdr( memOperand( instr )));} 
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}
 	- Alignment Trap \\
-    - Privileged instruction trap.
+    - Privileged instruction trap. \\
+    - Non access data TLB trap.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    - Useful for operating systems to probe or manage virtual→physical mappings. \\
-    - May be used with TLB management instructions such as \texttt{ITLB}.
-\end{iPageDescEntry}
+    Useful for operating systems to probe or manage virtual to physical mappings. \\
+ \end{iPageDescEntry}

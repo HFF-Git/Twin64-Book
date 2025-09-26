@@ -90,7 +90,7 @@
 %--------------------------------------------------------------------------------
 \lstdefinestyle{codesnippetstyle}{
     backgroundcolor=\color{gray!5},
-    basicstyle={\ttfamily\tiny}, % Try \relsize{-2} if this is still too large
+    basicstyle={\ttfamily\small}, % Try \relsize{-2} if this is still too large
     keywordstyle=\color{magenta},
     identifierstyle={\ttfamily\color{gray}},
     numberstyle={\ttfamily\footnotesize\color{gray}},
@@ -105,7 +105,9 @@
     xleftmargin=0.1\textwidth,
     breaklines=true,
     breakatwhitespace=false,
-    columns=fullflexible
+    columns=fullflexible,
+    keepspaces=true,
+    tabsize=4
 }
 
 %--------------------------------------------------------------------------------
@@ -154,7 +156,7 @@
 % We have a rectangle field of 16cm width. Positions start left with 0 and end
 % at 16 on the right. The first parameter to the macro is the position of the 
 % separators. The second parameter is a list of labels to put into the fields 
-% created by the separators.
+% created by the separators. A bit position is 0.5cm.
 %
 %--------------------------------------------------------------------------------
 \newcommand{\drawInstrFormat}[2]{%
@@ -204,7 +206,11 @@
   	\end{tikzpicture}%
 }
 
-
+%--------------------------------------------------------------------------------
+% Instruction format for a 64bit word. It still has 16cm width and the same 
+% display logic as the 32-bit counterpart. A bit position is 0.25cm.
+%
+%--------------------------------------------------------------------------------
 \newcommand{\drawInstrFormatSixtyFour}[2]{%
   	\begin{tikzpicture}[scale=0.7, transform shape]
     	% Outer box
