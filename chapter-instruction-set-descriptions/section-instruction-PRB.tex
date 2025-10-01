@@ -7,36 +7,55 @@
 \addcontentsline{toc}{section}{PRB — Probe Virtual Address}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{PRB RegR, RegB, RegX}
+    \texttt{PRB RegR, RegB, RegA} \\
+    \texttt{PRB RegR, RegB, mode}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{PRB} instruction uses the register and special-9 instruction format. \\
+    The \texttt{PRB} instruction uses both the register format and the special-9 format. \\
 
     \begin{flushleft}
     \drawInstrFormat
-        {0, 1,3,5,6.5,8.5,9.5,11.5,16}
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
         {\OpCodeGrpSYS, \OpCodePRB, RegR, 0, RegB, 0, RegA, 0}
     \end{flushleft}
     
     \begin{flushleft}
     \drawInstrFormat
-        {0, 1,3,5,6.5,8.5,10.5,11.5,16}
+        {0,1,3,5,6.5,8.5,10.5,11.5,16}
         {\OpCodeGrpSYS, \OpCodePRB, RegR, 1, RegB, 0, mode, 0}
     \end{flushleft}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{PRB} instruction probes the translation lookaside buffer (TLB) 
-    to check whether the effective address in \texttt{RegB} has a valid mapping. The result of the probe is returned in \texttt{RegR}. For the register format instruction \texttt{RegA} contains the mode. For the special-9 format, the mode is encoded in the instruction field mode.
+    The \texttt{PRB} instruction probes the Translation Lookaside Buffer (TLB) 
+    to determine whether the effective address in \texttt{RegB} has a valid mapping. 
+    The result of the probe is returned in \texttt{RegR}:  
+    \texttt{0} indicates that no mapping exists, while \texttt{1} indicates a valid mapping.  
 
-    If the address is not mapped, an appropriate fault code may be placed in \texttt{RegR}.
+    In the register format, the access mode is specified in \texttt{RegA}.  
+    In the special-9 format, the mode is encoded directly in the instruction.  
+
+    The mode specifies the type of access being probed:
+    
+    \begin{center}
+    \begin{tabular}{|c|l|}
+    \hline
+    \textbf{Value} & \textbf{Access type} \\ \hline
+    0 & \texttt{Read access}  \\ \hline
+    1 & \texttt{Write access} \\ \hline
+    2 & \texttt{Execute access} \\ \hline
+    3 & \texttt{Undefined} \\ \hline
+    \end{tabular}
+    \end{center}
 \end{iPageDescEntry}
 
-\begin{iPageDescEntry}{Operation}
-    \texttt{RegR ← probeVirtualAdress( RegB, RegA.[62..63]);} \\
-    \texttt{RegR ← probeVirtualAdress( RegB, mode);}
-\end{iPageDescEntry}
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- probeVirtualAddress(RegB, RegA.[62..63]);  // Reg
+RegR <- probeVirtualAddress(RegB, mode);           // Mode
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
 \begin{iPageDescEntry}{Exceptions}
     - Non-access TLB Trap \\
@@ -44,9 +63,5 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    Typically used by the operating system for virtual memory management.  
+    Typically used by the operating system for virtual memory management.
 \end{iPageDescEntry}
-
-// ??? convert to use standardized indexed and register index format ? 
-
-

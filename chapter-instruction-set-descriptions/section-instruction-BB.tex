@@ -44,9 +44,9 @@ and adding it to the current instruction address. If the condition is not satisf
 if ( instr.[A] )  pos <- SAR;
 else              pos <- instr.[pos];
 
-bit_val <- testBit( RegR, pos );
+bVal <- testBit( RegR, pos );
 
-cond <- ( instr.[V] ? (bit_val == 1) : (bit_val == 0) );
+cond <- ( instr.[V] ? (bVal == 1) : (bVal == 0) );
 
 if ( cond ) PSW.[IA] <- addOfs32( PSW.[IA], ofs << 2 );
 else        PSW.[IA] <- addOfs32( PSW.[IA], 4 );

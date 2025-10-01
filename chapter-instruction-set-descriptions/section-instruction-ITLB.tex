@@ -7,7 +7,7 @@
 \addcontentsline{toc}{section}{ITLB — Insert TLB Entry}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{ITLB RegR, RegB, RegX \dots}
+    \texttt{ITLB RegR, RegB, RegX}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
@@ -25,7 +25,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{TLB Arguments}
-	\texttt{RegB}  and \texttt{RegA} contain the arguments passed to the TLB subsystem. \texttt{RegB} contains the virtual address. The address is always o a page boundary and in the case of address ranges marks the starting page.
+	\texttt{RegB}  and \texttt{RegA} contain the arguments passed to the TLB subsystem. \texttt{RegB}  contains the virtual address. The address is always o a page boundary and in the case of address ranges marks the starting page.
 	
 	\begin{flushleft}
 	\drawInstrFormatSixtyFour
@@ -34,8 +34,6 @@
     \end{flushleft}
     
     \texttt{RegA} contains the flags and the physical address of the address range. 
-    
-    // ?? to do ...
     
     \begin{flushleft}
 	\drawInstrFormatSixtyFour

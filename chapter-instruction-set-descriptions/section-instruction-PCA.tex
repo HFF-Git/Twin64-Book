@@ -15,8 +15,8 @@
 
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,6.5,8.5,16}
-        {\OpCodeGrpSYS, \OpCodePCA, RegR, 0, RegB, 0}
+        {0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpSYS, \OpCodePCA, RegR, 0, M, 0, RegB, 0}
     \end{flushleft}
 \end{iPageDescEntry}
 
@@ -26,7 +26,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-    \texttt{ RegR <- purgeFromCache( RegB );}
+    \texttt{ RegR <- purgeFromCache( addOfs32( RegB, RegX );}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}

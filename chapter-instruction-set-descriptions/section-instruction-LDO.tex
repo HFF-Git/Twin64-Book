@@ -24,14 +24,14 @@ The \texttt{LDO} instruction uses the immediate-15 instruction format. \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{LDO} instruction loads a value from memory using an offset addressing mode. The \texttt{ofs} value is shifted by the \texttt{dw} field and then sign-extended. The result is calculated by adding this value to the contents of \texttt{RegB}.  
+The \texttt{LDO} instruction loads a value from memory using an offset addressing mode. The \texttt{ofs} value is sign extended and shifted by the \texttt{dw} field. The result is calculated by adding this value to the contents of \texttt{RegB}.  
 The loaded value is then stored in \texttt{RegR}.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- addOfs32(RegB, signExtend( ofs << 2 ));
+RegR <- addOfs32(RegB, signExtend( ofs ) << 2 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

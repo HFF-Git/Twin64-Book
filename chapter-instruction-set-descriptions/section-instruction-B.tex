@@ -43,10 +43,8 @@ if ( RegR != 0 ) RegR <- addOfs32( PSW.[IA], 4 );
 
 if ( instr.[G] ) {
     
-    if ( TLB[PSW.[IA]].priv > PSW.[PL] ) 
-        PSW.[PL] <- TLB[PSW.[IA]].priv;
-    
-    RegR <- new_priv;   // deposit privilege level into RegR
+    if ( TLB[PSW.[IA]].[X] > PSW.[X] ) 
+        PSW.[X] <- TLB[PSW.[IA]].[X];
 }
 
 PSW.[IA] <- addOfs32( PSW.[IA], ofs << 2 );
