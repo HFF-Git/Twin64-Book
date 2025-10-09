@@ -7,18 +7,40 @@
 
 No CPU architecture with an idea of a runtime environment. Although the instruction set can be used to implement many models of runtime environments, there are common principles that exploit the CPU architecture. In fact, several CPU concepts were selected with a runtime already in mind. This chapter will present the Twin-64 runtime environment and describe the high level system model, the register usage convention, the execution model and calling convention.
 
-\section*{Runtime Environment}
-\addcontentsline{toc}{section}{Runtime Environment}
+\section*{System Environment}
+\addcontentsline{toc}{section}{System Environment}
 
-basic concepts 
+start high level what the system is 
 
 a system runs tasks grouped into jobs
 
 The following figure depicts a high level overview of a software system for Twin-64. At the center is the execution thread, which is called a \textbf{task}. A task will consist of the current execution object and the task data area. Tasks belong to a \textbf{job}. All tasks of a job share a common job data area. At the highest level is the \textbf{system}, which contains the global data area for the system. 
 
-// ??? picture goes here...
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.9, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,8);
+      
+\end{tikzpicture}
+\end{center}
+\caption{Runtime Overview}
+\label{fig: Runtime Overview}
+\end{figure}
 
 
+\section*{Runtime Environment}
+\addcontentsline{toc}{section}{Runtime Environment}
+
+basic concepts 
+
+a runtime at any time is a code and a data region.
+
+a program or library, once prepared, is a read only / execute object.
+
+the loader will update the LTAB for a program or library loaded. 
+
+once loaded, it will not be released during the life time of the system ? To be investigated. Although we have a million regions, can we unload ? And if so, how do we make sure that the client LTAB data is updated properly ?
 
 \section*{Register Usage}
 \addcontentsline{toc}{section}{Register Usage}
@@ -26,9 +48,9 @@ The following figure depicts a high level overview of a software system for Twin
 The CPU features general registers and control registers. As described before, all general registers can do computation as well as address computation.
 
 
-global data - pointed to by DP
+global data - pointed to by DP ( architected to be a specific register ? )
 
-stack data - pointed to by SP
+stack data - pointed to by SP  ( architected to be a specific register ? )
 
 caller saved 
 
