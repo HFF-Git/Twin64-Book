@@ -10,6 +10,55 @@ Note: sketches and notes for now...
 \section*{Stack Frame}
 \addcontentsline{toc}{section}{Stack Frame Marker}
 
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.9, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,12);
+  	
+  	% Rectangle dimensions
+	\def\width{8}
+	\def\leftofs{2}
+	\def\rightofs{\leftofs + \width}
+  	\def\middleofs{ \leftofs + \width / 2 }
+  	\def\size{ 12 } 
+  	
+	% Box
+	\draw[thick] (\leftofs, 0) -- (\leftofs, \size);
+	\draw[thick] (\rightofs, 0) -- (\rightofs, \size);
+	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
+	\draw[thick] (\leftofs, \size) -- (\rightofs, \size);
+			
+	
+	% Fields 
+	\node at ({\leftofs - 1}, {12 }) { PSP };
+	
+	% Spill Area
+	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
+  	\node at ( \middleofs, 11 ) { Spill Area};
+	
+	% Local Area
+	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
+  	\node at ( \middleofs, 8 ) { Local Area};
+	
+	% Parameter Area
+	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
+	\draw[thick, dashed] (\leftofs, 3.5) -- (\rightofs, 3.5);
+  	\node at ( \middleofs, 4 ) { Parameter Area register};
+	  	
+  	% Stack Marker
+  	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
+  	\node at ({\leftofs - 1}, {0}) { SP };
+  	\node at ( \middleofs, {1}) { Stack Marker };
+  
+\end{tikzpicture}
+\end{center}
+\caption{Stack Frame}
+\label{fig:Stack Frame}
+\end{figure}
+
+
 \section*{Stack Frame Marker}
 \addcontentsline{toc}{section}{Stack Frame Marker}
 
@@ -22,7 +71,7 @@ stack frame marker has four double words. ( make it a picture ... )
   	\draw[help lines, gray!70, dashed] (0,0) grid(16,8);
   	
   	% Rectangle dimensions
-	\def\width{12}
+	\def\width{8}
 	\def\leftofs{2}
 	\def\rightofs{\leftofs + \width}
   	\def\middleofs{ \leftofs + \width / 2 }

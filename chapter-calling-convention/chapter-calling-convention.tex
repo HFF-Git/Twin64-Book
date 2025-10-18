@@ -63,7 +63,7 @@ an external procedure has an entry, also a procedure label
 	\node at (5.5,0.25) {\small{20}};
 	\node at (1.5,0.25) {\small{12}};
 	
-	\node at (14.5,1) {\small{ 0 }};
+	\node at (14.5,1) {\small{ Page Ofset }};
 	\node at (10.5,1) {\small{ PageNumber}};
 	\node at (5.5,1) {\small{ RegionId}};
 	\node at (1.5,1) {\small{ Flags }};
@@ -93,9 +93,6 @@ The external address is taken from the linkage table entry. The offset was compu
 			.
 			.
 			.
-			MFIA.S R1
-			BE <ofs>( R1 )
-			.
 			.
 \end{lstlisting}
 
@@ -113,9 +110,9 @@ The code snippet below is the maximum code to be generated.
 			;ENTER sequence
 			ST SP,(SP) 			; save PSP
 			ST RL, -8(SP)		; save RL
-			ST DP, -16(SP)  		; save DP
-			MFIA.S R1       		; get module LTAB address
-			LD DP,(R1) 			; load module DP
+			ST DP, -16(SP)      ; save DP
+			MFIA.S R1           ; get module LTAB address
+			LD DP, <ofs>(R1)    ; load module DP
 			LDO SP,<size>(SP) 	; allocate stack frame
 			.
 			.

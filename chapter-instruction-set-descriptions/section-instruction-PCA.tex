@@ -16,13 +16,13 @@
     \begin{flushleft}
     \drawInstrFormat
         {0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
-        {\OpCodeGrpSYS, \OpCodePCA, RegR, 0, M, 0, RegB, 0}
+        {\OpCodeGrpSYS, \OpCodePCA, RegR, 0, M, 0, RegB, mode, RegX, 0}
     \end{flushleft}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
     The \texttt{PCA} instruction purges a cache line, selected by the effective address
-    in \texttt{RegB}. This can be used by privileged code for cache management. Unlike \texttt{FCA}, purge may also invalidate dirty lines without writing them back.
+    in \texttt{RegB}. This can be used by privileged code for cache management. Unlike \texttt{FCA}, purge may also invalidate dirty lines without writing them back. The mode field indicates the cache type. A value of 0 refers to the instruction cache, a value of one refers to the data cache. A value of two refers to a unified cache.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}

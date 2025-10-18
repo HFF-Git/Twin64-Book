@@ -23,7 +23,7 @@
 \begin{iPageDescEntry}{Description}
     The \texttt{PTLB} instruction purges (removes) an entry from the translation 
     lookaside buffer (TLB). The entry to remove is identified by the effective 
-    address formed from \texttt{RegB} and \texttt{RegX}.
+    address formed from \texttt{RegB} and \texttt{RegX}. The mode field indicates the TLB type. A value of 0 refers to the instruction TLB, a value of one refers to the data TLB. A value of two refers to a unified TLB. This is privileged instruction.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
