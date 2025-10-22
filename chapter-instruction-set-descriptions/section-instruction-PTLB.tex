@@ -3,11 +3,12 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{PTLB — Purge TLB Entry}
-\addcontentsline{toc}{section}{PTLB — Purge TLB Entry}
+\section*{PxTLB — Purge TLB Entry}
+\addcontentsline{toc}{section}{PxTLB — Purge TLB Entry}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{PTLB RegR, RegB, RegA}
+    \texttt{PITLB RegR, RegB, RegA} \\
+    \texttt{PDTLB RegR, RegB, RegA}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
@@ -21,9 +22,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{PTLB} instruction purges (removes) an entry from the translation 
-    lookaside buffer (TLB). The entry to remove is identified by the effective 
-    address formed from \texttt{RegB} and \texttt{RegX}. The mode field indicates the TLB type. A value of 0 refers to the instruction TLB, a value of one refers to the data TLB. A value of two refers to a unified TLB. This is privileged instruction.
+    The \texttt{PITLB} and \texttt{PDTLB} instructions purge (removes) an entry from the translation lookaside buffer (TLB). The entry to remove is identified by the effective address formed from \texttt{RegB} and \texttt{RegX}. The mode field indicates the TLB type. A value of 0 refers to the instruction TLB, a value of one refers to the data TLB. A value of two refers to a unified TLB. This is privileged instruction.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}

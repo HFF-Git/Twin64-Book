@@ -1,0 +1,24 @@
+\chapter*{Appendix -Glossary}
+\addcontentsline{toc}{chapter}{Appendix - Glossary}
+
+\section*{Glossary}
+
+\paragraph{Address Space}
+A logical domain of addresses. The CPU may define multiple address spaces, such as \textit{main memory space} and \textit{I/O space}. Each space defines an independent address range and access semantics.
+
+\paragraph{Region}
+A contiguous range of addresses within an address space, reserved for a particular purpose.  
+Examples: \textit{code region}, \textit{data region}, \textit{stack region}.
+
+\paragraph{Object}
+A unit of storage within a region. Objects correspond to program-visible entities or runtime allocations, such as global variables, heap blocks, or stack frames.  
+Examples: \textit{global object}, \textit{heap object}, \textit{stack object}.
+
+\paragraph{ELF Section}
+A named subdivision in an ELF file used by the linker and compiler (e.g., \texttt{.text}, \texttt{.data}, \texttt{.bss}). Sections are grouped by the linker into ELF segments.
+
+\paragraph{ELF Segment}
+A loadable portion of an ELF file (defined by a program header). Each ELF segment is mapped into one or more regions of an address space during program loading.
+
+\paragraph{Mapped Region}
+A runtime mapping that associates an ELF segment or memory source with a region in an address space. The emulator or loader tracks mapped regions to manage memory access and protection.

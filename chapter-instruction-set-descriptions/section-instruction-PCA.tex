@@ -3,11 +3,12 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{PCA - Purge from Cache}
+\section*{PxCA - Purge from Cache}
 \addcontentsline{toc}{section}{PCA - Purge from Cache}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{PCA RegR, RegB}
+    \texttt{PICA RegR, RegB} \\
+    \texttt{PDCA RegR, RegB}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
@@ -21,8 +22,8 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{PCA} instruction purges a cache line, selected by the effective address
-    in \texttt{RegB}. This can be used by privileged code for cache management. Unlike \texttt{FCA}, purge may also invalidate dirty lines without writing them back. The mode field indicates the cache type. A value of 0 refers to the instruction cache, a value of one refers to the data cache. A value of two refers to a unified cache.
+    The \texttt{PICA} and \testtt{PDCA} instructions purge a cache line, selected by the effective address
+    in \texttt{RegB}. This can be used by privileged code for cache management. Unlike \texttt{FDCA}, purge may also invalidate dirty lines without writing them back. The mode field indicates the cache type. A value of 0 refers to the instruction cache, a value of one refers to the data cache. A value of two refers to a unified cache.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
