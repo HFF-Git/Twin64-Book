@@ -3,15 +3,16 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{FCA - flush from data cache}
-\addcontentsline{toc}{section}{FCA - flush from cache}
+\section*{FxCA - flush from data cache}
+\addcontentsline{toc}{section}{FxCA - flush from cache}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{FCA RegR, RegB}
+    \texttt{FICA RegR, [ RegX ] ( RegB )} \\
+    \texttt{FDCA RegR, [ RegX ] ( RegB )}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{FCA} instruction uses the standard indexed instruction format. \\
+    The \texttt{FICA} instruction uses the standard indexed instruction format. \\
 
     \begin{flushleft}
     \drawInstrFormat
