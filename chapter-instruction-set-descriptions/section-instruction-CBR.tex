@@ -28,9 +28,7 @@ The CBR instruction uses the signed immediate S15 format:
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{CBR} instruction compares the contents of \texttt{RegB} with \texttt{RegR}.  
-If the condition specified in the \texttt{cond} field is satisfied, execution continues at the current instruction plus the sign extended offset shifted by two. Otherwise, execution proceeds with the next instruction. The registers themselves are not modified.
-
+The \texttt{CBR} instruction compares the contents of \texttt{RegB} with \texttt{RegR} using the condition specified in the \texttt{cond} field. If the condition is satisfied, control is transferred to the instruction address computed by adding the sign-extended and word-aligned offset to the current instruction address. Otherwise, execution continues with the next sequential instruction. The comparison operation uses the same signed 64-bit comparator as the \texttt{CMP} instruction, and neither source register is modified.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -41,11 +39,15 @@ The \texttt{cond} field encodes the branch condition as follows:
 \begin{center}
 \begin{tabular}{|c|c|l|}
 \hline
-\textbf{Value} & \textbf{Mnemonic} & \textbf{Branch if} \\ \hline
+\textbf{Value}  & \textbf{Mnemonic} & \textbf{Branch if} \\ \hline
 0 & \texttt{EQ} & \texttt{RegR == RegB} \\ \hline
-1 & \texttt{LT} & \texttt{RegR < RegB}  \\ \hline
+1 & \texttt{LT} & \texttt{RegR <  RegB} \\ \hline
 2 & \texttt{NE} & \texttt{RegR != RegB} \\ \hline
-3 & \texttt{LE} & \texttt{RegR <= RegB} \\ \hline
+3 & \texttt{GE} & \texttt{RegR >= RegB} \\ \hline
+4 & \texttt{LE} & \texttt{RegR <= RegB} \\ \hline
+5 & reserved    & \\ \hline
+6 & \texttt{GT} & \texttt{RegR >  RegB} \\ \hline
+7 & reserved    & \\ \hline
 \end{tabular}
 \end{center}
 
@@ -68,6 +70,9 @@ else
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-\begin{iPageDescEntry}{Notes}
-	None. 
+\begin{iPageDescEntry}{Notes}{
+The \texttt{CBR} instruction extends the \texttt{CMP} functionality by integrating a conditional branch. With a mode field of three bits available for the \texttt{cond} field, all six standard relational conditions (\texttt{EQ}, \texttt{NE}, \texttt{LT}, \texttt{LE}, \texttt{GT}, \texttt{GE}) are directly encoded, avoiding the need for operand swapping or result inversion.
+
+See also the instruction notes on comparison and branch Condition encoding in the appendix.
+}
 \end{iPageDescEntry}

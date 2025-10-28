@@ -27,10 +27,7 @@ The MBR instruction uses the following format:
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-
-The \texttt{MBR} instruction copies the contents of \texttt{RegB} into \texttt{RegR}.  
-If the condition specified in the \texttt{cond} field evaluates true for the new value in \texttt{RegR}, execution continues at the current instruction address plus the sign-extended offset. Otherwise, execution resumes with the next instruction.
-
+The \texttt{MBR} instruction copies the contents of \texttt{RegB} into \texttt{RegR}.  If the condition specified in the \texttt{cond} field evaluates true for the new value in \texttt{RegR}, execution continues at the current instruction address plus the sign-extended offset. Otherwise, execution resumes with the next instruction.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -38,20 +35,20 @@ If the condition specified in the \texttt{cond} field evaluates true for the new
 
 The \texttt{cond} field encodes the branch condition as follows:
 
-\begin{center}
+\begin{flushleft}
 \begin{tabular}{|c|c|l|}
 \hline
 \textbf{Value} & \textbf{Mnemonic} & \textbf{Branch if} \\ \hline
 0 & \texttt{EQ} & \texttt{RegR == 0} \\ \hline
 1 & \texttt{LT} & \texttt{RegR < 0}  \\ \hline
 2 & \texttt{NE} & \texttt{RegR != 0} \\ \hline
-3 & \texttt{LE} & \texttt{RegR <= 0} \\ \hline
-4 & \texttt{EV} & \texttt{RegR.[0] == 0} \\ \hline
-5 & \texttt{OD} & \texttt{RegR.[0] != 0} \\ \hline
-6 & \texttt{rv} & reserved \\ \hline
-7 & \texttt{rv} & reserved \\ \hline
+3 & \texttt{GE} & \texttt{RegR >= 0} \\ \hline
+4 & \texttt{LE} & \texttt{RegR <= 0} \\ \hline
+5 & \texttt{EV} & \texttt{RegR.[0] == 0} \\ \hline
+6 & \texttt{GT} & \texttt{RegR > 0}  \\ \hline
+7 & \texttt{OD} & \texttt{RegR.[0] != 0} \\ \hline
 \end{tabular}
-\end{center}
+\end{flushleft}
 
 \end{iPageDescEntry}
 
@@ -60,18 +57,20 @@ The \texttt{cond} field encodes the branch condition as follows:
 \begin{lstlisting}[style=iPageOpStyle]
 RegR <- RegB;
 if ( cond( RegR )) PSW.[IA] <- addOfs32( PSW.[IA], signExtend( ofs ) << 2 );
-else               PSW.[IA] <- psw.[IA] + 4;
+else               PSW.[IA] <- PSW.[IA] + 4;
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-	None.
+None.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-	None. 
+The \texttt{CBR} instruction extends the \texttt{CMP} functionality by integrating a conditional branch. With a mode field of three bits available for the \texttt{cond} field, all six standard relational conditions (\texttt{EQ}, \texttt{NE}, \texttt{LT}, \texttt{LE}, \texttt{GT}, \texttt{GE}) are directly encoded, avoiding the need for operand swapping or result inversion. 
+	
+See also the instruction notes on comparison and branch Condition encoding in the appendix.
 \end{iPageDescEntry}
 
 

@@ -44,11 +44,11 @@ The \texttt{cond} field encodes the branch condition as follows:
 0 & \texttt{EQ} & \texttt{RegR == 0} \\ \hline
 1 & \texttt{LT} & \texttt{RegR < 0}  \\ \hline
 2 & \texttt{NE} & \texttt{RegR != 0} \\ \hline
-3 & \texttt{LE} & \texttt{RegR <= 0} \\ \hline
-4 & \texttt{EV} & \texttt{RegR.[0] == 0} \\ \hline
-5 & \texttt{OD} & \texttt{RegR.[0] != 0} \\ \hline
-6 & \texttt{rv} & reserved \\ \hline
-7 & \texttt{rv} & reserved \\ \hline
+3 & \texttt{GE} & \texttt{RegR >= 0} \\ \hline
+4 & \texttt{LE} & \texttt{RegR <= 0} \\ \hline
+5 & \texttt{EV} & \texttt{RegR.[0] == 0} \\ \hline
+6 & \texttt{GT} & \texttt{RegR > 0}  \\ \hline
+7 & \texttt{OD} & \texttt{RegR.[0] != 0} \\ \hline
 \end{tabular}
 \end{flushleft}
 
@@ -70,5 +70,7 @@ else               psw.[IA] <- psw.[IA] + 4;
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-	None. 
+The \texttt{CBR} instruction extends the \texttt{CMP} functionality by integrating a conditional branch. With a mode field of three bits available for the \texttt{cond} field, all six standard relational conditions (\texttt{EQ}, \texttt{NE}, \texttt{LT}, \texttt{LE}, \texttt{GT}, \texttt{GE}) are directly encoded, avoiding the need for operand swapping or result inversion.
+	
+See also the instruction notes on comparison and branch Condition encoding in the appendix.
 \end{iPageDescEntry}

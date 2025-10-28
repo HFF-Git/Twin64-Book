@@ -1,6 +1,97 @@
 \chapter*{Appendix - Instruction Commentary}
 \addcontentsline{toc}{chapter}{Appendix - Instruction Commentary}
 
+%--------------------------------------------------------------------------------
+\section*{Comparison and Branch Condition Encoding}
+\addcontentsline{toc}{section}{Comparison and Branch Condition Encoding}
 
-\section*{xxx}
-\addcontentsline{toc}{section}{Instruction xx}
+This appendix explains the condition-code encoding and the implementation philosophy used by the \texttt{CMP}, \texttt{CBR}, \texttt{ABR} and \texttt{MBR} instructions. The design goals are to minimize hardware complexity by reusing a single subtraction/comparator path. Comparison operators are encoded in a compact and symmetric way that makes condition inversion trivial. The following instructions use the comparison operations.
+
+\begin{itemize}
+  \item \textbf{CMP} — The compare instruction uses a 2-bit \texttt{cond} field (four primitives) and produces a boolean result (0/1) in a register.
+  \item \textbf{CBR} — The compare-and-branch uses a 3-bit \texttt{cond} field (eight encodings) and branches based on comparison between two registers.
+  \item \textbf{ABR} — The add-and-branch performs an add operation and branches using a 3-bit \texttt{cond} field that tests the add result against zero or other simple predicates.
+  \item \textbf{MBR} — move-and-branch also uses the same 3-bit \texttt{cond} field and tests the loaded result.
+\end{itemize}
+
+All three branch instructions (\texttt{CBR}, \texttt{ABR}, \texttt{MBR}) share the same 3-bit condition-code encoding so decoder logic is uniform across branch forms. \texttt{CMP} uses a compact 2-bit encoding (four primitives) for hardware efficiency; the assembler and/or an \texttt{inv} operation are used to provide the remaining relations where needed.
+
+Branch target computation uses a sign-extended 15-bit offset shifted left by two, allowing word-aligned branch destinations within a \texttt{±64\,KB} range relative to the current instruction address. 
+
+\paragraph{Design Rationale} 
+
+Implementing just four compare primitives minimizes combinational logic in the arithmetic/comparator unit. The primitives chosen are \texttt{EQ}, \texttt{NE}, \texttt{LT} and \texttt{GE}. These four are symmetric in pairs: \texttt{EQ} / \texttt{NE} and \texttt{LT} / \texttt{GE}. Each pair is the logical complement of the other, so an \emph{invert} operation (flip of a single decode bit) yields the complementary condition. That property makes both ISA decoding and assembler inversion trivial.
+
+Where a comparison such as \texttt{GT} or \texttt{LE} is required, the assembler can safely swap operands (register form, no side-effects), it will rewrite the comparison using operand swap (e.g. \texttt{A > B} → \texttt{B < A}). Where operand swapping is not possible (immediate or memory addressing modes), the condition is produced by inverting the result of an available primitive (either by an \texttt{inv} instruction that flips a 0/1 boolean, or by a branch invert bit in the branch encoding).
+
+\paragraph{Encodings}
+
+The compare instruction (2-bit cond) use the following compare modes:
+
+\begin{center}
+\begin{tabular}{|c|c|l|}
+\hline
+\textbf{Value} & \textbf{Mnemonic} & \textbf{Meaning} \\ \hline
+0 & \texttt{EQ} & \texttt{op1 == op2} \\ \hline
+1 & \texttt{LT} & \texttt{op1 < op2} \\ \hline
+2 & \texttt{NE} & \texttt{op1 != op2} \\ \hline
+3 & \texttt{GE} & \texttt{op1 >= op2} \\ \hline
+\end{tabular}
+\end{center}
+
+The 2-bit encoding is chosen so that the left most bit is the \emph{invert} bit: flipping it yields the complementary condition for every pair. 
+
+The other branch type instructions use the following compare modes:
+
+\begin{center}
+\begin{tabular}{|c|c|l|}
+\hline
+\textbf{Value} & \textbf{Mnemonic} & \textbf{Branch if} \\ \hline
+0 & \texttt{EQ} & \texttt{Reg == 0} \\ \hline
+1 & \texttt{LT} & \texttt{Reg < 0} \\ \hline
+2 & \texttt{NE} & \texttt{Reg != 0} \\ \hline
+3 & \texttt{GE} & \texttt{Reg >= 0} \\ \hline
+4 & \texttt{LE} & \texttt{Reg <= 0} \\ \hline
+5 & \texttt{EV} & \texttt{Reg.[0] == 0} \\ \hline
+6 & \texttt{GT} & \texttt{Reg > 0} \\ \hline
+7 & \texttt{OD} & \texttt{Reg.[0] != 0} \\ \hline
+\end{tabular}
+\end{center}
+
+The 3-bit encoding is chosen so that middle bit is the \emph{invert} bit. Flipping it yields the complementary condition for every pair. This symmetry keeps branch inversion extremely cheap in hardware and consistent across all branch forms.
+
+\paragraph{Logical decoding and hardware signals}
+
+All conditions used by the comparator/branch unit are derived from a few simple signals computed by the ALU/comparator after a subtraction (or directly from the result when testing against zero). The following Verilog code sequence depicts a possible implementation.
+
+\smallskip
+\lstset{style=codesnippetstyle}
+\begin{lstlisting}
+wire Z  = (result == 64'd0);
+wire S  = result[63];          
+wire B0 = result[0];
+
+wire cond_EQ = Z;
+wire cond_LT = S;
+wire cond_NE = ~Z;
+wire cond_GE = ~S;
+wire cond_LE = S | Z;
+wire cond_GT = (~S) & (~Z);
+wire cond_EV = ~B0;
+wire cond_OD = B0;
+\end{lstlisting}
+
+The condition select is a multiplexer that select on of the wires above. Because all branch forms share the same condition encoding scheme, the branch unit uses a single small logic table to produce \texttt{branch\_taken}, simplifying pipeline wiring and verification.
+
+\paragraph{CMP Instruction Assembler rules and rewrites}
+
+If the two operands are registers it is safe to use operand swapping in order to avoid generating extra instructions (invert or boolean complement) and to keep assembly readable. When a programmer writes a relation that is not one of the four primitives, the assembler rewrites it to:
+
+  \texttt{CMP.GT rR, rA, rB -> CMP.LT rR, rB, rA}    
+   
+  \texttt{CMP.LE rR, rA, rB -> CMP.GE rR, rB, rA}
+
+Swapping is only applied when both operands are pure (register or immediate) and no addressing side-effects are present. If swapping is not safe (memory-reference, indexed forms, or side-effecting addressing modes), the assembler emits the corresponding primitive followed by an \texttt{invert} operation.
+
+The branch type instructions encode all common relations directly, so assembler rewrites are not required.
+
