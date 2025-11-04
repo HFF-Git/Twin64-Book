@@ -222,10 +222,11 @@
     	% Initialize
     	\pgfmathsetmacro{\last}{0}
 
-    	% Split labels into individual macros
-    	\foreach [count=\i] \l in {#2} {%
-      		\expandafter\xdef\csname label@\i\endcsname{\l}%
-    	}
+    	% Fully expand label list before the foreach
+		\edef\expandedLabels{#2}%
+		\foreach [count=\i] \l in \expandedLabels {%
+  			\expandafter\xdef\csname label@\i\endcsname{\l}%
+		}
 
     	% Iterate over positions
     	\foreach \p [count=\i] in {#1} {%

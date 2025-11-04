@@ -59,6 +59,56 @@ Note: sketches and notes for now...
 \end{figure}
 
 
+\begin{figure}[h]
+\begin{center}
+\resizebox{0.7\linewidth}{!}{
+	\begin{tikzpicture}[x=1cm, y=1cm]
+  
+    % Grid and axes
+    \draw[step=1cm, gray!30, thin] (0,0) grid (24,32);
+   
+   	% Rectangle dimensions
+	\def\width{8}
+	\def\leftofs{2}
+	\def\rightofs{\leftofs + \width}
+  	\def\middleofs{ \leftofs + \width / 2 }
+  	\def\size{ 12 } 
+
+    % Example content
+    \draw[red, thick] (2,2) rectangle (14,30);
+    \node[blue] at (8,16) {\large Center text};
+	\end{tikzpicture}
+}
+\end{center}
+\label{fig:Stack Frame}
+\caption{A 16×32 coordinate system scaled to fit the page.}
+\end{figure}
+
+\begin{figure}[h]
+\begin{center}
+\begin{tikzpicture}[x=0.5cm, y=0.5cm]
+  
+    % Grid and axes
+    \draw[step=1cm, gray!30, thin] (0,0) grid (24,32);
+   
+   	% Rectangle dimensions
+	\def\width{8}
+	\def\leftofs{2}
+	\def\rightofs{\leftofs + \width}
+  	\def\middleofs{ \leftofs + \width / 2 }
+  	\def\size{ 12 } 
+
+    % Example content
+    \draw[red, thick] (2,2) rectangle (14,30);
+    \node[blue] at (8,16) {\large Center text};
+
+\end{tikzpicture}
+\end{center}
+\label{fig:Stack Frame}
+\caption{A 16×32 coordinate system scaled to fit the page.}
+\end{figure}
+
+
 \section*{Stack Frame Marker}
 \addcontentsline{toc}{section}{Stack Frame Marker}
 
