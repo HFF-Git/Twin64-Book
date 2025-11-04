@@ -18,13 +18,13 @@ All three branch instructions (\texttt{CBR}, \texttt{ABR}, \texttt{MBR}) share t
 
 Branch target computation uses a sign-extended 15-bit offset shifted left by two, allowing word-aligned branch destinations within a \texttt{±64\,KB} range relative to the current instruction address. 
 
-\paragraph{Design Rationale} 
+\subsection*{Design Rationale} 
 
 Implementing just four compare primitives minimizes combinational logic in the arithmetic/comparator unit. The primitives chosen are \texttt{EQ}, \texttt{NE}, \texttt{LT} and \texttt{GE}. These four are symmetric in pairs: \texttt{EQ} / \texttt{NE} and \texttt{LT} / \texttt{GE}. Each pair is the logical complement of the other, so an \emph{invert} operation (flip of a single decode bit) yields the complementary condition. That property makes both ISA decoding and assembler inversion trivial.
 
 Where a comparison such as \texttt{GT} or \texttt{LE} is required, the assembler can safely swap operands (register form, no side-effects), it will rewrite the comparison using operand swap (e.g. \texttt{A > B} → \texttt{B < A}). Where operand swapping is not possible (immediate or memory addressing modes), the condition is produced by inverting the result of an available primitive (either by an \texttt{inv} instruction that flips a 0/1 boolean, or by a branch invert bit in the branch encoding).
 
-\paragraph{Encodings}
+\subsection*{Encodings}
 
 The compare instruction (2-bit cond) use the following compare modes:
 
@@ -39,9 +39,7 @@ The compare instruction (2-bit cond) use the following compare modes:
 \end{tabular}
 \end{center}
 
-The 2-bit encoding is chosen so that the left most bit is the \emph{invert} bit: flipping it yields the complementary condition for every pair. 
-
-The other branch type instructions use the following compare modes:
+The 2-bit encoding is chosen so that the left most bit is the \emph{invert} bit: flipping it yields the complementary condition for every pair. The other branch type instructions use the following compare modes:
 
 \begin{center}
 \begin{tabular}{|c|c|l|}
@@ -60,7 +58,7 @@ The other branch type instructions use the following compare modes:
 
 The 3-bit encoding is chosen so that middle bit is the \emph{invert} bit. Flipping it yields the complementary condition for every pair. This symmetry keeps branch inversion extremely cheap in hardware and consistent across all branch forms.
 
-\paragraph{Logical decoding and hardware signals}
+\subsection*{Logical decoding and hardware signals}
 
 All conditions used by the comparator/branch unit are derived from a few simple signals computed by the ALU/comparator after a subtraction (or directly from the result when testing against zero). The following Verilog code sequence depicts a possible implementation.
 
@@ -83,15 +81,20 @@ wire cond_OD = B0;
 
 The condition select is a multiplexer that select on of the wires above. Because all branch forms share the same condition encoding scheme, the branch unit uses a single small logic table to produce \texttt{branch\_taken}, simplifying pipeline wiring and verification.
 
-\paragraph{CMP Instruction Assembler rules and rewrites}
+\subsection*{CMP Instruction Assembler rules and rewrites}
 
 If the two operands are registers it is safe to use operand swapping in order to avoid generating extra instructions (invert or boolean complement) and to keep assembly readable. When a programmer writes a relation that is not one of the four primitives, the assembler rewrites it to:
-
-  \texttt{CMP.GT rR, rA, rB -> CMP.LT rR, rB, rA}    
-   
-  \texttt{CMP.LE rR, rA, rB -> CMP.GE rR, rB, rA}
-
-Swapping is only applied when both operands are pure (register or immediate) and no addressing side-effects are present. If swapping is not safe (memory-reference, indexed forms, or side-effecting addressing modes), the assembler emits the corresponding primitive followed by an \texttt{invert} operation.
-
-The branch type instructions encode all common relations directly, so assembler rewrites are not required.
-
+\smallskip
+\lstset{style=codesnippetstyle}
+\begin{lstlisting}
+CMP.GT rR, rA, rB -> CMP.LT rR, rB, rA
+CMP.LE rR, rA, rB -> CMP.GE rR, rB, rA
+\end{lstlisting}
+Swapping is only applied when both operands are registers. When the second operand is an immediate or a memory reference, swapping is not possible. In that case the assembler emits the corresponding primitive followed by an \texttt{invert} operation:
+\smallskip
+\lstset{style=codesnippetstyle}
+\begin{lstlisting}
+CMP.GT rR, rA, <arg> -> CMP.GE rR, rA, <arg> ; OR.N rR, rR, R0
+CMP.LE rR, rA, <arg> -> CMP.LT rR, rA, <arg> ; OR.N rR, rR, R0
+\end{lstlisting}
+When generating conditional code, the assembler may omit the explicit invert operation if the logic of the surrounding construct (for example, an \texttt{IF} statement) allows the THEN and ELSE branches to be swapped without changing program semantics.

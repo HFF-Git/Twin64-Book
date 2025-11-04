@@ -57,9 +57,9 @@ The \texttt{cond} field encodes the branch condition as follows:
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 if ( cond( RegR, RegB )) 
-   psw.[IA] <- addOfs32( psw.[IA], ( ofs << 2 ));
+   PSW.[IA] <- addOfs32( PSW.[IA], ( ofs << 2 ));
 else                     
-   psw.[IA] <- addOfs32( psw.[IA] + 4 );
+   PSW.[IA] <- addOfs32( PSW.[IA] + 4 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
