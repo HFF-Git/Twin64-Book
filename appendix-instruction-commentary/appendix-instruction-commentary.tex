@@ -1,61 +1,10 @@
 \chapter*{Appendix - Instruction Commentary}
 \addcontentsline{toc}{chapter}{Appendix - Instruction Commentary}
 
-%--------------------------------------------------------------------------------
-\section*{Comparison and Branch Condition Encoding}
-\addcontentsline{toc}{section}{Comparison and Branch Condition Encoding}
+This appendix presents extended commentary on selected instruction groups. It provides further explanation, design rationale, and hardware-level insights that complement the main instruction descriptions. Each subsection discusses the motivation, encoding, and implementation strategy for one or more related instructions, offering a deeper view into the processor’s architectural design.
 
-This appendix explains the condition-code encoding and the implementation philosophy used by the \texttt{CMP}, \texttt{CBR}, \texttt{ABR}, and \texttt{MBR} instructions. The design goals are to minimize hardware complexity by reusing a single subtraction/comparator path. Comparison operators are encoded in a compact and symmetric way that makes condition inversion trivial. The following instructions use the comparison operations:
+\pagebreak
+\input {appendix-instruction-commentary/appendix-instruction-commentary-Compare-Instructions}
+\pagebreak
+\input {appendix-instruction-commentary/appendix-instruction-commentary-LDR-STC-instructions}
 
-\begin{itemize}
-  \item \textbf{CMP} — Compares two operands using the 3-bit \texttt{cond} field and produces a boolean result (0/1) in a register.
-  \item \textbf{CBR} — Compares two registers and branches based on the same 3-bit \texttt{cond} field.
-  \item \textbf{ABR} — Performs an add operation and branches using a 3-bit \texttt{cond} field that tests the add result against zero or other simple predicates.
-  \item \textbf{MBR} — Performs a move operation and branches using the same 3-bit \texttt{cond} field.
-\end{itemize}
-
-All four instructions share the same 3-bit condition-code encoding, allowing uniform decoder logic across comparison and branch forms. Branch target computation uses a sign-extended 15-bit offset shifted left by two, allowing word-aligned branch destinations within a \texttt{±64\,KB} range relative to the current instruction address. 
-
-\paragraph{Design Rationale} 
-
-The condition encoding is designed for symmetry and minimal logic cost. Conditions are arranged in complementary pairs so that flipping a single bit yields the inverse relation. This makes branch inversion trivial in hardware and simplifies assembler implementation. All compare and branch instructions use the same 3-bit condition encoding:
-
-\begin{center}
-\begin{tabular}{|c|c|l|}
-\hline
-\textbf{Value} & \textbf{Mnemonic} & \textbf{Meaning / Branch if} \\ \hline
-0 & \texttt{EQ} & Equal (\texttt{==}) \\ \hline
-1 & \texttt{LT} & Less than (\texttt{<}) \\ \hline
-2 & \texttt{NE} & Not equal (\texttt{!=}) \\ \hline
-3 & \texttt{GE} & Greater or equal (\texttt{>=}) \\ \hline
-4 & \texttt{LE} & Less or equal (\texttt{<=}) \\ \hline
-5 & \texttt{EV} & Even (bit~0 = 0) \\ \hline
-6 & \texttt{GT} & Greater than (\texttt{>}) \\ \hline
-7 & \texttt{OD} & Odd (bit~0 = 1) \\ \hline
-\end{tabular}
-\end{center}
-
-The middle bit of the encoding serves as an \emph{invert} bit—flipping it yields the complementary condition for each pair. This symmetry keeps condition decoding compact and consistent across all instruction forms.
-
-\paragraph{Logical decoding and hardware signals}
-
-All conditions used by the comparator/branch unit are derived from simple signals computed by the ALU/comparator after a subtraction (or directly from the result when testing against zero). The following Verilog code illustrates a possible implementation:
-
-\smallskip
-\lstset{style=codesnippetstyle}
-\begin{lstlisting}
-wire Z  = (result == 64'd0);
-wire S  = result[63];
-wire B0 = result[0];
-
-wire cond_EQ = Z;
-wire cond_LT = S;
-wire cond_NE = ~Z;
-wire cond_GE = ~S;
-wire cond_LE = S | Z;
-wire cond_GT = (~S) & (~Z);
-wire cond_EV = ~B0;
-wire cond_OD = B0;
-\end{lstlisting}
-
-The condition select is a multiplexer that chooses one of the signals above. Because all comparison and branch instructions share the same condition encoding, the branch unit can use a single compact logic table to produce \texttt{branch\_taken}, simplifying both pipeline design and verification.

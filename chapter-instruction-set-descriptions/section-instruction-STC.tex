@@ -21,19 +21,19 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{STC} instruction stores a value from a general-purpose register to memory
-    only if the memory address is still reserved by a prior \texttt{LDR} instruction.
-    - If the reservation is valid, the store succeeds and clears the reservation.
-    - If the reservation has been lost (e.g., another processor wrote to the address), the store fails and the memory is unchanged.
+    The \texttt{STC} instruction stores a value from a general-purpose register to memory only if the memory address is still reserved by a prior \texttt{LDR} instruction. If the reservation is valid, the store succeeds and clears the reservation. If the reservation has been lost (e.g., another processor wrote to the address), the store fails and the memory is unchanged.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-    if (isAddressReserved( memOperand( instr ))) \{ \\ 
-       memStore( memOperand( instr ), RegR );  \\
-       clearReservation( memOperand( instr )); \\
-    \} else \{ \\
-       storeFailedFlag  <- 1; \\
-    \}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( isAddressReserved( memOperand( instr ))) {
+
+    memStore( memOperand( instr ), RegR );
+    clearReservation( memOperand( instr ));
+    RegR <- 1;
+}
+else RegR <- 0;
+\end{lstlisting}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}

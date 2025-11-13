@@ -42,7 +42,10 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-    \texttt{memStore( memOperand(), RegR );} \quad (for indexed formats)
+\begin{lstlisting}[style=iPageOpStyle]
+memStore( memOperand( addOfs32( RegB, ofs )), RegR );
+memStore( memOperand( addOfs32( RegB, RegX )), RegR );
+\end{lstlisting}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}

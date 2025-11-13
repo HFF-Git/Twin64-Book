@@ -1,0 +1,85 @@
+%--------------------------------------------------------------------------------
+\section*{Load-Reserved and Store-Conditional Instructions}
+\addcontentsline{toc}{section}{Load-Reserved and Store-Conditional Instructions}
+
+The \texttt{LDR} (Load Reserved) and \texttt{STC} (Store Conditional) instructions provide the architectural mechanism for implementing atomic read–-modify-–write sequences without requiring explicit locks. Together, they form the foundation for synchronization primitives such as semaphores, spinlocks, and atomic counters.
+
+\begin{itemize}
+  \item \textbf{LDR} — loads a 64-bit value from memory and establishes a \emph{reservation} on the cache line containing that address. The effective address is computed as the sum of the base register and the signed offset and must be 8-byte aligned.   
+  \item \textbf{STC} — attempts to store the value in \texttt{Rn} to the same memory location, succeeding only if the reservation remains valid. If the reservation is valid, \texttt{STC} completes normally and returns a success indication (typically a value of~1). If the reservation has been lost, the store is suppressed and a failure value (0) is returned to the destination register.
+\end{itemize}
+
+\paragraph{Design Rationale}
+
+The \texttt{LDR}/\texttt{STC} pair allows atomic sequences to be expressed entirely in software, avoiding pipeline stalls and bus locks.  
+The mechanism relies on a single internal reservation register that tracks the address (or cache line) of the most recent \texttt{LDR}. Only one reservation may be active per processor at any time. Using the cache system as the underlying reservation tracker reduces hardware cost and ensures natural invalidation under normal cache-coherency events. A reservation is cleared automatically under any of the following conditions:
+
+\begin{itemize}
+  \item The cache line containing the reserved address is invalidated or evicted through the local or other processors.
+  \item The local processor performs a write to the same cache line through any path other than \texttt{STC}.
+  \item An interrupt, trap, or context switch occurs.
+  \item A subsequent \texttt{LDR} instruction establishes a new reservation.
+\end{itemize}
+
+This model guarantees that at most one \texttt{STC} can succeed per \texttt{LDR}, ensuring forward progress while maintaining strong atomicity at the cache-line granularity.
+
+\paragraph{Implementation Notes}
+
+The reservation register may store the cache line tag rather than the full address, allowing fast comparison against cache operations. Integration with the cache controller ensures that any coherence or invalidation event automatically clears the reservation flag. Because interrupts also clear reservations, interrupt latency and atomicity properties remain predictable.
+
+This design matches the behavior of similar primitives in other architectures (e.g., RISC-V \texttt{LR/SC} or PowerPC \texttt{lwarx/stwcx.}) but uses a cache-line–based validity rule rather than a fixed address match, simplifying coherence handling in multiprocessor systems.
+
+\paragraph{Atomic Increment Example}
+
+
+
+\smallskip
+\begin{lstlisting}
+// Atomic increment of memory at [Rbase + ofs]
+
+atomic_inc:
+    LDR   R1, ofs(Rbase)     // Load current value and set reservation
+    ADDI  R1, R1, #1         // Increment locally
+    STC   R1, ofs(Rbase)     // Attempt conditional store
+    BEQZ  R1, atomic_inc     // Retry if store failed (R1 = 0)
+    RET
+\end{lstlisting}
+
+Each iteration performs a reserved load, modifies the value, and attempts a conditional store.  
+If another processor writes to the same cache line between the \texttt{LDR} and \texttt{STC}, the reservation is cleared, causing \texttt{STC} to fail and the loop to retry.  
+This ensures that the final store reflects an atomic update to memory.
+
+\subsection*{Compare-and-Swap (CAS)}
+
+\smallskip
+\begin{lstlisting}
+// Atomic compare-and-swap
+// Arguments:
+//   Rbase : base address
+//   Rexp  : expected old value
+//   Rnew  : desired new value
+// Returns:
+//   Rres  : 1 on success, 0 on failure
+
+cas:
+    LDR   Rtmp, 0(Rbase)     // Load reserved value
+    CMP.EQ Rtmp, Rtmp, Rexp  // Compare with expected value
+    BEQZ  Rtmp, cas_fail     // If not equal, fail
+    STC   Rnew, 0(Rbase)     // Attempt conditional store
+    BEQZ  Rnew, cas          // Retry if store failed
+    MOVI  Rres, #1           // Indicate success
+    RET
+
+cas_fail:
+    MOVI  Rres, #0           // Indicate failure
+    RET
+\end{lstlisting}
+
+This CAS sequence allows software-based atomic updates: the memory location is only updated if its current value matches the expected value.  
+Failed stores due to lost reservations cause the loop to retry, guaranteeing atomicity even in multiprocessor environments.
+
+\paragraph{Summary}
+
+Together, these examples demonstrate how the \texttt{LDR}/\texttt{STC} mechanism enables fully software-based atomic read–modify–write operations.  
+By combining reserved loads with conditional stores, the processor can implement synchronization primitives, spinlocks, and lock-free data structures without additional hardware beyond the reservation register and cache-line tracking.
+

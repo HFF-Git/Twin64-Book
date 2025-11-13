@@ -1,0 +1,89 @@
+\section*{Comparison and Branch Condition Encoding}
+\addcontentsline{toc}{section}{Comparison and Branch Condition Encoding}
+
+This appendix explains the condition encoding and implementation philosophy used by the \texttt{CMP}, \texttt{CBR}, \texttt{ABR}, and \texttt{MBR} instructions. The design goal is to minimize hardware complexity by reusing a single subtraction/comparator path. Comparison operators are encoded in a compact and symmetric way that makes condition inversion trivial.
+
+The following instructions use the same 3-bit comparison field (\texttt{cond}):
+
+\begin{itemize}
+  \item \textbf{CMP} — Compares two operands using the 3-bit \texttt{cond} field and produces a boolean result (0/1) in a register.
+  \item \textbf{CBR} — Compares two registers and branches based on the same 3-bit \texttt{cond} field. This performs a direct comparison without requiring a preceding \texttt{CMP}.
+  \item \textbf{ABR} — Performs an add operation and branches using a 3-bit \texttt{cond} field that tests the \emph{add result} against zero or other simple predicates. Intended for loop counters or pointer walking.
+  \item \textbf{MBR} — Performs a move operation and branches using the same 3-bit \texttt{cond} field. The comparison is applied to the source operand, typically against zero.
+\end{itemize}
+
+All four instructions share a uniform 3-bit condition encoding, allowing common decoder and comparator logic.  
+Branch target computation uses a sign-extended 15-bit offset shifted left by two, allowing word-aligned branch destinations within a \texttt{±64\,KB} range relative to the current instruction address.
+
+\paragraph{Design Rationale}
+
+The condition encoding is designed for symmetry and minimal logic cost. Conditions are arranged in complementary pairs so that flipping a single bit yields the inverse relation. This symmetry makes branch inversion trivial in hardware and simplifies assembler implementation.
+
+\begin{center}
+\begin{tabular}{|c|c|c|l|}
+\hline
+\textbf{Value} & \textbf{Binary} & \textbf{Mnemonic} & \textbf{Meaning / Branch if} \\ \hline
+0 & 000 & \texttt{EQ} & Equal (\texttt{==}) \\ \hline
+1 & 001 & \texttt{LT} & Less than (\texttt{<}) \\ \hline
+2 & 010 & \texttt{GT} & Greater than (\texttt{>}) \\ \hline
+3 & 011 & \texttt{EV} & Even (bit~0 = 0) \\ \hline
+4 & 100 & \texttt{NE} & Not equal (\texttt{!=}) \\ \hline
+5 & 101 & \texttt{GE} & Greater than or equal (\texttt{>=}) \\ \hline
+6 & 110 & \texttt{LE} & Less than or equal (\texttt{<=}) \\ \hline
+7 & 111 & \texttt{OD} & Odd (bit~0 = 1) \\ \hline
+\end{tabular}
+\end{center}
+
+The most significant bit (\texttt{cond[2]}) acts as an \emph{invert bit}: flipping it inverts the sense of the comparison.  
+The relationships between base and inverted conditions are as follows:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Base Condition} & \textbf{Inverted Condition} & \textbf{Encoding Pair} \\ \hline
+\texttt{EQ} & \texttt{NE} & 000 / 100 \\ \hline
+\texttt{LT} & \texttt{GE} & 001 / 101 \\ \hline
+\texttt{GT} & \texttt{LE} & 010 / 110 \\ \hline
+\texttt{EV} & \texttt{OD} & 011 / 111 \\ \hline
+\end{tabular}
+\end{center}
+
+This arrangement keeps decoding logic compact and uniform across all instruction forms.
+
+\paragraph{Logical Decoding and Hardware Signals}
+
+All conditions used by the comparator and branch unit are derived from simple signals computed by the ALU after a subtraction, or directly from the result when testing against zero. The example below illustrates a possible Verilog implementation:
+
+\smallskip
+\lstset{style=codesnippetstyle}
+\begin{lstlisting}
+wire Z  = (result == 64'd0);  // Zero flag
+wire S  = result[63];         // Sign flag (for signed comparisons)
+wire B0 = result[0];          // Least significant bit (for EV/OD)
+
+wire cond_EQ =  Z;
+wire cond_LT =  S;
+wire cond_GT = (~S) & (~Z);
+wire cond_EV = ~B0;
+
+wire cond_NE = ~Z;
+wire cond_GE = ~S;
+wire cond_LE =  S | Z;
+wire cond_OD =  B0;
+
+assign branch_taken =
+    (cond == 3'b000) ? cond_EQ :
+    (cond == 3'b001) ? cond_LT :
+    (cond == 3'b010) ? cond_GT :
+    (cond == 3'b011) ? cond_EV :
+    (cond == 3'b100) ? cond_NE :
+    (cond == 3'b101) ? cond_GE :
+    (cond == 3'b110) ? cond_LE :
+                       cond_OD;
+\end{lstlisting}
+
+All comparisons are signed by default; unsigned comparisons can be implemented by treating operands as unsigned integers or through a future \texttt{CMPU} variant if required.  
+The \texttt{EV}/\texttt{OD} conditions allow efficient branching on bit~0, which is useful for address alignment tests, distinguishing even/odd indices, and loop unrolling.
+
+Because all comparison and branch instructions share this common encoding and logic, the branch unit requires only a single multiplexer and no dedicated condition register, simplifying both the datapath and verification.
+
