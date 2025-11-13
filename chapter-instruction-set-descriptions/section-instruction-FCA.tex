@@ -12,22 +12,31 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{FICA} instruction uses the standard indexed instruction format. \\
+    The \texttt{FICA} instruction uses the following instruction formats. \\
 
+	\begin{flushleft}
+    \drawInstrFormat
+        {0, 1, 3, 5, 6.5, 8.5, 9.5, 16}
+        {\OpCodeGrpSYS, \OpCodeFCA, RegR, 0, RegB, dw, ofs}
+    \end{flushleft}
+    
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,6.5,8.5,16}
-        {\OpCodeGrpSYS, \OpCodeFCA, RegR, 1, RegB, 0}
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpSYS, \OpCodeFCA, RegR, 1, RegB, 0, RegX, 0}
     \end{flushleft}
+     
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{FCA} instruction flushes a cache line, selected by the effective address
-    in \texttt{RegB}. This is a privileged instruction.
+    The \texttt{FCA} instruction flushes a cache line, selected by the effective address in \texttt{RegB}. This is a privileged instruction.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
-    \texttt{RegR <- flushFromCache( RegB );}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- flushFromCache( addOfs32( RegB, ofs ));
+RegR <- flushFromCache( addOfs32( RegB, RegX ));
+\end{lstlisting}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Exceptions}
@@ -35,7 +44,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    We may enhance this instruction with another register to for the target address by adding RegB with RegX, so that we can better support flushing cache ranges.
-\end{iPageDescEntry}
 
-// ??? also uses the index and register indexed formats ?
+We may enhance the instruction to have the "M" bit for supporting flush loops... tbd.
+    
+\end{iPageDescEntry} 

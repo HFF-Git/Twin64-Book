@@ -421,6 +421,8 @@ The instruction address portion of the PSW registers contains the segment id and
 \subsection*{Processor Status}
 \addcontentsline{toc}{subsection}{Protection Id Registers}
 
+??? finalize the bits and position ....
+
 
 \begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
     \caption{Status Field Bits} \\
@@ -457,9 +459,7 @@ The instruction address portion of the PSW registers contains the segment id and
     \textbf{P} & Protection identifier validation enable. When set instruction and data references are checked for valid protection identifiers (PIDs). The \texttt{PRB} instruction checks for valid PIDs without causing a trap. \\
     \midrule 
     \textbf{D} & Data memory break disable. The D-bit is cleared after the execution of each instruction, except for the \texttt{RFI} instruction which may set it. When set, data memory break traps are disabled. This bit allows a simple mechanism to trap on a data store and then proceed past the trapping instruction. \\
-    \midrule
-     
-    \textbf{...} & ... \\
+    \endrule
 \end{longtable}
 
 \section*{Data Types}
@@ -527,8 +527,8 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
   	\node at (1.5,6.75) {\large{Memory}};
   	\node at (11,6.75) {\large{Register}};
 
-  	\node at (1+0.125, 6+0.25) {7};
-	\node at (2-0.375, 6+0.25) {0};
+  	\node at (2+0.675, 6+0.25) {7};
+	\node at (2+0.125, 6+0.25) {0};
   	\node at (0.5, 6 - 0.2) {0};
   	\node at (0.5, 0.2) {7};
   	

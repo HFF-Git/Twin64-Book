@@ -255,6 +255,7 @@
 %
 %--------------------------------------------------------------------------------
 \newenvironment{iPageDescEntry}[1]{%
+  \par\vspace{0pt}% <--- forces vertical mode
   \noindent
   \begin{minipage}[t]{0.22\textwidth}
     \textbf{\large\textcolor{gray}{#1}}%
@@ -266,6 +267,7 @@
 }{\end{minipage}\par\vspace{0.75em}}
 
 \newenvironment{iPageDescOpEntry}[1]{%
+ \par\vspace{0pt}% <--- forces vertical mode
 	\noindent
   	\begin{minipage}[t]{0.22\textwidth}
     	\textbf{\large\textcolor{gray}{#1}}%

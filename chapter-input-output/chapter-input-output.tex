@@ -8,8 +8,6 @@
 Twin-64 features memory a mapped I/O architecture.
 
 
-memory mapped
-
 dedicated address space in physical memory
 
 bus concept 
@@ -108,20 +106,28 @@ The I/O address range is a 256Mbyte area in the first 4 Gbyte segment, i.e.segme
 \section*{Hard physical address range}
 \addcontentsline{toc}{section}{Hard physical address range}
 
-The \textbf{hard physical address} range contains a I/O page for each I/O modules installed. There room for 64 I/O modules.
+The \textbf{hard physical address} range contains a I/O page for each I/O modules installed. There is room for 64 I/O modules.
+
+address is fixed by hardware, e.g a bus slot or so ...
 
 \section*{Broadcast address range}
 \addcontentsline{toc}{section}{Broadcast address range}
 
 The \textbf{broadcast address} range mirrors the hard physical address range. However, a write to these locations is a write operation to which all I/O modules will react.
 
+Only write operations, read operations make no sense.
+
 \section*{Soft physical address range}
 \addcontentsline{toc}{section}{Soft physical address range}
 
 The \textbf{soft physical address} range is an area where space is allocated to an I/O module. The I/O module reacts to a memory access operation in its configured soft physical address range.
 
+can be in physical memory and I/O address space
+
 \section*{I/O Elements}
 \addcontentsline{toc}{section}{I/O Elements}
+
+Modules consist of I/O elements, smallest I/O unit of operaion
 
 I/O elements are 128 bytes, i.e. 16 regs 
 
