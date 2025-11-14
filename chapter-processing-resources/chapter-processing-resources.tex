@@ -10,35 +10,52 @@ This chapter describes the processing resources and data types in a Twin-64 syst
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.8, transform shape]
-        
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,4);
-  	
-  	\def\leftofs{1}
-  	
-  	\node[  tsRectangle, 
-            minimum width=4cm,
-            minimum height=4cm,  
-            fill=white,
-            anchor=west] at (\leftofs,2) {General\\ Registers};
-                 
-    \node[  tsRectangle, 
-            minimum width=4cm,
-            minimum height=4cm,  
-            fill=white,
-            anchor=west] at (\leftofs + 5,2) { Control\\ Registers};
-            
-    \node[  tsRectangle, 
-            minimum width=4cm,
-            minimum height=0.75cm,  
-            fill=white,
-            anchor=west] at (\leftofs + 10,3.5) { Instruction Address};
-            
-    \node[  tsRectangle, 
-            minimum width=1.5cm,
-            minimum height=0.75cm,  
-            fill=white,
-            anchor=west] at (\leftofs + 10,2.5) { Status };
-            
+
+    \draw[help lines, gray!70, dashed] (0,0) grid(16,4);
+    \def\leftofs{1}
+
+    % --- General Registers -----------------------------------------
+    \node[tsRectangle,
+          minimum width=4cm,
+          minimum height=4cm,
+          fill=white,
+          anchor=west] (genreg) at (\leftofs,2)  {General\\Registers};
+
+    % 16 subdivisions (4cm tall → 0.25cm per row)
+    \foreach \i in {1,...,15} {
+        \draw[gray!60]
+            ([yshift=2cm-0.25cm*\i]genreg.west) --
+            ([yshift=2cm-0.25cm*\i]genreg.east);
+    }
+
+
+    % --- Control Registers -----------------------------------------
+    \node[tsRectangle,
+          minimum width=4cm,
+          minimum height=4cm,
+          fill=white,
+          anchor=west] (ctrlreg) at (\leftofs+5,2) {Control\\Registers};
+
+    \foreach \i in {1,...,15} {
+        \draw[gray!60]
+            ([yshift=2cm-0.25cm*\i]ctrlreg.west) --
+            ([yshift=2cm-0.25cm*\i]ctrlreg.east);
+    }
+
+    % --- Instruction Address block ---------------------------------
+    \node[tsRectangle,
+          minimum width=4cm,
+          minimum height=0.5cm,
+          fill=white,
+          anchor=west] at (\leftofs + 10,3.75) { Instruction Address };
+
+    % --- Status block ----------------------------------------------
+    \node[tsRectangle,
+          minimum width=1.5cm,
+          minimum height=0.5cm,
+          fill=white,
+          anchor=west] at (\leftofs + 10, 3) { Status };
+
 \end{tikzpicture}
 \end{center}
 \caption{Software Accessible Registers}
@@ -59,7 +76,7 @@ Twin-64 features a set of 16 general purposes registers. They are used for all c
   	% \draw[help lines, gray!70, dashed] (0,0) grid(12,9);
 
 	% Rectangle dimensions
-	\def\width{12}
+	\def\width{10}
 	\def\leftofs{2}
 	\def\rightofs{\leftofs + \width}
 	\def\middleofs{ \leftofs + \width / 2 }
@@ -117,7 +134,7 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	% \draw[help lines, gray!70, dashed] (0,0) grid(12,17);
   	
   	% Rectangle dimensions
-	\def\width{12}
+	\def\width{10}
 	\def\leftofs{2}
 	\def\rightofs{\leftofs + \width}
   	\def\middleofs{ \leftofs + \width / 2 }
@@ -161,9 +178,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 11) -- (\leftofs + \width / 2 - 0.5, 12);
   	\draw[thick] (\rightofs - 0.5, 11) -- (\rightofs - 0.5, 12);
   	\node at ({\leftofs - 0.75}, {11 + 0.5}) { CR4 };
-  	\node at ({\leftofs + 3}, {11 + 0.5}) { Protection Id 1 (PID1)};
+  	\node at ({\leftofs + 2.25}, {11 + 0.5}) { Protection Id 1 (PID1)};
   	\node at ({\leftofs + \width/2 - 0.25}, {11 + 0.5}) { W };
-  	\node at ({\rightofs - 3}, {11 + 0.5}) { Protection Id 2 (PID2)};
+  	\node at ({\rightofs - 2.75}, {11 + 0.5}) { Protection Id 2 (PID2)};
   	\node at ({\rightofs - 0.25}, {11 + 0.5}) { W };
   	
   	% CR5
@@ -172,9 +189,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 10) -- (\leftofs + \width / 2 - 0.5, 11);
   	\draw[thick] (\rightofs - 0.5, 10) -- (\rightofs - 0.5, 11);
   	\node at ({\leftofs - 0.75}, {10 + 0.5}) { CR5 };
-  	\node at ({\leftofs + 3}, {10 + 0.5}) { Protection Id 3 (PID3)};
+  	\node at ({\leftofs + 2.25}, {10 + 0.5}) { Protection Id 3 (PID3)};
   	\node at ({\leftofs + \width/2 - 0.25}, {10 + 0.5}) { W };
-  	\node at ({\rightofs - 3}, {10 + 0.5}) { Protection Id 4 (PID4)};
+  	\node at ({\rightofs - 2.75}, {10 + 0.5}) { Protection Id 4 (PID4)};
   	\node at ({\rightofs - 0.25}, {10 + 0.5}) { W };
   	
   	%CR6
@@ -183,9 +200,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 9) -- (\leftofs + \width / 2 - 0.5, 10);
   	\draw[thick] (\rightofs - 0.5, 9) -- (\rightofs - 0.5, 10);
   	\node at ({\leftofs - 0.75}, {9 + 0.5}) { CR6 };
-  	\node at ({\leftofs + 3}, {9 + 0.5}) { Protection Id 5 (PID5)};
+  	\node at ({\leftofs + 2.25}, {9 + 0.5}) { Protection Id 5 (PID5)};
   	\node at ({\leftofs + \width/2 - 0.25}, {9 + 0.5}) { W };
-  	\node at ({\rightofs - 3}, {9 + 0.5}) { Protection Id 6 (PID6)};
+  	\node at ({\rightofs - 2.75}, {9 + 0.5}) { Protection Id 6 (PID6)};
   	\node at ({\rightofs - 0.25}, {9 + 0.5}) { W };
   	
   	% CR7
@@ -194,9 +211,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 8) -- (\leftofs + \width / 2 - 0.5, 9);
   	\draw[thick] (\rightofs - 0.5, 8) -- (\rightofs - 0.5, 9);
   	\node at ({\leftofs - 0.75}, {8 + 0.5}) { CR7 };
-  	\node at ({\leftofs + 3}, {8 + 0.5}) { Protection Id 7 (PID7)};
+  	\node at ({\leftofs + 2.25}, {8 + 0.5}) { Protection Id 7 (PID7)};
   	\node at ({\leftofs + \width/2 - 0.25}, {8 + 0.5}) { W };
-  	\node at ({\rightofs - 3}, {8 + 0.5}) { Protection Id 8 (PID8)};
+  	\node at ({\rightofs - 2.75}, {8 + 0.5}) { Protection Id 8 (PID8)};
   	\node at ({\rightofs - 0.25}, {8 + 0.5}) { W };
   	
   	% CR8
@@ -252,7 +269,7 @@ The processor configuration register contains information about the current syst
 
 \begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.9, transform shape]
+\begin{tikzpicture}[scale=0.7, transform shape]
         
   	% \draw[help lines, gray!70, dashed] (0,0) grid(16,2);
   	
@@ -300,7 +317,7 @@ The processor configuration register contains information about the current syst
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{Memory Size} & The available physical memory in 4Gbyte increments. The minimum size is 4Gbyte, encoded as a zero. The maximum size is 64Gbyte encoded as a 15. \\
+    \textbf{Memory Size} & The available physical memory in 4 Gbyte increments. The minimum size is 4 Gbyte, encoded as a zero. The maximum size is 64 Gbyte encoded as a 15. \\
     \midrule
     \textbf{Flags} & e.g default endian, etc. \\
     \midrule
@@ -313,6 +330,7 @@ The processor configuration register contains information about the current syst
     \textbf{...} & ... \\
     \midrule
     \textbf{Cycles per millisecond} & ... \\
+    \midrule
 \end{longtable}
 
 
@@ -358,7 +376,7 @@ The processor state register contains the virtual address of the current instruc
 
 \begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.9, transform shape]
+\begin{tikzpicture}[scale=0.7, transform shape]
         
     % \draw[help lines, gray!70, dashed] (0,0) grid(16,1.5);
   	
@@ -448,18 +466,16 @@ The instruction address portion of the PSW registers contains the segment id and
     \midrule
     \textbf{X} & When set, the processor runs in privileged mode. \\
     \midrule
-     \textbf{T} & When set, taken branch traps are enabled. Any branch taken will result in a trap. \\
+    \textbf{T} & When set, taken branch traps are enabled. Any branch taken will result in a trap. \\
     \midrule
     \textbf{I} & When set, external interrupts are enabled. \\
     \midrule 
-    
     \textbf{V} & Reserved. \\
     \midrule 
-    
     \textbf{P} & Protection identifier validation enable. When set instruction and data references are checked for valid protection identifiers (PIDs). The \texttt{PRB} instruction checks for valid PIDs without causing a trap. \\
     \midrule 
     \textbf{D} & Data memory break disable. The D-bit is cleared after the execution of each instruction, except for the \texttt{RFI} instruction which may set it. When set, data memory break traps are disabled. This bit allows a simple mechanism to trap on a data store and then proceed past the trapping instruction. \\
-    \endrule
+    \midrule
 \end{longtable}
 
 \section*{Data Types}
@@ -529,8 +545,8 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
 
   	\node at (2+0.675, 6+0.25) {7};
 	\node at (2+0.125, 6+0.25) {0};
-  	\node at (0.5, 6 - 0.2) {0};
-  	\node at (0.5, 0.2) {7};
+  	\node at (1.5, 6 - 0.2) {0};
+  	\node at (1.5, 0.2) {7};
   	
   	% Memory block
   	\node[tsRectangle, minimum width=0.75cm, minimum height=8*0.75cm, anchor=west] 

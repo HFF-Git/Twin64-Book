@@ -12,18 +12,20 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{FICA} instruction uses the following instruction formats. \\
+	The \texttt{FICA} instruction uses the following instruction format. \\
 
-	\begin{flushleft}
-    \drawInstrFormat
-        {0, 1, 3, 5, 6.5, 8.5, 9.5, 16}
-        {\OpCodeGrpSYS, \OpCodeFCA, RegR, 0, RegB, dw, ofs}
-    \end{flushleft}
-    
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,6.5,8.5,9.5,11.5,16}
-        {\OpCodeGrpSYS, \OpCodeFCA, RegR, 1, RegB, 0, RegX, 0}
+        {0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpSYS, \OpCodePCA, RegR, 0, M, 0, RegB, 3, RegX, 0}
+    \end{flushleft}
+    
+    The \texttt{FDCA} instruction uses the following instruction format. \\
+
+    \begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpSYS, \OpCodePCA, RegR, 0, M, 1, RegB, 3, RegX, 0}
     \end{flushleft}
      
 \end{iPageDescEntry}
@@ -32,12 +34,11 @@
     The \texttt{FCA} instruction flushes a cache line, selected by the effective address in \texttt{RegB}. This is a privileged instruction.
 \end{iPageDescEntry}
 
-\begin{iPageDescEntry}{Operation}
+\begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- flushFromCache( addOfs32( RegB, ofs ));
 RegR <- flushFromCache( addOfs32( RegB, RegX ));
 \end{lstlisting}
-\end{iPageDescEntry}
+\end{iPageDescOpEntry}
 
 \begin{iPageDescEntry}{Exceptions}
     Privilege violation trap.

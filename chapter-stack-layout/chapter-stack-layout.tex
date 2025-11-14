@@ -5,21 +5,22 @@
 \chapter*{Stack Layout}
 \addcontentsline{toc}{chapter}{Stack Layout}
 
-Note: sketches and notes for now...
+Most modern programming languages rely on a \textbf{stack} to manage function calls, local variables, and return information. This stack is organized into \textbf{stack frames}, each representing the state of an active function invocation. When a function is called, a new frame is pushed onto the stack; when it returns, that frame is popped. This structured approach allows programs to keep track of nested calls efficiently and ensures that each function has its own isolated workspace during execution.
 
 \section*{Stack Frame}
 \addcontentsline{toc}{section}{Stack Frame Marker}
 
+A stack frame consists of four main areas, depicted in the following figure. 
 
 \begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.9, transform shape]
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,12);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,14);
   	
   	% Rectangle dimensions
-	\def\width{8}
-	\def\leftofs{2}
+	\def\width{6}
+	\def\leftofs{6}
 	\def\rightofs{\leftofs + \width}
   	\def\middleofs{ \leftofs + \width / 2 }
   	\def\size{ 12 } 
@@ -29,11 +30,10 @@ Note: sketches and notes for now...
 	\draw[thick] (\rightofs, 0) -- (\rightofs, \size);
 	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
 	\draw[thick] (\leftofs, \size) -- (\rightofs, \size);
+	
+	\draw[thick, dashed] (\leftofs, \size) -- (\leftofs, \size + 2);
+	\draw[thick, dashed] (\rightofs, \size) -- (\rightofs, \size + 2);
 			
-	
-	% Fields 
-	\node at ({\leftofs - 1}, {12 }) { PSP };
-	
 	% Spill Area
 	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
   	\node at ( \middleofs, 11 ) { Spill Area};
@@ -45,12 +45,22 @@ Note: sketches and notes for now...
 	% Parameter Area
 	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
 	\draw[thick, dashed] (\leftofs, 3.5) -- (\rightofs, 3.5);
-  	\node at ( \middleofs, 4 ) { Parameter Area register};
+	\node at ( \middleofs, 2.5 ) { Parameter Area (register)};
+  	\node at ( \middleofs, 4.5 ) { Parameter Area (memory)};
 	  	
   	% Stack Marker
-  	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
-  	\node at ({\leftofs - 1}, {0}) { SP };
-  	\node at ( \middleofs, {1}) { Stack Marker };
+  	\draw[thick] (\leftofs, 1.5) -- (\rightofs, 1.5);
+  	\node at ( \middleofs, 0.75 ) { Frame Marker};
+  	
+  	%Pointers
+  	\draw[->, thick] (\leftofs - 0.5, 0) -- (\leftofs, 0);
+  	\node[anchor=west] at (0, 0) { Stack Pointer (SP) };
+  	\draw[->, thick] (\leftofs - 0.5, \size) -- (\leftofs, \size);
+  	\node[anchor=west] at (0, 12) { Previous Stack Pointer (PSP) };
+  	
+  	% bracket
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,0) -- (\rightofs + 0.5,\size)
+	node[midway, right=1cm, anchor=west]{\Large Stack Frame};
   
 \end{tikzpicture}
 \end{center}
@@ -58,118 +68,80 @@ Note: sketches and notes for now...
 \label{fig:Stack Frame}
 \end{figure}
 
+The \textbf{stack frame marker} holds a pointer to the previous stack frame along with the return link address, allowing the call chain to be restored during function returns.
 
-\begin{figure}[h]
-\begin{center}
-\resizebox{0.7\linewidth}{!}{
-	\begin{tikzpicture}[x=1cm, y=1cm]
-  
-    % Grid and axes
-    \draw[step=1cm, gray!30, thin] (0,0) grid (24,32);
-   
-   	% Rectangle dimensions
-	\def\width{8}
-	\def\leftofs{2}
-	\def\rightofs{\leftofs + \width}
-  	\def\middleofs{ \leftofs + \width / 2 }
-  	\def\size{ 12 } 
+The \textbf{parameter area} is used for passing arguments to the called function and for returning data. Although the first four parameters are passed in registers, space for them must still be reserved in memory. Any parameters beyond the first four are placed directly in this area.
 
-    % Example content
-    \draw[red, thick] (2,2) rectangle (14,30);
-    \node[blue] at (8,16) {\large Center text};
-	\end{tikzpicture}
-}
-\end{center}
-\label{fig:Stack Frame}
-\caption{A 16×32 coordinate system scaled to fit the page.}
-\end{figure}
+The \textbf{local area} stores the function’s local variables. This is the region the function uses for data that must persist throughout its execution.
 
-\begin{figure}[h]
-\begin{center}
-\begin{tikzpicture}[x=0.5cm, y=0.5cm]
-  
-    % Grid and axes
-    \draw[step=1cm, gray!30, thin] (0,0) grid (24,32);
-   
-   	% Rectangle dimensions
-	\def\width{8}
-	\def\leftofs{2}
-	\def\rightofs{\leftofs + \width}
-  	\def\middleofs{ \leftofs + \width / 2 }
-  	\def\size{ 12 } 
+Finally, the \textbf{spill area} is used to save registers whose values must be preserved and restored before returning to the caller.
 
-    % Example content
-    \draw[red, thick] (2,2) rectangle (14,30);
-    \node[blue] at (8,16) {\large Center text};
+\section*{Stack Frame Addressing}
+\addcontentsline{toc}{section}{Stack Frame Addressing}
 
-\end{tikzpicture}
-\end{center}
-\label{fig:Stack Frame}
-\caption{A 16×32 coordinate system scaled to fit the page.}
-\end{figure}
-
+All data items within a stack frame are accessed \textbf{relative to the current stack pointer (SP)}. The architecture uses an \texttt{SP - offset} addressing scheme, where each region of the stack frame---the frame marker, parameter area, local data area, and spill area—is located at a fixed negative offset from the SP at function entry. Because the stack \textbf{grows upward in memory}, increasing addresses correspond to deeper regions of the current frame. This convention allows the compiler and debugger to compute the location of every stack-resident object from the SP alone, without requiring a dedicated frame pointer. As long as the SP remains stable during the execution of the function, all stack frame items can be reliably referenced through their predefined offsets.
+ 
 
 \section*{Stack Frame Marker}
 \addcontentsline{toc}{section}{Stack Frame Marker}
 
-stack frame marker has four double words. ( make it a picture ... )
+A stack frame marker consists of two double words. The frame marker is pointed by the current stack pointer register (SP).
 
 \begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.9, transform shape]
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,8);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,4);
   	
   	% Rectangle dimensions
-	\def\width{8}
-	\def\leftofs{2}
+	\def\width{6}
+	\def\leftofs{6}
 	\def\rightofs{\leftofs + \width}
   	\def\middleofs{ \leftofs + \width / 2 }
+  	\def\size{ 2 } 
   	
-  	% Bits
-  	\node at (\leftofs + 0.25,4 + 0.25) {\small 63};
-	\node at (\rightofs - 0.25,4 + 0.25) {\small 0};
-
 	% Box
-	\draw[thick] (\leftofs, 0) -- (\leftofs, 4);
-	\draw[thick] (\rightofs, 0) -- (\rightofs, 4);
+	\draw[thick] (\leftofs, 0) -- (\leftofs, \size);
+	\draw[thick] (\rightofs, 0) -- (\rightofs, \size);
 	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
-	\draw[thick] (\leftofs, 4) -- (\rightofs, 4);
+	\draw[thick] (\leftofs, \size) -- (\rightofs, \size);
 	
-	\draw[thick] (\leftofs, 4) -- (\leftofs, 6);
-	\draw[thick, dashed] (\leftofs, 6) -- (\leftofs, 8);
+	\draw[thick, dashed] (\leftofs, \size) -- (\leftofs, \size + 2);
+	\draw[thick, dashed] (\rightofs, \size) -- (\rightofs, \size + 2);
 	
-	\draw[thick] (\rightofs, 4) -- (\rightofs, 6);
-	\draw[thick, dashed] (\rightofs, 6) -- (\rightofs, 8);
-	
-	\node at ({\leftofs - 1}, {4}) { SP - 28 };
-
-	% Fields 
-	% reserved
-	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
-  	\node at ({\leftofs - 1}, {3}) { SP - 24 };
-  	\node at ( \middleofs, {3 + 0.5}) { Reserved};	
+	\draw[thick] (\leftofs, \size / 2 ) -- (\rightofs, \size / 2  );
+				  	
+  	% Fields
+  	\node at ( \middleofs, 1.5 ) { Return Link (RL) };
+  	\node at ( \middleofs, 0.5 ) { Previos Frame Pointer (PSP) };
   	
-  	% DP Save
-  	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
-  	\node at ({\leftofs - 1}, {2}) { SP - 16 };
-  	\node at ( \middleofs, {2 + 0.5}) { DP save};
-  	
-  	% RL Save
-  	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);
-  	\node at ({\leftofs - 1}, {1}) { SP - 8 };
-  	\node at ( \middleofs, {1 + 0.5}) { RL save };
-  	
-  	% PSP
-  	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
-  	\node at ({\leftofs - 1}, {0}) { SP };
-  	\node at ( \middleofs, {0 + 0.5}) { PSP };
-  
+  	%Pointers
+  	\draw[->, thick] (\leftofs - 0.5, 0) -- (\leftofs, 0);
+  	\node[anchor=west] at (2, 0) { Stack Pointer (SP) };
+  	  
 \end{tikzpicture}
 \end{center}
-\caption{Stack Frame Marker}
-\label{fig:Stack Frame Marker}
+\caption{Stack Frame}
+\label{fig:Stack Frame}
 \end{figure}
 
+The first word holds the \textbf{address of the previous stack frame}. This field does not necessarily store the literal address, as the frame size can often be inferred from the instructions that created the current frame together with symbolic debugging information in the program image.
 
-A stack frame marker could also be smaller, if we consider to put DP and the reserved word as local variables in the stack frame.
+The second word contains the \textbf{return link}, which is the address immediately following the branch instruction in the calling function. If the called function is a leaf function, there is no need to save the return link in memory.
+
+\section*{Parameter Area}
+\addcontentsline{toc}{section}{Parameter Area}
+
+A stack frame includes a \textbf{parameter area} large enough to hold the largest argument list passed from the calling function to the callee. Although the first four parameters are normally passed in registers, corresponding space is still reserved in the frame to provide a uniform layout and to support cases where the callee needs to spill register arguments to memory. Any additional parameters beyond the first four are passed directly in the memory locations immediately below this register-parameter area. If a function neither receives parameters nor returns data, the parameter area is omitted from its stack frame, avoiding unnecessary stack usage.
+
+\section*{Local Data Area}
+\addcontentsline{toc}{section}{Local Data Area}
+
+Immediately below the parameter area lies the \textbf{local data area}, which holds all automatic (local) variables of the function. These variables exist only for the duration of the function call and are allocated anew for each invocation. The compiler determines the size and placement of each local variable within this area, taking into account alignment requirements and optimization opportunities. If a function declares no local variables, this region has size zero and is omitted from the final stack frame layout.
+
+\section*{Spill Area}
+\addcontentsline{toc}{section}{Spill Area}
+
+The \textbf{spill area} contains any registers that the function must temporarily save in order to preserve the calling convention. Registers that must remain unchanged across function calls are saved (``spilled'') into this area upon entry and restored before returning to the caller. The compiler allocates spill slots only when necessary; if a function does not need to save any registers, the spill area is not present in its stack frame. This selective allocation helps keep stack usage minimal while maintaining correct program behavior.
+
+
