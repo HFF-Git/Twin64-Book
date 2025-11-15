@@ -10,31 +10,74 @@ No CPU architecture with an idea of a runtime environment. Although the instruct
 \section*{System Environment}
 \addcontentsline{toc}{section}{System Environment}
 
-start high level what the system is 
-
-a system runs tasks grouped into jobs
-
-The following figure depicts a high level overview of a software system for Twin-64. At the center is the execution thread, which is called a \textbf{task}. A task will consist of the current execution object and the task data area. Tasks belong to a \textbf{job}. All tasks of a job share a common job data area. At the highest level is the \textbf{system}, which contains the global data area for the system. 
+The following figure depicts a high-level overview of the software environment for the Twin-64 system. At the center of the execution model is the execution thread, referred to as a \textbf{task}. A task consists of the currently running execution object together with its private task-local data area, including its own stack and runtime context. All tasks of a job share a common job data area. At the highest level is the \textbf{system}, which contains the global data area for the system. 
 
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.7, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(16,8);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,6);
   	
+  	\node[  tsRoundedRectangle, 
+            minimum width=16cm,
+            minimum height=6cm,  
+            fill=white!50] at (8,3) { };
+            
+   	\node[  tsRoundedRectangle, 
+            minimum width=6cm,
+            minimum height=4cm,  
+            fill=white!50] at (3.5, 2.5) { };
+            
+   	\node[  tsRoundedRectangle, 
+            minimum width=6cm,
+            minimum height=4cm,  
+            fill=white!50] at (10, 2.5) { };
+            
+  	\filldraw (14,2.5) circle (1mm);
+  	\filldraw (14.5,2.5) circle (1mm);
+  	\filldraw (15,2.5) circle (1mm);
   	
-      
+  	\node[  tsRoundedRectangle, 
+            minimum width=2cm,
+            minimum height=2cm,  
+            fill=white!50] at (2, 2) { Task };
+            
+  	\node[  tsRoundedRectangle, 
+            minimum width=2cm,
+            minimum height=2cm,  
+            fill=white!50] at (4.5, 2) { Task };
+  	
+  	\node[  tsRoundedRectangle, 
+            minimum width=2cm,
+            minimum height=2cm,  
+            fill=white!50] at (9, 2) { Task };
+            
+    \filldraw (11,2) circle (1mm);
+  	\filldraw (11.5,2) circle (1mm);
+  	\filldraw (12,2) circle (1mm);
+  	
+  	\node[	anchor=west] at ( 0.25, 5.5 ) { \LARGE System }; 
+  	\node[	anchor=west] at ( 0.5, 4 ) { \LARGE Job }; 
+  	\node[	anchor=west] at ( 7, 4 ) { \LARGE Job }; 
+        
 \end{tikzpicture}
 \end{center}
-\caption{Runtime Overview}
-\label{fig: Runtime Overview}
+\caption{System Environment}
+\label{fig: System Environment}
 \end{figure}
 
+All tasks belonging to the same job share a common job data area, which is used to store information and resources that must persist for the lifetime of the job and be visible across all of its tasks. A job may represent an interactive session—such as a terminal session—or it may be a non-interactive batch operation.
+
+The system level contains the global data area, system libraries, and all services provided by what is traditionally called the operating system. The system is responsible for creating jobs, managing their lifetime, and scheduling the tasks within them.
+
+The number of active tasks at any moment typically corresponds to the number of available processors in the system, allowing the system to take full advantage of available parallelism. While each task maintains its own private data and execution state, tasks within a single job share access to the job data area. All tasks, regardless of job, also have access to system-level services and global resources.
 
 \section*{Runtime Environment}
 \addcontentsline{toc}{section}{Runtime Environment}
 
-basic concepts 
+This section describes the runtime environment.
+
+
 
 a runtime at any time is a code and a data region.
 
@@ -43,6 +86,10 @@ a program or library, once prepared, is a read only / execute object.
 the loader will update the LTAB for a program or library loaded. 
 
 once loaded, it will not be released during the life time of the system ? To be investigated. Although we have a million regions, can we unload ? And if so, how do we make sure that the client LTAB data is updated properly ?
+
+
+
+
 
 \section*{Register Usage}
 \addcontentsline{toc}{section}{Register Usage}

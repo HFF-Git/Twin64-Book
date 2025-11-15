@@ -71,7 +71,7 @@ Twin-64 features a set of 16 general purposes registers. They are used for all c
 
 \begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.8, transform shape]
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
         
   	% \draw[help lines, gray!70, dashed] (0,0) grid(12,9);
 
@@ -122,14 +122,15 @@ Twin-64 features a set of 16 general purposes registers. They are used for all c
 
 Some general registers have dedicated purposes. Register zero always returns a zero value when read, and writing to it has no effect. Although the CPU has only 16 general registers, implementing such a register greatly simplifies instruction design, for example by providing a target when the result is not needed. General register one is a scratch register and also serves as an implicit target for certain instructions. Other general registers may have dedicated roles as defined by the runtime architecture conventions.
 
+%--------------------------------------------------------------------------------
 \section*{Control Registers}
 \addcontentsline{toc}{section}{Control Registers}
 
-Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}. Two instructions allow moving data between a control register and a general register in either direction. A move to a control register always transfers the full 64-bit word. A move from a control register to a general register transfers the value right-aligned to the size of the control register. The following table shows the control registers defined for Twin-64.
+Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}. Two instructions allow moving data between a control register and a general register in either direction. A move to a control register always transfers the full 64-bit word. A move from a control register to a general register transfers the value right-aligned to the size of the control register. The following figure depicts the control registers defined for Twin-64.
 
 \begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.9, transform shape]
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
         
   	% \draw[help lines, gray!70, dashed] (0,0) grid(12,17);
   	
@@ -141,8 +142,8 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	
   	% Bits
   	\node at (\leftofs + 0.25,16 + 0.25) {\small 63};
-  	\node at (\leftofs + 5.75,16 + 0.25) {\small 32};
-	\node at (\rightofs - 5.75,16 + 0.25) {\small 31};
+  	\node at (\middleofs +0.25,16 + 0.25) {\small 32};
+	\node at (\middleofs - 0.25,16 + 0.25) {\small 31};
 	\node at (\rightofs - 0.25,16 + 0.25) {\small 0};
 
 	% Box
@@ -164,8 +165,10 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	
   	% CR2
   	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
+  	\draw[thick] (\rightofs - 1.5, 14) -- (\rightofs - 1.5, 13);
   	\node at ({\leftofs - 0.75}, {13 + 0.5}) { CR2 };
-  	\node at ( \middleofs, {13 + 0.5}) { Reserved };
+  	\node at ( \leftofs + 3.5, {13 + 0.5}) { Reserved };
+  	\node at ( \rightofs - 0.75, {13 + 0.5}) { SAR };
   	
   	% CR3
   	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
@@ -267,38 +270,11 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
 
 The processor configuration register contains information about the current system and processor hardware setup. Some of its fields are read-only and set directly by the hardware, while others can be modified by processor-dependent code routines.
 
-\begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.7, transform shape]
-        
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,2);
-  	
-    \node[  tsRectangle, 
-            minimum width=16cm,
-            minimum height=1cm,  
-            fill=white!50] (blocks) at (8,1) { };
-            
-    % Bits
-  	\node at (0.25,1.75) {\small 63};
-  	\node at (8 - 0.25,1.75) {\small 32};
-  	\node at (8 + 0.25,1.75) {\small 31};
-	\node at (14 + 0.25,1.75) {\small 3};
-	\node at (16 - 0.25,1.75) {\small 0};
-                
-  	\draw[-] (14,0.5) -- (14,1.5);
-  	\draw[-] (8,0.5) -- (8,1.5);
-  		
-	\node at (15,1) {\small{ MemSize}};
-	\node at (4,1) {\small{ Cycles per millisecond }};
-	
-	\node at (15,0.25) {\small{4}};
-	\node at (4,0.25) {\small{32}};
-   	 	
-\end{tikzpicture}
+\drawInstrFormatSixtyFour
+  	{0, 8, 12, 13, 14, 15, 16}
+  	{Cycles per millisecond, Flags,  PNum, PId, AId, MSize }
 \end{center}
-\caption{Processor Configuration Register}
-\label{fig:Processor Configuration Register}
-\end{figure}
 
 
 \begin{longtable}{@{}p{0.4\linewidth}p{0.5\linewidth}@{}}
@@ -317,19 +293,17 @@ The processor configuration register contains information about the current syst
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{Memory Size} & The available physical memory in 4 Gbyte increments. The minimum size is 4 Gbyte, encoded as a zero. The maximum size is 64 Gbyte encoded as a 15. \\
+    \textbf{Memory Size (MSize)} & The available physical memory in 4 Gbyte increments. The minimum size is 4 Gbyte, encoded as a zero. The maximum size is 64 Gbyte encoded as a 15. \\
     \midrule
-    \textbf{Flags} & e.g default endian, etc. \\
+    \textbf{Architecture Id (AId) } & ... \\
     \midrule
-    \textbf{Architecture Id} & ... \\
+    \textbf{Processor Id Id (PId) } & ... \\
     \midrule
-    \textbf{Processor Id Id} & ... \\
+    \textbf{Processor Core Num} & in a multiprocessor configuration, the unique processor number is assigned during system startup. \\
     \midrule
-    \textbf{Processor Core Num} & ... \\
+    \textbf{Flags (tbd) } & e.g default endian, etc. \\
     \midrule
-    \textbf{...} & ... \\
-    \midrule
-    \textbf{Cycles per millisecond} & ... \\
+    \textbf{Cycles per millisecond} & the cycle per millisecond specifies the number of processor cycles for a millisecond. \\
     \midrule
 \end{longtable}
 
@@ -338,6 +312,11 @@ The processor configuration register contains information about the current syst
 \addcontentsline{toc}{subsection}{Processor Configuration Register}
 
 When enabled, the recovery counter decrements on each instruction cycle. When the leftmost bit becomes a one, a recovery trap is scheduled. The R bit in the processor status word is set, the recovery trap is enabled.
+
+\subsection*{Shift Amount Register}
+\addcontentsline{toc}{subsection}{Shift Amount Register}
+
+The shift amount register ( \texttt{ SAR} ) is used by the extract, deposit and double shift instruction when a dynamic position is specified in the instruction. The valid number range is zero to 63.
 
 \subsection*{Protection Id Registers}
 \addcontentsline{toc}{subsection}{Protection Id Registers}
@@ -700,7 +679,7 @@ Virtual address translations are stored in a translation lookaside buffer (TLB).
 \label{fig: Tlb info}
 \end{figure}
 
-To reduce TLB processing overhead, the TLB is capable of storing virtual address ranges. There is support for a large page size of 16Kb, 256 Kb, 4Mb and 64 Mb.
+To reduce TLB processing overhead, the TLB is capable of storing virtual address ranges. There is support for a larger page sizes. The supported sizes are 4 Kbyte, 64 Kbyte, 1 MByte and 16Mbyte. 
 
 \begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
     \caption{TLB Fields} \\
@@ -724,7 +703,7 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{Access Rights} & Encodes the access type (read, write, and execute) and the required privilege level for the operation. \\
     \midrule
-    \textbf{Page Size} & 4-bit field encoding the supported page size: \[ \texttt{( 1U << ( pSize * 2 )) * T64\_PAGE\_SIZE} \]. The pSize number 11 to 15 are undefined. A page size is not allowed to cross region boundaries. The virtual address must be aligned with selected teh page size.\\
+    \textbf{Page Size} & 4-bit field encoding the supported page size: \[ \texttt{( 1U << ( pSize * 4 )) * T64\_PAGE\_SIZE} \]. The pSize number 4 to 15 are reserved and result in an undefined operation. A page size is not allowed to cross region boundaries. The virtual address must be aligned with selected the page size.\\
     \midrule
     \textbf{V} & Indicates if the entry is valid. \\
     \midrule
@@ -764,7 +743,7 @@ The instruction set is organized into five groups:
  
   \item \textbf{Immediate instructions:} Instructions for constructing immediate values up to 64 bits. Several instructions embed immediate fields within the instruction word, but a full 64-bit constant requires a sequence of two or three instructions. Immediate instructions also support 32-bit address arithmetic, where calculations wrap around within the 32-bit offset field and never overflow into the segment identifier portion.
  
-  \item \textbf{Memory reference instructions:} Load and store operations for both virtual and physical memory. These transfer data between memory and general registers in sizes of doubleword, word, halfword, or byte. The design resembles a load/store architecture, but unlike strict load/store machines, many Twin-64 instructions allow memory operands directly. No instruction, however, both reads and writes data memory in the same operation.
+  \item \textbf{Memory reference instructions:} Load and store operations for both virtual and physical memory. These transfer data between memory and general registers in sizes of double--word, word, halfword, or byte. The design resembles a load/store architecture, but unlike strict load/store machines, many Twin-64 instructions allow memory operands directly. No instruction, however, both reads and writes data memory in the same operation.
   
   \item \textbf{Control flow instructions:} Both unconditional and conditional branches are supported. Unconditional branches may optionally save the return address in a general-purpose register. Conditional branches compare two operands and transfer control if the condition is satisfied, eliminating the need for a separate compare instruction.
     
