@@ -5,24 +5,171 @@
 \chapter*{Calling Convention}
 \addcontentsline{toc}{chapter}{Calling Convention}
 
-Note: sketches and notes for now...
 
+The previous chapters introduced the register usage conventions and the overall stack layout defined by the runtime architecture. Building on that foundation, this chapter describes the mechanisms used to invoke routines—both simple procedures and more substantial functions—and the conventions that govern control transfer, parameter passing, register preservation, and stack-frame management.
+
+The discussion begins with the simplest form of call, the local call, which transfers control between routines within the same module. Local calls illustrate the fundamental steps of the calling convention without the additional considerations required for inter-module calls.
+
+A routine call proceeds through several well-defined stages. First, the caller evaluates all argument expressions and places the resulting values into the parameter area, either in registers or on the stack as required. After preparing the parameters, the caller saves any registers whose values must remain intact across the call. These caller-save registers must be preserved by the caller before branching to another routine.
+
+The called routine—the callee—accesses the incoming parameters in the established layout of the parameter area and begins execution at its entry point. Upon entry, the callee allocates a stack frame, records the return link, and saves any callee-save registers it intends to overwrite. This setup ensures that both caller and callee operate independently while maintaining a consistent runtime state.
+
+Once the callee completes its computation, it prepares to return. All callee-save registers are restored, the return address is retrieved from the frame marker, and control is transferred back to the caller. This division of responsibility allows efficient cooperation between routines and avoids unnecessary state preservation.
+
+As described earlier, the general-purpose register set is partitioned into caller-save and callee-save regions. A compiler selects registers from these regions as needed, balancing the work of saving and restoring state between the caller and the callee. When possible, redundant saves and restores are eliminated. The runtime architecture distinguishes between two basic categories of calls: local calls, which remain within a single module, and external calls, which cross module boundaries and require additional handling. The following sections describe the two types in detail.
 
 \section*{Local Call}
 \addcontentsline{toc}{section}{Local Call}
 
-By far the most used call...
+A local call is by far the most common type of procedure call. The following code snippets illustrate such a call. The calling procedure prepares the call by loading the arguments, saving any registers that the callee might modify, and then branching to the callee. After the callee returns, the caller restores its saved registers and continues execution.
+
+\begin{figure}[H]
+\centering
+\lstset{style=codesnippetstyle}
+\begin{lstlisting}
+			
+; calling procedure
+			...					; load arguments
+			...					; save caller saves
+			BL target, RL 		; branch to "target"
+			...					; restore caller saves
+			
+\end{lstlisting}
+\end{figure}
+
+The called procedure begins by saving the return link, allocating its stack frame, and saving any registers that the caller expects to remain unchanged across the call. At the end of the routine, it restores the return address, restores any callee-saved registers, deallocates the stack frame, and finally branches back to the caller using the restored return address.
+
+\begin{figure}[H]
+\centering
 
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
-			BL target, R2
+			
+; called procedure
             
+target:     ...					; save RP
+			... 				; allocate stack frame
+			...					; save callee save
+			
+			...					; do the work
+			
+			...					; restore RP
+			...					; restore callee saves
+			...					: deallocate stack frame
+			BV (RL) 			; return to caller
             
-target:     ...
-			BV (R2) 
-            
-	
 \end{lstlisting}
+\end{figure}
+
+The code above shows the full sequence of steps that may be required for a local procedure call. Depending on the specific call and the nature of the callee, some steps may be omitted. For example, if the caller does not use any caller-saved registers, there is no need to save them before the call. Likewise, a procedure with no arguments does not need to evaluate arguments.
+
+The callee can also omit unnecessary steps. A leaf procedure—that is, a procedure that does not call any other procedure—does not need to save the return address. If it does not use any callee-saved registers, those need not be saved or restored. Finally, if a leaf procedure uses no caller-saved registers, has no local variables, and does not need to save any temporary registers, it may not require a stack frame at all.
+
+
+\section*{Parameter passing}
+\addcontentsline{toc}{section}{Parameter passing}
+
+Procedures optionally pass arguments to a called procedure and obtain return values. The parameter area is located in the calling procedure's stack frame below the stack frame marker.
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(16,8);
+  	
+  	% Rectangle dimensions
+  	\def\size{ 10 } 
+	\def\width{6}
+	\def\leftofs{6}
+	\def\rightofs{\leftofs + \width}
+	\def\middleofs{\leftofs + \width / 2 }
+  	  	
+	% Box
+	\draw[thick] (\leftofs, 0) -- (\leftofs, \size);
+	\draw[thick] (\rightofs, 0) -- (\rightofs, \size);
+	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
+	
+	\draw[thick, dashed] (\leftofs, \size) -- (\leftofs, \size + 2);
+	\draw[thick, dashed] (\rightofs, \size) -- (\rightofs, \size + 2);
+	
+	\draw[thick, dashed] (\leftofs, 9 ) -- (\rightofs, 9  );
+	\draw[thick] (\leftofs, 7 ) -- (\rightofs, 7  );
+	\draw[thick] (\leftofs, 6 ) -- (\rightofs, 6  );
+	\draw[thick] (\leftofs, 5 ) -- (\rightofs, 5  );
+	\draw[thick] (\leftofs, 4 ) -- (\rightofs, 4  );
+	\draw[thick] (\leftofs, 3 ) -- (\rightofs, 3  );
+	\draw[thick] (\leftofs, 2 ) -- (\rightofs, 2  );
+	\draw[thick] (\leftofs, 1 ) -- (\rightofs, 1  );
+				  	
+  	% Fields
+  	\node at ( \middleofs, 6.5 ) { Arg4 };
+  	\node at ( \middleofs, 5.5 ) { Arg3 };
+  	\node at ( \middleofs, 4.5 ) { Arg2 };
+  	\node at ( \middleofs, 3.5 ) { Arg1 / Ret1 };
+  	\node at ( \middleofs, 2.5 ) { Arg0 / Ret0 };
+  	\node at ( \middleofs, 1.5 ) { Return Address };
+  	\node at ( \middleofs, 0.5 ) { Previous Frame Pointer (PSP) };
+  	
+  	%Pointers
+  	\draw[->, thick] (\leftofs - 0.5, 9) -- (\leftofs, 9);
+  	\node[anchor=east] at (\leftofs - 1, 9) { \texttt{SP - nn} };
+  	
+  	\draw[->, thick] (\leftofs - 0.5, 7) -- (\leftofs, 7);
+  	\node[anchor=east] at (\leftofs - 1, 7) { \texttt{SP - 56} };
+  	
+  	\draw[->, thick] (\leftofs - 0.5, 6) -- (\leftofs, 6);
+  	\node[anchor=east] at (\leftofs - 1, 6) { \texttt{SP - 48} };
+  	
+  	\draw[->, thick] (\leftofs - 0.5, 5) -- (\leftofs, 5);
+  	\node[anchor=east] at (\leftofs - 1, 5) { \texttt{SP - 40} };
+  	
+  	\draw[->, thick] (\leftofs - 0.5, 4) -- (\leftofs, 4);
+  	\node[anchor=east] at (\leftofs - 1, 4) { \texttt{SP - 32} };
+  	
+  	\draw[->, thick] (\leftofs - 0.5, 3) -- (\leftofs, 3);
+  	\node[anchor=east] at (\leftofs - 1, 3) { \texttt{SP - 24} };
+  	
+  	\draw[->, thick] (\leftofs - 0.5, 2) -- (\leftofs, 2);
+  	\node[anchor=east] at (\leftofs - 1, 2) { \texttt{SP - 16} };
+  	
+  	\draw[->, thick] (\leftofs - 0.5, 1) -- (\leftofs, 1);
+  	\node[anchor=east] at (\leftofs - 1, 1) { \texttt{SP - 8} };
+  	
+  	\draw[->, thick] (\leftofs - 0.5, 0) -- (\leftofs, 0);
+  	\node[anchor=east] at (\leftofs - 1, 0) { Stack Pointer (SP) };
+  	
+  	% Brackets
+  	\draw[thick]  [decorate, decoration={brace, amplitude=0.25cm, mirror}] 
+  	    (\rightofs + 0.5,6) -- (\rightofs + 0.5,9)
+	    node[midway, right=1cm, anchor=west]{\Large Arguments on Stack};
+	
+  	\draw[thick]  [decorate, decoration={brace, amplitude=0.25cm, mirror}] 
+  	    (\rightofs + 0.5,2) -- (\rightofs + 0.5,6)
+	    node[midway, right=1cm, anchor=west]{\Large Register Arguments};
+	
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.25cm, mirror}] 
+	    (\rightofs + 0.5,0) -- (\rightofs + 0.5,2)
+	    node[midway, right=1cm, anchor=west]{\Large Frame Header};
+  	  
+\end{tikzpicture}
+\end{center}
+\caption{Argument Passing}
+\label{fig:argument_passing}
+\end{figure}
+
+The first four arguments are passed via the registers ARG0 to ARG3. Nevertheless, the stack frame parameter area allocates stack space for them. Any further parameter is stored in the stack frame parameter area. Upon return, the called procedure may pass up to two return values in registers, \texttt{Ret0} and \texttt{Ret1}. Arguments and return values are addressed relative to the stack frame pointer of the calling procedure. 
+
+
+
+
+\section*{External Calls}
+\addcontentsline{toc}{section}{External Calls}
+
+
+
+
+
+
 
 \section*{Linkage Table}
 \addcontentsline{toc}{section}{Linkage Table}
@@ -32,6 +179,8 @@ each module as a set of entries in the linkage table for the external references
 The assembler / compiler generates the linkage table skeleton.
 
 an external procedure has an entry, also a procedure label
+
+??? replace by instruction64 style...
 
 \begin{figure}[H]
 \begin{center}
