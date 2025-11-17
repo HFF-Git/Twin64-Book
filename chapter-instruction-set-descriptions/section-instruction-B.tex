@@ -37,7 +37,7 @@ The optional \texttt{.G} form enables the \emph{gateway branch} option. In this 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( RegR != 0 ) {
+if ( instr.[9:6] != 0 ) {
 	
 	RegR.[51:32] <- PSW.[IA-REG];
 	RegR.[31:0]  <- addOfs32( PSW.[IA-OFS], 4 );

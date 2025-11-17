@@ -29,9 +29,11 @@
    If the M bit is set, the base register RegB is updated with the computed effective address.
 \end{iPageDescEntry}
 
-\begin{iPageDescEntry}{Operation}
-	\texttt{RegR <- tanslateAdr( addOfs32( RegB + RegX ));} 
-\end{iPageDescEntry}
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- tanslateAdr( addOfs32( RegB + RegX ));
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
 \begin{iPageDescEntry}{Exceptions}
 	- Alignment Trap \\

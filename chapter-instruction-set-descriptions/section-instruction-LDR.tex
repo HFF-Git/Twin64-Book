@@ -27,10 +27,12 @@ The \texttt{LDR} instruction loads a value from memory into a general-purpose re
     
 \end{iPageDescEntry}
 
-\begin{iPageDescEntry}{Operation}
-    \texttt{RegR <- memLoad( memOperand( instr ));} \\
-    \texttt{markAddressReserved(memOperand( instr ));}
-\end{iPageDescEntry}
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- memLoad( memOperand( instr ));
+markAddressReserved(memOperand( instr ));
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
 \begin{iPageDescEntry}{Exceptions}
     - Memory Access Violation Trap \\

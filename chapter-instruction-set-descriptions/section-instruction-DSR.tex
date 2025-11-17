@@ -33,10 +33,10 @@ The shift amount is specified by the \texttt{amt} instruction field, or by the S
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[A] ) tmp <- SAR;
-else             tmp <- instr.[amt];
+if ( instr.[A] ) shAmt <- SAR;
+else             shAmt <- instr.[amt];
 
-RegR <- doubleShiftR( RegB, RegA, tmp );
+RegR <- doubleShiftR( RegB, RegA, shAmt );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

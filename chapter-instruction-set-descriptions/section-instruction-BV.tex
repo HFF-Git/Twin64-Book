@@ -29,8 +29,13 @@ Because \texttt{BV} is a segment base relative branch, branching to a page with 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- addOfs32( PSW.[IA], 4 );
-PSW.[IA] <- addOfs32( RegB, RegX << 2 );
+if ( instr.[9:6] != 0 ) {
+	
+	RegR.[51:32] <- PSW.[IA-REG];
+	RegR.[31:0]  <- addOfs32( PSW.[IA-OFS], 4 );
+}
+
+PSW.[IA-OFS] <- addOfs32( RegB, RegX << 2 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

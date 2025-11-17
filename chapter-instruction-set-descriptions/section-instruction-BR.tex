@@ -27,8 +27,13 @@ The \texttt{BR} instruction performs an unconditional branch to a target address
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- addOfs32( PSW.[IA], 4 );
-PSW.[IA] <- addOfs32( PSW.[IA], RegB << 2 );
+if ( instr.[9:6] != 0 ) {
+	
+	RegR.[51:32] <- PSW.[IA-REG];
+	RegR.[31:0]  <- addOfs32( PSW.[IA-OFS], 4 );
+}
+
+PSW.[IA-OFS] <- addOfs32( PSW.[IA-OFS], RegB.[31:0] << 2 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

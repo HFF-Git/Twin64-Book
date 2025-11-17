@@ -91,19 +91,29 @@ The processor is a general-purpose CPU. The runtime model presented here represe
 	\node[ tsRoundedRectangle, minimum width=16cm, minimum height=16cm, fill=white!50] at (8,8) { }; 
 	\node[ anchor=west] at ( 0.25, 15.5 ) { \Large Task }; 
 	\node[ tsRectangle, minimum width=4cm, minimum height=4cm, fill=white!50, anchor=west] at ( \dataLeft, 12) { };
-	\node[ anchor=west] at ( \dataLeft + 0.25, 13 ) { \Large Global Data }; 
+	\node[ anchor=west] at ( \dataLeft + 0.25, 13.5 ) { \Large Global Data }; 
 	\draw[<-, thick] (\dataLeft + 4, 14) -- (\dataLeft + 5, 14); 
 	\node[anchor=west] at (\dataLeft + 5.25, 14) { \Large DP }; 
+	
+	\node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 12) { }; 
+	\node[anchor=west] at (\dataLeft + 0.25, 12.25) { \small Module A };
+	
 	\node[ tsRectangle, minimum width=4cm, minimum height=8cm, fill=white!50, anchor=west] at ( \dataLeft, 5) { }; 
-	\node[ anchor=west] at ( \dataLeft + 0.25, 8 ) { \Large Stack Data }; \node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=white!50, anchor=west] at ( \dataLeft, 5) { }; 
+	\node[ anchor=west] at ( \dataLeft + 0.25, 8.5 ) { \Large Stack Data }; \node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=white!50, anchor=west] at ( \dataLeft, 5) { }; 
 	\node[ anchor=west] at ( \dataLeft + 0.25, 5.125 ) { \Large Stack Frame }; 
-	\draw[<-, thick] (\dataLeft + 4, 5.5) -- (\dataLeft + 5, 5.5); 
-	\node[anchor=west] at (\dataLeft + 5.25, 5.5) { \Large SP }; 
+	\draw[<-, thick] (\dataLeft + 4, 4.5) -- (\dataLeft + 5, 4.5); 
+	\node[anchor=west] at (\dataLeft + 5.25, 4.5) { \Large SP }; 
+	
 	\node[ tsRectangle, minimum width=4cm, minimum height=8cm, fill=white!50, anchor=west] at ( \codeLeft, 10) { }; 
-	\node[ anchor=west] at ( \codeLeft + 0.25, 13 ) { \Large Code }; 
+	\node[ anchor=west] at ( \codeLeft + 0.25, 13.5 ) { \Large Code }; 
+	\	
+	\node[ tsRectangle, minimum width=4cm, minimum height=2cm, fill=gray!40, anchor=west] at ( \codeLeft, 10) { }; 
+	\node[anchor=west] at (\codeLeft + 0.25, 10.75) { \small Module A };
+	
 	\node[ tsRectangle, minimum width=4cm, minimum height=0.125cm, fill=white!50, anchor=west] at ( \codeLeft, 10) { }; 
 	\draw[<-, thick] ( \codeLeft + 4, 10.125 ) -- ( \codeLeft + 5, 10.125 ); 
 	\node[anchor=west] at ( \codeLeft + 5.25, 10.125 ) { \Large IA }; 
+
 	
 \end{tikzpicture} \end{center} 
 \caption{Runtime Environment} 
@@ -112,7 +122,7 @@ The processor is a general-purpose CPU. The runtime model presented here represe
 
 The code region contains program text that, once loaded, is immutable. Code is organized into modules, and a single task may reference several modules in its code region. The currently executing instruction is identified by the instruction address (IA).
 
-Each code module provides a module-level global data section. The task-level global data—formed by aggregating the global sections of all modules referenced by the task—is addressed via the data pointer (DP). The data region also contains the stack area, which holds stack frames created by function calls. The active frame is located via the stack pointer (SP), and items within the stack are addressed relative to SP.
+Each code module provides a module-level global data section. The task-level global data—formed by aggregating the global sections of all modules referenced by the task is addressed via the data pointer (DP) plus an offset. The data region of a task also contains the stack area, which holds stack frames created by function calls. The active frame is located via the stack pointer (SP), and items within the stack are addressed relative to SP.
 
 In this design the stack grows upward: new frames occupy increasing addresses, and older frame contents are typically referenced using expressions of the form \texttt{SP - <ofs>}. Each stack frame includes a frame marker that stores the previous SP and the return link (RL), enabling structured returns and proper unwinding of frames.
 
