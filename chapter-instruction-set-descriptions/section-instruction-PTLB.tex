@@ -31,7 +31,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{PITLB} and \texttt{PDTLB} instructions purge (removes) an entry from the translation lookaside buffer (TLB). The entry to remove is identified by the effective address formed from \texttt{RegB} and \texttt{RegX}. This is privileged instruction.
+    The \texttt{PITLB} and \texttt{PDTLB} instructions purge (removes) an entry from the translation lookaside buffer (TLB). The entry to remove is identified by the effective address formed from \texttt{RegB} and \texttt{RegX}. If the M bit is set, the base register RegB is updated with the computed effective address.This is privileged instruction.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}

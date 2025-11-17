@@ -31,7 +31,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{FCA} instruction flushes a cache line, selected by the effective address in \texttt{RegB}. This is a privileged instruction.
+    The \texttt{FCA} instruction flushes a cache line, selected by the effective address in \texttt{RegB}. If the M bit is set, the base register RegB is updated with the computed effective address. This is a privileged instruction.
 \end{iPageDescEntry}
 
 \begin{iPageDescOpEntry}{Operation}

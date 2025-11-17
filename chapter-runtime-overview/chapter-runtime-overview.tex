@@ -7,6 +7,7 @@
 
 No CPU architecture with an idea of a runtime environment. Although the instruction set can be used to implement many models of runtime environments, there are common principles that exploit the CPU architecture. In fact, several CPU concepts were selected with a runtime already in mind. This chapter will present the Twin-64 runtime environment and describe the high level system model, the register usage convention, the execution model and calling convention.
 
+%--------------------------------------------------------------------------------
 \section*{System Environment}
 \addcontentsline{toc}{section}{System Environment}
 
@@ -72,72 +73,124 @@ The system level contains the global data area, system libraries, and all servic
 
 The number of active tasks at any moment typically corresponds to the number of available processors in the system, allowing the system to take full advantage of available parallelism. While each task maintains its own private data and execution state, tasks within a single job share access to the job data area. All tasks, regardless of job, also have access to system-level services and global resources.
 
+%--------------------------------------------------------------------------------
 \section*{Runtime Environment}
 \addcontentsline{toc}{section}{Runtime Environment}
 
-This section describes the runtime environment.
+The processor is a general-purpose CPU. The runtime model presented here represents one possible implementation strategy, chosen to support the calling conventions and execution model that will be described in later sections. The following figure depicts a high-level overview of the runtime environment.
 
+\begin{figure}[H] 
+\begin{center} 
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape] 
 
+	\draw[help lines, gray!70, dashed] (0,0) grid(16,16);
+	\def\dataLeft {1}; 
+	\def\codeLeft {9}; 
+	\def\width {4}; 
+	
+	\node[ tsRoundedRectangle, minimum width=16cm, minimum height=16cm, fill=white!50] at (8,8) { }; 
+	\node[ anchor=west] at ( 0.25, 15.5 ) { \Large Task }; 
+	\node[ tsRectangle, minimum width=4cm, minimum height=4cm, fill=white!50, anchor=west] at ( \dataLeft, 12) { };
+	\node[ anchor=west] at ( \dataLeft + 0.25, 13 ) { \Large Global Data }; 
+	\draw[<-, thick] (\dataLeft + 4, 14) -- (\dataLeft + 5, 14); 
+	\node[anchor=west] at (\dataLeft + 5.25, 14) { \Large DP }; 
+	\node[ tsRectangle, minimum width=4cm, minimum height=8cm, fill=white!50, anchor=west] at ( \dataLeft, 5) { }; 
+	\node[ anchor=west] at ( \dataLeft + 0.25, 8 ) { \Large Stack Data }; \node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=white!50, anchor=west] at ( \dataLeft, 5) { }; 
+	\node[ anchor=west] at ( \dataLeft + 0.25, 5.125 ) { \Large Stack Frame }; 
+	\draw[<-, thick] (\dataLeft + 4, 5.5) -- (\dataLeft + 5, 5.5); 
+	\node[anchor=west] at (\dataLeft + 5.25, 5.5) { \Large SP }; 
+	\node[ tsRectangle, minimum width=4cm, minimum height=8cm, fill=white!50, anchor=west] at ( \codeLeft, 10) { }; 
+	\node[ anchor=west] at ( \codeLeft + 0.25, 13 ) { \Large Code }; 
+	\node[ tsRectangle, minimum width=4cm, minimum height=0.125cm, fill=white!50, anchor=west] at ( \codeLeft, 10) { }; 
+	\draw[<-, thick] ( \codeLeft + 4, 10.125 ) -- ( \codeLeft + 5, 10.125 ); 
+	\node[anchor=west] at ( \codeLeft + 5.25, 10.125 ) { \Large IA }; 
+	
+\end{tikzpicture} \end{center} 
+\caption{Runtime Environment} 
+\label{fig: Runtime Environment} 
+\end{figure}
 
-a runtime at any time is a code and a data region.
+The code region contains program text that, once loaded, is immutable. Code is organized into modules, and a single task may reference several modules in its code region. The currently executing instruction is identified by the instruction address (IA).
 
-a program or library, once prepared, is a read only / execute object.
+Each code module provides a module-level global data section. The task-level global data—formed by aggregating the global sections of all modules referenced by the task—is addressed via the data pointer (DP). The data region also contains the stack area, which holds stack frames created by function calls. The active frame is located via the stack pointer (SP), and items within the stack are addressed relative to SP.
 
-the loader will update the LTAB for a program or library loaded. 
+In this design the stack grows upward: new frames occupy increasing addresses, and older frame contents are typically referenced using expressions of the form \texttt{SP - <ofs>}. Each stack frame includes a frame marker that stores the previous SP and the return link (RL), enabling structured returns and proper unwinding of frames.
 
-once loaded, it will not be released during the life time of the system ? To be investigated. Although we have a million regions, can we unload ? And if so, how do we make sure that the client LTAB data is updated properly ?
+\textbf{Note.}  
 
-
-
-
-
+%--------------------------------------------------------------------------------
 \section*{Register Usage}
 \addcontentsline{toc}{section}{Register Usage}
 
-The CPU features general registers and control registers. As described before, all general registers can do computation as well as address computation.
+The CPU features general registers and control registers. All general registers can do computation as well as address computation. The runtime architecture builds on the general register file and assigns specific meaning to each register. 
+
+\begin{figure}[H] 
+\begin{center} 
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape] 
+\draw[help lines, gray, dashed] (0,0) grid(16,9); 
+
+	% Base dimensions 
+	\def\leftx{2} 
+	\def\width{8} 
+	\def\rightx{\leftx + \width} 
+	\def\height{1} 
+	
+	% height of each slot % Draw outer box 
+	\draw[thick] (\leftx,0) rectangle ++(\width, {16*\height}); 
+	
+	% Slot lines 
+	\foreach \i in {1,...,15} { \draw[thick] (\leftx,{16*\height - \i*\height}) -- ++(\width,0); } 
+	
+	% Labels on the left side: GR0 .. GR15 
+	\foreach \i in {0,...,15} { \node[anchor=east] at (\leftx - 0.2, {16*\height - \i*\height - 0.45}) {\small GR\i}; } 
+	
+	% Register names
+	\node at (\leftx + \width/2, {16*\height - 0.45}) {Permanent zero}; 
+	\node at (\leftx + \width/2, {16*\height - 1.45}) {General use / Target for ADDIL }; 
+	\node at (\leftx + \width/2, {16*\height - 2.45}) {General use / DP }; 
+	\node at (\leftx + \width/2, {16*\height - 3.45}) {General use }; 
+	\node at (\leftx + \width/2, {16*\height - 4.45}) {General use }; 
+	\node at (\leftx + \width/2, {16*\height - 5.45}) {General use }; 
+	\node at (\leftx + \width/2, {16*\height - 6.45}) {General use }; 
+	\node at (\leftx + \width/2, {16*\height - 7.45}) {General use }; 
+	\node at (\leftx + \width/2, {16*\height - 8.45}) {General use }; 
+	\node at (\leftx + \width/2, {16*\height - 9.45}) {General use }; 
+	\node at (\leftx + \width/2, {16*\height - 10.45}) {General use / Arg3 }; 
+	\node at (\leftx + \width/2, {16*\height - 11.45}) {General use / Arg2 }; 
+	\node at (\leftx + \width/2, {16*\height - 12.45}) {General use / Arg1 / Ret1}; 
+	\node at (\leftx + \width/2, {16*\height - 13.45}) {General use / Arg0 / Ret0 }; 
+	\node at (\leftx + \width/2, {16*\height - 14.45}) {General use / RL }; 
+	\node at (\leftx + \width/2, {16*\height - 15.45}) {General use / SP }; 
+	
+	% bracket 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,14) -- (\rightx + 0.5,16) node[midway, right=1cm, anchor=west]{\Large Hardware Architected }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,13) -- (\rightx + 0.5,14) node[midway, right=1cm, anchor=west]{\Large Runtime Architecture }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,8) -- (\rightx + 0.5,13) node[midway, right=1cm, anchor=west]{\Large Callee Save }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,6) -- (\rightx + 0.5,8) node[midway, right=1cm, anchor=west]{\Large Caller Save }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,2) -- (\rightx + 0.5,6) node[midway, right=1cm, anchor=west]{\Large Parameter Area }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,0) -- (\rightx + 0.5,2) node[midway, right=1cm, anchor=west]{\Large Runtime Architecture }; 
+	
+\end{tikzpicture} 
+\end{center} 
+\caption{General Registers} 
+\label{fig:general-registers} 
+\end{figure} 
 
 
-global data - pointed to by DP ( runtime architected to be a specific register ? )
+Registers \texttt{R0} and \texttt{R1} are hardware-architected and have fixed, predefined roles within the processor. The remaining registers, \texttt{R2} through \texttt{R15}, form the general-purpose register file, whose usage is defined by the runtime environment. Within this convention, register \texttt{R2} is assigned as the data pointer (DP).
+It serves as the base reference for accessing the task’s global data region.
 
-stack data - pointed to by SP  ( runtime architected to be a specific register ? )
+Registers \texttt{R3} through \texttt{R7} form the callee-save register set.
+A callee-save register is one whose value must be preserved by the called function: if the function uses such a register, it must save its original contents upon entry and restore them before returning.
+This ensures that long-lived values in the caller remain intact across function calls.
 
-caller saved - 
+Registers \texttt{R8} and \texttt{R9} are designated as caller-save registers.
+A caller-save register may be overwritten by the called function; therefore, the caller is responsible for saving the register’s value before making a call if it must be preserved.
 
-callee saved - 
+Argument passing is handled through registers \texttt{R10} to \texttt{R13}, known as the parameter registers. When a function is invoked, its first four arguments are placed into these registers. Registers \texttt{R12} and \texttt{R13} also serve as the return-value registers, allowing a function to return up to two values without using memory.
 
-R0, R1 special
+Control flow is supported by register \texttt{R14}, the return-link register (RL).
+During a function call, the CALL instruction stores the return address in \texttt{R14}, allowing the function to return control to its caller.
 
-
-\section*{Task Execution}
-\addcontentsline{toc}{section}{Task Execution}
-
-
-segment - code, data
-
-global data - pointed to by DP
-
-stack data - pointed to by SP
-
-modules and functions
-
-modules have global data 
-
-functions allocate a stack frame 
-
-stack grows upward
-
-SP minus addressing 
-
-frame marker keeps previous SP and RL
-
-function call - RP optionally stored in frame marker
-
-first 4 args are passed in registers
-
-remaining args in stack frame
-
-
-
-
-
-
+Finally, register \texttt{R15} serves as the stack-frame pointer (SP).
+It marks the base of the current stack frame, which contains local variables, spilled registers, and temporaries, and supports predictable stack-based data management within the task’s runtime environment.

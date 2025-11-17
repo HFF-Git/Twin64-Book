@@ -33,11 +33,7 @@
     In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address.  
     In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
     
-    Optionally, the computed effective address may also be written back to the base register \texttt{RegB}. When this option is enabled, the sign of the offset determines the update behavior:  
-    – A negative offset causes the base register itself to be used as the fetch address.  
-    – A positive offset causes the sum of the base register and offset to be used.  
-    In both cases, the base register is updated.
-    
+    If the M bit is set, the base register RegB is updated with the computed effective address.
     The store address must be aligned to the data width specified. The value stored to memory is stored  as is in the data width specified.
 \end{iPageDescEntry}
 

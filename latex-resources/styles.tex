@@ -110,6 +110,14 @@
     tabsize=4
 }
 
+\lstdefinestyle{codesnippet-nobox}{
+    style=codesnippetstyle,   % inherit all other settings
+    frame=none,               % remove the frame
+    backgroundcolor=,         % remove background
+    xleftmargin=0pt,          % optional: remove left margin offset
+    linewidth=\textwidth      % optional: use full width
+}
+
 %--------------------------------------------------------------------------------
 % Common TIKZ styles for my pictures.
 %
@@ -290,7 +298,7 @@
     keepspaces=true,
     breaklines=true,
     columns=fullflexible,
-    frame=single,
+    frame=none,
     aboveskip=0pt, 
     belowskip=0pt,
     xleftmargin=0.025pt,

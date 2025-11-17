@@ -26,10 +26,7 @@
 
     The physical address, if found, is returned from information in the TLB.  No memory access is performed. If there is a separate instruction and data TLB, the data TLB is used. For direct mapped segments the virtual address is the physical address.
     
-    Optionally, the computed effective address may also be written back to the base register \texttt{RegB}. When this option is enabled, the sign of the offset determines the update behavior:  
-    – A negative offset causes the base register itself to be used as the fetch address.  
-    – A positive offset causes the sum of the base register and offset to be used.  
-    In both cases, the base register is updated.
+   If the M bit is set, the base register RegB is updated with the computed effective address.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}

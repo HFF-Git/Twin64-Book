@@ -29,17 +29,9 @@
 
 \begin{iPageDescEntry}{Description}
     The \texttt{LD} instruction loads a data value from memory into a general-purpose register.  
-    Two formats are available: the immediate-offset format and the register-indexed format. 
+    Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
     
-    In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address.  
-    In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
-    
-    Optionally, the computed effective address may also be written back to the base register \texttt{RegB}. When this option is enabled, the sign of the offset determines the update behavior:  
-    – A negative offset causes the base register itself to be used as the fetch address.  
-    – A positive offset causes the sum of the base register and offset to be used.  
-    In both cases, the base register is updated.
-    
-    The fetch address must be aligned to the data width specified. The value read from memory is sign-extended and placed in general register \texttt{RegR}.
+    If the M bit is set, the base register RegB is updated with the computed effective address. The effective address must be aligned to the data width specified. The value read from memory is sign-extended and placed in general register \texttt{RegR}.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}

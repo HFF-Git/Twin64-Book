@@ -65,6 +65,7 @@ The code above shows the full sequence of steps that may be required for a local
 
 The callee can also omit unnecessary steps. A leaf procedure—that is, a procedure that does not call any other procedure—does not need to save the return address. If it does not use any callee-saved registers, those need not be saved or restored. Finally, if a leaf procedure uses no caller-saved registers, has no local variables, and does not need to save any temporary registers, it may not require a stack frame at all.
 
+The instructions \texttt{B}, \texttt{BR} and \texttt{BV} are the instructions used for a local. The address computation, whether IA-relative or region relative, will not impact the region portion of the instruction address. 
 
 \section*{Parameter passing}
 \addcontentsline{toc}{section}{Parameter passing}
@@ -159,16 +160,14 @@ Procedures optionally pass arguments to a called procedure and obtain return val
 
 The first four arguments are passed via the registers ARG0 to ARG3. Nevertheless, the stack frame parameter area allocates stack space for them. Any further parameter is stored in the stack frame parameter area. Upon return, the called procedure may pass up to two return values in registers, \texttt{Ret0} and \texttt{Ret1}. Arguments and return values are addressed relative to the stack frame pointer of the calling procedure. 
 
-
-
-
 \section*{External Calls}
 \addcontentsline{toc}{section}{External Calls}
 
+An external call is defined as potentially crossing the region boundary. The \texttt{BE} instruction computes the effective address from a general register and an immediate offset encoded in the instruction. In contrast to the local branch type instruction, the general register used contains the virtual address and not only the offset portion.
 
 
 
-
+??? ......... ???
 
 
 \section*{Linkage Table}

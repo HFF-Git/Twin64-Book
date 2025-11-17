@@ -46,10 +46,10 @@ else              pos <- instr.[pos];
 
 bVal <- testBit( RegR, pos );
 
-cond <- ( instr.[V] ? (bVal == 1) : (bVal == 0) );
+cond <- ( instr.[V] ? ( bVal == 1 ) : ( bVal == 0 ));
 
-if ( cond ) PSW.[IA] <- addOfs32( PSW.[IA], ofs << 2 );
-else        PSW.[IA] <- addOfs32( PSW.[IA], 4 );
+if ( cond ) PSW.[IA-OFS] <- addOfs32( PSW.[IA-OFS], ofs << 2 );
+else        PSW.[IA-OFS] <- addOfs32( PSW.[IA-OFS], 4 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
