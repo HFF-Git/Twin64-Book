@@ -12,31 +12,30 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{LD} instruction uses the indexed and register-indexed instruction formats. \\
+    The \texttt{LD} instruction uses the following instruction formats: \\
 
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,5.5,6,6.5,8.5,9.5,16}
-        {\OpCodeGrpMEM, \OpCodeLD, RegR, 0, M, 0, RegB, dw, ofs}
+        {0,1,3,5,6.5,8.5,9.5,16}
+        {\OpCodeGrpMEM, \OpCodeLD, RegR, 0, RegB, dw, ofs}
     \end{flushleft}
 
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
-        {\OpCodeGrpMEM, \OpCodeLD, RegR, 0, M, 1, RegB, dw, RegX, 0}
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpMEM, \OpCodeLD, RegR, 1, RegB, dw, RegX, 0}
     \end{flushleft}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{LD} instruction loads a data value from memory into a general-purpose register.  
-    Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
+    The \texttt{LD} instruction loads a data value from memory into a general-purpose register. Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
     
-    If the M bit is set, the base register RegB is updated with the computed effective address. The effective address must be aligned to the data width specified. The value read from memory is sign-extended and placed in general register \texttt{RegR}.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- memLoad( memOperand( instr ));
+RegR <- memLoad( memOperandImmIndexed( instr )); (S13)
+RegR <- memLoad( memOperandRegIndexed( instr )); (S9)
 \end{lstlisting}
 \end{iPageDescEntry}
 
@@ -48,7 +47,7 @@ RegR <- memLoad( memOperand( instr ));
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    The option to update the base register is often used in loops to fetch data from memory.
+    None.
 \end{iPageDescEntry}
 
 

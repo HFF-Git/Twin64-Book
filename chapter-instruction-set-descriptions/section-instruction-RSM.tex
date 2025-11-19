@@ -11,7 +11,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{RSM} instruction uses the system instruction format. \\
+    The \texttt{RSM} instruction uses the following instruction format: \\
 
     \begin{flushleft}
     \drawInstrFormat
@@ -22,7 +22,7 @@
 
 \begin{iPageDescEntry}{Description}
     The \texttt{RSM} (Reset System Mask) instruction clears bits in the system
-    mask register that are set in \texttt{RegR}.
+    mask register that are encoded in the instruction. The previous mask values are returned in \texttt{RegR}.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}

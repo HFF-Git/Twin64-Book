@@ -12,7 +12,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{PICA} instruction uses the standard indexed instruction format. \\
+    The \texttt{PICA} instruction uses the following instruction format: \\
 
     \begin{flushleft}
     \drawInstrFormat
@@ -30,9 +30,9 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{PICA} and \texttt{PDCA} instructions purge a cache line, selected by the effective address
-    in \texttt{RegB}. This can be used by privileged code for cache management. Unlike \texttt{FDCA}, purge may also invalidate dirty lines without writing them back. The mode field indicates the cache type. A value of 0 refers to the instruction cache, a value of one refers to the data cache. A value of two refers to a unified cache.
-    If the M bit is set, the base register RegB is updated with the computed effective address.
+    The \texttt{PxCA} instructions purge a cache line, selected by the effective address
+    in \texttt{RegB}. This can be used by privileged code for cache management. Unlike \texttt{FxCA}, a purge operation may also invalidate dirty lines without writing them back.
+   
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
@@ -46,7 +46,3 @@
 \begin{iPageDescEntry}{Notes}
     Typically only allowed in supervisor mode.
 \end{iPageDescEntry}
-
-// ??? also uses the index and register indexed formats ?
-
-

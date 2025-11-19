@@ -8,8 +8,8 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{DEP[.Z/I] RegR, RegB, pos, len} \\
-\texttt{DEP[.Z/I] RegR, RegB, SAR, len}
+\texttt{DEP[.Z] RegR, val, pos, len} \\
+\texttt{DEP[.Z] RegR, RegB, SAR, len}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -41,9 +41,9 @@ if ( instr.[A] ) pos <- SAR;
 else             pos <- instr.[pos];
 
 if ( instr.[I] ) 
-    RegR <- depositImm( RegR, RegB, pos, instr.[len] ); 
+    RegR <- deposit( RegR, instr.[RegB], pos, instr.[len] ); 
 else 
-    RegR <- depositField( RegR, RegB, pos, instr.[len] );
+    RegR <- deposit( RegR, RegB, pos, instr.[len] );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

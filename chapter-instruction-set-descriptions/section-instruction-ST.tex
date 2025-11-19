@@ -16,31 +16,29 @@
 
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,5.5,6,6.5,8.5,9.5,16}
-        {\OpCodeGrpMEM, \OpCodeST, RegR, 0, M, 0, RegB, dw, S-IMM-13}
+        {0,1,3,5,6.5,8.5,9.5,16}
+        {\OpCodeGrpMEM, \OpCodeST, RegR, 0, RegB, dw, S-IMM-13}
     \end{flushleft}
 
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
-        {\OpCodeGrpMEM, \OpCodeST, RegR, 0, M, 1, RegB, dw, RegX, 0}
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpMEM, \OpCodeST, RegR, 1, RegB, dw, RegX, 0}
     \end{flushleft}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
     The \texttt{ST} instruction stores a value from a general-purpose register into memory. 
     
-    In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address.  
-    In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
+    In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
     
-    If the M bit is set, the base register RegB is updated with the computed effective address.
     The store address must be aligned to the data width specified. The value stored to memory is stored  as is in the data width specified.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-memStore( memOperand( addOfs32( RegB, ofs )), RegR );
-memStore( memOperand( addOfs32( RegB, RegX )), RegR );
+memStore( memOperandImmIndexed( addOfs32( RegB, ofs )), RegR );
+memStore( memOperandRegIndexed( addOfs32( RegB, RegX )), RegR );
 \end{lstlisting}
 \end{iPageDescEntry}
 
@@ -52,7 +50,7 @@ memStore( memOperand( addOfs32( RegB, RegX )), RegR );
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    The jury is still out if the M bit is not too expensive in hardware. We would need to read three registers. One for the value, and up to two for the index calculation.
+   None.
 \end{iPageDescEntry}
 
 

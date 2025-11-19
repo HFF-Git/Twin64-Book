@@ -10,7 +10,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Format}
-The \texttt{BR} instruction uses the immediate-15 instruction format. \\
+The \texttt{BR} instruction uses the following instruction format: \\
 
 \begin{flushleft}
 \drawInstrFormat
@@ -27,7 +27,7 @@ The \texttt{BR} instruction performs an unconditional branch to a target address
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[9:6] != 0 ) {
+if ( instr.[RegR] != 0 ) {
 	
 	RegR.[51:32] <- PSW.[IA-REG];
 	RegR.[31:0]  <- addOfs32( PSW.[IA-OFS], 4 );

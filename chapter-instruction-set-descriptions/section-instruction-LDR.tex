@@ -11,7 +11,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{LDR} instruction uses the indexed instruction format. \\
+    The \texttt{LDR} instruction uses the following instruction format: \\
 
     \begin{flushleft}
     \drawInstrFormat
@@ -21,7 +21,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-The \texttt{LDR} instruction loads a value from memory into a general-purpose register and marks the address as "reserved" for a subsequent conditional store. The instruction is only the first step of an atomic read-modify-write pair. The subsequent \texttt{STC} (store conditional) instruction will succeed only if the reservation is still valid.
+The \texttt{LDR} instruction loads a value from memory into a general-purpose register and marks the effective address as "reserved" for a subsequent conditional store. The instruction is only the first step of an atomic read-modify-write pair. The subsequent \texttt{STC} (store conditional) instruction will succeed only if the reservation is still valid.
     
     The signed immediate offset is shifted right by 3 and added to \texttt{RegB} to form the effective address.  
     
@@ -29,8 +29,8 @@ The \texttt{LDR} instruction loads a value from memory into a general-purpose re
 
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- memLoad( memOperand( instr ));
-markAddressReserved(memOperand( instr ));
+RegR <- memLoad( memOperandImmIndexed( instr ));
+markAddressReserved( memOperandImmIndexed( instr ));
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
@@ -41,5 +41,5 @@ markAddressReserved(memOperand( instr ));
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    This instruction is part of a "load-reserved / store-conditional" pair for atomic memory updates and often used for implementing locks or atomic counters. Reservation may be cleared by other stores to the same address by another processor. \\
+    This instruction is part of a "load-reserved / store-conditional" pair for atomic memory updates and often used for implementing locks or atomic counters. Reservation may be cleared by other stores to the same address by another processor. See the appendix for more information.
 \end{iPageDescEntry}

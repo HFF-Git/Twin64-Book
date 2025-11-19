@@ -12,7 +12,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{PRB} instruction uses both the register format and the special-9 format. \\
+    The \texttt{PRB} instruction uses both the following instruction format: \\
 
     \begin{flushleft}
     \drawInstrFormat
@@ -30,12 +30,10 @@
 \begin{iPageDescEntry}{Description}
     The \texttt{PRB} instruction probes the Translation Lookaside Buffer (TLB) 
     to determine whether the effective address in \texttt{RegB} has a valid mapping. 
-    The result of the probe is returned in \texttt{RegR}:  
-    \texttt{0} indicates that no mapping exists, while \texttt{1} indicates a valid mapping.  
+    The result of the probe is returned in \texttt{RegR}. A value of \texttt{0} indicates that no mapping exists, while a \texttt{1} indicates a valid mapping.  
 
-    In the register format, the access mode is specified in \texttt{RegA}.  
-    In the special-9 format, the mode is encoded directly in the instruction.  
-
+    In the immediate instruction format the access mode is encoded directly in the instruction, otherwise in \texttt{RegA}.
+   
     The mode specifies the type of access being probed:
     
     \begin{center}
@@ -53,7 +51,7 @@
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 RegR <- probeVirtualAddress(RegB, RegA.[62..63]);  // Reg
-RegR <- probeVirtualAddress(RegB, mode);           // Mode
+RegR <- probeVirtualAddress(RegB, instr.[mode] );  // Mode
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

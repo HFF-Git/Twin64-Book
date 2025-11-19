@@ -51,10 +51,10 @@ The \texttt{ADD} instruction adds two signed 64-bit operands and stores the resu
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- RegB + RegA;                                       (S9 )
-RegR <- RegB + signExt( val );                             (S15)
-RegR <- RegR + memLoad( RegB, signExt( ofs << dw, 15 ), dw );  (S13)
-RegR <- RegR + memLoad( RegB, RegX, dw );                  (S9 )
+RegR <- RegB + RegA;                            (S9 )
+RegR <- RegB + immOperand( instr );             (S15)
+RegR <- RegR + memOperandImmIndexed( instr );   (S13)
+RegR <- RegR + memOpwerandRegIndexed( instr );  (S9 )
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

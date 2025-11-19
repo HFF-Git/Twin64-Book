@@ -30,13 +30,13 @@ The \texttt{TRAP} instruction generates a synchronous trap to handle exceptional
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-raiseTrap( id, RegB, RegA );
+raiseTrap( concat( tid1, tid2 ), RegB, RegA );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-The trap raised.
+The trap raised. See the appendix for valid trap codes.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

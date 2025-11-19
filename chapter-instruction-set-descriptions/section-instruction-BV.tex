@@ -5,12 +5,12 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{BV RegB [, RegR, RegX ]}
+\texttt{BV [ RegB ] (  RegR ) [ , RegR ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Format}
-The \texttt{BV} instruction uses the register instruction format. \\
+The \texttt{BV} instruction uses the following instruction format: \\
 
 \begin{flushleft}
 \drawInstrFormat
@@ -21,17 +21,17 @@ The \texttt{BV} instruction uses the register instruction format. \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{BV} instruction performs an unconditional segment relative branch. The content of \texttt{RegX} is shifted by two and added to \texttt{RegB}, forming the target offset in the current segment. The return link is stored in \texttt{RegR}.  
+The \texttt{BV} instruction performs an unconditional region relative branch. The content of \texttt{RegX}  is shifted by two and added to \texttt{RegB}, forming the target offset in the current region. The return link is stored in \texttt{RegR}.  
 
-Because \texttt{BV} is a segment base relative branch, branching to a page with a different privilege level is possible. Branching from a lower privilege level to a higher one triggers an instruction protection trap. Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register. If no change is required, the privilege level remains unchanged.  
+Because \texttt{BV} is a region base relative branch, branching to a page with a different privilege level is possible. Branching from a lower privilege level to a higher one triggers an instruction protection trap. Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register accordingly. If no change is required, the privilege level remains unchanged.  
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[9:6] != 0 ) {
+if ( instr.[RegR] != 0 ) {
 	
-	RegR.[51:32] <- PSW.[IA-REG];
+	RegR.[51:32] <- PSW.[IA-REG];
 	RegR.[31:0]  <- addOfs32( PSW.[IA-OFS], 4 );
 }
 

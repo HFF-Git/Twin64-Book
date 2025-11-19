@@ -11,12 +11,12 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{LD} instruction uses the indexed and register-indexed instruction formats. \\
+    The \texttt{LD} instruction uses the following instruction formats: \\
 
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,5.5,6,6.5,8.5,9.5,11.5,16}
-        {\OpCodeGrpSYS, \OpCodeLPA, RegR, 0, M, 1, RegB, 0, RegX, 0}
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpSYS, \OpCodeLPA, RegR, 1, RegB, 0, RegX, 0}
     \end{flushleft}
 \end{iPageDescEntry}
 
@@ -24,14 +24,13 @@
     The \texttt{LPA} (Load Physical Address) instruction computes the physical 
     address corresponding to the given virtual address and loads it into \texttt{RegR}. The virtual address is formed by adding \texttt{RegX} to \texttt{RegB}. If there is no translation, a value of zero is returned. 
 
-    The physical address, if found, is returned from information in the TLB.  No memory access is performed. If there is a separate instruction and data TLB, the data TLB is used. For direct mapped segments the virtual address is the physical address.
+    The physical address, if found, is returned from information in the TLB.  No memory access is performed. If there is a separate instruction and data TLB, the data TLB is used. For direct mapped regions the virtual address is the physical address.
     
-   If the M bit is set, the base register RegB is updated with the computed effective address.
 \end{iPageDescEntry}
 
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- tanslateAdr( addOfs32( RegB + RegX ));
+RegR <- tanslateAdr( addOfs32( RegB, RegX ));
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
@@ -42,5 +41,5 @@ RegR <- tanslateAdr( addOfs32( RegB + RegX ));
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Notes}
-    None. \\
- \end{iPageDescEntry}
+A return value zero is ambiguous in that it means a non-existent translation or a mapping to page zero.    
+\end{iPageDescEntry}

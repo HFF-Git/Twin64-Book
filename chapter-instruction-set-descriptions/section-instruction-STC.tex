@@ -11,12 +11,12 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{STC} instruction uses the indexed instruction format. \\
+    The \texttt{STC} instruction uses the following instruction format: \\
 
     \begin{flushleft}
     \drawInstrFormat
         {0, 1, 3, 5, 6.5, 8.5, 9.5, 16}
-        {\OpCodeGrpMEM, \OpCodeSTC, RegR, 0, RegB, 3, S-IMM-13}
+        {\OpCodeGrpMEM, \OpCodeSTC, RegR, 0, RegB, 3,ofs}
     \end{flushleft}
 \end{iPageDescEntry}
 
@@ -26,10 +26,10 @@
 
 \begin{iPageDescEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( isAddressReserved( memOperand( instr ))) {
+if ( isAddressReserved( memOperandImmIndexed( instr ))) {
 
-    memStore( memOperand( instr ), RegR );
-    clearReservation( memOperand( instr ));
+    memStore( memOperandImmIndexed( instr ), RegR );
+    clearReservation( memOperandImmIndexed( instr ));
     RegR <- 1;
 }
 else RegR <- 0;

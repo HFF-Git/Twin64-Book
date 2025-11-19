@@ -8,12 +8,12 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{LDIL[.L/.S/.U] RegR, val}
+\texttt{LDIL[.L/.R/.U] RegR, val}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Format}
-The \texttt{LDIL} instruction uses the immediate-20 instruction format. \\
+The \texttt{LDIL} instruction uses the following instruction format: \\
 
 \begin{flushleft}
 \drawInstrFormat
@@ -28,8 +28,10 @@ The \texttt{LDIL} instruction deposits an immediate value into general register 
 The optional suffix determines how the immediate value is positioned within the destination register. If no suffix is specified, the default is \texttt{.L} mode (mode value = 1).
 
 \begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \setlength{\parskip}{0pt}
     \item \texttt{.L} (mode = 1) — Deposits 20 bits of \texttt{val} into bits [31..12] of \texttt{RegR}. RegR is cleared before the operation. 
-    \item \texttt{.S} (mode = 2) — Deposits 20 bits of \texttt{val} into bits [51..32] of \texttt{RegR}. RegR is not cleared before the operation.
+    \item \texttt{.R} (mode = 2) — Deposits 20 bits of \texttt{val} into bits [51..32] of \texttt{RegR}. RegR is not cleared before the operation.
     \item \texttt{.U} (mode = 3) — Deposits 12 bits of \texttt{val} into bits [63..52] of \texttt{RegR}. RegR is not cleared before the operation.
 \end{itemize}
 
@@ -39,8 +41,8 @@ A mode value of zero is reserved and must not be used.
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- ((val & 0xFFFFF) << 12)                   // .L mode (1)
-RegR <- deposit( RegR, (val & 0xFFFFF), 32, 20 ); // .S mode (2)
+RegR <- ((val & 0xFFFFF) << 12 );                 // .L mode (1)
+RegR <- deposit( RegR, (val & 0xFFFFF), 32, 20 ); // .R mode (2)
 RegR <- deposit( RegR, (val & 0xFFF), 52, 12 );   // .U mode (3)
 \end{lstlisting}
 \end{iPageDescOpEntry}
@@ -56,5 +58,5 @@ The \texttt{LDIL} instruction is used to construct large values in a register.
 The \texttt{.L} variant clears the destination register before depositing the immediate value.  
 This form is intended for building larger offsets for indexed addressing modes, where an addressing instruction adds its own 12-bit offset in the low bits. Together, these operations allow the construction of any 32-bit offset.
 
-In contrast, the \texttt{.S} and \texttt{.U} variants deposit their immediate fields without clearing the register, preserving the remaining bits. Using a combination of these modes, a full 64-bit value can be assembled in two to four instructions.
+In contrast, the \texttt{.R} and \texttt{.U} variants deposit their immediate values without clearing the register, preserving the remaining bits. Using a combination of these modes, a full 64-bit value can be assembled in two to four instructions.
 \end{iPageDescEntry}

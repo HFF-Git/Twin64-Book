@@ -8,7 +8,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{MFIA [.U/S/L/A] RegR}
+\texttt{MFIA [.R/L/A] RegR}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -27,20 +27,20 @@ The \texttt{MFIA} instruction uses the register instruction format. \\
 The \texttt{MFIA} instruction copies the current instruction address to register \texttt{RegR}.The mode field allows to select a portion of the instruction address. 
 
 \begin{itemize}
+ 	\setlength{\itemsep}{0.5em}
+    \setlength{\parskip}{0pt}
 	\item \texttt{.A} (mode = 0) — copies IA to \texttt{RegR}. This is the default operation.
     \item \texttt{.L} (mode = 1) — Deposits 20 bits of \texttt{val} into bits [31..12] of \texttt{RegR}.  
     \item \texttt{.S} (mode = 2) — Deposits 20 bits of \texttt{val} into bits [51..32] of \texttt{RegR}.  
-    \item \texttt{.U} (mode = 3) — Deposits the lower 12 bits of \texttt{val} into bits [63..52] of \texttt{RegR}.
 \end{itemize}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- PSW.[IA]                       // .A mode (0)
-RegR <- ((PSW.[IA] & 0xFFFFF) << 12)   // .L mode (1)
-RegR <- ((PSW.[IA] & 0xFFFFF) << 32)   // .S mode (2)
-RegR <- ((PSW.[IA] & 0xFFF)   << 52)   // .U mode (3)
+RegR <- PSW.[IA]                          // .A mode (0)
+RegR <- (( PSW.[IA] & 0xFFFFF ) << 12 )   // .L mode (1)
+RegR <- (( PSW.[IA] & 0xFFFFF ) << 32 )   // .S mode (2)
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

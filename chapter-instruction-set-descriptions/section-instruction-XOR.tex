@@ -40,15 +40,18 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-  The \texttt{XOR} instruction performs a bitwise XOR operation on two 64-bit operands and stores the result in the target register \texttt{RegR}. The result can be negated by setting the "N" bit. This instruction supports the immediate, register, and both memory-reference formats. The Boolean operation itself does not trigger any traps, but the indexed formats may cause a memory-reference–related trap.
+  The \texttt{XOR} instruction performs a bitwise XOR operation on two 64-bit operands and stores the result in the target register \texttt{RegR}. The result can be negated by setting the "N" bit. This instruction supports the immediate, register, and both memory-reference formats. The boolean operation itself does not trigger any traps, but the indexed formats may cause a memory-reference–related trap.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- RegB ^ RegA;           (register format)
-RegR <- RegB ^ immOperand();   (immediate format)
-RegR <- RegR ^ memOperand();   (indexed formats)
+tmp <- RegA;                            (S9)
+tmp <- immOperand( instr );             (S15)
+tmp <- memOperandImmIndexed( instr );   (S13)
+tmp <- memOpwerandRegIndexed( instr );  (S9 )
+
+RegR <- RegR ^ tmp;
 if ( instr.[N] ) RegR <- not( RegR );
 \end{lstlisting}
 \end{iPageDescOpEntry}

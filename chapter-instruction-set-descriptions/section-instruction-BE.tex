@@ -10,7 +10,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Format}
-The \texttt{BE} instruction uses the signed immediate S15 format. \\
+The \texttt{BE} instruction uses the following instruction format: \\
 
 \begin{flushleft}
 \drawInstrFormat
@@ -21,9 +21,9 @@ The \texttt{BE} instruction uses the signed immediate S15 format. \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{BE} instruction performs an unconditional branch to another segment. \texttt{RegB} contains a target segment and offset base to which the sign extended offset shifted by two is added. The return link is stored in \texttt{RegR}.
+The \texttt{BE} instruction performs an unconditional branch to another region. \texttt{RegB} contains a target region and offset base to which the sign extended offset shifted by two is added. The return link is stored in \texttt{RegR}.
 
-Because \texttt{BE} is a segment base relative branch, branching to a page with a different privilege level is possible. Branching from a lower privilege level to a higher one triggers an instruction protection trap. Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register. If no change is required, the privilege level remains unchanged.  
+Because \texttt{BE} is a region base relative branch, branching to a page with a different privilege level is possible. Branching from a lower privilege level to a higher one triggers an instruction protection trap. Branching from a higher privilege to a lower privilege level updates the privilege level in the processor status register accordingly. If no change is required, the privilege level remains unchanged.  
 
 
 \end{iPageDescEntry}
@@ -31,7 +31,7 @@ Because \texttt{BE} is a segment base relative branch, branching to a page with 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-if ( instr.[9:6] != 0 ) {
+if ( instr.[RegR] != 0 ) {
 	
 	RegR.[51:32] <- PSW.[IA-REG];
 	RegR.[31:0]  <- addOfs32( PSW.[IA-OFS], 4 );

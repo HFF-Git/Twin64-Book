@@ -11,20 +11,8 @@ For better readability and convenience, an assembler can offer \emph{synthetic i
 
 Synthetic instructions are also useful when a single instruction cannot fully express the desired operation. For example, loading an immediate value larger than the instruction field allows requires an instruction sequence. An assembler can provide a generic "load immediate" synthetic instruction that automatically emits such an instruction sequence depending on the size of the value. Similarly, if the offset to a base register is too small to reach a desired data item, the assembler can transparently emit an additional `ADDIL` instruction to compute the correct address.
 
-The synthetic instruction set can be organized into several groups:
-
-\begin{itemize}
- 
- 	\item \textbf{Immediate Operations:} yyy.  
- 	\item \textbf{Register Operations:} yyy.
- 	\item \textbf{Arithmetic Operations:} yyy. 
-	\item \textbf{Shift and Rotate Operations:} yyy. 
-	\item \textbf{Memory Reference Operations:} yyy.
-\end{itemize}
-
 \section*{Immediate Operations}
 \addcontentsline{toc}{section}{Immediate Operations}
-
 
 \begin{longtable}{@{}p{0.2\linewidth}p{0.2\linewidth}p{0.5\linewidth}@{}}
     \caption{Immediate synthetic instructions} \\
@@ -42,7 +30,7 @@ The synthetic instruction set can be organized into several groups:
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{LDI} & ... & ... \\
+    \textbf{LDI} Rn, val & ... & small, big, very big, full \\
     \midrule
 \end{longtable}
 
@@ -65,13 +53,13 @@ The synthetic instruction set can be organized into several groups:
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{CLR} & ... & ... \\
+    \textbf{CLR} Rn & AND Rn, Rn, 0 & clears RegN. \\
     \midrule
-    \textbf{CPY} & ... & ... \\
+    \textbf{CPY} Rn, Rm & OR Rn, Rm, 0 & copies RegM to RegN. \\
     \midrule
-    \textbf{COM} & ... & ... \\
+    \textbf{COM} Rn & OR.N Rn, Rm, 0 & logically inverts RegN. \\
     \midrule
-    \textbf{NEG} & ... & ... \\
+    \textbf{NEG} Rn & SUB Rn, R0, Rn & negates a value in RegN. \\
     \midrule
 \end{longtable}
 
@@ -94,15 +82,15 @@ The synthetic instruction set can be organized into several groups:
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{INC} & ... & ... \\
+    \textbf{INC} Rn, val & ADD Rn, Rn, val & increments Rn by <val>. \\
     \midrule
-    \textbf{DEC} & ... & ... \\
+    \textbf{DEC} Rn, val & SUB Rn, Rn, val & decrements Rn by <val>. \\
     \midrule
-    \textbf{EXT8} & ... & ... \\
+    \textbf{EXT8} Rn, Rm & EXTR.S Rn, Rm, 0, 8 & sign extends a byte in Rn. \\
     \midrule
-    \textbf{EXT16} & ... & ... \\
+    \textbf{EXT16} Rn, Rm & EXTR.S Rn, Rm, 0, 16 & sign extends a byte in Rn. \\
     \midrule
-    \textbf{EXT32} & ... & ... \\
+    \textbf{EXT32} Rn, Rm & EXTR.S Rn, Rm, 0, 32 & sign extends a byte in Rn. \\
     \midrule
 \end{longtable}
 
