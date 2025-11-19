@@ -24,8 +24,8 @@ Conditional branches combine a comparison with an instruction-relative branch. I
 \addcontentsline{toc}{section}{Linkage}
 Certain branch instructions support procedure calls by saving the return address (the instruction immediately following the branch) into a general-purpose register. The linkage mechanism applies to both intra-segment and inter-segment branches. The saved return address consists of both the segment identifier and the instruction offset.
 
-\section*{Inter-segment Branches}
-\addcontentsline{toc}{section}{Inter-segment Branches}
+\section*{Cross-Region Branches}
+\addcontentsline{toc}{section}{Cross-Region Branches}
 Unconditional inter-segment branches are branches to another segment. The offset is computed from the offset portion in the address specified plus the immediate value encoded in the \texttt{BE} instruction.
 
 \section*{Privilege Level Changes}

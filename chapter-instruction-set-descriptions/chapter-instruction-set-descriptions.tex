@@ -8,6 +8,8 @@
 This chapter provides a detailed description of the Twin-64 instruction set. Each instruction entry includes:
 
 \begin{itemize}
+	\setlength{\itemsep}{0.5em}
+    \setlength{\parskip}{0pt}
     \item The instruction word layout.
     \item A concise description of the instruction.
     \item A high-level pseudo code representation of its operation.
@@ -16,6 +18,8 @@ This chapter provides a detailed description of the Twin-64 instruction set. Eac
 Instruction operations are expressed using C-style pseudo code. The routines and conventions used are listed in the appendix. Registers are referenced by class and index:
 
 \begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \setlength{\parskip}{0pt}
     \item \texttt{GR[5]} — general register 5
     \item \texttt{CR[1]} — control register 1
     \item Some registers have dedicated names, e.g., the shift amount control register is \texttt{SAR}.
@@ -24,12 +28,16 @@ Instruction operations are expressed using C-style pseudo code. The routines and
 Subfields of an instruction are accessed using a dot and the field name in square brackets. For example:
 
 \begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \setlength{\parskip}{0pt}
     \item The interrupt enable bit in the PSW register: \texttt{PSW.[I]}.
 \end{itemize}
 
 Instruction options are specified in assembler syntax by a dot followed by one or more characters, each representing a defined option. For example:
 
 \begin{itemize}
+    \setlength{\itemsep}{0.5em}
+    \setlength{\parskip}{0pt}
     \item \texttt{AND.N ...} — the \texttt{AND} instruction with the negate result option.
     \item The order of option characters does not matter; all defined options are listed in the relevant character set.
 \end{itemize}

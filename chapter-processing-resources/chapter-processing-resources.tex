@@ -5,13 +5,12 @@
 \chapter*{Processing Resources}
 \addcontentsline{toc}{chapter}{Processing Resources}
 
-This chapter describes the processing resources and data types in a Twin-64 system. Twin-64 provides a set of general-purpose registers, a set of control registers, and the Program State Word (PSW), which contains the current instruction address and processor status. The following figure presents a high-level overview of these register sets.
-
+This chapter describes the processing resources and data types in a Twin-64 system. Twin-64 provides a set of general-purpose registers, a set of control registers, and the Program State Word (PSW), which contains the current instruction address and processor status. 
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.8, transform shape]
 
-    \draw[help lines, gray!70, dashed] (0,0) grid(16,4);
+    % \draw[help lines, gray!70, dashed] (0,0) grid(16,4);
     \def\leftofs{1}
 
     % --- General Registers -----------------------------------------
@@ -181,9 +180,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 11) -- (\leftofs + \width / 2 - 0.5, 12);
   	\draw[thick] (\rightofs - 0.5, 11) -- (\rightofs - 0.5, 12);
   	\node at ({\leftofs - 0.75}, {11 + 0.5}) { CR4 };
-  	\node at ({\leftofs + 2.25}, {11 + 0.5}) { Protection Id 1 (PID1)};
+  	\node at ({\leftofs + 2.25}, {11 + 0.5}) { Region Id 1 (RID1)};
   	\node at ({\leftofs + \width/2 - 0.25}, {11 + 0.5}) { W };
-  	\node at ({\rightofs - 2.75}, {11 + 0.5}) { Protection Id 2 (PID2)};
+  	\node at ({\rightofs - 2.75}, {11 + 0.5}) { Region Id 2 (RID2)};
   	\node at ({\rightofs - 0.25}, {11 + 0.5}) { W };
   	
   	% CR5
@@ -192,9 +191,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 10) -- (\leftofs + \width / 2 - 0.5, 11);
   	\draw[thick] (\rightofs - 0.5, 10) -- (\rightofs - 0.5, 11);
   	\node at ({\leftofs - 0.75}, {10 + 0.5}) { CR5 };
-  	\node at ({\leftofs + 2.25}, {10 + 0.5}) { Protection Id 3 (PID3)};
+  	\node at ({\leftofs + 2.25}, {10 + 0.5}) { Region Id 3 (RID3)};
   	\node at ({\leftofs + \width/2 - 0.25}, {10 + 0.5}) { W };
-  	\node at ({\rightofs - 2.75}, {10 + 0.5}) { Protection Id 4 (PID4)};
+  	\node at ({\rightofs - 2.75}, {10 + 0.5}) { Region Id 4 (RID4)};
   	\node at ({\rightofs - 0.25}, {10 + 0.5}) { W };
   	
   	%CR6
@@ -203,9 +202,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 9) -- (\leftofs + \width / 2 - 0.5, 10);
   	\draw[thick] (\rightofs - 0.5, 9) -- (\rightofs - 0.5, 10);
   	\node at ({\leftofs - 0.75}, {9 + 0.5}) { CR6 };
-  	\node at ({\leftofs + 2.25}, {9 + 0.5}) { Protection Id 5 (PID5)};
+  	\node at ({\leftofs + 2.25}, {9 + 0.5}) { Region Id 5 (RID5)};
   	\node at ({\leftofs + \width/2 - 0.25}, {9 + 0.5}) { W };
-  	\node at ({\rightofs - 2.75}, {9 + 0.5}) { Protection Id 6 (PID6)};
+  	\node at ({\rightofs - 2.75}, {9 + 0.5}) { Region Id 6 (RID6)};
   	\node at ({\rightofs - 0.25}, {9 + 0.5}) { W };
   	
   	% CR7
@@ -214,9 +213,9 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	\draw[thick] (\leftofs + \width / 2 - 0.5, 8) -- (\leftofs + \width / 2 - 0.5, 9);
   	\draw[thick] (\rightofs - 0.5, 8) -- (\rightofs - 0.5, 9);
   	\node at ({\leftofs - 0.75}, {8 + 0.5}) { CR7 };
-  	\node at ({\leftofs + 2.25}, {8 + 0.5}) { Protection Id 7 (PID7)};
+  	\node at ({\leftofs + 2.25}, {8 + 0.5}) { Region Id 7 (RID7)};
   	\node at ({\leftofs + \width/2 - 0.25}, {8 + 0.5}) { W };
-  	\node at ({\rightofs - 2.75}, {8 + 0.5}) { Protection Id 8 (PID8)};
+  	\node at ({\rightofs - 2.75}, {8 + 0.5}) { Region Id 8 (RID8)};
   	\node at ({\rightofs - 0.25}, {8 + 0.5}) { W };
   	
   	% CR8
@@ -265,6 +264,8 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
 \label{fig:Control registers}
 \end{figure}
 
+\textbf{Note:} We may need more than 16 control registers. Under evaluation.
+
 \subsection*{Processor Configuration Register}
 \addcontentsline{toc}{subsection}{Processor Configuration Register}
 
@@ -273,7 +274,7 @@ The processor configuration register contains information about the current syst
 \begin{center}
 \drawInstrFormatSixtyFour
   	{0, 8, 12, 13, 14, 15, 16}
-  	{Cycles per millisecond, Flags,  PNum, PId, AId, MSize }
+  	{Cycles per millisecond, Flags,  PNum, RID, AId, MSize }
 \end{center}
 
 
@@ -297,7 +298,7 @@ The processor configuration register contains information about the current syst
     \midrule
     \textbf{Architecture Id (AId) } & ... \\
     \midrule
-    \textbf{Processor Id Id (PId) } & ... \\
+    \textbf{Processor Id Id (RID) } & ... \\
     \midrule
     \textbf{Processor Core Num} & in a multiprocessor configuration, the unique processor number is assigned during system startup. \\
     \midrule
@@ -311,22 +312,22 @@ The processor configuration register contains information about the current syst
 \subsection*{Recovery Counter}
 \addcontentsline{toc}{subsection}{Processor Configuration Register}
 
-When enabled, the recovery counter decrements on each instruction cycle. When the leftmost bit becomes a one, a recovery trap is scheduled. The R bit in the processor status word is set, the recovery trap is enabled.
+When enabled, the recovery counter decrements on each instruction cycle. When the leftmost bit becomes a one and the R bit in the processor status word is set, a recovery trap is scheduled.
 
 \subsection*{Shift Amount Register}
 \addcontentsline{toc}{subsection}{Shift Amount Register}
 
 The shift amount register ( \texttt{ SAR} ) is used by the extract, deposit and double shift instruction when a dynamic position is specified in the instruction. The valid number range is zero to 63.
 
-\subsection*{Protection Id Registers}
-\addcontentsline{toc}{subsection}{Protection Id Registers}
+\subsection*{Region Id Registers}
+\addcontentsline{toc}{subsection}{Region Id Registers}
 
-Twin-64 allows to record a set of up to 8 protection Id values in the processor control registers \texttt{CR4} to \texttt{CR7} which are accessible to the currently executing process. The protection Id is identical to a segment Id. For each access to a segment that has the protection check bit set, one of the protection Id control registers must match the segment Id. If not, a protection violation trap is raised. The rightmost bit of each of the eight PIDs is the write disable (W) bit. When the bit is set, that PID cannot be used to grant write access. See also the chapter on addressing and access control.
+Twin-64 allows to record a set of up to 8 region IDs in the processor control registers \texttt{CR4} to \texttt{CR7} which are accessible to the currently executing process. For each access to a region that has the protection check bit set, one of the protection Id control registers must match the region Id. If not, a protection violation trap is raised. The rightmost bit of each of the eight RIDs is the write disable (W) bit. When the bit is set, that RID data cannot be used to grant write access. See also the chapter on addressing and access control.
 
 \subsection*{Interrupt Vector Table Address}
 \addcontentsline{toc}{subsection}{Interrupt Vector Table Address}
 
-The Interruption Vector Table Address (IVA) control register, \texttt{CR8}, holds the base address of an array of service routines assigned to the different interruption classes. The lower 14 bits of the IVA are reserved and must be set to zero, meaning any address written to it must be aligned to a page boundary. The IVA is always located in the first segment, segment 0. The array of interruption service routines is indexed by interruption numbers, as described in the chapter on interrupts.
+The Interruption Vector Table Address (IVA) control register, \texttt{CR8}, holds the base address of an array of service routines assigned to the different interruption classes. The lower 12 bits of the IVA are reserved and must be set to zero, meaning any address written to it must be aligned to a page boundary. The IVA is always located in  region zero. The array of interruption service routines is indexed by interruption numbers, as described in the chapter on interrupts.
 
 \subsection*{External Interrupt Enable Mask}
 \addcontentsline{toc}{subsection}{External Interrupt Enable Mask}
@@ -379,8 +380,8 @@ The processor state register contains the virtual address of the current instruc
 	\node at (\fw * 7 - 0.2, 1) {-};
 	\node at (\fw * 8 - 0.2, 1) {-};
 	\node at (\fw * 9 - 0.2, 1) {-};
-	\node at (\fw * 10 - 0.2, 1) {-};
-	\node at (\fw * 11 - 0.2, 1) {P};
+	\node at (\fw * 10 - 0.2, 1) {C};
+	\node at (\fw * 11 - 0.2, 1) {D};
 	\node at (\fw * 12 - 0.2, 1) {I};
 	
 	\node at (\fw * 1 - 0.2,0.25) {\small{1}};
@@ -401,7 +402,7 @@ The processor state register contains the virtual address of the current instruc
     \node at (7,0.25) {\small{20}};
    	\node at (12.5,0.25) {\small{32}};
    	
-	\node at (6.5,1) {\small IA Segment};
+	\node at (6.5,1) {\small IA region};
 	\node at (12.5,1) {\small IA Offset};
    	 	
 \end{tikzpicture}
@@ -410,16 +411,15 @@ The processor state register contains the virtual address of the current instruc
 \label{fig:Program State Register}
 \end{figure}
 
+\simpleNote{ Another option is to have a separate status word. Under evaluation. }
+
 \subsection*{Instruction Address}
 \addcontentsline{toc}{subsection}{Instruction Address Register}
 
-The instruction address portion of the PSW registers contains the segment id and the byte offset into the segment for the currently executing instruction.
+The instruction address portion of the PSW registers contains the region id and the byte offset into the region for the currently executing instruction.
 
 \subsection*{Processor Status}
-\addcontentsline{toc}{subsection}{Protection Id Registers}
-
-??? finalize the bits and position ....
-
+\addcontentsline{toc}{subsection}{Processor Status}
 
 \begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
     \caption{Status Field Bits} \\
@@ -451,7 +451,7 @@ The instruction address portion of the PSW registers contains the segment id and
     \midrule 
     \textbf{V} & Reserved. \\
     \midrule 
-    \textbf{P} & Protection identifier validation enable. When set instruction and data references are checked for valid protection identifiers (PIDs). The \texttt{PRB} instruction checks for valid PIDs without causing a trap. \\
+    \textbf{C} & Instruction memory break disable. The C-bit is cleared after the execution of each instruction, except for the \texttt{RFI} instruction which may set it. When set, instruction memory break traps are disabled. This bit allows a simple mechanism to trap on an instruction and then proceed past the trapping instruction. \\
     \midrule 
     \textbf{D} & Data memory break disable. The D-bit is cleared after the execution of each instruction, except for the \texttt{RFI} instruction which may set it. When set, data memory break traps are disabled. This bit allows a simple mechanism to trap on a data store and then proceed past the trapping instruction. \\
     \midrule
@@ -460,7 +460,7 @@ The instruction address portion of the PSW registers contains the segment id and
 \section*{Data Types}
 \addcontentsline{toc}{section}{Data Types}
 
-The fundamental data type is a 64-bit signed integer, with the most significant bit on the left and the least significant bit on the right. All computations are performed on 64-bit signed integers. Memory accesses can be performed at the granularity of a double-word, word, halfword, or byte. Data loaded as a word, halfword, or byte is sign-extended to 64 bits. Store operations write the corresponding value to memory without modification.
+The fundamental data type is a 64-bit signed integer, with the most significant bit on the left and the least significant bit on the right. All computations are performed on 64-bit signed integers. Memory accesses can be performed at the granularity of a double-word, word, halfword, or byte. Data loaded as a word, half--word, or byte is sign-extended to 64 bits. Store operations write the corresponding value to memory without modification.
 
 \begin{figure}[ht]
 \begin{center}
@@ -504,7 +504,7 @@ The fundamental data type is a 64-bit signed integer, with the most significant 
 \label{fig:data types}
 \end{figure}
 
-All memory addresses are expressed as bytes addresses. Address computation uses a 32-bit unsigned math, i.e. numbers wrap around in a 32-bit space and never cross segment boundaries.
+All memory addresses are expressed as bytes addresses. Address computation uses a 32-bit unsigned math, i.e. numbers wrap around in a 32-bit space and never cross region boundaries.
 
 \section*{Byte Ordering and Alignment}
 \addcontentsline{toc}{section}{Byte Ordering and Alignment}
@@ -703,7 +703,9 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{Access Rights} & Encodes the access type (read, write, and execute) and the required privilege level for the operation. \\
     \midrule
-    \textbf{Page Size} & 4-bit field encoding the supported page size: \[ \texttt{( 1U << ( pSize * 4 )) * T64\_PAGE\_SIZE} \]. The pSize number 4 to 15 are reserved and result in an undefined operation. A page size is not allowed to cross region boundaries. The virtual address must be aligned with selected the page size.\\
+    \textbf{Page Size} & 4-bit field encoding the supported page size: 
+    		\[ \texttt{( 1U << ( pSize * 4 )) * T64\_PAGE\_SIZE} \] 
+    The pSize number 4 to 15 are reserved and result in an undefined operation. A page size is not allowed to cross region boundaries. The virtual address must be aligned with selected the page size.\\
     \midrule
     \textbf{V} & Indicates if the entry is valid. \\
     \midrule
@@ -713,12 +715,10 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{U} & When set, the page represented by the TLB entry is not cached. \\
     \midrule
-    \textbf{P} & When set, the page has protection checking enabled. \\
-    \midrule
     \textbf{B} & When set, a branch instruction executed from this page will cause a branch-taken trap. This inly applies for instruction TLBs or unified TLBs.\\
 \end{longtable}
 
-The first segments, segment 0 to 15, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
+The first regions, region 0 to 15, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
 
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
@@ -727,7 +727,7 @@ Twin-64 is a cache-visible architecture that supports both unified and separate 
 
 The architecture does not mandate specific cache line sizes, cache organization, or hierarchy models. Instead, it defines instructions for cache operations, such as deletion or flushing of cache lines.
 
-Each TLB entry indicates whether the corresponding data should be cached. For segments 0 to 15, where the TLB is bypassed, the hardware determines the caching behavior. Memory address ranges are always cached, whereas the I/O address range is not cached.
+Each TLB entry indicates whether the corresponding data should be cached. For regions 0 to 15, where the TLB is bypassed, the hardware determines the caching behavior. All memory address ranges as well as the I/O address range are not cached.
 
 \section*{Instruction Set}
 \addcontentsline{toc}{section}{Instruction Set}
@@ -739,9 +739,9 @@ Unlike CISC-style processors that support a wide variety of addressing modes, Tw
 The instruction set is organized into five groups:  
 
 \begin{itemize}
-  \item \textbf{Computational instructions:} Arithmetic, Boolean, and bit-manipulation operations such as extract and deposit. Twin-64 supports only 64-bit signed arithmetic. Any numeric overflow results in a trap.
+  \item \textbf{Computational instructions:} Arithmetic, boolean, and bit-manipulation operations such as extract and deposit. Twin-64 supports only 64-bit signed arithmetic. Any numeric overflow results in a trap.
  
-  \item \textbf{Immediate instructions:} Instructions for constructing immediate values up to 64 bits. Several instructions embed immediate fields within the instruction word, but a full 64-bit constant requires a sequence of two or three instructions. Immediate instructions also support 32-bit address arithmetic, where calculations wrap around within the 32-bit offset field and never overflow into the segment identifier portion.
+  \item \textbf{Immediate instructions:} Instructions for constructing immediate values up to 64 bits. Several instructions embed immediate fields within the instruction word, but a full 64-bit constant requires a sequence of two or three instructions. There are also immediate instructions that support 32-bit address arithmetic, where calculations wrap around within the 32-bit offset field and never overflow into the region identifier portion.
  
   \item \textbf{Memory reference instructions:} Load and store operations for both virtual and physical memory. These transfer data between memory and general registers in sizes of double--word, word, halfword, or byte. The design resembles a load/store architecture, but unlike strict load/store machines, many Twin-64 instructions allow memory operands directly. No instruction, however, both reads and writes data memory in the same operation.
   

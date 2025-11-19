@@ -5,7 +5,7 @@
 \section*{Virtual Address Space}
 \addcontentsline{toc}{section}{Virtual Address Space}
 
-Twin-64 features a 52-bit virtual address range, organized into a 20-bit segment identifier and a 32-bit offset within that segment. The following figure illustrates the structure of a virtual address and how the segment is selected.
+Twin-64 features a 52-bit virtual address range, organized into a 20-bit region identifier and a 32-bit offset within that region. The following figure illustrates the structure of a virtual address and how the region is selected.
 
 \begin{figure}[H]
 \begin{center}
@@ -28,7 +28,7 @@ Twin-64 features a 52-bit virtual address range, organized into a 20-bit segment
 	\node at (1.75,13.75) {52};
 	\node at (0.25,13.75) {63};           	
     \node at (1,13) {0};
-    \node at (4,13) {segId};
+    \node at (4,13) {regionId};
     \node at (9,13) {offset};
     	        
     \def\leftofs{9}
@@ -47,7 +47,7 @@ Twin-64 features a 52-bit virtual address range, organized into a 20-bit segment
             anchor=west,
             fill=white!50] (blocks) at (9,8.875) { };
 		
-	\node at (\leftofs, 7) {Segment};
+	\node at (\leftofs, 7) {Region};
 		
 \end{tikzpicture}
 \end{center}
@@ -55,7 +55,7 @@ Twin-64 features a 52-bit virtual address range, organized into a 20-bit segment
 \label{fig:Virtual Memory Address Range}
 \end{figure}
 
-A virtual address is translated into a physical address. For translation purposes, the virtual address range can also be viewed as a set of virtual pages. The architected page size is 16 KB, with a 38-bit virtual page number and a 14-bit page offset. 
+A virtual address is translated into a physical address. For translation purposes, the virtual address range can also be viewed as a set of virtual pages. The architected page size is 4 KBytes, with a 40-bit virtual page number and a 12-bit page offset. 
 
 \section*{Address Space Layout}
 \addcontentsline{toc}{section}{Address Space Layout}
@@ -127,8 +127,8 @@ Twin-64 architecture features a 36-bit physical memory address range which allow
 \label{fig:Memory Address Ranges}
 \end{figure}
 
-Segment IDs 0 to 15 represent the physical address space, with a maximum size of 64 GB. These segments are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these segments. Control Register 0 contains a field that encodes the actual memory size installed in the system.
+Region IDs 0 to 15 represent the physical address space, with a maximum size of 64 GB. These regions are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these regions. Control Register 0 contains a field that encodes the actual physical memory size installed in the system.
 
-Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top 256 MB of the first segment. I/O modules allocate their registers and storage within this range, and access to this area is uncached.
+Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top 256 MB of the first region. I/O modules allocate their registers and storage within this range, and access to this area is uncached.
 
 The remaining address space is dedicated to virtual memory. Virtual storage is allocated dynamically, and the TLB provides the necessary translation to physical addresses while enforcing access rights.

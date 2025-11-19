@@ -10,15 +10,15 @@ Designers of CPUs in the seventies and early eighties almost all used a microcod
 \section*{Twin-64}
 \addcontentsline{toc}{section}{Twin-64}
 
-Welcome to Twin-64. Twin-64 is a simple 64-bit CPU with a register–memory model and segmented virtual memory. The design is heavily influenced by Hewlett-Packard’s PA\_RISC architecture, which was initially a 32-bit RISC-style load/store machine. Almost all of the key architectural features come from there. However, other processors—such as the Data General MV8000, the DEC Alpha, and the IBM PowerPC—were also influential or at least investigated for their design choices. In addition, the Blitz-64 architecture was studied. Blitz-64, a design developed at Portland State University, offered an interesting approach in that it only supported 64-bit signed arithmetic, avoiding common errors from mixing signed and unsigned arithmetic.
+Welcome to Twin-64. Twin-64 is a simple 64-bit CPU with a register-–memory model and segmented virtual memory. The design is heavily influenced by Hewlett-Packard’s PA\_RISC architecture, which was initially a 32-bit RISC-style load/store machine. Almost all of the key architectural features come from there. However, other processors such as the Data General MV8000, the DEC Alpha, the IBM PowerPC—were and more lately RISC-V also influential or at least investigated for their design choices. In addition, the Blitz-64 architecture was studied. Blitz-64, a design developed at Portland State University, offered an interesting approach in that it only supports 64-bit signed arithmetic, avoiding common errors from mixing signed and unsigned arithmetic.
 
-Where does the name Twin-64 come from? Obviously, the “64” indicates that the CPU is a 64-bit CPU. The “Twin” part will become clearer when implementations of the CPU are described in later chapters. One implementation represents a dual-issue instruction design with two ALUs for computation. Nevertheless, a very basic implementation could just offer single-issue, single-ALU execution as well. 
+Where does the name Twin-64 come from? Obviously, the “64” indicates that the CPU is a 64-bit CPU. The “Twin” part will become clearer when implementations of the CPU are described in later chapters. One implementation represents a dual-issue instruction design with two ALUs for computation. Nevertheless, a basic implementation could just offer single-issue, single-ALU execution as well. 
 
 
 \section*{Design Goals}
 \addcontentsline{toc}{section}{Design Goals}
 
-While it is not a design goal to build an industry-strength, competitive CPU, the CPU should nevertheless be useful and largely follow established design practices. For example, instructions should not be invented just because they seem useful, but rather designed with the assembler and compilers in mind. Instruction set design is CPU design. Register–memory architectures were typically microcoded, complex-instruction machines. In contrast, Twin-64 instructions will be hardwired and are in general pipeline-friendly, avoiding data and control hazards and stalls where possible.
+While it is not a design goal to build an industry-strength, competitive CPU, the CPU should nevertheless be useful and largely follow established design practices. For example, instructions should not be invented just because they seem useful, but rather designed with the assembler and compilers in mind. Instruction set design is CPU design. Twin-64 instructions will be hardwired and are in general pipeline-friendly, avoiding data and control hazards and stalls where possible.
 
 \section*{This book}
 \addcontentsline{toc}{section}{This book}
@@ -33,7 +33,7 @@ This document serves as a comprehensive guide to the Twin-64 processor, its inst
 
 \textbf{Part Five} discusses the runtime environment and software conventions. It explains program interaction with Twin-64, including calling conventions, exception handling, and runtime support for higher-level languages.
 
-\textbf{Part Six} examines processor design. While multiple design approaches are possible, this section provides a reference implementation that highlights key architectural concepts, practical trade-offs, and performance considerations.
+\textbf{Part Six} examines processor design. While multiple design approaches are of course possible, this section provides a reference implementation that highlights key architectural concepts, practical trade-offs, and performance considerations.
 
 \textbf{Part Seven} presents a reference implementation of the architecture and instruction set processor in a simulator environment.
 

@@ -29,7 +29,7 @@ All four classes of interruptions are handled in the same way.
 \section*{Interrupt Handling}
 \addcontentsline{toc}{section}{Interrupt Handling}
 
-Handling of an interrupt is implemented as a fast context switch. When an interruption occurs, the hardware saves the PSW at the time of the interrupt to the IPSW control register.  PSW in effect at the time of the interruption is saved in the IPSW. Depending on the interrupt type, this can be the current instruction of the next instruction. All status bits, which are part of the PSW, are saved too. The hardware will then set the PSW status bits as follows. The M bit is set if the interruption is a high priority machine check. All other bits are set to zero. Depending on the trap type, additional data is saved to the interrupt argument control registers IARG0 and IARG1.
+Handling of an interrupt is implemented as a fast context switch. When an interruption occurs, the hardware saves the PSW at the time of the interrupt to the IPSW control register. Depending on the interrupt type, this can be the current instruction of the next instruction. All status bits, which are part of the PSW, are saved too. The hardware will then set the PSW status bits as follows. The M bit is set if the interruption is a high priority machine check. All other bits are set to zero. Depending on the trap type, additional data is saved to the interrupt argument control registers IARG0 and IARG1.
 
 The control register \texttt{IVA} holds the virtual address of the interrupt vector table. Execution of the interrupt handler begins at the address computed using the trap number:
 

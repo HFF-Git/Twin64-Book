@@ -10,41 +10,39 @@ This chapter introduces Twin-64 by highlighting the major components and design 
 \section*{A Register–Memory Architecture}
 \addcontentsline{toc}{section}{A Register–Memory Architecture}
 
-Modern RISC CPUs are typically load / store designs and feature a large number of general-purpose registers. Operations take place between registers. Twin-64 follows a slightly different route. It has fewer general registers, and in addition to register–register computation, a register–memory model is also supported. However, there are no instructions that read from and write to memory in a single instruction cycle, since this would complicate the design considerably.
+Modern RISC CPUs are typically out--of--order load / store designs and feature a large number of general-purpose registers. Operations solely take place between registers. Twin-64 follows a slightly different route. It has fewer general registers, and in addition to register–register computation, a register–-memory model is also supported. In contrast to similar historical register–-memory designs, Twin-64 has no operations that both read from and write to memory in the same instruction. For example, there is no “increment memory” instruction, since this would require two memory operations and is generally not pipeline-friendly. 
 
-Twin-64 implements a \textbf{register-memory architecture} offering only a few addressing modes for the operand, combined with a fixed instruction word length. For most instructions one operand is a register, while the other is a flexible operand that can be an immediate, another register, or a memory address from which data is obtained or stored. The result is placed in the register, which is also the first operand. These types of machines are also called two-address machines.
-
-In contrast to similar historical register–-memory designs, Twin-64 has no operations that both read from and write to memory in the same instruction. For example, there is no “increment memory” instruction, since this would require two memory operations and is generally not pipeline-friendly. Memory data access is performed at the word, half-word, or byte level. Besides the implicit operand fetch in a computational instruction, there are dedicated load/store instructions. In addition to the register–immediate and register–memory operand modes, one operand mode supports the three-operand model ($R_s = R_a \,\text{OP}\, R_b$), specifying two source registers and a result register. This allows Twin-64 to support both register–memory and load/store operation styles.
+Twin-64 offers only a few addressing modes for the operand, combined with a fixed instruction word length. For most instructions one operand is a register, while the other is a flexible operand that can be an immediate, another register, or a memory address from which data is obtained or stored. The result is placed in the register, which is also the first operand. These types of machines are also called two-address machines.
 
 \section*{System}
 \addcontentsline{toc}{section}{System}
 
 A Twin-64 system is organized around a central system bus that interconnects the key components of the architecture. Processors, main memory modules, and I/O modules are all attached as peers to this bus, enabling uniform communication and data exchange. Larger configurations may also include I/O adapters, which bridge slower peripheral buses to the central system bus while preserving a consistent programming model.
 
-Processors initiate memory and I/O transactions via the bus and can also receive external events such as interrupts or system resets through the same interface. This modular structure provides flexibility in system design, allowing configurations to scale from simple processor–memory systems to complex multiprocessor environments with diverse I/O subsystems.
+Processors initiate memory and I/O transactions via the bus and can also receive external events such as interrupts or system resets through the same interface. This modular structure provides flexibility in system design, allowing configurations to scale from simple processor–-memory systems to complex multiprocessor environments with diverse I/O subsystems.
 
 \section*{Processor}
 \addcontentsline{toc}{section}{Processor}
 
-The Twin-64 processor implements the instruction set architecture and provides the computational resources of the system. It contains a general register set, control and status registers, and the program state word. To support virtual memory, each processor includes a Translation Lookaside Buffer (TLB) that translates virtual addresses into physical addresses. Instruction and data caches, while optional in principle, are essential for performance and tightly integrated with the memory interface. Regardless of configuration, all processor-generated addresses are virtual and must be resolved by the TLB before memory access.
+The Twin-64 processor implements the instruction set architecture and provides the computational resources of the system. It contains a general register set, control and status registers, and the program state register. To support virtual memory, each processor includes a Translation Lookaside Buffer (TLB) that translates virtual addresses into physical addresses. Instruction and data caches, while optional in principle, are essential for performance and tightly integrated with the memory interface. Regardless of configuration, all processor-generated addresses are virtual and must be resolved by the TLB before memory access.
 
 \section*{Virtual Memory}
 \addcontentsline{toc}{section}{Virtual Memory}
 
-Twin-64 offers a large global address range, organized in segments. A segment number and offset together form the global virtual address. Segments are also associated with access rights and protection identifiers. The CPU itself can run in user or privileged mode. Twin-64 always generates virtual addresses at the CPU level. The global virtual memory range is a 52-bit space organized into a 20-bit segment ID and a 32-bit byte offset. There are $2^{20}$ segments with $2^{32}$ bytes each.
+Twin-64 offers a large global address range, organized in regions. A region number and offset together form the global virtual address. regions are also associated with access rights and protection identifiers. The CPU itself can run in user or privileged mode. Twin-64 always generates virtual addresses at the CPU level. The global virtual memory range is a 52-bit space organized into a 20-bit region ID and a 32-bit byte offset. There are $2^{20}$ regions with $2^{32}$ bytes each.
 
-Virtual addresses are translated to physical addresses by the TLB when memory is referenced. For memory management purposes, the virtual address range can also be viewed as a set of pages. A segment therefore contains $2^{18}$ pages of 16 KB each. A virtual page number, combining the segment and the page number within that segment, is a $2^{38}$ value. Address translations are made at the page level. 
+Virtual addresses are translated to physical addresses by the TLB when memory is referenced. For memory management purposes, the virtual address range can also be viewed as a set of pages. A region therefore contains $2^{20}$ pages of 4 KB each. A virtual page number, combining the region and the page number within that region, is a $2^{40}$ value. Address translations are performed at the page level. 
 
-The first segments in the virtual address space are special in that they also represent the physical address range. A virtual address in that range bypasses the TLB and accesses physical memory directly. 
+The first regions in the virtual address space are special in that they actually represent the physical address range. An address in that range bypasses the TLB and accesses physical memory directly. 
 
-A TLB can optionally support different page sizes in addition to the architected 16 KB page size. Supported sizes are 16 bytes, 256 KB, 4 MB, and 64 MB. It is very common for the operating system and data to be mapped in consecutive physical pages, which can then be covered by a larger page size.
+A TLB can optionally support different page sizes in addition to the architected 4 KB page size. Supported sizes are 4 Kbyte, 64 Kbytes, 1 Mbyte and 16 MByte. It is very common for the operating system and data to be mapped in consecutive physical pages, which can then be covered by a larger page size.
 
 \section*{Security and Protection Support}
 \addcontentsline{toc}{section}{Security and Protection Support}
 
-Twin-64 implements a protection model along two dimensions. The first dimension is \textbf{access type control} and privilege-level checking. Each page is associated with a page type. Page types include read-only, read–write, execute, and gateway. There are two privilege levels: user and supervisor mode. Access type and privilege level together form the access control information, which is checked for each instruction and data memory access. 
+Twin-64 implements a protection model along two dimensions. The first dimension is \textbf{access type control} and privilege-level checking. Each page is associated with a page type. Page types include read-only, read–write, execute, and gateway. There are two privilege levels: user mode and supervisor mode. Access type and privilege level together form the access control information, which is checked for each instruction and data memory access. 
 
-The second dimension of protection is the \textbf{protection ID}, which is the segment ID itself. Twin-64 allows a set of segment IDs to be recorded in processor control registers. For each access to a segment that has the protection check bit set, one of the protection ID control registers must match the segment ID. If not, a protection violation trap is raised.
+The second dimension of protection is the region ID itself. Twin-64 allows a set of region IDs to be recorded in processor control registers. For each access to a region that has the protection check bit set, one of the region ID control registers must match the region ID. If not, a protection violation trap is raised.
 
 \section*{Privilege Changes}
 \addcontentsline{toc}{section}{Privilege Changes}
