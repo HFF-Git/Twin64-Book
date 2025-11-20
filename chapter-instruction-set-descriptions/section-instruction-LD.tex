@@ -7,8 +7,8 @@
 \addcontentsline{toc}{section}{LD — Load Register}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{LD[.D/W/H/B/M] RegR, SignedImmed13( RegB )} \\
-    \texttt{LD[.D/W/H/B/M] RegR, RegX( RegB )}
+    \texttt{LD[.D/W/H/B/U] RegR, SignedImmed13( RegB )} \\
+    \texttt{LD[.D/W/H/B/U] RegR, RegX( RegB )}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
@@ -16,26 +16,28 @@
 
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,6.5,8.5,9.5,16}
-        {\OpCodeGrpMEM, \OpCodeLD, RegR, 0, RegB, dw, ofs}
+        {0,1,3,5,6,6.5,8.5,9.5,16}
+        {\OpCodeGrpMEM, \OpCodeLD, RegR, 0, U, RegB, dw, ofs}
     \end{flushleft}
 
     \begin{flushleft}
     \drawInstrFormat
-        {0,1,3,5,6.5,8.5,9.5,11.5,16}
-        {\OpCodeGrpMEM, \OpCodeLD, RegR, 1, RegB, dw, RegX, 0}
+        {0,1,3,5,6,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpMEM, \OpCodeLD, RegR, 1, U, RegB, dw, RegX, 0}
     \end{flushleft}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
     The \texttt{LD} instruction loads a data value from memory into a general-purpose register. Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
     
+    If the data loaded is a byte, half-word or a word, the data is sign-extended. If the \texttt{U} option is set, the data is zero-extended instead.
+    
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- memLoad( memOperandImmIndexed( instr )); (S13)
-RegR <- memLoad( memOperandRegIndexed( instr )); (S9)
+RegR <- memOperandImmIndexed( instr ); (S13)
+RegR <- memOperandRegIndexed( instr ); (S9)
 \end{lstlisting}
 \end{iPageDescEntry}
 
