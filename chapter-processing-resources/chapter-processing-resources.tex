@@ -443,7 +443,7 @@ The instruction address portion of the PSW registers contains the region id and 
     \midrule
     \textbf{R} & Recovery counter enable. When set... \\
     \midrule
-    \textbf{X} & When set, the processor runs in privileged mode. \\
+    \textbf{X} & When set, the processor runs in privileged ( supervisor ) mode. \\
     \midrule
     \textbf{T} & When set, taken branch traps are enabled. Any branch taken will result in a trap. \\
     \midrule
@@ -739,6 +739,8 @@ Unlike CISC-style processors that support a wide variety of addressing modes, Tw
 The instruction set is organized into five groups:  
 
 \begin{itemize}
+\setlength{\itemsep}{0.5em}
+\setlength{\parskip}{0pt}
   \item \textbf{Computational instructions:} Arithmetic, boolean, and bit-manipulation operations such as extract and deposit. Twin-64 supports only 64-bit signed arithmetic. Any numeric overflow results in a trap.
  
   \item \textbf{Immediate instructions:} Instructions for constructing immediate values up to 64 bits. Several instructions embed immediate fields within the instruction word, but a full 64-bit constant requires a sequence of two or three instructions. There are also immediate instructions that support 32-bit address arithmetic, where calculations wrap around within the 32-bit offset field and never overflow into the region identifier portion.

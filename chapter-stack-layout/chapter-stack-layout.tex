@@ -68,7 +68,7 @@ A stack frame consists of four main areas, depicted in the following figure.
 \label{fig:Stack Frame}
 \end{figure}
 
-The \textbf{stack frame marker} holds a pointer to the previous stack frame along with the return link address, allowing the call chain to be restored during function returns.
+The \textbf{stack frame marker} holds a pointer to the previous stack frame along with the return link address, allowing the call chain to be restored during function returns. 
 
 The \textbf{parameter area} is used for passing arguments to the called function and for returning data. Although the first four parameters are passed in registers, space for them must still be reserved in memory. Any parameters beyond the first four are placed directly in this area.
 
@@ -79,9 +79,8 @@ Finally, the \textbf{spill area} is used to save registers whose values must be 
 \section*{Stack Frame Addressing}
 \addcontentsline{toc}{section}{Stack Frame Addressing}
 
-All data items within a stack frame are accessed \textbf{relative to the current stack pointer (SP)}. The architecture uses an \texttt{SP - offset} addressing scheme, where each region of the stack frame---the frame marker, parameter area, local data area, and spill area—is located at a fixed negative offset from the SP at function entry. Because the stack \textbf{grows upward in memory}, increasing addresses correspond to deeper regions of the current frame. This convention allows the compiler and debugger to compute the location of every stack-resident object from the SP alone, without requiring a dedicated frame pointer. As long as the SP remains stable during the execution of the function, all stack frame items can be reliably referenced through their predefined offsets.
+All data items within a stack frame are accessed \textbf{relative to the current stack pointer (SP)}. The architecture uses an \texttt{SP - offset} addressing scheme, where each region of the stack frame, i.e. the frame marker, parameter area, local data area, and spill area are located at a fixed negative offset from the SP at function entry. This convention allows the compiler and debugger to compute the location of every stack-resident object from the SP alone, without requiring a dedicated frame pointer. As long as the SP remains stable during the execution of the function, all stack frame items can be reliably referenced through their predefined offsets.
  
-
 \section*{Stack Frame Marker}
 \addcontentsline{toc}{section}{Stack Frame Marker}
 
@@ -132,7 +131,7 @@ The second word contains the \textbf{return link}, which is the address immediat
 \section*{Parameter Area}
 \addcontentsline{toc}{section}{Parameter Area}
 
-A stack frame includes a \textbf{parameter area} large enough to hold the largest argument list passed from the calling function to the callee. Although the first four parameters are normally passed in registers, corresponding space is still reserved in the frame to provide a uniform layout and to support cases where the callee needs to spill register arguments to memory. Any additional parameters beyond the first four are passed directly in the memory locations immediately below this register-parameter area. If a function neither receives parameters nor returns data, the parameter area is omitted from its stack frame, avoiding unnecessary stack usage.
+A stack frame includes a \textbf{parameter area} large enough to hold the largest argument list passed from the calling function to the callee. Although the first four parameters are normally passed in registers, corresponding space is still reserved in the frame to provide a uniform layout and to support cases where the callee needs to spill register arguments to memory. Any additional parameters beyond the first four are passed directly in the memory locations immediately below this register-parameter area. If a function neither receives parameters nor returns data, the parameter area is omitted from its stack frame, avoiding unnecessary stack usage. 
 
 \section*{Local Data Area}
 \addcontentsline{toc}{section}{Local Data Area}

@@ -5,6 +5,8 @@ In Twin-64, control normally proceeds to the next sequential instruction in memo
 \addcontentsline{toc}{section}{Unconditional Branches}
 Unconditional branch instructions always redirect control flow and may optionally save the return address in a general-purpose register. The branch target address can be computed in two ways:
 \begin{itemize}
+\setlength{\itemsep}{0.5em}
+\setlength{\parskip}{0pt}
 \item \textbf{Instruction-relative branches:} The target is obtained by adding an offset to the address of the current instruction.
 \item \textbf{Segment-relative branches:} The target is computed relative to the start of the segment (address zero of the segment).
 \end{itemize}
@@ -35,6 +37,8 @@ Traditionally, privilege changes are handled through traps into the operating sy
 Twin-64 provides a more efficient gateway mechanism. An unconditional branch with the \texttt{.G} gateway option may enter a gateway page, raising the privilege level. The processor then executes at the privilege level specified by the gateway page, with the PSW privilege bit updated accordingly.
 When returning to code in a lower-privilege page, the CPU automatically lowers the current privilege level. Each instruction fetch checks the privilege level of the code page against the PSW \texttt{P}-bit:
 \begin{itemize}
+\setlength{\itemsep}{0.5em}
+\setlength{\parskip}{0pt}
 \item If the page requires higher privilege than the PSW indicates, a privilege violation trap occurs.
 \item If the page requires lower privilege, execution privilege level is automatically demoted.
 \item If the G option on the branch instruction \texttt{B} is set, the execution privilege is set to the privilege level of the gateway page where the branch instruction resides.

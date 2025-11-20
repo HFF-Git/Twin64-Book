@@ -5,7 +5,7 @@
 \chapter*{Runtime Overview}
 \addcontentsline{toc}{chapter}{Runtime Overview}
 
-No CPU architecture with an idea of a runtime environment. Although the instruction set can be used to implement many models of runtime environments, there are common principles that exploit the CPU architecture. In fact, several CPU concepts were selected with a runtime already in mind. This chapter will present the Twin-64 runtime environment and describe the high level system model, the register usage convention, the execution model and calling convention.
+No CPU architecture with an idea of a runtime environment. Although the instruction set can be used to implement many models of runtime environments, there are common principles that exploit the CPU architecture. In fact, several CPU concepts were selected with a certain runtime already in mind. This chapter will present the Twin-64 runtime environment and describe the high level system model, the register usage convention, the execution model and calling convention.
 
 %--------------------------------------------------------------------------------
 \section*{System Environment}
@@ -67,7 +67,7 @@ The following figure depicts a high-level overview of the overall software envir
 \label{fig: System Environment}
 \end{figure}
 
-All tasks belonging to the same job share a common job data area, which is used to store information and resources that must persist for the lifetime of the job and be visible across all of its tasks. A job may represent an interactive session—such as a terminal session—or it may be a non-interactive batch operation.
+All tasks belonging to the same job share a common job data area, which is used to store information and resources that must persist for the lifetime of the job and be visible across all of its tasks. A job may represent an interactive session, such as a terminal session, or it may be a non-interactive batch operation.
 
 The system level contains the global data area, system libraries, and all services provided by what is traditionally called the operating system. The system is responsible for creating jobs, managing their lifetime, and scheduling the tasks within them.
 
@@ -99,7 +99,8 @@ The processor is a general-purpose CPU. The runtime model presented here represe
 	\node[anchor=west] at (\dataLeft + 0.25, 12.25) { \small Module A };
 	
 	\node[ tsRectangle, minimum width=4cm, minimum height=8cm, fill=white!50, anchor=west] at ( \dataLeft, 5) { }; 
-	\node[ anchor=west] at ( \dataLeft + 0.25, 8.5 ) { \Large Stack Data }; \node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=white!50, anchor=west] at ( \dataLeft, 5) { }; 
+	\node[ anchor=west] at ( \dataLeft + 0.25, 8.5 ) { \Large Stack Data }; 
+	\node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 5) { }; 
 	\node[ anchor=west] at ( \dataLeft + 0.25, 5.125 ) { \Large Stack Frame }; 
 	\draw[<-, thick] (\dataLeft + 4, 4.5) -- (\dataLeft + 5, 4.5); 
 	\node[anchor=west] at (\dataLeft + 5.25, 4.5) { \Large SP }; 
@@ -113,18 +114,18 @@ The processor is a general-purpose CPU. The runtime model presented here represe
 	\node[ tsRectangle, minimum width=4cm, minimum height=0.125cm, fill=white!50, anchor=west] at ( \codeLeft, 10) { }; 
 	\draw[<-, thick] ( \codeLeft + 4, 10.125 ) -- ( \codeLeft + 5, 10.125 ); 
 	\node[anchor=west] at ( \codeLeft + 5.25, 10.125 ) { \Large IA }; 
-
 	
-\end{tikzpicture} \end{center} 
+\end{tikzpicture} 
+\end{center} 
 \caption{Runtime Environment} 
 \label{fig: Runtime Environment} 
 \end{figure}
 
 The code region contains program text that, once loaded, is immutable. Code is organized into modules, and a single task may reference several modules in its code region. The currently executing instruction is identified by the instruction address (IA).
 
-Each code module provides a module-level global data section. The task-level global data—formed by aggregating the global sections of all modules referenced by the task is addressed via the data pointer (DP) plus an offset. The data region of a task also contains the stack area, which holds stack frames created by function calls. The active frame is located via the stack pointer (SP), and items within the stack are addressed relative to SP.
+Each code module provides a module-level global data section. The task-level global data, formed by aggregating the global sections of all modules referenced by the task, is addressed via the data pointer (DP) plus an offset. The data region of a task also contains the stack area, which holds stack frames created by function calls. The active frame is located via the stack pointer (SP), and items within the stack are addressed relative to SP.
 
-In this design the stack grows upward: new frames occupy increasing addresses, and older frame contents are typically referenced using expressions of the form \texttt{SP - <ofs>}. Each stack frame includes a frame marker that stores the previous SP and the return link (RL), enabling structured returns and proper unwinding of frames.
+In this runtime design the stack grows upward: new frames occupy increasing addresses, and older frame contents are typically referenced using expressions of the form \texttt{SP - <ofs>}. Each stack frame includes a frame marker that stores the previous SP and the return link (RL), enabling structured returns and proper unwinding of frames.
 
 \textbf{Note.}  
 
@@ -175,32 +176,26 @@ The CPU features general registers and control registers. All general registers 
 	% bracket 
 	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,14) -- (\rightx + 0.5,16) node[midway, right=1cm, anchor=west]{\Large Hardware Architected }; 
 	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,13) -- (\rightx + 0.5,14) node[midway, right=1cm, anchor=west]{\Large Runtime Architecture }; 
-	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,8) -- (\rightx + 0.5,13) node[midway, right=1cm, anchor=west]{\Large Callee Save }; 
-	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,6) -- (\rightx + 0.5,8) node[midway, right=1cm, anchor=west]{\Large Caller Save }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,9) -- (\rightx + 0.5,13) node[midway, right=1cm, anchor=west]{\Large Callee Save }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,6) -- (\rightx + 0.5,9) node[midway, right=1cm, anchor=west]{\Large Caller Save }; 
 	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,2) -- (\rightx + 0.5,6) node[midway, right=1cm, anchor=west]{\Large Parameter Area }; 
 	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,0) -- (\rightx + 0.5,2) node[midway, right=1cm, anchor=west]{\Large Runtime Architecture }; 
 	
 \end{tikzpicture} 
 \end{center} 
-\caption{General Registers} 
-\label{fig:general-registers} 
+\caption{General Register Usage} 
+\label{fig:general-registers-usage} 
 \end{figure} 
 
 
-Registers \texttt{R0} and \texttt{R1} are hardware-architected and have fixed, predefined roles within the processor. The remaining registers, \texttt{R2} through \texttt{R15}, form the general-purpose register file, whose usage is defined by the runtime environment. Within this convention, register \texttt{R2} is assigned as the data pointer (DP).
-It serves as the base reference for accessing the task’s global data region.
+Registers \texttt{R0} and \texttt{R1} are hardware-architected and have fixed, predefined roles within the processor. The remaining registers, \texttt{R2} through \texttt{R15}, form the general-purpose register file, whose usage is defined by the runtime environment. Within this convention, register \texttt{R2} is assigned as the data pointer (DP). It serves as the base reference for accessing the task’s global data region.
 
-Registers \texttt{R3} through \texttt{R7} form the callee-save register set.
-A callee-save register is one whose value must be preserved by the called function: if the function uses such a register, it must save its original contents upon entry and restore them before returning.
-This ensures that long-lived values in the caller remain intact across function calls.
+Registers \texttt{R3} through \texttt{R6} form the callee-save register set. A callee-save register is one whose value must be preserved by the called function: if the function uses such a register, it must save its original contents upon entry and restore them before returning. This ensures that long-lived values in the caller remain intact across function calls.
 
-Registers \texttt{R8} and \texttt{R9} are designated as caller-save registers.
-A caller-save register may be overwritten by the called function; therefore, the caller is responsible for saving the register’s value before making a call if it must be preserved.
+Registers \texttt{R7} and \texttt{R9} are designated as caller-save registers. A caller-save register may be overwritten by the called function; therefore, the caller is responsible for saving the register’s value before making a call if it must be preserved.
 
 Argument passing is handled through registers \texttt{R10} to \texttt{R13}, known as the parameter registers. When a function is invoked, its first four arguments are placed into these registers. Registers \texttt{R12} and \texttt{R13} also serve as the return-value registers, allowing a function to return up to two values without using memory.
 
-Control flow is supported by register \texttt{R14}, the return-link register (RL).
-During a function call, the CALL instruction stores the return address in \texttt{R14}, allowing the function to return control to its caller.
+Control flow is supported by register \texttt{R14}, the return-link register (RL). During a function call, the CALL instruction stores the return address in \texttt{R14}, allowing the function to return control to its caller.
 
-Finally, register \texttt{R15} serves as the stack-frame pointer (SP).
-It marks the base of the current stack frame, which contains local variables, spilled registers, and temporaries, and supports predictable stack-based data management within the task’s runtime environment.
+Finally, register \texttt{R15} serves as the stack-frame pointer (SP). It marks the base of the current stack frame, which contains local variables, spilled registers, and temporaries, and supports predictable stack-based data management within the task’s runtime environment.

@@ -20,8 +20,32 @@ describe the routines used in the instruction set operation part...
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{addOfs32( base, ofs )} & ... \\
+    \textbf{addOfs32( base, ofs ) } & the offset is added to the base register using a 32-but unsigned arithmetic. The upper portion of the base register remains unchanged. \\
     \midrule
-    \textbf{...} & ... \\
+    \textbf{immOperand( instr ) } & the singed 15-bit immediate value field in the instruction is selected and sign extended. \\
+    \midrule
+    \textbf{memOperandImmIndexed( instr ) } & the signed 13-bit immediate value field in the instruction is selected, shifted left by the dw field and sign extended. It is added to the base register RegB using a 32-but unsigned arithmetic. The upper 32-bits of RegB remain unchanged. The operand is fetched according to the data width.\\
+    \midrule
+    \textbf{memOperandRegIndexed( instr ) } & the lower 32-bits of RegX are shifted left by the dw field and sign extended. The value is added to the base register RegB using a 32-but unsigned arithmetic. The operand is fetched according to the data width.\\
+    \textbf{testBit( reg, pos ) } & the bit in the passed register at the position is tested. \\
+    \midrule
+    \textbf{compare( cond, reg1, reg2 ) } & Reg2 is subtracted from Reg1 and evaluated for the condition. If the condition is true, a 1 is returned. \\
+    \midrule
+    \textbf{deposit( reg1, reg2, pos, len ) } & The right most field of len in Reg 2 is extracted and deposited at the position in Reg 1. \\
+    \midrule
+    \textbf{extract( reg1, reg2, pos, len ) } & The field of len at the position in Reg2 is extracted and returned in Reg1. \\
+    \midrule
+    \textbf{doubleShiftR( reg1, reg2, len ) } & Reg1 and Reg2 are concatenated and shifted right by len. The rightmost 64 bits of the result are returned. \\
+    \midrule
+    \textbf{diagOperation( id, reg1, reg2 ) } & Diagnostic function id is passed reg1 and reg2. \\
+    \midrule
+    \textbf{flushFromCache( adr ) } & Cache flush operation. \\
+    \midrule
+    \textbf{purgeFromCache( adr ) } & Cache purge operation. \\
+    \midrule
+    \textbf{insertIntoTlb( adr, info ) } & TLB insert. \\
+    \midrule
+    \textbf{purgeFromTlb( adr, info ) } & TLB purge. \\
+    \midrule
 \end{longtable}
 \end{center}

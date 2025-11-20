@@ -3,7 +3,11 @@
 \section*{Bit Operation Instructions}
 \addcontentsline{toc}{section}{Bit Operation Instructions}
 
-AND, OR, XOR, EXTR, DEP, DSR 
+
+\subsection*{Boolean operations}
+\addcontentsline{toc}{subsection}{Boolean operations}
+
+AND, OR, XOR 
 
 
 \subsection*{Bit operations with immediate operand}
@@ -11,10 +15,20 @@ AND, OR, XOR, EXTR, DEP, DSR
 
 For bit operation instructions that use an immediate value as one operand, there are two basic design options for interpreting the immediate field: it may be treated as an unsigned value and zero-extended to the machine word size, or it may be interpreted as a signed value and sign-extended. A zero-extended immediate is convenient for constructing small low-bit masks, while a sign-extended immediate provides access to negative constants, which correspond to masks with many high bits set.
 
-This architecture adopts \emph{sign-extension} for logical immediates. The primary motivation is uniformity: the logical I-type instructions share the same immediate decoding path as arithmetic instructions such as \texttt{ADDI}, avoiding additional decode logic.  
+This architecture adopts \emph{sign-extension} for logical immediate values. The primary motivation is uniformity: the logical I-type instructions share the same immediate decoding path as arithmetic instructions such as \texttt{ADDI}, avoiding additional decode logic.  
 
 Sign-extension also enables several useful bit-manipulation idioms without requiring extra instructions. For example, \texttt{AND Rn, Rm, -2} uses the sign-extended mask \texttt{0x\ldots FFFE} to clear the least significant bit, and \texttt{AND Rn, Rm, -4096} produces the mask \texttt{0x\ldots F800}, which aligns an address to a 4\,KiB boundary.
 
 Similarly, \texttt{XOR Rn, Rm, -1} yields the all-ones mask \texttt{0x\ldots FFFF}, providing a compact encoding of bitwise NOT without a dedicated instruction. The instruction \texttt{OR Rn, Rm, -256} constructs the high-bit mask \texttt{0x\ldots FF00}, useful when forcing upper bits to one.
 
-Using sign-extension for logical immediates therefore offers both a straightforward hardware implementation and a flexible set of common masking and bit-twiddling operations.
+Using sign-extension for logical immediate values therefore offers both a straightforward hardware implementation and a flexible set of common masking and bit-twiddling operations.
+
+\subsection*{Bit operations Extract, Deposit and Shift}
+\addcontentsline{toc}{subsection}{Bit operations Extract, Deposit and Shift}
+
+\subsection*{Bit operations Shift and Rotate}
+\addcontentsline{toc}{subsection}{Bit operations Shift and Rotate}
+
+EXTR, DEP, DSR 
+
+Twin-64 does not offer instructions to perform rotate and shift instructions. They are implemented using the \texttt{EXTR}, \texttt{DEP} and \texttt{DSR} instructions.

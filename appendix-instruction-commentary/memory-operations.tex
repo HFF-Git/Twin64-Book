@@ -3,10 +3,34 @@
 \section*{Memory Reference Instructions}
 \addcontentsline{toc}{section}{Memory Reference Instructions}
 
+Twin-64 provides conventional load and store instructions together with a small, carefully chosen set of addressing modes. In addition, the computational instructions \texttt{ADD}, \texttt{SUB}, \texttt{AND}, \texttt{OR}, \texttt{XOR}, and \texttt{CMP} may use these addressing modes to obtain their second operand. This reflects the register-–memory character of the architecture.
 
-LD, ST
+\subsection*{Addressing Modes and Data Access Model}
+\addcontentsline{toc}{subsection}{Addressing Modes and Data Access Model}
 
-but also: ADD, SUB, AND, OR, XOR, CMP
+Twin-64 supports two fundamental and orthogonal addressing modes for data access:
+\begin{enumerate}
+\setlength{\itemsep}{0.5em}
+\setlength{\parskip}{0pt}
+    \item Base register plus immediate offset, and
+    \item Base register plus index register.
+\end{enumerate}
+These modes form the basis of all load/store operations and all computational instructions that reference memory for their second operand.
 
-post increment strategy
+\paragraph{Scaled Indexing and Implicit Alignment}
+\addcontentsline{toc}{paragraph}{Scaled Indexing and Implicit Alignment}
+
+When the index-register mode is used, the index value is automatically scaled according to the size of the referenced data item. For example, a half-word access shifts the index left by one bit, while a word access shifts it left by two bits. This scaling increases the effective range of the index and ensures that the resulting address is aligned to the natural boundary of the accessed data. The effective address is computed as the sum of the base register and the scaled index.
+
+\paragraph{Signed Data Semantics}
+\addcontentsline{toc}{paragraph}{Signed Data Semantics}
+
+All data fetched by load instructions or by memory-operand computational instructions is interpreted as a signed quantity. Bytes, half-words, and words are sign-extended to the full 64-bit register width during access. This design aligns with the Twin-64 arithmetic model, simplifies the ALU and trap semantics, and avoids the complexity of maintaining separate signed and unsigned data paths.
+
+\paragraph{Absence of Pre/Post-Increment Addressing}
+\addcontentsline{toc}{paragraph}{Absence of Pre/Post-Increment Addressing}
+
+Some historical architectures provided pre-increment and post-increment addressing modes, in which the effective address is both computed and written back to the base register. Twin-64 intentionally omits these modes.
+
+Implicit updates require additional register-file write ports or multi-cycle update paths, increasing datapath and hazard complexity. They also introduce subtle ordering and forwarding constraints that complicate pipeline timing. Since modern compilers seldom use such addressing forms, their practical value does not justify the associated hardware and verification cost. Their omission helps preserve the simplicity and implementation efficiency of Twin-64.
 
