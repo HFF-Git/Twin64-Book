@@ -132,3 +132,7 @@ Region IDs 0 to 15 represent the physical address space, with a maximum size of 
 Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top 256 MB of the first region. I/O modules allocate their registers and storage within this range, and access to this area is uncached.
 
 The remaining address space is dedicated to virtual memory. Virtual storage is allocated dynamically, and the TLB provides the necessary translation to physical addresses while enforcing access rights.
+
+\simpleNote{ Explain the conceptual model of machine mode, supervisor mode and user mode and how this impacts address resolution. The term privileged code would need to be replaced with supervisor mode. Under evaluation. For now, there is privileged and user mode. Priv mode accesses the entire address range.}
+
+

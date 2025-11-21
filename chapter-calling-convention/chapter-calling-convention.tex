@@ -261,11 +261,19 @@ The above figure depicts two modules in the task global data area. The global da
 
 \begin{center}
     \drawInstrFormatSixtyFour
-       {0,3,8,13,16}
-        {Flags, Region Id, Page Number, Page Offset}
+       {0,3,16}
+        {Flags, Virtual Address of Function}
 \end{center}
 
 ??? flags need to be defined, important that the \texttt{BE} instruction always ignores the upper 12 bits.
+
+??? not clear what we do about the DP value. It is a small nightmare. While we can combine all module DP areas in one area, we need to switch DP on an external call. We can either save the caller DP and load the target DP from the linkage table, or we can come up with some magic that enables the target library to load its own DP.
+
+??? also not clear, if a library instance, i.e. a library used by the program has its own library DP per program or one common DP for the library. We could say that an external library is only one instance per system once loaded. So there are relocatable libraries which are added to the program code image and executable libraries which exist exactly once in the system. 
+
+??? we could then call these external libraries "subsystems". Oh well...
+
+??? when we store the target DP in the linkage table, we do not know if we need to load it. A flag in the linkage table entry could help, bit this is a branch. If we load the target DP in any case, we need to store the caller DP value and restore it after the call. This would bloat the calling sequence or require stub code which introduced sevral branches. Sigh.
 
 
 

@@ -24,9 +24,14 @@ describe the routines used in the instruction set operation part...
     \midrule
     \textbf{immOperand( instr ) } & the singed 15-bit immediate value field in the instruction is selected and sign extended. \\
     \midrule
-    \textbf{memOperandImmIndexed( instr ) } & the signed 13-bit immediate value field in the instruction is selected, shifted left by the dw field and sign extended. It is added to the base register RegB using a 32-but unsigned arithmetic. The upper 32-bits of RegB remain unchanged. The operand is fetched according to the data width.\\
+    \textbf{memLoadImmIndexed( instr ) } & the signed 13-bit immediate value field in the instruction is selected, shifted left by the dw field and sign extended. It is added to the base register RegB using a 32-but unsigned arithmetic. The upper 32-bits of RegB remain unchanged. The data is fetched according to the data width.\\
     \midrule
-    \textbf{memOperandRegIndexed( instr ) } & the lower 32-bits of RegX are shifted left by the dw field and sign extended. The value is added to the base register RegB using a 32-but unsigned arithmetic. The operand is fetched according to the data width.\\
+    \textbf{memLoadRegIndexed( instr ) } & the lower 32-bits of RegX are shifted left by the dw field and sign extended. The value is added to the base register RegB using a 32-but unsigned arithmetic. The data is fetched according to the data width.\\
+    \midrule
+    \textbf{ memStoreImmIndexed( instr, data )} & the signed 13-bit immediate value field in the instruction is selected, shifted left by the dw field and sign extended. It is added to the base register RegB using a 32-but unsigned arithmetic. The upper 32-bits of RegB remain unchanged. The data is stored according to the data width. \\
+    \midrule
+    \textbf{memStoreImmIndexed( instr, data )} & the lower 32-bits of RegX are shifted left by the dw field and sign extended. The value is added to the base register RegB using a 32-bit unsigned arithmetic. The upper 32-bits of RegB remain unchanged. The data is stored according to the data width.\\
+    \midrule
     \textbf{testBit( reg, pos ) } & the bit in the passed register at the position is tested. \\
     \midrule
     \textbf{compare( cond, reg1, reg2 ) } & Reg2 is subtracted from Reg1 and evaluated for the condition. If the condition is true, a 1 is returned. \\

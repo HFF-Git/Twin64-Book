@@ -8,7 +8,7 @@ Unconditional branch instructions always redirect control flow and may optionall
 \setlength{\itemsep}{0.5em}
 \setlength{\parskip}{0pt}
 \item \textbf{Instruction-relative branches:} The target is obtained by adding an offset to the address of the current instruction.
-\item \textbf{Segment-relative branches:} The target is computed relative to the start of the segment (address zero of the segment).
+\item \textbf{Region-relative branches:} The target is computed relative to the start of the segment (address zero of the segment).
 \end{itemize}
 Both methods use 32-bit unsigned arithmetic with wrap-around on overflow. For example, if the current instruction resides at \texttt{0xFFFF\_FFFC} and the branch offset is \texttt{0x10}, the calculation is:
 

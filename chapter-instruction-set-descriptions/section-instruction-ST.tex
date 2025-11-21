@@ -37,8 +37,8 @@
 
 \begin{iPageDescEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-memStore( memOperandImmIndexed( addOfs32( RegB, ofs )), RegR );
-memStore( memOperandRegIndexed( addOfs32( RegB, RegX )), RegR );
+memStoreImmIndexed( instr, RegR );
+memStoreRegIndexed( instr, RegR );
 \end{lstlisting}
 \end{iPageDescEntry}
 

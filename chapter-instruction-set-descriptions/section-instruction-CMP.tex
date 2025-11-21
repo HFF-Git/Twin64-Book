@@ -72,10 +72,10 @@ The \texttt{cond} field encodes the branch condition as follows:
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- compare( cond, RegB, RegA );          			(S9 )
-RegR <- compare( cond, RegB, immOperand());   			(S15)
-RegR <- compare( cond, RegR, memOperandImmIndexed());   (S13) 
-RegR <- compare( cond, RegR, memOperandRegIndexed());   (S9 )
+RegR <- compare( cond, RegB, RegA );                  (S9 )
+RegR <- compare( cond, RegB, immOperand());           (S15)
+RegR <- compare( cond, RegR, memOperandImmIndexed()); (S13) 
+RegR <- compare( cond, RegR, memOperandRegIndexed()); (S9 )
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
