@@ -83,37 +83,46 @@ The processor is a general-purpose CPU. The runtime model presented here represe
 \begin{center} 
 \begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape] 
 
-	\draw[help lines, gray!70, dashed] (0,0) grid(16,16);
+	\draw[help lines, gray, dashed] (0,0) grid(16,18);
 	\def\dataLeft {1}; 
 	\def\codeLeft {9}; 
 	\def\width {4}; 
 	
-	\node[ tsRoundedRectangle, minimum width=16cm, minimum height=16cm, fill=white!50] at (8,8) { }; 
-	\node[ anchor=west] at ( 0.25, 15.5 ) { \Large Task }; 
-	\node[ tsRectangle, minimum width=4cm, minimum height=4cm, fill=white!50, anchor=west] at ( \dataLeft, 12) { };
-	\node[ anchor=west] at ( \dataLeft + 0.25, 13.5 ) { \Large Global Data }; 
-	\draw[<-, thick] (\dataLeft + 4, 14) -- (\dataLeft + 5, 14); 
-	\node[anchor=west] at (\dataLeft + 5.25, 14) { \Large DP }; 
+	%task
+	\node[ tsRoundedRectangle, minimum width=16cm, minimum height=19cm, fill=white!50] at (8,8.5) { }; 
+	\node[ anchor=west] at ( 0.25, 17.5 ) {  \bfseries \LARGE Task }; 
 	
-	\node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 12) { }; 
-	\node[anchor=west] at (\dataLeft + 0.25, 12.25) { \small Module A };
+	%globals
+	\node[ tsRectangle, minimum width=4cm, minimum height=8cm, fill=white!50, anchor=west] at ( \dataLeft, 12) { };
+	\draw[thick] (\dataLeft, 13) -- (\dataLeft + \width, 13); 
 	
-	\node[ tsRectangle, minimum width=4cm, minimum height=8cm, fill=white!50, anchor=west] at ( \dataLeft, 5) { }; 
-	\node[ anchor=west] at ( \dataLeft + 0.25, 8.5 ) { \Large Stack Data }; 
-	\node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 5) { }; 
-	\node[ anchor=west] at ( \dataLeft + 0.25, 5.125 ) { \Large Stack Frame }; 
-	\draw[<-, thick] (\dataLeft + 4, 4.5) -- (\dataLeft + 5, 4.5); 
-	\node[anchor=west] at (\dataLeft + 5.25, 4.5) { \Large SP }; 
+	\node[ anchor=west] at ( \dataLeft + 0.25, 15.5 ) {  \bfseries \Large Linkage Data }; 
+	\node[ anchor=west] at ( \dataLeft + 0.25, 12.75 ) {  \bfseries \Large Global Data }; 
 	
-	\node[ tsRectangle, minimum width=4cm, minimum height=8cm, fill=white!50, anchor=west] at ( \codeLeft, 10) { }; 
-	\node[ anchor=west] at ( \codeLeft + 0.25, 13.5 ) { \Large Code }; 
+	\draw[<-, thick] (\dataLeft + 4, 13) -- (\dataLeft + 5, 13); 
+	\node[anchor=west] at (\dataLeft + 5.25, 13) { \Large DP }; 
+	
+	\node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 11) { }; 
+	\node[anchor=west] at (\dataLeft + 0.25, 11.25) { \small Module Globals };
+	
+	%stack 
+	\node[ tsRectangle, minimum width=4cm, minimum height=7cm, fill=white!50, anchor=west] at ( \dataLeft, 3.5) { }; 
+	\node[ anchor=west] at ( \dataLeft + 0.25, 6.5 ) { \bfseries \Large Stack Data }; 
+	\node[ tsRectangle, minimum width=4cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 3) { }; 
+	\node[ anchor=west] at ( \dataLeft + 0.25, 3.125 ) { \small Stack Frame }; 
+	\draw[<-, thick] (\dataLeft + 4, 2.5) -- (\dataLeft + 5, 2.5); 
+	\node[anchor=west] at (\dataLeft + 5.25, 2.5) { \Large SP }; 
+	
+	%code 
+	\node[ tsRectangle, minimum width=4cm, minimum height=10cm, fill=white!50, anchor=west] at ( \codeLeft, 11) { }; 
+	\node[ anchor=west] at ( \codeLeft + 0.25, 15.5 ) {  \bfseries \Large Code }; 
 	\	
-	\node[ tsRectangle, minimum width=4cm, minimum height=2cm, fill=gray!40, anchor=west] at ( \codeLeft, 10) { }; 
-	\node[anchor=west] at (\codeLeft + 0.25, 10.75) { \small Module A };
+	\node[ tsRectangle, minimum width=4cm, minimum height=2cm, fill=gray!40, anchor=west] at ( \codeLeft, 12) { }; 
+	\node[anchor=west] at (\codeLeft + 0.25, 12.75) { \small Module Code};
 	
-	\node[ tsRectangle, minimum width=4cm, minimum height=0.125cm, fill=white!50, anchor=west] at ( \codeLeft, 10) { }; 
-	\draw[<-, thick] ( \codeLeft + 4, 10.125 ) -- ( \codeLeft + 5, 10.125 ); 
-	\node[anchor=west] at ( \codeLeft + 5.25, 10.125 ) { \Large IA }; 
+	\node[ tsRectangle, minimum width=4cm, minimum height=0.125cm, fill=white!50, anchor=west] at ( \codeLeft, 12) { }; 
+	\draw[<-, thick] ( \codeLeft + 4, 12.125 ) -- ( \codeLeft + 5, 12.125 ); 
+	\node[anchor=west] at ( \codeLeft + 5.25, 12.125 ) { \Large IA }; 
 	
 \end{tikzpicture} 
 \end{center} 
@@ -121,11 +130,15 @@ The processor is a general-purpose CPU. The runtime model presented here represe
 \label{fig: Runtime Environment} 
 \end{figure}
 
-The code region contains program text that, once loaded, is immutable. Code is organized into modules, and a single task may reference several modules in its code region. The currently executing instruction is identified by the instruction address (IA).
+When a compiler or assembler generates code, the fundamental unit of work is the compilation unit. A compilation unit corresponds to a single invocation of the compiler or assembler. Although syntax varies by language, the source text is organized into modules. A module is an entity that contains constant declarations, type definitions, module-level global variables, and functions.
 
-Each code module provides a module-level global data section. The task-level global data, formed by aggregating the global sections of all modules referenced by the task, is addressed via the data pointer (DP) plus an offset. The data region of a task also contains the stack area, which holds stack frames created by function calls. The active frame is located via the stack pointer (SP), and items within the stack are addressed relative to SP.
+The task’s code region contains the program text of all modules used by the task. Once loaded, this region is immutable. The currently executing instruction is identified by the instruction address (IA).
 
-In this runtime design the stack grows upward: new frames occupy increasing addresses, and older frame contents are typically referenced using expressions of the form \texttt{SP - <ofs>}. Each stack frame includes a frame marker that stores the previous SP and the return link (RL), enabling structured returns and proper unwinding of frames.
+Each task also has a global data region. This task-level global data is formed by aggregating the global data sections of all modules referenced by the task. It is addressed using the data pointer (DP) plus an offset. The data region includes the task’s stack, which holds stack frames created by function calls. The active frame is located via the stack pointer (SP), and items within the stack are accessed relative to SP.
+
+The data region further contains the linkage table, a structure that provides the information needed to access functions in external libraries. Details of this mechanism are described in the section on linkage tables.
+
+In this runtime design, the stack grows upward: new frames occupy increasing addresses, and older frame contents are typically referenced using expressions of the form SP - <ofs>. Each stack frame includes a frame marker containing the previous SP and the return link (RL), enabling structured returns and proper unwinding of frames.
 
 \textbf{Note.}  
 
@@ -159,28 +172,27 @@ The CPU features general registers and control registers. All general registers 
 	% Register names
 	\node at (\leftx + \width/2, {16*\height - 0.45}) {Permanent zero}; 
 	\node at (\leftx + \width/2, {16*\height - 1.45}) {General use / Target for ADDIL }; 
-	\node at (\leftx + \width/2, {16*\height - 2.45}) {General use / DP }; 
+	\node at (\leftx + \width/2, {16*\height - 2.45}) {General use }; 
 	\node at (\leftx + \width/2, {16*\height - 3.45}) {General use }; 
 	\node at (\leftx + \width/2, {16*\height - 4.45}) {General use }; 
 	\node at (\leftx + \width/2, {16*\height - 5.45}) {General use }; 
 	\node at (\leftx + \width/2, {16*\height - 6.45}) {General use }; 
 	\node at (\leftx + \width/2, {16*\height - 7.45}) {General use }; 
 	\node at (\leftx + \width/2, {16*\height - 8.45}) {General use }; 
-	\node at (\leftx + \width/2, {16*\height - 9.45}) {General use }; 
-	\node at (\leftx + \width/2, {16*\height - 10.45}) {General use / Arg3 }; 
-	\node at (\leftx + \width/2, {16*\height - 11.45}) {General use / Arg2 }; 
-	\node at (\leftx + \width/2, {16*\height - 12.45}) {General use / Arg1 / Ret1}; 
-	\node at (\leftx + \width/2, {16*\height - 13.45}) {General use / Arg0 / Ret0 }; 
-	\node at (\leftx + \width/2, {16*\height - 14.45}) {General use / RL }; 
-	\node at (\leftx + \width/2, {16*\height - 15.45}) {General use / SP }; 
+	\node at (\leftx + \width/2, {16*\height - 9.45}) {General use  / Arg3 }; 
+	\node at (\leftx + \width/2, {16*\height - 10.45}) {General use / Arg2 }; 
+	\node at (\leftx + \width/2, {16*\height - 11.45}) {General use / Arg1 / Ret1};
+	\node at (\leftx + \width/2, {16*\height - 12.45}) {General use / Arg0 / Ret0}; 
+	\node at (\leftx + \width/2, {16*\height - 13.45}) {General use / RL }; 
+	\node at (\leftx + \width/2, {16*\height - 14.45}) {General use / SP }; 
+	\node at (\leftx + \width/2, {16*\height - 15.45}) {General use / DP }; 
 	
 	% bracket 
 	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,14) -- (\rightx + 0.5,16) node[midway, right=1cm, anchor=west]{\Large Hardware Architected }; 
-	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,13) -- (\rightx + 0.5,14) node[midway, right=1cm, anchor=west]{\Large Runtime Architecture }; 
-	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,9) -- (\rightx + 0.5,13) node[midway, right=1cm, anchor=west]{\Large Callee Save }; 
-	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,6) -- (\rightx + 0.5,9) node[midway, right=1cm, anchor=west]{\Large Caller Save }; 
-	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,2) -- (\rightx + 0.5,6) node[midway, right=1cm, anchor=west]{\Large Parameter Area }; 
-	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,0) -- (\rightx + 0.5,2) node[midway, right=1cm, anchor=west]{\Large Runtime Architecture }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,10) -- (\rightx + 0.5,14) node[midway, right=1cm, anchor=west]{\Large Callee Save }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,7) -- (\rightx + 0.5,10) node[midway, right=1cm, anchor=west]{\Large Caller Save }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,3) -- (\rightx + 0.5,7) node[midway, right=1cm, anchor=west]{\Large Parameter Area }; 
+	\draw[thick] [decorate, decoration={brace, amplitude=0.125cm, mirror}] (\rightx + 0.5,0) -- (\rightx + 0.5,3) node[midway, right=1cm, anchor=west]{\Large Runtime Architecture }; 
 	
 \end{tikzpicture} 
 \end{center} 
@@ -189,14 +201,17 @@ The CPU features general registers and control registers. All general registers 
 \end{figure} 
 
 
-Registers \texttt{R0} and \texttt{R1} are hardware-architected and have fixed, predefined roles within the processor. The remaining registers, \texttt{R2} through \texttt{R15}, form the general-purpose register file, whose usage is defined by the runtime environment. Within this convention, register \texttt{R2} is assigned as the data pointer (DP). It serves as the base reference for accessing the task’s global data region.
+Registers \texttt{R0} and \texttt{R1} are hardware-architected and have fixed, predefined roles within the processor. The remaining registers, \texttt{R2} through \texttt{R15}, form the general-purpose register file, whose usage is defined by the runtime environment. 
 
-Registers \texttt{R3} through \texttt{R6} form the callee-save register set. A callee-save register is one whose value must be preserved by the called function: if the function uses such a register, it must save its original contents upon entry and restore them before returning. This ensures that long-lived values in the caller remain intact across function calls.
+Registers \texttt{R2} through \texttt{R5} form the callee-save register set. A callee-save register is one whose value must be preserved by the called function: if the function uses such a register, it must save its original contents upon entry and restore them before returning. This ensures that long-lived values in the caller remain intact across function calls.
 
-Registers \texttt{R7} and \texttt{R9} are designated as caller-save registers. A caller-save register may be overwritten by the called function; therefore, the caller is responsible for saving the register’s value before making a call if it must be preserved.
+Registers \texttt{R6} and \texttt{R8} are designated as caller-save registers. A caller-save register may be overwritten by the called function; therefore, the caller is responsible for saving the register’s value before making a call if it must be preserved.
 
-Argument passing is handled through registers \texttt{R10} to \texttt{R13}, known as the parameter registers. When a function is invoked, its first four arguments are placed into these registers. Registers \texttt{R12} and \texttt{R13} also serve as the return-value registers, allowing a function to return up to two values without using memory.
+Argument passing is handled through registers \texttt{R9} to \texttt{R12}, known as the parameter registers. When a function is invoked, its first four arguments are placed into these registers. Registers \texttt{R11} and \texttt{R12} also serve as the return-value registers, allowing a function to return up to two values without using memory.
 
-Control flow is supported by register \texttt{R14}, the return-link register (RL). During a function call, the CALL instruction stores the return address in \texttt{R14}, allowing the function to return control to its caller.
+Control flow is supported by register \texttt{R13}, the return-link register (RL). During a function call, the CALL instruction stores the return address in \texttt{R13}, allowing the function to return control to its caller.
 
-Finally, register \texttt{R15} serves as the stack-frame pointer (SP). It marks the base of the current stack frame, which contains local variables, spilled registers, and temporaries, and supports predictable stack-based data management within the task’s runtime environment.
+Register \texttt{R14} serves as the stack-frame pointer (SP). It marks the base of the current stack frame, which contains local variables, spilled registers, and temporaries, and supports predictable stack-based data management within the task’s runtime environment.
+
+Finally, register \texttt{R15} is assigned as the data pointer (DP). It serves as the base reference for accessing the task’s global data region.
+

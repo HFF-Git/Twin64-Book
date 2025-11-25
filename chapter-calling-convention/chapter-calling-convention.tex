@@ -5,23 +5,22 @@
 \chapter*{Calling Convention}
 \addcontentsline{toc}{chapter}{Calling Convention}
 
+The previous chapters introduced the register-usage conventions and the overall stack layout defined by the runtime architecture. Building on that foundation, this chapter describes the mechanisms used to invoke routines---both simple procedures and full functions---and the conventions that govern control transfer, parameter passing, register preservation, and stack-frame management.
 
-The previous chapters introduced the register usage conventions and the overall stack layout defined by the runtime architecture. Building on that foundation, this chapter describes the mechanisms used to invoke routines, both simple procedures and more substantial functions, and the conventions that govern control transfer, parameter passing, register preservation, and stack-frame management.
+The discussion begins with the simplest form of call: the \emph{local call}, which transfers control between routines within the same module. Local calls illustrate the fundamental steps of the calling convention without the additional considerations required for inter-module calls.
 
-The discussion begins with the simplest form of call, the local call, which transfers control between routines within the same module. Local calls illustrate the fundamental steps of the calling convention without the additional considerations required for inter-module calls.
+A routine call proceeds through several well-defined stages. First, the caller evaluates all argument expressions and places the resulting values into the parameter area, either in registers or on the stack as required. After preparing the parameters, the caller saves any registers whose values must remain intact across the call. These caller-saved registers must be preserved by the caller before branching to another routine.
 
-A routine call proceeds through several well-defined stages. First, the caller evaluates all argument expressions and places the resulting values into the parameter area, either in registers or on the stack as required. After preparing the parameters, the caller saves any registers whose values must remain intact across the call. These caller-save registers must be preserved by the caller before branching to another routine.
+The callee then begins execution at its entry point. It accesses the incoming parameters in the established layout of the parameter area, allocates a stack frame, records the return link, and saves any callee-saved registers it intends to overwrite. This setup ensures that caller and callee operate independently while maintaining a consistent runtime state.
 
-The called routine, the callee, accesses the incoming parameters in the established layout of the parameter area and begins execution at its entry point. Upon entry, the callee allocates a stack frame, records the return link, and saves any callee-save registers it intends to overwrite. This setup ensures that both caller and callee operate independently while maintaining a consistent runtime state.
+When the callee completes its work, it restores all callee-saved registers, retrieves the return link from the frame marker, deallocates its stack frame, and transfers control back to the caller. This division of responsibility allows efficient cooperation between routines and avoids unnecessary state preservation.
 
-Once the callee completes its computation, it prepares to return. All callee-save registers are restored, the return address is retrieved from the frame marker, and control is transferred back to the caller. This division of responsibility allows efficient cooperation between routines and avoids unnecessary state preservation.
-
-As described earlier, the general-purpose register set is partitioned into caller-save and callee-save regions. A compiler selects registers from these regions as needed, balancing the work of saving and restoring state between the caller and the callee. When possible, redundant saves and restores are eliminated. The runtime architecture distinguishes between two basic categories of calls: local calls, which remain within a single module, and external calls, which cross module boundaries and require additional handling. The following sections describe the two types in detail.
+As described earlier, the general-purpose register set is partitioned into caller-save and callee-save regions. A compiler selects registers from these regions as needed, balancing the work of saving and restoring state between the caller and the callee. When possible, redundant saves and restores are eliminated. The runtime architecture distinguishes between two basic categories of calls: \emph{local calls}, which remain within a single module, and \emph{external calls}, which cross module boundaries and require additional handling. The following sections describe these types in detail.
 
 \section*{Local Call}
 \addcontentsline{toc}{section}{Local Call}
 
-A local call is by far the most common type of procedure call. The following code snippets illustrate such a call. The calling procedure prepares the call by loading the arguments, saving any registers that the callee might modify, and then branching to the callee. After the callee returns, the caller restores its saved registers and continues execution.
+A local call is the most common form of procedure call. The following code snippet illustrates such a call. The caller loads the arguments, saves any registers the callee might modify, and branches to the callee. After the callee returns, the caller restores its saved registers and continues execution.
 
 \begin{figure}[H]
 \centering
@@ -36,7 +35,8 @@ A local call is by far the most common type of procedure call. The following cod
 \end{lstlisting}
 \end{figure}
 
-The called procedure begins by saving the return link, allocating its stack frame, and saving any registers that the caller expects to remain unchanged across the call. At the end of the routine, it restores the return address, restores any callee-saved registers, deallocates the stack frame, and finally branches back to the caller using the restored return address.
+
+The callee begins by saving the return link, allocating its stack frame, and saving any registers that must remain unchanged across the call. When the routine completes, it restores the return address, restores callee-saved registers, deallocates the stack frame, and branches back to the caller.
 
 \begin{figure}[H]
 \centering
@@ -58,16 +58,16 @@ target:     ...					; save RL
 \end{lstlisting}
 \end{figure}
 
-The code above shows the full sequence of steps that may be required for a local procedure call. Depending on the specific call and the nature of the callee, some steps may be omitted. For example, if the caller does not use any caller-saved registers, there is no need to save them before the call. Likewise, a procedure with no arguments does not need to evaluate arguments.
+This sequence shows all steps that may be required for a local call. Depending on the specific call and the nature of the callee, some steps may be omitted. For example, if the caller does not use any caller-saved registers, no saving is needed before the call. Likewise, a routine with no arguments does not need to evaluate arguments.
 
-The callee can also omit unnecessary steps. A leaf procedure, which is a procedure that does not call any other procedure, does not need to save the return address. If it does not use any callee-saved registers, those need not be saved or restored. Finally, if a leaf procedure uses no caller-saved registers, has no local variables, and does not need to save any temporary registers, it may not require a stack frame at all.
+The callee can also omit steps. A \emph{leaf procedure}, i.e. one that calls no other routines, does not need to save the return address. If it does not use any callee-saved registers, those need not be saved or restored. Finally, if a leaf procedure uses no caller-saved registers, has no local variables, and does not need to preserve temporary registers, it may require no stack frame at all.
 
-The instructions \texttt{B}, \texttt{BR} and \texttt{BV} are the instructions used for a local branch. The address computation, whether IA-relative or region relative, will not impact the region portion of the instruction address. 
+The instructions \texttt{B}, \texttt{BR}, and \texttt{BV} are used for local branches. The address computation, whether IA-relative or region-relative, does not modify the region portion of the instruction address.
 
 \section*{Parameter passing}
 \addcontentsline{toc}{section}{Parameter passing}
 
-Procedures optionally pass arguments to a called procedure and obtain return values. The parameter area is located in the calling procedure's stack frame below the stack frame marker.
+Procedures may pass arguments to a callee and receive return values. The parameter area is located in the caller's stack frame, below the frame marker.
 
 \begin{figure}[H]
 \begin{center}
@@ -155,76 +155,107 @@ Procedures optionally pass arguments to a called procedure and obtain return val
 \label{fig:argument_passing}
 \end{figure}
 
-The first four arguments are passed via the registers ARG0 to ARG3. Nevertheless, the stack frame parameter area allocates stack space for them. Any further parameter is stored in the stack frame parameter area. Upon return, the called procedure may pass up to two return values in registers, \texttt{Ret0} and \texttt{Ret1}. Arguments and return values are addressed relative to the stack frame pointer of the calling procedure. Since the called procedure may also allocates a stack frame, the size of the callee stack frame needs to be added to the fixed offsets where the arguments are in the previous frame.
+The first four arguments are passed in registers \texttt{ARG0} through \texttt{ARG3}. Nevertheless, the caller's stack frame reserves space for them in the parameter area. Any additional parameters are stored on the stack. Upon return, the callee may supply up to two return values in registers \texttt{RET0} and \texttt{RET1}.
+
+Arguments and return values are addressed relative to the caller's frame pointer. Because the callee may allocate its own stack frame, the size of the callee's frame must be added to the fixed offsets of the arguments in the caller's frame.
 
 \section*{External Calls}
 \addcontentsline{toc}{section}{External Calls}
 
-An external call is defined as potentially crossing the region boundary. The \texttt{BE} instruction computes the effective address from a general register and an immediate offset encoded in the instruction. Like the local calls, this is a 32-bit unsigned address computation. In contrast to the local branch type instruction, the general register used as the base register contains the full virtual address and not only the offset portion. The \texttt{BE} is used for branching to a target in another region and also to return from that region. The following code snippets show an external call.
+
+An external call is one that may cross a region boundary. The \texttt{BE} instruction computes the effective address from a general register and an immediate offset encoded in the instruction. Like local branches, this computation produces a 32-bit unsigned address. However, unlike local branches, the base register contains the full virtual address, not just an offset. The \texttt{BE} instruction is used both to call a target in another region and to return from it. The following code snippets shows a basic external call.
 
 \begin{figure}[H]
 \centering
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
+
 ; calling code
 
 			...					; load arguments
 			...					; save caller saves
-			LD R1, -ofs(DP)	    ; obtain the target address    
+			LD R1, <target>)	    ; obtain the target address    
 			BE R1, RL    		; branch to "target", save return
 			...					; restore caller saves
 \end{lstlisting}
 \end{figure}
 
-Before executing the \texttt{BE} instruction, that target address is fetched from an area below the global area pointed to by the DP register. This area is referred to as the linkage table, outlined in the next section. The following figure shows the called procedure.
+
+This snippet illustrates only the external branch. The full runtime convention is more elaborate. When calling an external function, the target address and its associated DP value must be obtained. This information is stored in the \textbf{linkage table}, which is populated with actual values at load time. This indirection allows compiled code to remain unchanged regardless of where the external function is ultimately located.
+
+Because there is no practical way for the callee to determine its correct DP value in a shared-code model, the caller is responsible for setting DP before branching outside its module. The necessary steps of loading the target address, loading the target DP, and performing the external branch are placed into a small piece of code called a \emph{stub}. A stub is generated at compile time and inserted into the module's code.
+
+A generic external call sequence is shown below:
 
 \begin{figure}[H]
 \centering
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
+
+;calling code
+
+			...
+            ...						; load arguments
+			...						; save caller saves
+			...						; save DP
+			B stubF1				; branch to the stub for "F1"
+			...						;restore DP
+			...						; restore caller saves
+			...
+			
+;stubF1
+stubF1:		LD R1, -<ofs>(DP)		; load target address of F1
+			LD DP, -<ofs> + 8(DP)   ; load target DP value
+			BE (R1)					; branch to target
+
+\end{lstlisting}
+\end{figure}
+
+
+Before the stub loads the new DP value, the caller must save the current DP. This step is always required, even if the calling function does not use DP. The Twin-64 runtime model performs this work in the caller before branching to the stub. This division has several benefits. First, the caller can optimize DP saving. For example, by dedicating a register to hold it so that only restoring DP is necessary after external calls. Second, the stub's sequence of loading the target address and DP value is shared for all calls to the same external function. The target function is unaware of whether it was reached by a local or external call:
+
+\begin{figure}[H]
+\centering
+\lstset{style=codesnippetstyle}
+\begin{lstlisting}
+
 ; called code
 
-target:     ...					; save RL
-			... 				; allocate stack frame
-			...					; save callee save
-			
-			...					; ??? work....				   <=====
+target:     ST RL, -16(SP)		; save RL
+			LDO SP, <size>(SP)  ; allocate stack frame of <size>
+			...					; save callee save regs
 			
 			...					; do the function work
 			
-			...					; restore RL
 			...					; restore callee saves
-			...					: deallocate stack frame
-			
-								; ??? work....                 <=====
-						
+			LDO SP, -<size>(SP) : deallocate stack frame
+			LD RL, -16(SP)      ; restore RL
 			BE (RL) 		    ; branch to return location	
 \end{lstlisting}
 \end{figure}
 
-In addition to the work that needs to be done also for a local call, the external call, i.e. the cross region call, needs to do additional work. First the, since the target address is not in the same region, the virtual address needs to be obtained. Typically, during the load process, the region Id is assigned to the target region. The runtime features a \textbf{linkage table} for this purpose. The table will be explained the next section. 
-
-Each module has global register, DP, which points to the module global data. A branch with the same file, the DP register remains unchanged. When calling code in a library, the DP value will change. Consequently, the entry and exit sequence of the called function potentially needs to save and restore the callers DP value.
+Local calls may use \texttt{BV} to return, since the region portion of the address does not change. Exported functions, however, may return either locally or externally, and therefore must use \texttt{BE}.
 
 \section*{Linkage Table}
 \addcontentsline{toc}{section}{Linkage Table}
 
-The assembler / compiler generates the linkage table skeleton. The linkage table is located below the global data area, pointed to by DP. The linkage table is architected to start at region offset zero.
+The assembler or compiler generates the skeleton of the linkage table. The linkage table resides below the global data area. Entries are addressed using negative DP offsets.
 
 \begin{figure}[H] 
 \begin{center} 
 \begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape] 
 
-	% \draw[help lines, gray!70, dashed] (0,0) grid(16,8);
+	% \draw[help lines, gray!70, dashed] (0,0) grid(16,10);
 	
 	\def\dataLeft {4}; 
 	\def\codeLeft {9}; 
 	\def\width {6}; 
 	
-	\node[ tsRectangle, minimum width=6cm, minimum height=8cm, fill=white!50, anchor=west] at ( \dataLeft, 4 ) { };
-	\draw[thick] (\dataLeft, 4) -- (\dataLeft + 6, 4);
+	\node[ tsRectangle, minimum width=6cm, minimum height=10cm, fill=white!50, anchor=west] at ( \dataLeft, 5 ) { };
+	\draw[thick] (\dataLeft, 4) -- (\dataLeft + + \width, 4);
+	\draw[thick] (\dataLeft, 8) -- (\dataLeft + \width, 8); 
 	\draw[<-, thick] (\dataLeft, 8) -- (\dataLeft - 1, 8); 
-	\node[anchor=west] at (\dataLeft - 4.75, 8 ) { \Large Region start (0) }; 
+	\node[anchor=west] at (\dataLeft - 4.75, 10 ) { \Large Data Region }; 
 	\draw[<-, thick] (\dataLeft, 4) -- (\dataLeft - 1, 4); 
 	\node[anchor=west] at (\dataLeft - 2.25, 4 ) { \Large DP }; 
 	
@@ -257,7 +288,7 @@ The assembler / compiler generates the linkage table skeleton. The linkage table
 \label{fig: Linkage Table} 
 \end{figure}
 
-The above figure depicts two modules in the task global data area. The global data of a module are addressed DP plus an offset, the linkage table items are addressed DP minus an offset. The assembler / compiler creates the linkage table during the compilation process. The entries are as follows:
+The figure illustrates two modules within a task's global data region. A module's global data is addressed as DP plus an offset, while linkage-table entries are addressed as DP minus an offset. The compiler constructs the linkage table during compilation. Each entry has the following structure:
 
 \begin{center}
     \drawInstrFormatSixtyFour
@@ -267,13 +298,21 @@ The above figure depicts two modules in the task global data area. The global da
 
 ??? flags need to be defined, important that the \texttt{BE} instruction always ignores the upper 12 bits.
 
-??? not clear what we do about the DP value. It is a small nightmare. While we can combine all module DP areas in one area, we need to switch DP on an external call. We can either save the caller DP and load the target DP from the linkage table, or we can come up with some magic that enables the target library to load its own DP.
+\section*{Function Labels}
+\addcontentsline{toc}{section}{Function Labels}
 
-??? also not clear, if a library instance, i.e. a library used by the program has its own library DP per program or one common DP for the library. We could say that an external library is only one instance per system once loaded. So there are relocatable libraries which are added to the program code image and executable libraries which exist exactly once in the system. 
+??? also need a linkage table entry
 
-??? we could then call these external libraries "subsystems". Oh well...
+\section*{Design Rationale}
+\addcontentsline{toc}{section}{Design Rationale}
 
-??? when we store the target DP in the linkage table, we do not know if we need to load it. A flag in the linkage table entry could help, bit this is a branch. If we load the target DP in any case, we need to store the caller DP value and restore it after the call. This would bloat the calling sequence or require stub code which introduced sevral branches. Sigh.
+- simple instructions compared to CISC which did a lit of that work behind the scenes \\
+- split between caller, import stub, callee \\
+- could have done more in stub at the expense of branches \\
+- our runtime is a reasonable compromise \\
+- added only one more branch \\
+- code expansion for DP saving is moderate, can be optimized \\
+- callee is unaware of caller region, no export stub necessary \\
 
 
 
