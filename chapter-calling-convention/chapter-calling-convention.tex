@@ -288,7 +288,17 @@ The assembler or compiler generates the skeleton of the linkage table. The linka
 \label{fig: Linkage Table} 
 \end{figure}
 
-The figure illustrates two modules within a task's global data region. A module's global data is addressed as DP plus an offset, while linkage-table entries are addressed as DP minus an offset. The compiler constructs the linkage table during compilation. Each entry has the following structure:
+The figure illustrates two modules within a task's global data region. A module's global data is addressed as DP plus an offset, while linkage-table entries are addressed as DP minus an offset. The compiler constructs the linkage table during compilation. The linkage table contains per external library several entries. 
+
+The DP value entry starts the linkage subtable for a particular library. 
+
+\begin{center}
+    \drawInstrFormatSixtyFour
+       {0,3,16}
+        {Flags, DP value of Function Library}
+\end{center}
+
+The function target entry contains the target address of the function.
 
 \begin{center}
     \drawInstrFormatSixtyFour
@@ -296,23 +306,30 @@ The figure illustrates two modules within a task's global data region. A module'
         {Flags, Virtual Address of Function}
 \end{center}
 
-??? flags need to be defined, important that the \texttt{BE} instruction always ignores the upper 12 bits.
+??? we need at least two kind of entries: one is the DP value entry, which is the same for all external targets of the same library, and one is the target itself.
 
 \section*{Function Labels}
 \addcontentsline{toc}{section}{Function Labels}
 
-??? also need a linkage table entry
+??? also need a linkage table entry for function labels
+
+\begin{center}
+    \drawInstrFormatSixtyFour
+       {0,3,16}
+        {Flags, Virtual Address of Function}
+\end{center}
 
 \section*{Design Rationale}
 \addcontentsline{toc}{section}{Design Rationale}
 
-- simple instructions compared to CISC which did a lit of that work behind the scenes \\
-- split between caller, import stub, callee \\
-- could have done more in stub at the expense of branches \\
-- our runtime is a reasonable compromise \\
-- added only one more branch \\
-- code expansion for DP saving is moderate, can be optimized \\
-- callee is unaware of caller region, no export stub necessary \\
+There are many possible ways to organize modules and their external linkages. Classic CISC architectures provided simple call instructions that implicitly performed all the required steps such as address computation, access-rights checking, and memory references needed to resolve external linkages.
 
+RISC designs, in contrast, expose only simple branch and jump instructions and rely on explicit caller–-callee code sequences to implement calling conventions. Because compilers require a unified and predictable calling sequence, the additional work needed for external calls is typically inserted by the linker via import and export stubs.
 
+Twin-64 follows a similar model. External calls use an import stub, which is responsible for locating the target function and obtaining the external library’s DP value before issuing the external branch instruction. The caller saves its own DP value and restores it upon return.
 
+This approach adds two simple instructions at each external call site, but provides a key benefit: it avoids two additional branches, one from the stub to the callee and one back from the callee to the caller. It also centralizes DP handling. Because the stub does not manipulate the caller’s DP value, the caller has full flexibility. It may save DP to memory, move it to another register, or even save it once and reload it after each external call, depending on optimization goals.
+
+Thus an external call requires only one additional branch in the calling sequence, and the code expansion for saving the caller’s DP is modest. The callee is completely unaware of the caller’s region, so no export stub is required.
+
+An additional advantage is that the compiler does not need to generate any special code for functions that may be called externally. Only imported functions must be DP-aware. This reduces complexity and places less burden on the compiler designer.

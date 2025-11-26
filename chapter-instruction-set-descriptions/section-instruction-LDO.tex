@@ -13,25 +13,33 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Format}
-The \texttt{LDO} instruction uses the following instruction format: \\
+The \texttt{LDO} instruction uses the following instruction formats: \\
 
 \begin{flushleft}
 \drawInstrFormat
     {0,1,3,5,6.5,8.5,9.5,16}
-    {0,\OpCodeLDO,RegR,0,RegB, dw, ofs}
+    {\OpCodeGrpALU,\OpCodeLDO,RegR,0,RegB, dw, ofs}
 \end{flushleft}
+
+\begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpALU,\OpCodeLDO, RegR, 1, RegB, dw, RegX, 0}
+    \end{flushleft}
+    
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{LDO} instruction loads a value from memory using a scaled offset addressing mode. The \texttt{ofs} value is sign extended and shifted by the \texttt{dw} field. The result is calculated by adding this value to the contents of \texttt{RegB}.  
-The loaded value is then stored in \texttt{RegR}.
+The \texttt{LDO} instruction loads an offset into a general register. Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address. The computed value is then stored in \texttt{RegR}.
+
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 RegR <- addOfs32( RegB, signExtend( ofs, 13 ) << dw );
+RegR <- addOfs32( RegB, ( RegX << dw ));
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
