@@ -8,6 +8,10 @@ A logical domain of addresses. The CPU may define multiple address spaces, such 
 A contiguous range of addresses within an address space, reserved for a particular purpose.  
 Examples: \textit{code region}, \textit{data region}, \textit{stack region}.
 
+\paragraph{Offset}
+An unsigned 32-bit value that together with the region forms a virtual address. 
+Examples: \textit{code offset}, \textit{data offset}.
+
 \paragraph{Object}
 A unit of storage within a region. Objects correspond to program-visible entities or runtime allocations, such as global variables, heap blocks, or stack frames.  
 Examples: \textit{global object}, \textit{heap object}, \textit{stack object}.

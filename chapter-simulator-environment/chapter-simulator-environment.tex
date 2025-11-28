@@ -2,26 +2,49 @@
 \addcontentsline{toc}{chapter}{Simulator}
 
 
-\section*{xxx}
-\addcontentsline{toc}{section}{xxx}
 
+\section*{Running the Simulator}
+\addcontentsline{toc}{section}{Running the Simulator}
+
+Running the simulator simply means launching the application in a terminal window.
+The figure below shows a typical simulator environment. The environment consists of several simulator windows arranged within a single terminal screen. Each window begins with a banner line, displayed in inverse video. The banner identifies the window and shows its current state.
+
+Beneath the banner is the window body, which consists of multiple lines of ASCII text. This area displays status information, messages, or other simulator output.
 
 \begin{figure}[h]
 \centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape] 
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
 
-	\draw[help lines, gray!70, dashed] (0,0) grid(16,10);
+    % ---- GRID (for development only) ----
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,11);
 
-	%\begin{overpic}[width=0.8\textwidth]{screenshot.pdf}
-  		% Coordinates from 0–100 percent
-  	%	\put(30,70){\color{red}\vector(1,-1){20}}
-  	%	\put(52,50){\color{red}This part does X}
+    % The image
+    \node[anchor=north west] (img) at (0,11)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimMainWindow.pdf}};
 
-  	%	\put(10,20){\color{blue}\vector(1,0){15}}
-  	%	\put(28,20){\color{blue}Another annotation}
-	%\end{overpic}
-	
-\end{tikzpicture} 
-\caption{Simulator Environment Screen} 
-\label{fig: Simulator Environment Screen} 
+    % ---- ARROW INTO SCREENSHOT ----
+    \draw[gray, thick, ->] (4, 1) -- (6, 2);
+    \node[anchor=east] at ( 5, 0.5 ) {\LARGE Command Window};
+    
+    \draw[gray, thick, ->] (4, 10) -- (6, 8.25);
+    \node[anchor=east] at ( 5, 10.5 ) {\LARGE Window Banner};
+    
+    \draw[gray, thick, ->] (12, 10) -- (8, 7.25);
+    \node[anchor=east] at ( 13.5, 10.5 ) {\LARGE Window Body};
+    
+\end{tikzpicture}
+\caption{Simulator Environment Screen}
+\label{fig:simulator-environment-screen}
 \end{figure}
+
+Multiple simulator windows may appear stacked vertically within the terminal. The final window in the stack is the simulator command window. This window typically presents an input prompt, and some simulator commands also write their output directly to this window.
+
+\section*{Simulator Windows}
+\addcontentsline{toc}{section}{Simulator Windows}
+
+\section*{Simulator Commands}
+\addcontentsline{toc}{section}{Simulator Commands}
+
+
+\section*{Simulator Configuration}
+\addcontentsline{toc}{section}{Simulator Configuration}

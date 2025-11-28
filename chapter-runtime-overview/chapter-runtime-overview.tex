@@ -209,7 +209,7 @@ Registers \texttt{R6} and \texttt{R8} are designated as caller-save registers. A
 
 Argument passing is handled through registers \texttt{R9} to \texttt{R12}, known as the parameter registers. When a function is invoked, its first four arguments are placed into these registers. Registers \texttt{R11} and \texttt{R12} also serve as the return-value registers, allowing a function to return up to two values without using memory.
 
-Control flow is supported by register \texttt{R13}, the return-link register (RL). During a function call, the CALL instruction stores the return address in \texttt{R13}, allowing the function to return control to its caller.
+Control flow is supported by register \texttt{R13}, the return-link register (RL). During a function call, the branch instructions store the return address in \texttt{R13}, allowing the function to return control to its caller.
 
 Register \texttt{R14} serves as the stack-frame pointer (SP). It marks the base of the current stack frame, which contains local variables, spilled registers, and temporaries, and supports predictable stack-based data management within the task’s runtime environment.
 

@@ -35,12 +35,11 @@ This design matches the behavior of similar primitives in other architectures (e
 The following example implements an atomic increment function. The memory location is specified by base register GR5 and an offset. \\
 
 \begin{lstlisting}[style=iPageOpStyle]
-atomic_inc:
-    LDR      R1, ofs( R5 )     ; Load current value and set reservation
-    ADDI     R1, R1, 1         ; Increment locally
-    STC      R1, ofs( R5 )     ; Attempt conditional store
-    CBR.EQ   R1, R0, atomic_inc    ; Retry if store failed (R1 = 0)
-    RET
+atomic_inc:	LDR 	R1, ofs( R5 )         ; Load current value and set reservation
+    		ADD     R1, R1, 1             ; Increment locally
+    		STC     R1, ofs( R5 )         ; Attempt conditional store
+    		CBR.EQ  R1, R0, atomic_inc    ; Retry if store failed (R1 = 0)
+    		BE (RL)					      ; return
 \end{lstlisting}
 
 Each iteration performs a reserved load, modifies the value, and attempts a conditional store. If another processor writes to the same cache line between the \texttt{LDR} and \texttt{STC}, the reservation is cleared, causing \texttt{STC} to fail and the loop to retry. This ensures that the final store reflects an atomic update to memory.
@@ -57,18 +56,16 @@ The following example implements the compare and swap function. \\
 ;   Returns:
 ;      Arg0  : 1 on success, 0 on failure
 
-cas:
-    LDR    R1, 0(Arg0)           ; load reserved value
-    CBR.EQ R1, Arg1, cas_fail    ; compare with expected value
-    							 ; If not equal, fail
-    STC    Arg2, 0(Arg0)         ; Attempt conditional store
-    MBR    Arg2, Arg2, cas       ; Retry if store failed
-    OR     Arg0, R0, 1           ; Indicate success
-    BV ( R2 )	                 ; return
+cas:         LDR    R1, 0(Arg0)           ; load reserved value
+             CBR.EQ R1, Arg1, cas_fail    ; compare with expected value
+    							          ; If not equal, fail
+             STC    Arg2, 0(Arg0)         ; Attempt conditional store
+             MBR    Arg2, Arg2, cas       ; Retry if store failed
+             OR     Arg0, R0, 1           ; Indicate success
+             BE ( RL )	                  ; return
 
-cas_fail:
-    OR     Arg0, R0, 0           ; Indicate failure
-    BV ( R2 )	                 ; return
+cas_fail:    OR     Arg0, R0, 0           ; Indicate failure
+             BE ( RL )	                  ; return
 \end{lstlisting}
 
 This CAS sequence allows software-based atomic updates: the memory location is only updated if its current value matches the expected value.  Failed stores due to lost reservations cause the loop to retry, guaranteeing atomicity even in multiprocessor environments.

@@ -5,7 +5,7 @@
 \chapter*{Calling Convention}
 \addcontentsline{toc}{chapter}{Calling Convention}
 
-The previous chapters introduced the register-usage conventions and the overall stack layout defined by the runtime architecture. Building on that foundation, this chapter describes the mechanisms used to invoke routines---both simple procedures and full functions---and the conventions that govern control transfer, parameter passing, register preservation, and stack-frame management.
+The previous chapters introduced the register-usage conventions and the overall stack layout defined by the runtime architecture. Building on that foundation, this chapter describes the mechanisms used to invoke routines and the conventions that govern control transfer, parameter passing, register preservation, and stack-frame management.
 
 The discussion begins with the simplest form of call: the \emph{local call}, which transfers control between routines within the same module. Local calls illustrate the fundamental steps of the calling convention without the additional considerations required for inter-module calls.
 
@@ -45,15 +45,16 @@ The callee begins by saving the return link, allocating its stack frame, and sav
 \begin{lstlisting}
 ; called procedure
             
-target:     ...					; save RL
-			... 				; allocate stack frame
+target:     ST RL, -16(SP)	    ; save RL
+			LDO SP, <size>(SP) 	; allocate stack frame
 			...					; save callee save
 			
 			...					; do the work
 			
-			...					; restore RL
+			
 			...					; restore callee saves
-			...					: deallocate stack frame
+			LDO SP, -<size>(SP) ; deallocate stack frame
+			LD RL, -16(SP)		; restore RL
 			BV (RL) 			; return to caller
 \end{lstlisting}
 \end{figure}
@@ -62,7 +63,7 @@ This sequence shows all steps that may be required for a local call. Depending o
 
 The callee can also omit steps. A \emph{leaf procedure}, i.e. one that calls no other routines, does not need to save the return address. If it does not use any callee-saved registers, those need not be saved or restored. Finally, if a leaf procedure uses no caller-saved registers, has no local variables, and does not need to preserve temporary registers, it may require no stack frame at all.
 
-The instructions \texttt{B}, \texttt{BR}, and \texttt{BV} are used for local branches. The address computation, whether IA-relative or region-relative, does not modify the region portion of the instruction address.
+The instructions \texttt{B}, \texttt{BR}, and \texttt{BV} are used for local branches. The address computation, whether IA-relative or region-relative, does not modify the region portion of the instruction address. IT is always the region of the currently executing code.
 
 \section*{Parameter passing}
 \addcontentsline{toc}{section}{Parameter passing}
@@ -162,8 +163,7 @@ Arguments and return values are addressed relative to the caller's frame pointer
 \section*{External Calls}
 \addcontentsline{toc}{section}{External Calls}
 
-
-An external call is one that may cross a region boundary. The \texttt{BE} instruction computes the effective address from a general register and an immediate offset encoded in the instruction. Like local branches, this computation produces a 32-bit unsigned address. However, unlike local branches, the base register contains the full virtual address, not just an offset. The \texttt{BE} instruction is used both to call a target in another region and to return from it. The following code snippets shows a basic external call.
+An external call is one that may cross a region boundary. The \texttt{BE} instruction computes the effective address from a general register and an immediate offset encoded in the instruction. Like local branches, this computation produces a 32-bit unsigned address offset. However, unlike local branches, the base register contains the full virtual address, region and offset, not just an offset. The \texttt{BE} instruction is used both to call a target in another region and to return from it. The following code snippets shows a basic external call.
 
 \begin{figure}[H]
 \centering
@@ -174,7 +174,7 @@ An external call is one that may cross a region boundary. The \texttt{BE} instru
 
 			...					; load arguments
 			...					; save caller saves
-			LD R1, <target>)	    ; obtain the target address    
+			LD R1, <target>)    ; obtain the target address    
 			BE R1, RL    		; branch to "target", save return
 			...					; restore caller saves
 \end{lstlisting}
@@ -199,11 +199,12 @@ A generic external call sequence is shown below:
 			...						; save caller saves
 			...						; save DP
 			B stubF1				; branch to the stub for "F1"
-			...						;restore DP
+			...						; restore DP
 			...						; restore caller saves
 			...
 			
 ;stubF1
+
 stubF1:		LD R1, -<ofs>(DP)		; load target address of F1
 			LD DP, -<ofs> + 8(DP)   ; load target DP value
 			BE (R1)					; branch to target
@@ -212,7 +213,7 @@ stubF1:		LD R1, -<ofs>(DP)		; load target address of F1
 \end{figure}
 
 
-Before the stub loads the new DP value, the caller must save the current DP. This step is always required, even if the calling function does not use DP. The Twin-64 runtime model performs this work in the caller before branching to the stub. This division has several benefits. First, the caller can optimize DP saving. For example, by dedicating a register to hold it so that only restoring DP is necessary after external calls. Second, the stub's sequence of loading the target address and DP value is shared for all calls to the same external function. The target function is unaware of whether it was reached by a local or external call:
+Before the stub loads the new DP value, the caller must save the current DP. This step is always required, even if the calling function does not use DP. The Twin-64 runtime model performs this work in the caller's code before branching to the stub. This division has several benefits. First, the caller can optimize DP saving. For example, by dedicating a register to hold it so that only restoring DP is necessary after external calls. Second, the stub's sequence of loading the target address and DP value is shared for all calls to the same external function. Finally, the target function is unaware of whether it was reached by a local or external call:
 
 \begin{figure}[H]
 \centering
@@ -234,7 +235,7 @@ target:     ST RL, -16(SP)		; save RL
 \end{lstlisting}
 \end{figure}
 
-Local calls may use \texttt{BV} to return, since the region portion of the address does not change. Exported functions, however, may return either locally or externally, and therefore must use \texttt{BE}.
+Local calls may use \texttt{BV} to return, since the region portion of the address does not change. Exported functions, however, may return either locally or externally, and therefore must use \texttt{BE}. It is recommended to simply always use the \texttt{BE} instruction.
 
 \section*{Linkage Table}
 \addcontentsline{toc}{section}{Linkage Table}
@@ -245,44 +246,71 @@ The assembler or compiler generates the skeleton of the linkage table. The linka
 \begin{center} 
 \begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape] 
 
-	% \draw[help lines, gray!70, dashed] (0,0) grid(16,10);
+	\draw[help lines, gray!70, dashed] (0,0) grid(16,16);
 	
 	\def\dataLeft {4}; 
 	\def\codeLeft {9}; 
 	\def\width {6}; 
 	
-	\node[ tsRectangle, minimum width=6cm, minimum height=10cm, fill=white!50, anchor=west] at ( \dataLeft, 5 ) { };
-	\draw[thick] (\dataLeft, 4) -- (\dataLeft + + \width, 4);
-	\draw[thick] (\dataLeft, 8) -- (\dataLeft + \width, 8); 
-	\draw[<-, thick] (\dataLeft, 8) -- (\dataLeft - 1, 8); 
-	\node[anchor=west] at (\dataLeft - 4.75, 10 ) { \Large Data Region }; 
-	\draw[<-, thick] (\dataLeft, 4) -- (\dataLeft - 1, 4); 
-	\node[anchor=west] at (\dataLeft - 2.25, 4 ) { \Large DP }; 
+	%box
+	\node[ tsRectangle, minimum width=6cm, minimum height=14cm, fill=white!50, anchor=west] at ( \dataLeft, 9 ) { };
 	
+	\draw[thick] (\dataLeft, 12) -- (\dataLeft + \width, 12);
+	\draw[thick] (\dataLeft, 8) -- (\dataLeft + \width, 8);
+	\draw[thick] (\dataLeft, 2) -- (\dataLeft + \width, 2);
+	
+	\draw[thick, dashed] (\dataLeft, 0) -- (\dataLeft, 2);
+	\draw[thick, dashed] (\dataLeft + \width, 0) -- (\dataLeft + \width, 2);
+	
+	%left side text
+	\node[anchor=east] at (\dataLeft - 1, 16 ) { \Large Data Region }; 
+	\draw[<-, thick] (\dataLeft, 16) -- (\dataLeft - 1, 16); 
+	
+	\draw[<-, thick] (\dataLeft, 12) -- (\dataLeft - 1, 12); 
+	\node[anchor=east] at (\dataLeft - 1, 12 ) { \Large DP }; 
+	
+	\draw[<-, thick] (\dataLeft, 4) -- (\dataLeft - 1, 4); 
+	\node[anchor=east] at (\dataLeft - 1, 4 ) { \Large SP }; 
+
+	% global data text    
 	\draw[thick]  [decorate, decoration={brace, amplitude=0.25cm, mirror}] 
-	    (\dataLeft + 6.5, 0 ) -- (\dataLeft + 6.5, 4 )
-	    node[midway, right=1cm, anchor=west]{ };
-	    
-	\draw[thick]  [decorate, decoration={brace, amplitude=0.25cm, mirror}] 
-	    (\dataLeft + 6.5, 0 ) -- (\dataLeft + 6.5, 4 )
+	    (\dataLeft + 6.5, 8 ) -- (\dataLeft + 6.5, 12 )
 	    node[midway, right=1cm, anchor=west]{\Large Global Data};
 	    
+	% linkage table text    
 	\draw[thick]  [decorate, decoration={brace, amplitude=0.25cm, mirror}] 
-	    (\dataLeft + 6.5, 4 ) -- (\dataLeft + 6.5, 8 )
+	    (\dataLeft + 6.5, 12 ) -- (\dataLeft + 6.5, 16 )
 	    node[midway, right=1cm, anchor=west]{\Large Linkage Table};
 	    
-	\node[ tsRectangle, minimum width=6cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 7 ) { }; 
-	\node[anchor=west] at (\dataLeft + 0.25, 7) { \small Module A Externals};
-
-	\node[ tsRectangle, minimum width=6cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 3 ) { }; 
-	\node[anchor=west] at (\dataLeft + 0.25, 3) { \small Module A Global Data};
+	% stack area text    
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.25cm, mirror}] 
+	 	(\dataLeft + 6.5, 2 ) -- (\dataLeft + 6.5, 8 )
+	    node[midway, right=1cm, anchor=west]{ \Large Stack Area};
+	    
+	% module A externals        
+	\node[ tsRectangle, minimum width=6cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 14 ) { }; 
+	\node[anchor=west] at (\dataLeft + 0.25, 14) { \small Module A Externals};
+	% module B externals
+	\node[ tsRectangle, minimum width=6cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 13 ) { }; 
+	\node[anchor=west] at (\dataLeft + 0.25, 13) { \small Module B Externals};
 	
-	\node[ tsRectangle, minimum width=6cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 6 ) { }; 
-	\node[anchor=west] at (\dataLeft + 0.25, 6) { \small Module B Externals};
-
-	\node[ tsRectangle, minimum width=6cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 2 ) { }; 
-	\node[anchor=west] at (\dataLeft + 0.25, 2) { \small Module B Global Data};
-			
+	% module A globals
+	\node[ tsRectangle, minimum width=6cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 11 ) { }; 
+	\node[anchor=west] at (\dataLeft + 0.25, 11) { \small Module A Global Data};
+	
+	% module B globals
+	\node[ tsRectangle, minimum width=6cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 10 ) { }; 
+	\node[anchor=west] at (\dataLeft + 0.25, 10) { \small Module B Global Data};
+	
+	% stack frame
+	\node[ tsRectangle, minimum width=6cm, minimum height=1cm, fill=gray!40, anchor=west] at ( \dataLeft, 4.5 ) { }; 
+	\node[anchor=west] at (\dataLeft + 0.25, 4.5) { \small Stack Frame};
+	
+	% rest
+	\filldraw ( \dataLeft + 2.5, 1) circle (0.5mm);
+  	\filldraw ( \dataLeft + 3, 1) circle (0.5mm);
+  	\filldraw ( \dataLeft + 3.5, 1) circle (0.5mm);
+	
 \end{tikzpicture} 
 \end{center} 
 \caption{Linkage Table} 
@@ -296,7 +324,7 @@ The DP value entry starts the linkage subtable for a particular library.
 \begin{center}
     \drawInstrFormatSixtyFour
        {0,3,16}
-        {Flags, DP value of Function Library}
+        {0, DP value of Function Library}
 \end{center}
 
 The function target entry contains the target address of the function.
@@ -304,32 +332,40 @@ The function target entry contains the target address of the function.
 \begin{center}
     \drawInstrFormatSixtyFour
        {0,3,16}
-        {Flags, Virtual Address of Function}
+        {0, Virtual Address of Function}
 \end{center}
 
-??? we need at least two kind of entries: one is the DP value entry, which is the same for all external targets of the same library, and one is the target itself.
+The runtime supports two methods for allocating linkage table entries. In the first method, each external function has its own pair of entries, the DP value followed by the target address. These can be accessed using constant offsets of 0 and 8 bytes, respectively.
+
+However, because the DP register value is identical for all external functions within a given external load module, it only needs to be stored once. In the second method, a single DP entry is placed at the start of the linkage table portion for the external module, followed by the target address entries for all external functions. This approach produces a more compact table.
 
 \section*{Function Labels}
 \addcontentsline{toc}{section}{Function Labels}
 
-??? also need a linkage table entry for function labels
+A function label is a reference to a function which is resolved at calling time. Therefore each function that is accessed via a function label has an entry in the linkage table. The function label itself is then the index into the linkage table. 
+
+??? the entry is two pieces: DP index and function index. To be defined...
 
 \begin{center}
     \drawInstrFormatSixtyFour
-       {0,3,16}
-        {Flags, Virtual Address of Function}
+       {0,8,12,16}
+        {0, DP index, Function index}
 \end{center}
+
+\section*{Privilege Level Changes}
+\addcontentsline{toc}{section}{Privilege Level Changes}
+
 
 \section*{Design Rationale}
 \addcontentsline{toc}{section}{Design Rationale}
 
 There are many possible ways to organize modules and their external linkages. Classic CISC architectures provided simple call instructions that implicitly performed all the required steps such as address computation, access-rights checking, and memory references needed to resolve external linkages.
 
-RISC designs, in contrast, expose only simple branch and jump instructions and rely on explicit caller–-callee code sequences to implement calling conventions. Because compilers require a unified and predictable calling sequence, the additional work needed for external calls is typically inserted by the linker via import and export stubs.
+RISC designs, in contrast, expose only simple branch and jump instructions and rely on explicit caller–-callee code sequences to implement calling conventions. Because compilers require a unified and predictable calling sequence, the additional work needed for external calls is typically done via import and export stubs.
 
 Twin-64 follows a similar model. External calls use an import stub, which is responsible for locating the target function and obtaining the external library’s DP value before issuing the external branch instruction. The caller saves its own DP value and restores it upon return.
 
-This approach adds two simple instructions at each external call site, but provides a key benefit: it avoids two additional branches, one from the stub to the callee and one back from the callee to the caller. It also centralizes DP handling. Because the stub does not manipulate the caller’s DP value, the caller has full flexibility. It may save DP to memory, move it to another register, or even save it once and reload it after each external call, depending on optimization goals.
+This approach adds two simple instructions at each external call site, but provides a key benefit: it avoids two additional branches, one from the import stub to the callee and one back from the import stub to the caller. It also centralizes DP handling. Because the stub does not manipulate the caller’s DP value, the caller has full flexibility. It may save DP to memory, move it to another register, or even save it once and reload it after each external call, depending on optimization goals.
 
 Thus an external call requires only one additional branch in the calling sequence, and the code expansion for saving the caller’s DP is modest. The callee is completely unaware of the caller’s region, so no export stub is required.
 

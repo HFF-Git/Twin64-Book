@@ -5,63 +5,7 @@
 \chapter*{Processing Resources}
 \addcontentsline{toc}{chapter}{Processing Resources}
 
-This chapter describes the processing resources and data types in a Twin-64 system. Twin-64 provides a set of general-purpose registers, a set of control registers, and the Program State Word (PSW), which contains the current instruction address and processor status. 
-\begin{figure}[H]
-\begin{center}
-\begin{tikzpicture}[scale=0.8, transform shape]
-
-    % \draw[help lines, gray!70, dashed] (0,0) grid(16,4);
-    \def\leftofs{1}
-
-    % --- General Registers -----------------------------------------
-    \node[tsRectangle,
-          minimum width=4cm,
-          minimum height=4cm,
-          fill=white,
-          anchor=west] (genreg) at (\leftofs,2)  {General\\Registers};
-
-    % 16 subdivisions (4cm tall → 0.25cm per row)
-    \foreach \i in {1,...,15} {
-        \draw[gray!60]
-            ([yshift=2cm-0.25cm*\i]genreg.west) --
-            ([yshift=2cm-0.25cm*\i]genreg.east);
-    }
-
-
-    % --- Control Registers -----------------------------------------
-    \node[tsRectangle,
-          minimum width=4cm,
-          minimum height=4cm,
-          fill=white,
-          anchor=west] (ctrlreg) at (\leftofs+5,2) {Control\\Registers};
-
-    \foreach \i in {1,...,15} {
-        \draw[gray!60]
-            ([yshift=2cm-0.25cm*\i]ctrlreg.west) --
-            ([yshift=2cm-0.25cm*\i]ctrlreg.east);
-    }
-
-    % --- Instruction Address block ---------------------------------
-    \node[tsRectangle,
-          minimum width=4cm,
-          minimum height=0.5cm,
-          fill=white,
-          anchor=west] at (\leftofs + 10,3.75) { Instruction Address };
-
-    % --- Status block ----------------------------------------------
-    \node[tsRectangle,
-          minimum width=1.5cm,
-          minimum height=0.5cm,
-          fill=white,
-          anchor=west] at (\leftofs + 10, 3) { Status };
-
-\end{tikzpicture}
-\end{center}
-\caption{Software Accessible Registers}
-\label{fig:Software Accessible Registers}
-\end{figure}
-
-General registers are used for computation and address storage, control registers manage processor state, and the PSW holds the current instruction address along with the processor status.
+This chapter describes the processing resources and data types in a Twin-64 system. Twin-64 provides a set of general-purpose registers, a set of control registers, and the Program State Word (PSW). The general-purpose registers are used for computation and address storage, the control registers manage processor state, and the PSW holds both the current instruction address and processor status.
 
 \section*{General Registers}
 \addcontentsline{toc}{section}{General Registers}
@@ -236,12 +180,12 @@ Twin-64 has 16 defined control registers, numbered \texttt{CR0} to \texttt{CR15}
   	% CR11
   	\draw[thick] (\leftofs, 4) -- (\rightofs, 4);
   	\node at ({\leftofs - 0.75}, {4 + 0.5}) { CR11 };
-  	\node at ( \middleofs, {4 + 0.5}) { Interruption Instruction (IARG0)};
+  	\node at ( \middleofs, {4 + 0.5}) { Interruption Argument 0 (IARG0)};
   	
   	% CR12
   	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
   	\node at ({\leftofs - 0.75}, {3 + 0.5}) { CR12 };
-  	\node at ( \middleofs, {3 + 0.5}) { Interruption Address (IARG1)};
+  	\node at ( \middleofs, {3 + 0.5}) { Interruption Argument 1 (IARG1)};
   	
   	% CR13
   	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
@@ -317,7 +261,7 @@ When enabled, the recovery counter decrements on each instruction cycle. When th
 \subsection*{Shift Amount Register}
 \addcontentsline{toc}{subsection}{Shift Amount Register}
 
-The shift amount register ( \texttt{ SAR} ) is used by the extract, deposit and double shift instruction when a dynamic position is specified in the instruction. The valid number range is zero to 63.
+The shift amount register ( \texttt{ SAR} ) is a 6-bit register used by the extract, deposit and double shift instruction when a dynamic position is specified in the instruction. The valid number range is zero to 63.
 
 \subsection*{Region Id Registers}
 \addcontentsline{toc}{subsection}{Region Id Registers}
@@ -342,7 +286,7 @@ Upon an interrupt, the address of the interrupted instruction and the processor 
 \subsection*{Interruption Argument Registers}
 \addcontentsline{toc}{subsection}{Argument Registers}
 
-The Interruption Argument Registers (\texttt{CR11} and \texttt{CR12}) are used to pass an instruction and a virtual address to an interruption handler. The values of these registers for each interruption class are described in the chapter on interrupts.
+The Interruption Argument Registers are used to pass an instruction and a virtual address to an interruption handler. The values of these registers for each interruption class are described in the chapter on interrupts.
 
 \subsection*{Scratch Registers}
 \addcontentsline{toc}{subsection}{External Interrupt Register}
@@ -441,7 +385,7 @@ The instruction address portion of the PSW registers contains the region id and 
     \midrule
     \textbf{E} & Little endian access enable. When set, memory access is in little endian format, else big endian format. Endian support is an optional feature. If not implemented, all access is in big endian format. \\
     \midrule
-    \textbf{R} & Recovery counter enable. When set... \\
+    \textbf{R} & Recovery counter enable. When set the recovery counter trap is issued when the recovery counter becomes negative. \\
     \midrule
     \textbf{X} & When set, the processor runs in privileged ( supervisor ) mode. \\
     \midrule
@@ -460,7 +404,7 @@ The instruction address portion of the PSW registers contains the region id and 
 \section*{Data Types}
 \addcontentsline{toc}{section}{Data Types}
 
-The fundamental data type is a 64-bit signed integer, with the most significant bit on the left and the least significant bit on the right. All computations are performed on 64-bit signed integers. Memory accesses can be performed at the granularity of a double-word, word, halfword, or byte. Data loaded as a word, half--word, or byte is sign-extended to 64 bits. Store operations write the corresponding value to memory without modification.
+The fundamental data type is a 64-bit signed integer, with the most significant bit on the left and the least significant bit on the right. All computations are performed on 64-bit signed integers. Memory accesses can be performed at the granularity of a double-word, word, halfword, or byte. Data loaded as a word, half-word, or byte is normally sign-extended to 64 bits. The load instruction has however an option to zero-extend the data loaded. Store operations write the corresponding value to memory without modification.
 
 \begin{figure}[ht]
 \begin{center}
@@ -547,7 +491,7 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
             minimum height=0.75cm,  
             anchor=west] at (7,5.5) { };
             
-    \node[anchor=west] at ( 4, 5.5 ) { LD.B R3,7(R4) };        
+    \node[anchor=west] at ( 4, 5.5 ) { LD.B R3,7(R0) };        
     
     \foreach \i in {8,...,14} {
     	\draw[-] (\i, 5.5+0.375 ) -- (\i, 5.5 - 0.375);
@@ -563,7 +507,7 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
             minimum height=0.75cm,  
             anchor=west] at (7, 3.875) { };
             
-    \node[anchor=west] at ( 4, 3.875 ) { LD.H R3,2(R4) };
+    \node[anchor=west] at ( 4, 3.875 ) { LD.H R3,2(R0) };
     
     \foreach \i in {8,...,14} {
     	\draw[-] (\i, 3.875 + 0.375) -- (\i, 3.875 - 0.375);
@@ -579,7 +523,7 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
             minimum height=0.75cm,  
             anchor=west] at (7,2.25) { };
             
-    \node[anchor=west] at ( 4, 2.25 ) { LD.W R3,4(R4) };
+    \node[anchor=west] at ( 4, 2.25 ) { LD.W R3,4(R0) };
     
     \foreach \i in {8,...,14} {
     	\draw[-] (\i, 2.25 + 0.375) -- (\i, 2.25 - 0.375);
@@ -595,7 +539,7 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
             minimum height=0.75cm,  
             anchor=west] at (7, 0.5) { };
             
-    \node[anchor=west] at ( 4, 0.5 ) { LD.D R3,0(R4) }; 
+    \node[anchor=west] at ( 4, 0.5 ) { LD.D R3,0(R0) }; 
     
     \foreach \i in {8,...,14} {
     	\draw[-] (\i, 1 - 0.125) -- (\i, 0 + 0.125);
@@ -655,7 +599,7 @@ Virtual address translations are stored in a translation lookaside buffer (TLB).
             minimum height=0.75cm,  
             fill=white,
             anchor=west] at (0,1.5) { };
-    \node[anchor=west] at (0, 1.5) {PSize}; 
+    \node[anchor=west] at (0, 1.5) {Page Size}; 
     \node[anchor=west] at (11,1.5) {4bit};
     
     \def\fw{0.4} 
@@ -709,16 +653,16 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{V} & Indicates if the entry is valid. \\
     \midrule
-    \textbf{M} & When set, the page has been modified. This only applies to data TLBs or unified TLBs. \\
+    \textbf{M} & When set, the page has been modified. \\
     \midrule
-    \textbf{L} & When set, the TLB entry is locked and will not be selected during replacement. \\
+    \textbf{L} & When set, the TLB entry is locked and will not be selected during a replacement candidate search. \\
     \midrule
     \textbf{U} & When set, the page represented by the TLB entry is not cached. \\
     \midrule
-    \textbf{B} & When set, a branch instruction executed from this page will cause a branch-taken trap. This inly applies for instruction TLBs or unified TLBs.\\
+    \textbf{B} & When set, a branch instruction executed from this page will cause a branch-taken trap. This only applies for instruction TLBs or unified TLBs.\\
 \end{longtable}
 
-The first regions, region 0 to 15, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
+The first virtual memory regions, region 0 to 15, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
 
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
@@ -745,7 +689,7 @@ The instruction set is organized into five groups:
  
   \item \textbf{Immediate instructions:} Instructions for constructing immediate values up to 64 bits. Several instructions embed immediate fields within the instruction word, but a full 64-bit constant requires a sequence of two or three instructions. There are also immediate instructions that support 32-bit address arithmetic, where calculations wrap around within the 32-bit offset field and never overflow into the region identifier portion.
  
-  \item \textbf{Memory reference instructions:} Load and store operations for both virtual and physical memory. These transfer data between memory and general registers in sizes of double--word, word, halfword, or byte. The design resembles a load/store architecture, but unlike strict load/store machines, many Twin-64 instructions allow memory operands directly. No instruction, however, both reads and writes data memory in the same operation.
+  \item \textbf{Memory reference instructions:} Load and store operations for both virtual and physical memory. These transfer data between memory and general registers in sizes of double--word, word, halfword, or byte. The design resembles a load/store architecture, but unlike strict load/store machines, several computational Twin-64 instructions allow memory operands directly. No instruction, however, both reads and writes data memory in the same operation.
   
   \item \textbf{Control flow instructions:} Both unconditional and conditional branches are supported. Unconditional branches may optionally save the return address in a general-purpose register. Conditional branches compare two operands and transfer control if the condition is satisfied, eliminating the need for a separate compare instruction.
     

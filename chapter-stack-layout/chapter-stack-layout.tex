@@ -33,6 +33,10 @@ A stack frame consists of four main areas, depicted in the following figure.
 	
 	\draw[thick, dashed] (\leftofs, \size) -- (\leftofs, \size + 2);
 	\draw[thick, dashed] (\rightofs, \size) -- (\rightofs, \size + 2);
+	
+	%stack growth
+	\draw[->, thick] ( \leftofs - 2, 10) -- ( \leftofs - 2, 4);
+	\node [anchor=west] at ( 0, 7 ) { Increasing address };
 			
 	% Spill Area
 	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
@@ -124,7 +128,7 @@ A stack frame marker consists of two double words. The frame marker is pointed b
 \label{fig:Stack Frame Marker}
 \end{figure}
 
-The first word holds the \textbf{address of the previous stack frame}. This field does not necessarily store the literal address, as the frame size can often be inferred from the instructions that created the current frame together with symbolic debugging information in the program image.
+The first word holds the \textbf{address of the previous stack frame}. This field does not necessarily store the previous frame marker address, as the frame size can often be inferred from the instructions that created the current frame together with symbolic debugging information in the program image.
 
 The second word contains the \textbf{return link}, which is the address immediately following the branch instruction in the calling function. If the called function is a leaf function, there is no need to save the return link in memory.
 
