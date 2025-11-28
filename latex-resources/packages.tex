@@ -2,33 +2,76 @@
 % Packages
 %
 %--------------------------------------------------------------------------------
-\usepackage{amsmath}           
-\usepackage{hyperref}           
-\usepackage{geometry}           
-\usepackage{fancyhdr} 
-\usepackage{fancyvrb}          
+
+%--------------------------------------------------------------------------------
+% CORE MATH + FONTS
+%--------------------------------------------------------------------------------
+\usepackage{amsmath}
+
+%--------------------------------------------------------------------------------
+% PAGE GEOMETRY & PARAGRAPH FORMATTING
+%--------------------------------------------------------------------------------
+\usepackage{geometry}
+\usepackage{parskip}     % modifies paragraph layout
+
+%--------------------------------------------------------------------------------
+% HEADER/FOOTER, TITLES
+%--------------------------------------------------------------------------------
+\usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{titlepic}
-\usepackage{booktabs}
-\usepackage{listings}
+
+%--------------------------------------------------------------------------------
+% COLOR + GRAPHICS + FIGURES
+%--------------------------------------------------------------------------------
 \usepackage{xcolor}
-\usepackage{tcolorbox}
-\usepackage{graphicx}           
-\usepackage{pdfpages}
-\usepackage{float}
-\usepackage{placeins}
-\usepackage{tikz}
-\usepackage{relsize}
+\usepackage{graphicx}
 \usepackage{pdflscape}
-\usepackage{tabularx}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage[all]{nowidow}
-\usepackage{etoolbox}
-\usepackage{tocloft}
-\usepackage{parskip}
-\usepackage{xparse}
-\usepackage[toc]{appendix}
+\usepackage{tikz}
+\usepackage[percent]{overpic}
 \usetikzlibrary{shapes,shadows,arrows,calc,intersections}
 \usetikzlibrary{decorations.pathreplacing}
 \usetikzlibrary{arrows.meta}
+
+%--------------------------------------------------------------------------------
+% FLOATING OBJECTS + CONTROL
+%--------------------------------------------------------------------------------
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{caption}
+
+%--------------------------------------------------------------------------------
+% TABLE PACKAGES
+%--------------------------------------------------------------------------------
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+
+%--------------------------------------------------------------------------------
+% VERBATIM, LISTINGS, CODE
+%--------------------------------------------------------------------------------
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage{tcolorbox}
+
+%--------------------------------------------------------------------------------
+% DOCUMENT STRUCTURE EXTRAS
+%--------------------------------------------------------------------------------
+\usepackage{pdfpages}
+\usepackage{relsize}
+\usepackage[all]{nowidow}
+\usepackage{etoolbox}
+\usepackage{xparse}
+\usepackage[toc]{appendix}
+
+%--------------------------------------------------------------------------------
+% TOC, LOF, LOT CUSTOMIZATION
+% (must be before hyperref)
+%--------------------------------------------------------------------------------
+\usepackage{tocloft}
+
+%--------------------------------------------------------------------------------
+% HYPERREF MUST BE LAST
+%--------------------------------------------------------------------------------\usepackage[hidelinks]{hyperref}
+

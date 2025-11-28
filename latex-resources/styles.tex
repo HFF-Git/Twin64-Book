@@ -1,14 +1,20 @@
 %--------------------------------------------------------------------------------
-%
-%
+% To make our life easier, here are styles defined for the book.
 %
 %--------------------------------------------------------------------------------
 
 %--------------------------------------------------------------------------------
-% Page layout settings
+% General Page layout settings.
 %
 %--------------------------------------------------------------------------------
-\geometry{a4paper, margin=1in, top=1in, bottom=1in, left=1in, right=1in, headheight=1in}
+\geometry{	a4paper, 
+			margin=1in, 
+			top=1in, 
+			bottom=1in, 
+			left=1in, 
+			right=1in, 
+			headheight=1in }
+			
 \addtolength{\parskip}{1.0ex}
 
 \pagestyle{fancy}         
@@ -59,8 +65,7 @@
 \setlength{\cftsecindent}{0em} 
 
 %--------------------------------------------------------------------------------
-%
-%
+% Notes format.
 %
 %--------------------------------------------------------------------------------
 \newtcolorbox{fancyNote}{
@@ -75,9 +80,9 @@
   title=\textbf{Note}
 }
 
-\newcommand{\simpleNote}[1]{%
+\newcommand{\simpleNote}[1]{
 %  \noindent
-  \textbf{Note:}\hspace{0.5em}%
+  \textbf{Note:}\hspace{0.5em}
   \hangindent=3em
   \hangafter=0
   #1\par
@@ -164,7 +169,7 @@
 % We have a rectangle field of 16cm width. Positions start left with 0 and end
 % at 16 on the right. The first parameter to the macro is the position of the 
 % separators. The second parameter is a list of labels to put into the fields 
-% created by the separators. A bit position is 0.5cm.
+% created by the separators. A bit position is 0.5 units.
 %
 %--------------------------------------------------------------------------------
 \newcommand{\drawInstrFormat}[2]{%
@@ -215,8 +220,8 @@
 }
 
 %--------------------------------------------------------------------------------
-% Instruction format for a 64bit word. It still has 16cm width and the same 
-% display logic as the 32-bit counterpart. A bit position is 0.25cm.
+% Instruction format for a 64-bit word. It still has 16 unit width and the same 
+% display logic as the 32-bit counterpart. A bit position is 0.25 units.
 %
 %--------------------------------------------------------------------------------
 \newcommand{\drawInstrFormatSixtyFour}[2]{%
@@ -256,7 +261,6 @@
     	}%
   	\end{tikzpicture}%
 }
-
 
 %--------------------------------------------------------------------------------
 % Instruction description pages use these layout definitions.
