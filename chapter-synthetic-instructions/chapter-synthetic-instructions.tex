@@ -14,7 +14,7 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
 \section*{Immediate Operations}
 \addcontentsline{toc}{section}{Immediate Operations}
 
-\begin{longtable}{@{}p{0.2\linewidth}p{0.3\linewidth}p{0.4\linewidth}@{}}
+\begin{longtable}{@{}p{0.3\linewidth}p{0.3\linewidth}p{0.3\linewidth}@{}}
     % \caption{Immediate synthetic instructions} \\
     \toprule
     \textbf{OpCode} & \textbf{Sequence} & \textbf{Comment} \\
@@ -30,14 +30,20 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{LDI} Rn, val & ... & small, big, very big, full \\
-    \midrule
+    \textbf{LDI} Rn, val & LDO Rn, val & load an immediate value in the range of $\pm 2^{12}$ \\
+	\midrule
+	\textbf{LDI} Rn, val & LDIL.L Rn, L\%val \newline LDO Rn, R\%val & load an immediate value in the range of $\pm 2^{31}$ \\
+	\midrule
+	\textbf{LDI} Rn, val & LDIL.S Rn, S\%val \newline LDIL.L Rn, L\%val \newline LDO Rn, R\%val & load an immediate value in the range of $\pm 2^{51}$ \\
+	\midrule
+	\textbf{LDI} Rn, val & LDIL.U Rn, U\%val  \newline LDIL.S Rn, S\%val  \newline LDIL.L Rn, L\%val \newline LDO Rn, R\%val & load an immediate value in the range of $\pm 2^{63}$ \\
+	\midrule
 \end{longtable}
 
 \section*{Register Operations}
 \addcontentsline{toc}{section}{Register Operations}
 
-\begin{longtable}{@{}p{0.2\linewidth}p{0.3\linewidth}p{0.4\linewidth}@{}}
+\begin{longtable}{@{}p{0.3\linewidth}p{0.3\linewidth}p{0.3\linewidth}@{}}
     % \caption{Immediate synthetic instructions} \\
     \toprule
     \textbf{OpCode} & \textbf{Sequence} & \textbf{Comment} \\
@@ -57,7 +63,7 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
     \midrule
     \textbf{CPY} Rn, Rm & OR Rn, Rm, 0 & copies RegM to RegN. \\
     \midrule
-    \textbf{COM} Rn & OR.N Rn, Rm, 0 & logically inverts RegN. \\
+    \textbf{COM} Rn & XOR Rn, Rn, 1 & logically inverts RegN. \\
     \midrule
     \textbf{NEG} Rn & SUB Rn, R0, Rn & negates a value in RegN. \\
     \midrule
@@ -66,39 +72,44 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
 \section*{Arithmetic Operations}
 \addcontentsline{toc}{section}{Arithmetic Operations}
 
-\begin{longtable}{@{}p{0.2\linewidth}p{0.3\linewidth}p{0.4\linewidth}@{}}
-    % \caption{Immediate synthetic instructions} \\
+\begin{longtable}{@{}p{0.3\linewidth}p{0.3\linewidth}p{0.3\linewidth}@{}}
     \toprule
     \textbf{OpCode} & \textbf{Sequence} & \textbf{Comment} \\
     \midrule
     \endfirsthead
+
     \toprule
     \textbf{OpCode} & \textbf{Sequence} & \textbf{Comment} \\
     \midrule
     \endhead
+
     \midrule
     \multicolumn{2}{r}{\textit{Continued on next page}} \\
     \midrule
     \endfoot
+
     \bottomrule
     \endlastfoot
-    \textbf{INC} Rn, val & ADD Rn, Rn, val & increments Rn by <val>. \\
+
+    \textbf{INC} Rn, val  & ADD Rn, Rn, val & increments Rn by \textless val\textgreater . \\
     \midrule
-    \textbf{DEC} Rn, val & SUB Rn, Rn, val & decrements Rn by <val>. \\
+    \textbf{DEC} Rn, val  & SUB Rn, Rn, val & decrements Rn by \textless val\textgreater . \\
     \midrule
-    \textbf{EXT8} Rn, Rm & EXTR.S Rn, Rm, 0, 8 & sign extends a byte in Rn. \\
+
+    % Combine the next 3 rows:
+    \textbf{EXT8}  Rn, Rm & EXTR.S Rn, Rm, 0, 8    & \multirow{3}{*}{sign extends a byte in Rn.} \\
+    \textbf{EXT16} Rn, Rm & EXTR.S Rn, Rm, 0, 16   &  \\
+    \textbf{EXT32} Rn, Rm & EXTR.S Rn, Rm, 0, 32   &  \\
     \midrule
-    \textbf{EXT16} Rn, Rm & EXTR.S Rn, Rm, 0, 16 & sign extends a byte in Rn. \\
-    \midrule
-    \textbf{EXT32} Rn, Rm & EXTR.S Rn, Rm, 0, 32 & sign extends a byte in Rn. \\
-    \midrule
+
 \end{longtable}
+
 
 
 \section*{Shift and Rotate Operations}
 \addcontentsline{toc}{section}{Shift and Rotate Operations}
 
-\begin{longtable}{@{}p{0.2\linewidth}p{0.3\linewidth}p{0.4\linewidth}@{}}
+\begin{longtable}{@{}p{0.3\linewidth}p{0.3\linewidth}p{0.3\linewidth}@{}}
     % \caption{Immediate synthetic instructions} \\
     \toprule
     \textbf{OpCode} & \textbf{Sequence} & \textbf{Comment} \\
@@ -128,7 +139,7 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
 \section*{Memory Reference Operations}
 \addcontentsline{toc}{section}{Memory Reference Operations}
 
-\begin{longtable}{@{}p{0.2\linewidth}p{0.3\linewidth}p{0.4\linewidth}@{}}
+\begin{longtable}{@{}p{0.3\linewidth}p{0.3\linewidth}p{0.3\linewidth}@{}}
     % \caption{Immediate synthetic instructions} \\
     \toprule
     \textbf{OpCode} & \textbf{Sequence} & \textbf{Comment} \\
@@ -149,4 +160,53 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
     \textbf{STOR} & ... & ... \\
     \midrule
 \end{longtable}
+
+\section*{Branch Type Operations}
+\addcontentsline{toc}{section}{Branch Type Operations}
+
+\begin{longtable}{@{}p{0.3\linewidth}p{0.3\linewidth}p{0.3\linewidth}@{}}
+    % \caption{Immediate synthetic instructions} \\
+    \toprule
+    \textbf{OpCode} & \textbf{Sequence} & \textbf{Comment} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{OpCode} & \textbf{Sequence} & \textbf{Comment} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    
+     % Combine the 6 branch instructions
+    \textbf{BEQ} Rn, Rm, target & CBR.EQ Rn, Rm, target &
+         \multirow{6}{*}{\parbox{1\linewidth}{subtract RegM from RegN and branch on condition.}} \\
+    \textbf{BLT} Rn, Rm, target & CBR.LT Rn, Rm, target &  \\
+    \textbf{BGT} Rn, Rm, target & CBR.GT Rn, Rm, target &  \\
+    \textbf{BNE} Rn, Rm, target & CBR.NE Rn, Rm, target &  \\
+    \textbf{BGE} Rn, Rm, target & CBR.GE Rn, Rm, target &  \\
+    \textbf{BLE} Rn, Rm, target & CBR.LE Rn, Rm, target &  \\
+    \midrule
+    
+     % Combine the 6 branch instructions
+    \textbf{TEQ} Rn, target & MBR.EQ Rn, Rn, target &
+         \multirow{6}{*}{\parbox{1\linewidth}{test RegN and branch on condition.}} \\
+    \textbf{TLT} Rn, target & MBR.LT Rn, Rm, target &  \\
+    \textbf{TGT} Rn, target & MBR.GT Rn, Rm, target &  \\
+    \textbf{TEV} Rn, target & MBR.EV Rn, Rm, target &  \\
+    \textbf{TNE} Rn, target & MBR.NE Rn, Rm, target &  \\
+    \textbf{TGE} Rn, target & MBR.GE Rn, Rm, target &  \\
+    \textbf{TLE} Rn, target & MBR.LE Rn, Rm, target &  \\
+    \textbf{TOD} Rn, target & MBR.OD Rn, Rm, target &  \\
+    \midrule
+    
+\end{longtable}
+
+
+
+
+
 	
