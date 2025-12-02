@@ -1,20 +1,21 @@
 \chapter*{Appendix - Glossary}
 \addcontentsline{toc}{chapter}{Appendix - Glossary}
 
+\paragraph{Absolute Address}
+An address in the physical memory range from zero to the maximum physical memory size. This range is directly mapped to an equivalent virtual address range.
+
 \paragraph{Address Space}
 A logical domain of addresses. The CPU may define multiple address spaces, such as \textit{main memory space} and \textit{I/O space}. Each space defines an independent address range and access semantics.
 
-\paragraph{Region}
-A contiguous range of addresses within an address space, reserved for a particular purpose.  
-Examples: \textit{code region}, \textit{data region}, \textit{stack region}.
+\paragraph{Callee Save Registers}
+Registers whose values must be preserved across a function call by the callee (the function being called).  
+If the callee uses any of these registers, it must save their original values on entry (typically on the stack) and restore them before returning.  
+This convention allows callers to assume the registers retain their values after the call.
 
-\paragraph{Offset}
-An unsigned 32-bit value that together with the region forms a virtual address. 
-Examples: \textit{code offset}, \textit{data offset}.
-
-\paragraph{Object}
-A unit of storage within a region. Objects correspond to program-visible entities or runtime allocations, such as global variables, heap blocks, or stack frames.  
-Examples: \textit{global object}, \textit{heap object}, \textit{stack object}.
+\paragraph{Caller Save Registers}
+Registers that may be overwritten by a called function.  
+The caller must save these registers (if it needs their values later) before invoking another function.  
+This convention allows the callee to use these registers freely without preserving their previous contents.
 
 \paragraph{ELF Section}
 A named subdivision in an ELF file used by the linker and compiler (e.g., \texttt{.text}, \texttt{.data}, \texttt{.bss}). Sections are grouped by the linker into ELF segments.
@@ -22,5 +23,38 @@ A named subdivision in an ELF file used by the linker and compiler (e.g., \textt
 \paragraph{ELF Segment}
 A loadable portion of an ELF file (defined by a program header). Each ELF segment is mapped into one or more regions of an address space during program loading.
 
+\paragraph{Function Pointer}
+A reference to a function descriptor.
+
+\paragraph{Global Data Area}
+All modules compiled for a load module allocate their global data in this area. The DP register points to the beginning of the area.
+
+\paragraph{Global Data Pointer (DP)}
+The address of the global data area. The address is normally kept in the DP register. Each module has a DP area in the global data area. Load modules also use this register to access the linkage table.
+
+\paragraph{IA-relative Addressing}
+Code that uses the current instruction address (IA) as the base for branches and for accessing constant data.
+
+\paragraph{Linkage Table}
+A table of address descriptors for functions external to the load module. One type of entry stores the address of an external function. Another type stores a reference to the external load module's global data area.
+
+\paragraph{Load Module}
+An executable unit of code produced by the assembler or compiler from one or several modules.
+
 \paragraph{Mapped Region}
 A runtime mapping that associates an ELF segment or memory source with a region in an address space. The emulator or loader tracks mapped regions to manage memory access and protection.
+
+\paragraph{Object}
+A unit of storage within a region. Objects correspond to program-visible entities or runtime allocations, such as global variables, heap blocks, or stack frames.  
+Examples: \textit{global object}, \textit{heap object}, \textit{stack object}.
+
+\paragraph{Offset}
+An unsigned 32-bit value that, together with the region, forms a virtual address.  
+Examples: \textit{code offset}, \textit{data offset}.
+
+\paragraph{Region}
+A contiguous range of addresses within the virtual address space, reserved for a particular purpose. A region represents the upper 20 bits of the 52-bit virtual address range. 
+Examples: \textit{code region}, \textit{data region}, \textit{stack region}.
+
+\paragraph{Virtual Address}
+A virtual address consists of the region ID and the region offset. Together they form the architected virtual address space of 52 bits.

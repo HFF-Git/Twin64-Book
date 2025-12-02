@@ -30,13 +30,13 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{LDI} Rn, val & LDO Rn, val & load an immediate value in the range of $\pm 2^{12}$ \\
+    \textbf{LDI} Rn, val & LDO Rn, val(R0) & load an immediate value in the range of $\pm 2^{12}$ \\
 	\midrule
-	\textbf{LDI} Rn, val & LDIL.L Rn, L\%val \newline LDO Rn, R\%val & load an immediate value in the range of $\pm 2^{31}$ \\
+	\textbf{LDI} Rn, val & LDIL Rn, L\%val \newline ADDIL Rn, R\%val & load an immediate value in the range of $\pm 2^{31}$ \\
 	\midrule
-	\textbf{LDI} Rn, val & LDIL.S Rn, S\%val \newline LDIL.L Rn, L\%val \newline LDO Rn, R\%val & load an immediate value in the range of $\pm 2^{51}$ \\
+	\textbf{LDI} Rn, val & LDIL Rn, L\%val \newline ADDIL Rn, R\%val \newline LDIL.M Rn, M\%val & load an immediate value in the range of $\pm 2^{51}$ \\
 	\midrule
-	\textbf{LDI} Rn, val & LDIL.U Rn, U\%val  \newline LDIL.S Rn, S\%val  \newline LDIL.L Rn, L\%val \newline LDO Rn, R\%val & load an immediate value in the range of $\pm 2^{63}$ \\
+	\textbf{LDI} Rn, val & LDIL Rn, L\%val \newline ADDIL Rn, R\%val \newline LDI.M Rn, M\%val  \newline LDIL.U Rn, U\%val & load an immediate value in the range of $\pm 2^{63}$ \\
 	\midrule
 \end{longtable}
 
@@ -192,15 +192,15 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
     \midrule
     
      % Combine the 6 branch instructions
-    \textbf{TEQ} Rn, target & MBR.EQ Rn, Rn, target &
+    \textbf{BEQ} Rn, target & MBR.EQ Rn, Rn, target &
          \multirow{6}{*}{\parbox{1\linewidth}{test RegN and branch on condition.}} \\
-    \textbf{TLT} Rn, target & MBR.LT Rn, Rm, target &  \\
-    \textbf{TGT} Rn, target & MBR.GT Rn, Rm, target &  \\
-    \textbf{TEV} Rn, target & MBR.EV Rn, Rm, target &  \\
-    \textbf{TNE} Rn, target & MBR.NE Rn, Rm, target &  \\
-    \textbf{TGE} Rn, target & MBR.GE Rn, Rm, target &  \\
-    \textbf{TLE} Rn, target & MBR.LE Rn, Rm, target &  \\
-    \textbf{TOD} Rn, target & MBR.OD Rn, Rm, target &  \\
+    \textbf{BLT} Rn, target & MBR.LT Rn, Rm, target &  \\
+    \textbf{BGT} Rn, target & MBR.GT Rn, Rm, target &  \\
+    \textbf{BEV} Rn, target & MBR.EV Rn, Rm, target &  \\
+    \textbf{BNE} Rn, target & MBR.NE Rn, Rm, target &  \\
+    \textbf{BGE} Rn, target & MBR.GE Rn, Rm, target &  \\
+    \textbf{BLE} Rn, target & MBR.LE Rn, Rm, target &  \\
+    \textbf{BOD} Rn, target & MBR.OD Rn, Rm, target &  \\
     \midrule
     
 \end{longtable}
