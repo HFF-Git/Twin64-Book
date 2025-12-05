@@ -1,27 +1,21 @@
 \chapter*{Input/Output}
 \addcontentsline{toc}{chapter}{Input/Output}
-
-scope of this chapter, will not define particular modules or I/O software ...
+This chapter presents the Twin-64 I/O architecture and introduces its core concepts.
+It does not describe any specific I/O module, nor does it cover operating-system initialization or runtime I/O procedures.
 
 \section*{Concepts}
 \addcontentsline{toc}{section}{Concepts}
+Twin-64 uses a memory-mapped I/O architecture. A dedicated portion of the physical address space in address region zero is reserved exclusively for the I/O subsystem. This clean partitioning ensures predictable system behavior during early initialization and simplifies both hardware implementation and software design.
 
-Twin-64 features a memory--mapped I/O architecture. A dedicated portion of the physical address space, specifically region zero,  is reserved exclusively for the I/O subsystem.  
-This clear separation ensures predictable behavior during system initialization and simplifies both hardware design and software development.
+The I/O subsystem is organized around functional entities known as \textbf{modules}. Typical modules include processors, memory controllers, and various I/O devices. All modules connect to the \textbf{system bus}, which supports up to 64 modules in total. Although real systems often provide fewer physical slots, the architecture itself imposes no such restriction. At system startup, each module is assigned a dedicated 4-KB physical address page. This page defines the base address range to which the module responds and serves as a fixed anchor for its control and status information.
 
-The I/O architecture is organized around functional entities called \textbf{modules}. Typical modules include processors, memory controllers, and a variety of I/O cards. All modules are connected to the \textbf{system bus}, which is designed to support up to 64 modules in total.   Although real-world systems often provide fewer physical slots, the architecture itself imposes no such limitation.
+Within each module, functionality is exposed through a collection of \textbf{registers}. These registers are accessed using standard load and store instructions, although they are not required to be 64 bits wide. A core set of registers is common across all modules, establishing a uniform interface for essential operations. Each module may define additional device-specific registers to implement its specialized capabilities. The registers within a module’s hard physical page are organized into register sets. The first is the architected supervisor register set, while the remaining sets are optional and depend on the particular I/O module.
 
-During system startup, each module is assigned a dedicated 4 KByte physical address page. This page defines the base range to which the module responds and provides an fixed anchor for its control and status information.
+Many modules also require additional storage to manage their internal \textbf{I/O elements}. An I/O element—also called a \textbf{device}—is the smallest addressable functional unit within a module. For example, a console terminal module may expose two devices: one for input and one for output.
 
-Within each module, functionality is exposed through a collection of \textbf{registers}. These registers are accessible via standard load and store instructions, yet they are not required to be 64 bits wide. A core set of registers is common across all modules, ensuring a uniform interface for basic operations, while each module may additionally define its own device-specific register set to implement specialized features.
+The system bus spans a 256-KB address space, aligned to a 256-KB boundary, with one 4-KB page reserved for every possible module. In practice, physical constraints often limit the number of installed modules, but the architecture supports growth by allowing multiple modules to reside on a single I/O card, with each card occupying one physical slot on the bus.
 
-The registers found within a module’s hard physical address page are further subdivided. One portion forms the common supervisor register set, while the remainder is split among multiple \textbf{I/O element} register sets. An I/O element, also referred to as a \textbf{device}, represents the smallest addressable functional unit within a module. For example, a console terminal module may present two I/O elements: one dedicated to input and another dedicated to output.
-
-The system bus itself spans a 256\,KB address space, aligned to a 256 KB boundary, with one page reserved for each possible module. In practice, physical constraints typically limit the number of installed modules, but the architecture accommodates growth by allowing several modules to reside on a single I/O card, each card occupying one physical slot on the bus.
-
-Overall, the Twin-64 I/O subsystem aims to balance clarity, modularity, and extensibility.  
-Its hierarchical structure, from modules to devices, and from hard physical pages to soft and broadcast regions, supports both straightforward configurations and more complex, densely populated systems.
-
+Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibility. Its hierarchical structure—from modules to devices, and from hard physical pages to optional soft and broadcast regions—supports both straightforward configurations and more complex, densely populated systems.
 \section*{I/O Address Space}
 \addcontentsline{toc}{section}{I/O Address Space}
 
@@ -79,6 +73,10 @@ Its hierarchical structure, from modules to devices, and from hard physical page
 	\node at (\leftofs + \width / 2, 5) {\textbf{Hard physical address space}};
 	\node at (\leftofs + \width / 2, 3) {\textbf{Broadcast address space}};
 	
+	%allocation arrow
+	\draw[thick, -> ] (\leftofs - 1, 7) -- (\leftofs - 1, 10); 
+	\node[anchor = east] at (\leftofs - 1.25, 8.5) {\textbf{Allocate}};
+	
 	% bracket
 	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,2) -- (\rightofs + 0.5,14)
 	node[midway, right=1cm, anchor=west]{\Large I/O Address Range};
@@ -89,9 +87,9 @@ Its hierarchical structure, from modules to devices, and from hard physical page
 \label{fig:I/O Address Space}
 \end{figure}
 
-The I/O address range is a 256Mbyte area in the first 4 Gbyte region, i.e. region 0. The area is divided into several ranges. The first range contains the processor dependent code. There is a set of library functions to manage the processor itself but also provide low-level primitives for the boot process and the operating system. 
+The I/O address range is a 256 Mbyte area in the first 4 Gbyte region, i.e. region zero. The area is divided into several ranges. The first range contains the processor dependent code. There is a set of library functions to manage the processor itself but also provide low-level primitives for the boot process and the operating system. 
 
-Each module listens to three distinct address ranges:
+At the upper level of the I/O address range, there are the broadcast address range, the hard physical address range and the soft physical address range. At system reset or reboot, there is only the broadcast address space. The processor will try to locate all modules in the physical address range. Finally, each I/O module will then allocate its soft physical address range. Each module therefore listens to three distinct address ranges:
 
 \begin{itemize}
     \item \textbf{Hard physical address range:}  
@@ -108,13 +106,17 @@ Each module listens to three distinct address ranges:
 \section*{Hard physical address range}
 \addcontentsline{toc}{section}{Hard physical address range}
 
-The \textbf{hard physical address} range contains a I/O page for each I/O modules installed. There is room for 64 I/O modules. Each module provides a set of registers in that page. The first 16 registers are the 16 supervisory registers. Next are the I/O element registers. There are up to 62 I/O elements, each element providing up to 8 registers.
+The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 64 I/O modules in the bus. Each module provides a set of register sets in that page. A registers set has 32 registers. A register is a 64-bit word. The first 32 registers are the supervisory registers. This set is architected and must be implemented by each module. Next are the optional register sets. They are module specific. There are up to 15 optional register sets.
+
+??? in here we also have the IODC code for the  functional entry points specific to the module. \\
+??? need to describe in the supervisor register set where this is located in the HPA page. \\
+ 
 
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.7, transform shape]
         
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,16);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,12);
 
 	% Rectangle dimensions
 	\def\width{8}
@@ -124,41 +126,41 @@ The \textbf{hard physical address} range contains a I/O page for each I/O module
 	% Left side
 	\draw[thick] (\leftofs, 0) -- (\leftofs, 3); 
 	\draw[thick, dashed] (\leftofs, 3) -- (\leftofs, 6);
-	\draw[thick] (\leftofs, 6) -- (\leftofs, 14);
+	\draw[thick] (\leftofs, 6) -- (\leftofs, 12);
 	
 	% Right side
 	\draw[thick] (\rightofs, 0) -- (\rightofs, 3); 
 	\draw[thick, dashed] (\rightofs, 3) -- (\rightofs, 6);
-	\draw[thick] (\rightofs, 6) -- (\rightofs, 14); 		
+	\draw[thick] (\rightofs, 6) -- (\rightofs, 12); 		
 		
 	% Edges
 	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
 	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);
 	\draw[thick] (\leftofs, 2) -- (\rightofs, 2); 
+	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
+	\draw[thick] (\leftofs, 9 ) -- (\rightofs, 9); 
 	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
-	\draw[thick] (\leftofs, 11) -- (\rightofs, 11); 
 	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
-	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
 	
 	% Labels 
-	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0x0}};
-	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0x100}};
-	\node[left] at (\leftofs, 11 - 0.2) {\texttt{0x180}};
-	\node[left] at (\leftofs, 10 - 0.2) {\texttt{0x200}};
+	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0x0}};
+	\node[left] at (\leftofs, 10 - 0.2) {\texttt{0x100}};
+	\node[left] at (\leftofs, 9 - 0.2) {\texttt{0x200}};
+	\node[left] at (\leftofs, 8 - 0.2) {\texttt{0x300}};
 
-	\node[left] at (\leftofs, 2  - 0.2) {\texttt{0xF00}};	
-	\node[left] at (\leftofs, 1  - 0.2) {\texttt{0xF80}};
+	\node[left] at (\leftofs, 2  - 0.2) {\texttt{0xE00}};	
+	\node[left] at (\leftofs, 1  - 0.2) {\texttt{0xF00}};
 	\node[left] at (\leftofs, 0  + 0.2) {\texttt{0xFFF}};
 	
-	\node at (\leftofs + \width / 2, 13) {\textbf{Supervisor Registers}};
-	\node at (\leftofs + \width / 2, 11.5) {\textbf{I/O Element 1}};
-	\node at (\leftofs + \width / 2, 10.5) {\textbf{I/O Element 2}};
-	\node at (\leftofs + \width / 2, 1.5) {\textbf{I/O Element 61}};
-	\node at (\leftofs + \width / 2, 0.5) {\textbf{I/O Element 62}};
+	\node at (\leftofs + \width / 2, 11) {\textbf{Supervisor Register Set}};
+	\node at (\leftofs + \width / 2, 9.5) {\textbf{Register Set 1}};
+	\node at (\leftofs + \width / 2, 8.5) {\textbf{Register Set 2}};
+	\node at (\leftofs + \width / 2, 1.5) {\textbf{Register Set 14}};
+	\node at (\leftofs + \width / 2, 0.5) {\textbf{Register Set 15}};
 	
 	% bracket
-	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,0) -- (\rightofs + 0.5,14)
-	node[midway, right=1cm, anchor=west]{\Large HPA};
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,0) -- (\rightofs + 0.5,12)
+	node[midway, right=1cm, anchor=west]{\Large HPA Address Range};
 	
 \end{tikzpicture}
 \end{center}
@@ -175,32 +177,26 @@ Instead, the write operation is applied simultaneously to all I/O modules on the
 This mechanism is typically used for system-wide commands such as resets, synchronization events,  
 or configuration updates that must reach every module at once.
 
+??? at reset time, there is only the broadcast space to which modules listen. Only after system bus setup and module discovery, is HPA available.
+
 \section*{Soft physical address range}
 \addcontentsline{toc}{section}{Soft physical address range}
 
 In many cases, a module requires more addressable registers or data structures than can be  
-accommodated within its hard physical address page. The \textbf{soft physical address} range provides a flexible region where additional space may be allocated for an I/O module’s extended functionality. A module responds to memory accesses within its configured soft physical address space, which may reside  either in the I/O address space or the general memory address space.
+accommodated within its hard physical address page. The \textbf{soft physical address} range provides a flexible region where additional space may be allocated for an I/O module’s extended functionality. From a software perspective, the allocated area is termed \textbf{I/O Element}. However, the meaning of register sets in this range is entirely up to the module. A module responds to memory accesses within its configured soft physical address space, which may reside  either in the I/O address space or the general memory address space.
 
 For example, a memory controller has a hard physical page in the I/O address space, yet its soft physical region typically encompasses all or part of the system’s physical memory. Similarly, a processor may allocate a soft physical address range within the I/O space to store performance counters or diagnostic information that needs to be accessible without interfering with normal memory traffic.
 
+??? direct I/O and DMA use SPA space, up to two SPA spaces, so we can map one page in HPA and one in USER space.
+
+??? Processor has PDC as SPA space, each processor has an area in SPA
+
+??? System Console has no SPA 
+
+??? IODC data has info what to configure as SPA for a module
+
 \section*{Supervisor Register Set}
 \addcontentsline{toc}{section}{Supervisor Register Set}
-
-one reg: 
-
-IO\_STATUS ( R ) 16 - bit
-
-IO\_COMMAND ( W ) 16 - bit 
-
-one reg: 
-
-IO\_CONFIG (  R / W ) 64 - bit 
-
-IO\_VERSION ( R / W ) 64 - bit 
-
-IO\_SPA\_ADR ( R/ W ) 64 - bit
-
-IO\_SPA\_LEN ( R / W ) 64 - bit 
 
 
 \begin{figure}[H]
@@ -233,81 +229,55 @@ IO\_SPA\_LEN ( R / W ) 64 - bit
 	% IOREG0
 	\draw[thick] (\leftofs, 15) -- (\rightofs, 15);
   	\node[anchor = east] at ({\leftofs - 0.75}, {15 + 0.5}) { IOREG0 };
-  	\node at ( \middleofs, {15 + 0.5}) { IO\_STATUS / IO\_COMMAND };	
+  	\node at ( \middleofs, {15 + 0.5}) { IO\_STATUS };	
   	
   	% IOREG1
   	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
   	\node[anchor = east] at ({\leftofs - 0.75}, {14 + 0.5}) { IOREG1 };
-  	\node at ( \middleofs, {14 + 0.5}) { IO\_CONFIG };
+  	\node at ( \middleofs, {14 + 0.5}) { IO\_COMMAND };
   	
   	% IOREG2
   	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
   	\node[anchor = east] at ({\leftofs - 0.75}, {13 + 0.5}) { IOREG2 };
-  	\node at ( \middleofs, {13 + 0.5}) { IO\_VERSION };
+  	\node at ( \middleofs, {13 + 0.5}) { IO\_DATA };
 
   	% IOREG3
   	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
   	\node[anchor = east] at ({\leftofs - 0.75}, {12 + 0.5}) { IOREG3 };
-  	\node at ( \middleofs, {12 + 0.5}) { IO\_SPA\_ADR };
+  	\node at ( \middleofs, {12 + 0.5}) { IO\_SPA\_CONFIG };
   	
   	% IOREG4
   	\draw[thick] (\leftofs, 11) -- (\rightofs, 11);
     \node[anchor = east] at ({\leftofs - 0.75}, {11 + 0.5}) { IOREG4 };
-    \node at ( \middleofs, {11 + 0.5}) { IO\_SPA\_LEN };
+    \node at ( \middleofs, {11 + 0.5}) { IO\_SPA\_VERSION };
   
   	% IOREG5
   	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
   	\node[anchor = east] at ({\leftofs - 0.75}, {10 + 0.5}) { IOREG5 };
-  	\node at ( \middleofs, {10 + 0.5}) { 0 };
+  	\node at ( \middleofs, {10 + 0.5}) { IO\_SPA\_ADR };
   	
   	% IOREG6
   	\draw[thick] (\leftofs, 9) -- (\rightofs, 9);
   	\node[anchor = east] at ({\leftofs - 0.75}, {9 + 0.5}) { IOREG6 };
-  	\node at ( \middleofs, {9 + 0.5}) { 0 };
+  	\node at ( \middleofs, {9 + 0.5}) { IO\_SPA\_LEN };
 
   	% IOREG7
   	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
   	\node[anchor = east] at ({\leftofs - 0.75}, {8 + 0.5}) { IOREG7 };  
-  	\node at ( \middleofs, {8 + 0.5}) { 0 };
+  	\node at ( \middleofs, {8 + 0.5}) { IO\_EIR };
 
-  	% IOREG8
-  	\draw[thick] (\leftofs, 7) -- (\rightofs, 7);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {7 + 0.5}) { IOREG8 };
-  	\node at ( \middleofs, {7 + 0.5}) { 0 };
-  	
-  	% IOREG9
-  	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {6 + 0.5}) { IOREG9 };
-  	\node at ( \middleofs, {6 + 0.5}) { 0 };
-  	
-  	% IOREG10
-  	\draw[thick] (\leftofs, 5) -- (\rightofs, 5);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {5 + 0.5}) { IOREG10 };
-  	\node at ( \middleofs, {5 + 0.5}) { 0 };
-  	
-  	% IOREG11
-  	\draw[thick] (\leftofs, 4) -- (\rightofs, 4);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {4 + 0.5}) { IOREG11 };
-  	\node at ( \middleofs, {4 + 0.5}) { 0 };
-  	
-  	% IOREG12
-  	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {3 + 0.5}) { IOREG12 };
-  	\node at ( \middleofs, {3 + 0.5}) { 0 };
-  	
-  	% IOREG13
-  	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {2 + 0.5}) { IOREG13 };
-  	\node at ( \middleofs, {2 + 0.5}) { 0 };
 
-  	% IOREG14
-  	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);;
-  	\node[anchor = east] at ({\leftofs - 0.75}, {1 + 0.5}) { IOREG14 };
+	\node at ( \middleofs, {5 + 0.5}) { reserved, set to zero };
+	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
+  	
+  	% IOREG30
+  	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);
+  	\node[anchor = east] at ({\leftofs - 0.75}, {1 + 0.5}) { IOREG30 };
   	\node at ( \middleofs, {1 + 0.5}) { 0 };
   	
-  	% IOREG15
+  	% IOREG31
   	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {0 + 0.5}) { IOREG15 };
+  	\node[anchor = east] at ({\leftofs - 0.75}, {0 + 0.5}) { IOREG31 };
   	\node at ( \middleofs, {0 + 0.5}) { 0 };
 			
 \end{tikzpicture}
@@ -316,6 +286,8 @@ IO\_SPA\_LEN ( R / W ) 64 - bit
 \label{fig:I/O Module Supervisory Registers}
 \end{figure}
 
+??? need to SPA places ?
+
 
 
 \section*{I/O Elements}
@@ -323,99 +295,53 @@ IO\_SPA\_LEN ( R / W ) 64 - bit
 
 Modules consist of I/O elements, smallest I/O unit of operation.
 
-I/O elements are 128 bytes, i.e. 16 regs 
+??? several types of I/O Elements.
 
-I/O elements can also be two pages, one priv and one user level, mapped...
+??? a two page type, where one page is privileged and in I/O space, another one mapped into user space. 
 
-IO\_STATUS
+??? also option of packing many smaller I/O elements in one page.
 
-IO\_COMMAND
-
-IO\_CONFIG
-
-IO\_VERSION
-
-IO\_SPA\_ADR
-
-IO\_SPA\_LEN
-
-\begin{figure}[H]
-\begin{center}
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-        
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(12,11);
-  	
-  	% Rectangle dimensions
-	\def\width{8}
-	\def\leftofs{3}
-	\def\rightofs{\leftofs + \width}
-  	\def\middleofs{ \leftofs + \width / 2 }
-  	
-  	% Bits
-  	\node at (\leftofs   + 0.25,8 + 0.25) {\small 63};
-  	\node at (\middleofs + 0.25,8 + 0.25) {\small 32};
-	\node at (\middleofs - 0.25,8 + 0.25) {\small 31};
-	\node at (\middleofs + 1.75,8  + 0.25) {\small 16};
-	\node at (\middleofs + 2.25,8 + 0.25) {\small 15};
-	\node at (\rightofs  - 0.25,8 + 0.25) {\small 0};
-
-	% Box
-	\draw[thick] (\leftofs, 0) -- (\leftofs, 8);
-	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
-	\draw[thick] (\rightofs, 8) -- (\rightofs, 0);
-	\draw[thick] (\rightofs, 0) -- (\leftofs, 0);
-	
-	% Fields 
-	% IOEREG0
-  	\draw[thick] (\leftofs, 7) -- (\rightofs, 7);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {7 + 0.5}) { IOEREG0 };
-  	\node at ( \middleofs, {7 + 0.5}) { IO\_STATUS / IO\_COMMAND };	
-  	
-  	% IOEREG1
-  	\draw[thick] (\leftofs, 6) -- (\rightofs, 6);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {6 + 0.5}) { IOEREG1 };
-  	\node at ( \middleofs, {6 + 0.5}) { IO\_CONFIG };
-  	
-  	% IOEREG2
-  	\draw[thick] (\leftofs, 5) -- (\rightofs, 5);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {5 + 0.5}) { IOEREG2 };
-  	\node at ( \middleofs, {5 + 0.5}) { IO\_VERSION };
-  	
-  	% IOEREG3
-  	\draw[thick] (\leftofs, 4) -- (\rightofs, 4);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {4 + 0.5}) { IOEREG3 };
-  	\node at ( \middleofs, {4 + 0.5}) { IO\_SPA\_ADR };
-  	
-  	% IOEREG4
-  	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {3 + 0.5}) { IOEREG4 };
-  	\node at ( \middleofs, {3 + 0.5}) { IO\_SPA\_LEN };
-  	
-  	% IOEREG5
-  	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {2 + 0.5}) { IOEREG5 };
-  	\node at ( \middleofs, {2 + 0.5}) { 0 };
-
-  	% IOEREG6
-  	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);;
-  	\node[anchor = east] at ({\leftofs - 0.75}, {1 + 0.5}) { IOEREG6 };
-  	\node at ( \middleofs, {1 + 0.5}) { 0 };
-  	
-  	% IOEREG7
-  	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {0 + 0.5}) { IOEREG7 };
-  	\node at ( \middleofs, {0 + 0.5}) { 0 };
-			
-\end{tikzpicture}
-\end{center}
-\caption{I/O Element Registers}
-\label{fig:I/O Element Registers}
-\end{figure}
-
+ 
 
 \section*{Interrupt Processing}
 \addcontentsline{toc}{section}{Interrupt Processing}
 
 what do we need to store for interrupt processing in the registers ???
+
+A processor has two control registers. The external interrupt register and the external interrupt mask register. 
+
+Both are ANDed and checked after each instruction execution. 
+
+A module can set a bit in the external interrupt request register. There are 64 interrupt groups in the EIRR control register. 
+
+When not masked by the EIMR register, the interrupt is handled.
+
+Each module has a EIREQ register. This register contains two fields. The first is the target processor HPA page, the second is the bit position to set in the EIRR register. This is normally set up at system initialization time, but can also be set for each I/O request. 
+
+
+\section*{Processor dependent Code}
+\addcontentsline{toc}{section}{Processor dependent Code}
+
+
+\section*{I/O dependent Code}
+\addcontentsline{toc}{section}{I/O dependent Code}
+
+
+\section*{Design Rationale}
+\addcontentsline{toc}{section}{Design Rationale}
+
+??? simple but flexible design
+
+??? closely modeled after PA-RISC
+
+??? simplified a little though
+
+???  
+
+
+
+
+
+
 
 
