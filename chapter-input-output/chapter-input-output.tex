@@ -1,7 +1,6 @@
 \chapter*{Input/Output}
 \addcontentsline{toc}{chapter}{Input/Output}
-This chapter presents the Twin-64 I/O architecture and introduces its core concepts.
-It does not describe any specific I/O module, nor does it cover operating-system initialization or runtime I/O procedures.
+This chapter presents the Twin-64 I/O architecture and introduces its core concepts related to the processor and system architecture. It does not describe any specific I/O module, nor does it cover operating-system initialization or runtime I/O procedures.
 
 \section*{Concepts}
 \addcontentsline{toc}{section}{Concepts}
@@ -16,6 +15,7 @@ Many modules also require additional storage to manage their internal \textbf{I/
 The system bus spans a 256-KB address space, aligned to a 256-KB boundary, with one 4-KB page reserved for every possible module. In practice, physical constraints often limit the number of installed modules, but the architecture supports growth by allowing multiple modules to reside on a single I/O card, with each card occupying one physical slot on the bus.
 
 Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibility. Its hierarchical structure—from modules to devices, and from hard physical pages to optional soft and broadcast regions—supports both straightforward configurations and more complex, densely populated systems.
+
 \section*{I/O Address Space}
 \addcontentsline{toc}{section}{I/O Address Space}
 

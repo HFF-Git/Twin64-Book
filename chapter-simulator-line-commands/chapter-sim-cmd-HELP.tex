@@ -1,0 +1,72 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\section*{HELP - list help info}
+\addcontentsline{toc}{section}{HELP - list help info}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{HELP } \\
+\texttt{HELP <cmdId> } \\
+\texttt{HELP "commands" } \\
+\texttt{HELP "wcommands" } \\ 
+\texttt{HELP "predefined" }
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{HELP} command displays help information for the simulator. Help topics are grouped into several categories:
+
+\begin{itemize}
+  \item The \texttt{COMMANDS} keyword lists a summary of all available line-mode commands. Entering \texttt{HELP} with no arguments also displays this list.
+  \item The \texttt{WCOMMANDS} keyword lists a summary of all available window-mode commands.
+  \item The \texttt{PREDEFINED} keyword lists all predefined functions that can be used in command-line expressions.
+\end{itemize}
+
+To view detailed syntax for a specific command or predefined function, type \texttt{HELP <cmdId>}
+where \textit{cmdId} is the name of the command or function.
+
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Example}
+\begin{lstlisting}[style=iPageOpStyle]
+(8) ->help
+ help            list help info
+ exit            program exit
+ hist            command history
+ do              re-execute command
+ redo            edit and then re-execute command
+ env             lists the env tab, a variable, sets a variable
+ xf              execute commands from a file
+ reset           resets the system, etc.
+ run             run the system ( all CPUs )
+ step            single step the system
+ w               evaluates and prints an expression
+ dm              display registered modules for the system
+ mr              modify a CPU register
+ da              display absolute memory
+ ma              modify absolute memory
+ pica            purges instruction cache line data
+ pdca            purges data cache line data
+ fdca            flushes data cache line data
+ iitlb           inserts an entry into the instruction TLB
+ idtlb           inserts an entry into the data TLB
+ pitlb           purges an entry from the instruction TLB
+ pdtlb           purges an entry from the data TLB
+ won             enables windows mode / redraw
+(9) ->
+(9) ->help da
+da <adr> [ , <len> ] [ , <fmt> ] - display absolute memory
+(10) ->
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None.
+\end{iPageDescEntry}
