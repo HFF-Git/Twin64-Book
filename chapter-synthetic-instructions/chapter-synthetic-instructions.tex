@@ -91,9 +91,9 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
     \bottomrule
     \endlastfoot
 
-    \textbf{INC} Rn, val  & ADD Rn, Rn, val & increments Rn by \textless val\textgreater . \\
+    \textbf{INC} Rn, val  & ADD Rn, Rn, val & increments Rn by "val". \\
     \midrule
-    \textbf{DEC} Rn, val  & SUB Rn, Rn, val & decrements Rn by \textless val\textgreater . \\
+    \textbf{DEC} Rn, val  & SUB Rn, Rn, val & decrements Rn  by "val". \\
     \midrule
 
     % Combine the next 3 rows:
@@ -125,13 +125,17 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{ASR} & ... & ... \\
+    \textbf{ASR Rm, Rn, amt} & EXTR.S Rn, Rm, amt, 64 - amt & arithmetic shift right by "amt" bits of RegN. The result is stored in RegM. \\
     \midrule
-    \textbf{LSR} & ... & ... \\
+    \textbf{LSR Rm, Rn, amt} & EXTR.S Rn, Rm, amt, 64 - amt & logical shift right by "amt" bits of RegN. The result is stored in RegM. \\
     \midrule
-    \textbf{ROR} & ... & ... \\
+    \textbf{ASL Rm, Rn, amt} & DSR Rm, Rn, R0, amt, 64 - amt & arithmetic shift left by "amt" bits of RegN. The result is stored in RegM. \\
     \midrule
-    \textbf{ROL} & ... & ... \\
+    \textbf{LSL Rm, Rn, amt} & DSR Rm, Rn, R0, amt, 64 - amt & logical shift left by "amt" bits of RegN. The result is stored in RegM. \\
+    \midrule
+    \textbf{ROR Rm, Rn, amt} & DSR Rm, Rn, Rn, amt & rotate RegN right my amount bits and store in RegM\\
+    \midrule
+    \textbf{ROL Rm, Rn, amt} & DSR Rm, Rn, Rn, 64 - amt & rotate RegN left my amount bits and store in RegM \\
     \midrule
 
 \end{longtable}
@@ -155,7 +159,7 @@ Synthetic instructions are also useful when a single instruction cannot fully ex
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{LOAD} & ... & ... \\
+    \textbf{LOAD ofs ( Rb )} & ...  & ... \\
     \midrule
     \textbf{STOR} & ... & ... \\
     \midrule
