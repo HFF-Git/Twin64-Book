@@ -15,8 +15,7 @@ Beneath the banner is the window body, which consists of multiple lines of ASCII
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
 
-    % ---- GRID (for development only) ----
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,11);
+    % \draw[help lines, gray!70, dashed] (0,0) grid (16,11);
 
     % The image
     \node[anchor=north west] (img) at (0,11)
@@ -41,6 +40,61 @@ Multiple simulator windows may appear stacked vertically within the terminal. Th
 
 \section*{Simulator Windows}
 \addcontentsline{toc}{section}{Simulator Windows}
+
+A window consists of a window banner line and a window body. The banner line begins with the window identification, which includes the window stack number and the window number. The window number is a unique identifier that can be used to refer to a specific window.
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    % \draw[help lines, gray!70, dashed] (0,0) grid (16,8);
+
+    % Image
+    \node[anchor=north west] (img) at (0,4)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWindowBannerLine.pdf}};
+
+    % Arrows
+    \draw[gray, thick] (0.55, 3) -- (1, 7);
+    \node[anchor=west] at ( 1.5, 7 ) {\Large Window is Current};
+    
+    \draw[gray, thick] (0.85, 3) -- (2, 6);
+    \node[anchor=west] at ( 2.5, 6 ) {\Large Window Stack Number};
+    
+    \draw[gray, thick] (1.35, 3) -- (3, 5);
+    \node[anchor=west] at ( 3.5, 5 ) {\Large Window Number};
+    
+\end{tikzpicture}
+\caption{Simulator Environment Screen}
+\label{fig:simulator-environment-screen}
+\end{figure}
+
+Windows can be organized into stacks. This allows related windows—for example, all windows associated with a single CPU—to be grouped together. A stack can be displayed or hidden as a whole.
+
+At all times, exactly one window is designated as the current window. The current window is marked with a star (*) symbol in the banner line. If a window command does not explicitly specify a window identifier, it operates on the current window.
+
+The remainder of the banner line is specific to the window type and is described in the following sections of this manual. At the right edge of the banner line, each window displays the radix format used for presenting its data. The command window banner line displays the currently defined window stacks at the right edge.
+
+\section*{Command Window}
+\addcontentsline{toc}{section}{Command Window}
+
+
+\section*{CPU Window}
+\addcontentsline{toc}{section}{CPU Window}
+
+\section*{Cache Window}
+\addcontentsline{toc}{section}{Cache Window}
+
+\section*{TLB Window}
+\addcontentsline{toc}{section}{TLB Window}
+
+\section*{Memory Window}
+\addcontentsline{toc}{section}{Memory Window}
+
+\section*{Code Window}
+\addcontentsline{toc}{section}{Code Window}
+
+\section*{Text Window}
+\addcontentsline{toc}{section}{Text Window}
 
 
 \section*{Simulator Configuration}

@@ -2,5 +2,90 @@
 \addcontentsline{toc}{chapter}{Processor Design}
 
 
-\section*{xxx}
-\addcontentsline{toc}{section}{xxx}
+\section*{Pipeline}
+\addcontentsline{toc}{section}{Pipeline}
+
+Twin-64 has a three stage pipeline, with each stage have two subStages.
+
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.7, transform shape]
+        
+  	\draw[help lines, gray!70, dashed] (0,0) grid(20,8);
+  	
+  	\def\height{6}
+  	\def\stageWidth{6}
+  	\def\subStageWidth{\stageWidth / 2 } 
+  	
+  	\def\leftOfs{1}
+  	\def\fdStageLeftOfs{\leftOfs}
+  	\def\maStageLeftOfs{\fdStageLeftOfs+\stageWidth}
+  	\def\exStageLeftOfs{\maStageLeftOfs+\stageWidth}
+  	
+  	
+	%separators
+
+	\draw[thick] (\fdStageLeftOfs, 0) -- (\fdStageLeftOfs, \height);
+	\draw[thick, dashed] 
+		(\fdStageLeftOfs + \subStageWidth, 0) -- 
+			(\fdStageLeftOfs + \subStageWidth, \height);
+	
+	\draw[thick] (\maStageLeftOfs, 0) -- (\maStageLeftOfs, \height);
+	\draw[thick, dashed] 
+		(\maStageLeftOfs + \subStageWidth, 0) -- 
+			(\maStageLeftOfs + \subStageWidth, \height);
+	
+	\draw[thick] (\exStageLeftOfs, 0) -- (\exStageLeftOfs, \height);
+	\draw[thick, dashed] 
+		(\exStageLeftOfs + \subStageWidth, 0) -- 
+			(\exStageLeftOfs + \subStageWidth, \height);
+	
+	\draw[thick] (\exStageLeftOfs + \stageWidth, 0) -- 
+		(\exStageLeftOfs + \stageWidth, \height);
+		
+	% brackets
+	\draw[thick, decorate, decoration={brace, amplitude=0.2cm}] 
+		(\fdStageLeftOfs,\height+0.5) -- (\fdStageLeftOfs + \stageWidth,\height+0.5 )
+  		node[midway, yshift=0.6cm, anchor=south] {\Large FetchDecode};
+  		
+  	\draw[thick, decorate, decoration={brace, amplitude=0.2cm}] (
+  		\maStageLeftOfs, \height+0.5) -- (\maStageLeftOfs + \stageWidth, \height+0.5 )
+  		node[midway, yshift=0.6cm, anchor=south] {\Large AccessMemory};
+  		
+  	\draw[thick, decorate, decoration={brace, amplitude=0.2cm}] 
+  		(\exStageLeftOfs,\height+0.5) -- (\exStageLeftOfs + \stageWidth, \height+0.5 )
+  		node[midway, yshift=0.6cm, anchor=south] {\Large Execute};
+  		
+  	% text
+  	\node at ( \fdStageLeftOfs + \subStageWidth / 2, \height / 2 ) {\huge F};
+  	\node at (\fdStageLeftOfs + \subStageWidth + \subStageWidth / 2, \height / 2 ) {\huge D};
+  	
+  	\node at ( \maStageLeftOfs + \subStageWidth / 2, \height - 1 ) {\huge A};
+  	\node at (\maStageLeftOfs + \subStageWidth + \subStageWidth / 2, \height - 1 ) {\huge B};
+  	
+  	\node at ( \maStageLeftOfs + \subStageWidth / 2, 1 ) {\huge A};
+  	\node at (\maStageLeftOfs + \subStageWidth + \subStageWidth / 2, 1 ) {\huge M};
+  	
+  	\node at ( \exStageLeftOfs + \subStageWidth / 2, \height / 2 ) {\huge C};
+  	\node at (\exStageLeftOfs + \subStageWidth + \subStageWidth / 2, \height / 2 ) {\huge C };
+
+	
+\end{tikzpicture}
+\end{center}
+\caption{Hard physical Address Page}
+\label{fig:Hard physical Address Page}
+\end{figure}
+
+Two instructions take pace in parallel. 
+
+Instructions are Compute, Branch, Memory, System.
+
+Combinations possible are: CM, CB, CS, CC, BM.
+
+Address computation uses 32-bit adders.
+
+ALU is 64 Bit. We only need one, since we can compute two substages one result each.
+
+ 
+

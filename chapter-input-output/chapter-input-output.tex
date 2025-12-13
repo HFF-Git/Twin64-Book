@@ -187,7 +187,7 @@ IO\_ENTRY\_POINT\_TAB\_LEN
 \section*{Broadcast address range}
 \addcontentsline{toc}{section}{Broadcast address range}
 
-I/O module 63, i.e. the last page in the HPA address range, is the broadcast module. It contains no actual functions. Writes issued to broadcastable registers within this range are not directed to a single module. Instead, the write operation is applied simultaneously to all I/O modules on the system bus. This mechanism is typically used for system-wide commands such as resets, synchronization events, or configuration updates that must reach every module at once.
+I/O module 63, i.e. the last page in the HPA address range, is the broadcast module. It is actually not a module and contains no actual functions. Writes issued to broadcastable registers using this module number are not directed to a single module. Instead, the write operation is applied simultaneously to all I/O modules on the system bus. This mechanism is typically used for system-wide commands such as resets, synchronization events, or configuration updates that must reach every module at once.
 
 At reset time, all modules only listen to their broadcastable registers. Only after system bus setup and module discovery, is the HPA address range available.
 
