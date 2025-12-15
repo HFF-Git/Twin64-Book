@@ -2,275 +2,129 @@
 %
 %
 %--------------------------------------------------------------------------------
-\chapter*{Simulator}
-\addcontentsline{toc}{chapter}{Simulator}
+\chapter*{Twin-64 Simulator}
+\addcontentsline{toc}{chapter}{Twin-64Simulator}
 
+The Twin-64 simulator is an interactive program that runs a configured Twin-64 system. Running the simulator simply means launching the application in a terminal window. During the execution of the configured system, data can be displayed and modified. The simulator features a processor model, system memory and a simulated I/O system. The simulator terminal screen displays system data and allows the monitoring, modifying and tracing of the system execution. 
 
-??? what is the simulator ...
-
-Running the simulator simply means launching the application in a terminal window.
-The simulator environment consists of a running Twin-64 system and the simulator screen. Several simulator windows arranged within a single terminal screen. Each window begins with a banner line, displayed in inverse video. The banner identifies the window and shows its current state. The last window on the terminal screen is the command window. This window presents an input prompt, and some simulator commands also write their output directly to this window.
- 
 %-------------------------------------------------------------------------------- 
-\section*{Simulator Windows}
-\addcontentsline{toc}{section}{Simulator Windows}
+\section*{Simulator Environment}
+\addcontentsline{toc}{section}{Simulator Environment}
 
-A window consists of a \textbf{window banner line} and a \textbf{window body}. The banner line begins with the window identification, which includes the window stack number and the window number. The window number is a unique identifier that can be used to refer to a specific window. Beneath the window banner line is the window body, which consists of several lines of ascii text. Both areas are window types specific and display status information, messages and simulator output. 
+The simulator environment is a set of configured modules. A module is a processor, memory or I/O module. The following figure shows a high level view of a configured system.
 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
 
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,14);
+    % \draw[help lines, gray!70, dashed] (0,0) grid (20,10);
+    
+    \node[  tsRoundedRectangle, 
+            minimum width=4cm,
+            minimum height=8cm,
+            line width = 1.3pt,  
+            fill=gray!20,
+            anchor=south west] at (1,1) { \LARGE Simulator \\ \LARGE Driver};
+            
+    \draw[->, gray, thick] (5, 7) -- (7, 7);
+                
+    \node[  tsRoundedRectangle, 
+            minimum width=10cm,
+            minimum height=8cm,  
+             line width = 1.3pt, 
+            fill=gray!20,
+            anchor=south west] at (7,1) { };
+            
+    \draw[<-, gray, thick] (5, 3) -- (7, 3);
+    
+    \node[  tsRectangle, 
+            minimum width=2cm,
+            minimum height=2cm,  
+            fill=white,
+            anchor=south west] at (9.5,6) { Proc 1};
+            
+   	\node[  tsRectangle, 
+            minimum width=2cm,
+            minimum height=2cm,  
+            fill=white,
+            anchor=south west] at (12.5,6) { Proc 2};
+            
+    \draw[<->, gray, thick] (8, 5) -- ( 16, 5);
+    
+    \node[  tsRectangle, 
+            minimum width=2cm,
+            minimum height=2cm,  
+            fill=white,
+            anchor=south west] at (8, 2) { Memory};
+            
+    \node[  tsRectangle, 
+            minimum width=2cm,
+            minimum height=2cm,  
+            fill=white,
+            anchor=south west] at (11, 2) { I/O};
+            
+    \node[  tsRectangle, 
+            minimum width=2cm,
+            minimum height=2cm,  
+            fill=white,
+            anchor=south west] at (14, 2) { I/O};
+            
+    \draw[<->, black, thick] (10.5, 5) -- (10.5, 6);
+    \draw[<->, black, thick] (13.5, 5) -- (13.5, 6);
+    \draw[<->, black, thick] (9, 4) -- (9, 5);
+    \draw[<->, black, thick] (12, 4) -- (12, 5);
+	\draw[<->, black, thick] (15, 4) -- (15, 5);
 
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWindows.pdf}};
-
-    % Arrows
-    \draw[gray, thick] (0.45, 9.5) -- (1, 14);
-    \node[anchor=west] at ( 1.25, 14 ) {\Large Window is Current};
-    
-    \draw[gray, thick] (0.75, 9.5) -- (2, 13);
-    \node[anchor=west] at ( 2.25, 13 ) {\Large Window Stack Number};
-    
-    \draw[gray, thick] (1.1, 9.5) -- (3, 12);
-    \node[anchor=west] at ( 3.25, 12 ) {\Large Window Number};
-    
-    \draw[gray, thick] (9, 9.45) -- (11, 13);
-    \node[anchor=west] at ( 11.25, 13 ) {\LARGE Window Banner};
-    
-    \draw[gray, thick] (10, 8.75) -- (12, 12);
-    \node[anchor=west] at ( 12.25, 12 ) {\LARGE Window Body};
-    
 \end{tikzpicture}
-\caption{Simulator Windows}
-\label{fig:simulator-windows}
+\caption{Simulator Environment}
+\label{fig:simulator-environment}
 \end{figure}
 
-Windows can be organized into stacks. This allows related windows—for example, all windows associated with a single CPU—to be grouped together. A stack can be displayed or hidden as a whole.
-
-At all times, exactly one window is designated as the current window. The current window is marked with a star (*) symbol in the banner line. If a window command does not explicitly specify a window identifier, it operates on the current window.
-
-The remainder of the banner line is specific to the window type and is described in the following sections of this manual. At the right edge of the banner line, each window displays the radix format used for presenting its data. The command window banner line displays the currently defined window stacks at the right edge.
+The figure above shows a two processor system with a memory module and two I/O modules an a shared \textbf{system bus}. The simulator driver issues commands to the simulation environment. Examples are modifying a memory cell content, or single stepping the processors. The simulated environment provides execution data to the driver. The data is generally shown in \textbf{simulator windows}. The main window is the command window.
 
 %--------------------------------------------------------------------------------
-\section*{Window Stacks}
-\addcontentsline{toc}{section}{Window Stacks}
+\section*{Command Window}
+\addcontentsline{toc}{section}{Command Window}
 
-Simulator windows can be organized into \textbf{window stacks}. All visible stacks are displayed horizontally with the terminal screen size adjusted accordingly. The following figure shows a two stack example.
+The \textbf{command window} is the primary interface where commands are entered and line-mode information is displayed. This window is always visible, regardless of whether the simulator is operating in windowed mode or line mode. It is always the last window displayed, that is, it appears at the bottom of the terminal screen. The command window prompts the user to enter a command:
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+\begin{lstlisting}[style=iPageOpStyle]
 
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+    (commandNum) ->
 
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinStacks.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator Window Stacks}
-\label{fig:simulator-window-stacks}
-\end{figure}
+\end{lstlisting}
 
-Naturally, a monitor screen cannot display more than two or three stacks next to each other. Stacks, like windows, can therefore be disabled. A disabled stack is not shown. The command window has a little status filed in its banner line which shows what stacks have been created. 
+The command number is an incrementing value. Each command entered is assigned a
+unique number, which can be used to re-execute or edit previously entered commands.
+Several commands display the command history, showing recent commands along with
+their associated command numbers. The \texttt{DO} command re-executes the specified
+command, while the \texttt{REDO} command retrieves a command from the history and
+presents it for editing before execution.
 
-%--------------------------------------------------------------------------------
-\pagebreak
-\section*{CPU Window}
-\addcontentsline{toc}{section}{CPU Window}
+Numeric data entered and displayed is shown in decimal or hexadecimal. A decimal number is a numeric string of the number digits 0 to 9. A hexadecimal number has the prefix "0x" and accepts the digits 0 to 9, A to F. Where the context is clear, a hexadecimal number may drop the "0x" prefix on output. A string is a sequence of characters enclosed in quotation marks.
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+\begin{lstlisting}[style=iPageOpStyle]
 
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+    00123456            a decimal number 
+    0xc00f0010          a hexadecimal number
+    "simulator"         a string
 
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCpuGreg.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator CPU Window - General Register}
-\label{fig:simulator-cpu-window-greg}
-\end{figure}
+\end{lstlisting}
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCpuGregPid}};
-    
-\end{tikzpicture}
-\caption{Simulator CPU Window - COntrol Registers}
-\label{fig:simulator-cpu-window-creg}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCpuCreg.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator CPU Window - General Register}
-\label{fig:simulator-cpu-window-greg}
-\end{figure}
+Command lines are case insensitive. Internally all input, except those in quotation marks is upshifted before interpretation.
 
 %--------------------------------------------------------------------------------
-\pagebreak
-\section*{Cache Window}
-\addcontentsline{toc}{section}{Cache Window}
+\section*{Line Mode and Windows Mode}
+\addcontentsline{toc}{section}{Line Mode and Windows Mode}
 
+The simulator displays several windows arranged within a single terminal screen.
+Each window begins with a banner line shown in inverse video. The banner identifies
+the window and indicates its current state. The last window on the terminal screen
+is always the command window.
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCache.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator CPU Window - Cache}
-\label{fig:simulator-cpu-window-cache}
-\end{figure}
-
-%--------------------------------------------------------------------------------
-\pagebreak
-\section*{TLB Window}
-\addcontentsline{toc}{section}{TLB Window}
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinTlb.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator CPU Window - TLB}
-\label{fig:simulator-cpu-window-tlb}
-\end{figure}
-
-%--------------------------------------------------------------------------------
-\pagebreak
-\section*{Memory Window}
-\addcontentsline{toc}{section}{Memory Window}
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemHex32.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator MEM Window - Hex32}
-\label{fig:simulator-mem-window-hex32}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemHex64.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator MEM Window - Hex64}
-\label{fig:simulator-mem-window-hex64}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemDec.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator MEM Window - Decimal}
-\label{fig:simulator-mem-window-dec}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemAscii.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator MEM Window - Ascii}
-\label{fig:simulator-mem-window-ascii}
-\end{figure}
-
-%--------------------------------------------------------------------------------
-\pagebreak
-\section*{Code Window}
-\addcontentsline{toc}{section}{Code Window}
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemCode.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator MEM Window - Code}
-\label{fig:simulator-mem-window-code}
-\end{figure}
-
-%--------------------------------------------------------------------------------
-\pagebreak
-\section*{Text Window}
-\addcontentsline{toc}{section}{Text Window}
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
-
-    % Image
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinText.pdf}};
-    
-\end{tikzpicture}
-\caption{Simulator Text Window}
-\label{fig:simulator-text-window}
-\end{figure}
-
+The simulator normally operates with multiple windows visible, but it can be placed
+into \textbf{line mode}. In this mode, only the command window is displayed. Commands
+are entered at the prompt line, and all output is shown sequentially, one line at a
+time.
+ 
 
