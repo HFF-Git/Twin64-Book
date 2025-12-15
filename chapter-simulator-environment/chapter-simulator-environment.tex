@@ -1,71 +1,51 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
 \chapter*{Simulator}
 \addcontentsline{toc}{chapter}{Simulator}
 
 
-
-\section*{Running the Simulator}
-\addcontentsline{toc}{section}{Running the Simulator}
+??? what is the simulator ...
 
 Running the simulator simply means launching the application in a terminal window.
-The figure below shows a typical simulator environment. The environment consists of several simulator windows arranged within a single terminal screen. Each window begins with a banner line, displayed in inverse video. The banner identifies the window and shows its current state.
-
-Beneath the banner is the window body, which consists of multiple lines of ASCII text. This area displays status information, messages, or other simulator output.
-
-\begin{figure}[h]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-
-    % \draw[help lines, gray!70, dashed] (0,0) grid (16,11);
-
-    % The image
-    \node[anchor=north west] (img) at (0,11)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimMainWindow.pdf}};
-
-    % ---- ARROW INTO SCREENSHOT ----
-    \draw[gray, thick, ->] (4, 1) -- (6, 2);
-    \node[anchor=east] at ( 5, 0.5 ) {\LARGE Command Window};
-    
-    \draw[gray, thick, ->] (4, 10) -- (6, 8.25);
-    \node[anchor=east] at ( 5, 10.5 ) {\LARGE Window Banner};
-    
-    \draw[gray, thick, ->] (12, 10) -- (8, 7.25);
-    \node[anchor=east] at ( 13.5, 10.5 ) {\LARGE Window Body};
-    
-\end{tikzpicture}
-\caption{Simulator Environment Screen}
-\label{fig:simulator-environment-screen}
-\end{figure}
-
-Multiple simulator windows may appear stacked vertically within the terminal. The final window in the stack is the simulator command window. This window typically presents an input prompt, and some simulator commands also write their output directly to this window.
-
+The simulator environment consists of a running Twin-64 system and the simulator screen. Several simulator windows arranged within a single terminal screen. Each window begins with a banner line, displayed in inverse video. The banner identifies the window and shows its current state. The last window on the terminal screen is the command window. This window presents an input prompt, and some simulator commands also write their output directly to this window.
+ 
+%-------------------------------------------------------------------------------- 
 \section*{Simulator Windows}
 \addcontentsline{toc}{section}{Simulator Windows}
 
-A window consists of a window banner line and a window body. The banner line begins with the window identification, which includes the window stack number and the window number. The window number is a unique identifier that can be used to refer to a specific window.
+A window consists of a \textbf{window banner line} and a \textbf{window body}. The banner line begins with the window identification, which includes the window stack number and the window number. The window number is a unique identifier that can be used to refer to a specific window. Beneath the window banner line is the window body, which consists of several lines of ascii text. Both areas are window types specific and display status information, messages and simulator output. 
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
 
-    % \draw[help lines, gray!70, dashed] (0,0) grid (16,8);
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,14);
 
     % Image
-    \node[anchor=north west] (img) at (0,4)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWindowBannerLine.pdf}};
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWindows.pdf}};
 
     % Arrows
-    \draw[gray, thick] (0.55, 3) -- (1, 7);
-    \node[anchor=west] at ( 1.5, 7 ) {\Large Window is Current};
+    \draw[gray, thick] (0.45, 9.5) -- (1, 14);
+    \node[anchor=west] at ( 1.25, 14 ) {\Large Window is Current};
     
-    \draw[gray, thick] (0.85, 3) -- (2, 6);
-    \node[anchor=west] at ( 2.5, 6 ) {\Large Window Stack Number};
+    \draw[gray, thick] (0.75, 9.5) -- (2, 13);
+    \node[anchor=west] at ( 2.25, 13 ) {\Large Window Stack Number};
     
-    \draw[gray, thick] (1.35, 3) -- (3, 5);
-    \node[anchor=west] at ( 3.5, 5 ) {\Large Window Number};
+    \draw[gray, thick] (1.1, 9.5) -- (3, 12);
+    \node[anchor=west] at ( 3.25, 12 ) {\Large Window Number};
+    
+    \draw[gray, thick] (9, 9.45) -- (11, 13);
+    \node[anchor=west] at ( 11.25, 13 ) {\LARGE Window Banner};
+    
+    \draw[gray, thick] (10, 8.75) -- (12, 12);
+    \node[anchor=west] at ( 12.25, 12 ) {\LARGE Window Body};
     
 \end{tikzpicture}
-\caption{Simulator Environment Screen}
-\label{fig:simulator-environment-screen}
+\caption{Simulator Windows}
+\label{fig:simulator-windows}
 \end{figure}
 
 Windows can be organized into stacks. This allows related windows—for example, all windows associated with a single CPU—to be grouped together. A stack can be displayed or hidden as a whole.
@@ -74,28 +54,223 @@ At all times, exactly one window is designated as the current window. The curren
 
 The remainder of the banner line is specific to the window type and is described in the following sections of this manual. At the right edge of the banner line, each window displays the radix format used for presenting its data. The command window banner line displays the currently defined window stacks at the right edge.
 
-\section*{Command Window}
-\addcontentsline{toc}{section}{Command Window}
+%--------------------------------------------------------------------------------
+\section*{Window Stacks}
+\addcontentsline{toc}{section}{Window Stacks}
 
+Simulator windows can be organized into \textbf{window stacks}. All visible stacks are displayed horizontally with the terminal screen size adjusted accordingly. The following figure shows a two stack example.
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinStacks.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator Window Stacks}
+\label{fig:simulator-window-stacks}
+\end{figure}
+
+Naturally, a monitor screen cannot display more than two or three stacks next to each other. Stacks, like windows, can therefore be disabled. A disabled stack is not shown. The command window has a little status filed in its banner line which shows what stacks have been created. 
+
+%--------------------------------------------------------------------------------
+\pagebreak
 \section*{CPU Window}
 \addcontentsline{toc}{section}{CPU Window}
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCpuGreg.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator CPU Window - General Register}
+\label{fig:simulator-cpu-window-greg}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCpuGregPid}};
+    
+\end{tikzpicture}
+\caption{Simulator CPU Window - COntrol Registers}
+\label{fig:simulator-cpu-window-creg}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCpuCreg.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator CPU Window - General Register}
+\label{fig:simulator-cpu-window-greg}
+\end{figure}
+
+%--------------------------------------------------------------------------------
+\pagebreak
 \section*{Cache Window}
 \addcontentsline{toc}{section}{Cache Window}
 
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCache.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator CPU Window - Cache}
+\label{fig:simulator-cpu-window-cache}
+\end{figure}
+
+%--------------------------------------------------------------------------------
+\pagebreak
 \section*{TLB Window}
 \addcontentsline{toc}{section}{TLB Window}
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinTlb.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator CPU Window - TLB}
+\label{fig:simulator-cpu-window-tlb}
+\end{figure}
+
+%--------------------------------------------------------------------------------
+\pagebreak
 \section*{Memory Window}
 \addcontentsline{toc}{section}{Memory Window}
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemHex32.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator MEM Window - Hex32}
+\label{fig:simulator-mem-window-hex32}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemHex64.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator MEM Window - Hex64}
+\label{fig:simulator-mem-window-hex64}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemDec.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator MEM Window - Decimal}
+\label{fig:simulator-mem-window-dec}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemAscii.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator MEM Window - Ascii}
+\label{fig:simulator-mem-window-ascii}
+\end{figure}
+
+%--------------------------------------------------------------------------------
+\pagebreak
 \section*{Code Window}
 \addcontentsline{toc}{section}{Code Window}
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemCode.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator MEM Window - Code}
+\label{fig:simulator-mem-window-code}
+\end{figure}
+
+%--------------------------------------------------------------------------------
+\pagebreak
 \section*{Text Window}
 \addcontentsline{toc}{section}{Text Window}
 
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
 
-\section*{Simulator Configuration}
-\addcontentsline{toc}{section}{Simulator Configuration}
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,4);
+
+    % Image
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinText.pdf}};
+    
+\end{tikzpicture}
+\caption{Simulator Text Window}
+\label{fig:simulator-text-window}
+\end{figure}
+
+

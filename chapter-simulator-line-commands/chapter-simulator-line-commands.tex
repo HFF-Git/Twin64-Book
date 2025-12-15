@@ -1,6 +1,71 @@
 \chapter*{Simulator Line Commands}
 \addcontentsline{toc}{chapter}{Simulator Line Commands}
 
+
+\begin{longtable}{@{}p{0.3\linewidth}p{0.6\linewidth}@{}}
+    \caption{Simulator Line Commands} \\
+    \toprule
+    \textbf{Command} & \textbf{Purpose} \\
+    \midrule
+    \endfirsthead
+    \toprule
+     \textbf{Command} & \textbf{Purpose} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    \textbf{DA} & display absolute memory \\
+	\midrule
+	\textbf{DM} & display configured Twin-64 modules \\
+	\midrule
+	\textbf{DO} & execute a command from the command history stack \\
+	\midrule
+	\textbf{ENV} & display, add, modify environment variables \\
+	\midrule
+	\textbf{EXIT} & leave the Twin-64 simulator \\
+	\midrule
+	\textbf{FDCA} & flush data cache from CPU \\
+	\midrule
+	\textbf{HIST} & display command history stack \\
+	\midrule
+	\textbf{IDTLB} & insert into a data TLB of a CPU \\
+	\midrule
+	\textbf{IDTLB} & insert into a instruction TLB of a CPU \\
+	\midrule
+	\textbf{LF} & load ELF file into memory \\
+	\midrule
+	\textbf{MA} & modify absolute memory \\
+	\midrule
+	\textbf{MR} & modify a register of a CPU \\
+	\midrule
+	\textbf{PDCA} & purge from data cache of a CPU \\
+	\midrule
+	\textbf{PDTLB} & purge from data TLB of a CPU \\
+	\midrule
+	\textbf{PICA} & purge from instruction cache of a CPU \\
+	\midrule
+	\textbf{PITLB} & purge from instruction TLB of a CPU \\
+	\midrule
+	\textbf{REDO} & edit and do a command from the command history stack \\
+	\midrule
+	\textbf{RESET} & reset a Twin64 system or CPU \\
+	\midrule
+	\textbf{RUN} & run a configured simulation \\
+	\midrule
+	\textbf{STEP} & step through a simulation\\
+	\midrule
+	\textbf{W} & evaluate and display an expression \\
+	\midrule
+	\textbf{XF} & execute commands from a file \\
+	\end{longtable}
+
+
+
+
 \input{chapter-simulator-line-commands/chapter-sim-cmd-DA}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-DM}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-DO}
