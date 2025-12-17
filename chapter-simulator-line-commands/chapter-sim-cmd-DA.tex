@@ -3,29 +3,54 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{DA - display physical memory}
-\addcontentsline{toc}{section}{DA - display physical memory}
+\section*{DA - Display Physical Memory}
+\addcontentsline{toc}{section}{DA - Display Physical Memory}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{DA }
+\texttt{da <adr> [ , <len> ] [ , <fmt> ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{DA} command ...
+The \texttt{DA} command displays data from physical memory, starting at address
+\texttt{adr} and continuing for \texttt{len} bytes. If \texttt{len} is omitted,
+a default length of 8 bytes is used.
+
+For numeric data display, the starting address is rounded down to an 8-byte
+boundary. For code display, the starting address is rounded down to a 4-byte
+boundary.
+
+The optional \texttt{fmt} parameter selects the output format. Supported formats
+include hexadecimal (default), decimal, and disassembled instruction words.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-\begin{iPageDescOpEntry}{Example}
+\begin{iPageDescEntry}{Example}
+The following example displays 16 bytes starting at address \texttt{0x1000}.
+
 \begin{lstlisting}[style=iPageOpStyle]
+(3) ->da 0x1000, 10 
+00_0000_1000: 0000_0000_0000_0000  0000_0000_0000_0000
 
-... 
-
+(4) ->   
 \end{lstlisting}
-\end{iPageDescOpEntry}
+
+The \texttt{fmt} option can be used to display the data as disassembled
+instruction words.
+
+\begin{lstlisting}[style=iPageOpStyle]
+(4) ->da 0x1000, 10, code
+00_0000_4000: NOP
+00_0000_4010: NOP
+00_0000_4020: NOP
+
+(5) ->
+\end{lstlisting}
+
+\end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}

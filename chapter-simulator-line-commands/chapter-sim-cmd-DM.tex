@@ -3,27 +3,41 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{DM - list configured modules}
-\addcontentsline{toc}{section}{DM - list configured modules}
+\section*{DM - List Module Info}
+\addcontentsline{toc}{section}{DM - List Module Info}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{DM }
+\texttt{dm [ <modNum> ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{DM} command ...
+The \texttt{DM} command displays the configured modules of the Town64 system.
+Each module is listed with its module number, type, hard physical address
+(\texttt{HPA}), and the optional soft physical address range
+(\texttt{SPA}) and size.
+
+If no module number is specified, all modules are displayed. If a module
+number is provided, only the selected module is shown.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
+(1) ->dm
+Mod  Type   HPA             SPA             Size    
+00   MEM    0x00_ffe0_0000  0x00_f000_0000  0000_4000  
+01   MEM    0x00_ffe0_1000  0x00_0000_0000  0004_0000  
+02   MEM    0x00_ffe0_2000  0x00_0004_0000  0004_0000  
+03   PROC   0x00_ffe0_3000  
 
-... 
+(2) ->dm 2
+ 02   MEM    0x00_ffe0_2000  0x00_0004_0000  0004_0000
 
+(3) ->
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

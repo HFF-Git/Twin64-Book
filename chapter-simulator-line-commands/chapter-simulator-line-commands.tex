@@ -3,6 +3,9 @@
 
 This chapter presents the line mode commands. Although they are called line mode commands, these commands are also available when windows are enabled. The following table is summary of the available commands. Like all commands, they are entered in the command window.
 
+\section*{Command Summary}
+\addcontentsline{toc}{section}{Command Summary}
+
 \begin{longtable}{@{}p{0.3\linewidth}p{0.6\linewidth}@{}}
     \caption{Simulator Line Commands} \\
     \toprule
@@ -25,11 +28,15 @@ This chapter presents the line mode commands. Although they are called line mode
 	\midrule
 	\textbf{DO} & execute a command from the command history stack \\
 	\midrule
+	\textbf{DW} & display windows \\
+	\midrule
 	\textbf{ENV} & display, add, modify environment variables \\
 	\midrule
 	\textbf{EXIT} & leave the Twin-64 simulator \\
 	\midrule
 	\textbf{FDCA} & flush data cache from CPU \\
+	\midrule
+	\textbf{FICA} & flush instruction cache from CPU \\
 	\midrule
 	\textbf{HIST} & display command history stack \\
 	\midrule
@@ -64,14 +71,27 @@ This chapter presents the line mode commands. Although they are called line mode
 	\textbf{XF} & execute commands from a file \\
 	\end{longtable}
 	
+\section*{Command Syntax}
+\addcontentsline{toc}{section}{Command Syntax}
+	
+Command syntax is described using the following conventions. Reserved words are written in uppercase letters. Parameters begin with a lowercase letters
+
+Optional elements are enclosed in square brackets \texttt{[ ]}. Elements that may be repeated are enclosed in curly braces \texttt{\{ \}}.
+
+Numeric values are shown with a \texttt{0x} prefix when expressed in hexadecimal notation. For improved readability, underscore characters may be used as digit separators within hexadecimal values.
+
+String literals are enclosed in apostrophes (\texttt{' '}).
+	
 The next pages present each command in more detail, showing their purpose, syntax, arguments and an example.
 
 \input{chapter-simulator-line-commands/chapter-sim-cmd-DA}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-DM}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-DO}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-DW}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-ENV}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-EXIT}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-FDCA}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-FICA}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-HIST}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-IDTLB}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-IITLB}

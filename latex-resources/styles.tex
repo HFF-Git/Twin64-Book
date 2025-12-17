@@ -263,7 +263,7 @@
 }
 
 %--------------------------------------------------------------------------------
-% Instruction description pages use these layout definitions.
+% Page description layout style.
 %
 %--------------------------------------------------------------------------------
 \newenvironment{iPageDescEntry}[1]{%
@@ -278,6 +278,11 @@
     \setlength{\parindent}{0pt} 
 }{\end{minipage}\par\vspace{0.75em}}
 
+
+%--------------------------------------------------------------------------------
+% Page description layout style for instruction operation description.
+%
+%--------------------------------------------------------------------------------
 \newenvironment{iPageDescOpEntry}[1]{%
  \par\vspace{0pt}% <--- forces vertical mode
 	\noindent
@@ -296,6 +301,10 @@
  	\end{minipage}\par\vspace{0.75em}%
 }
 
+%--------------------------------------------------------------------------------
+% Instruction description pages use these layout definitions.
+%
+%--------------------------------------------------------------------------------
 \lstdefinestyle{iPageOpStyle}{
     basicstyle=\ttfamily\footnotesize,
     showstringspaces=false,
@@ -303,8 +312,8 @@
     breaklines=true,
     columns=fullflexible,
     frame=none,
-    aboveskip=0pt, 
-    belowskip=0pt,
+    aboveskip=0.6\baselineskip, 
+    belowskip=0.6\baselineskip,
     xleftmargin=0.025pt,
     xrightmargin=0pt,
     linewidth=\dimexpr0.95\textwidth\relax,

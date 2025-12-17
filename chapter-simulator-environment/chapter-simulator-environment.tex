@@ -5,7 +5,7 @@
 \chapter*{Twin-64 Simulator}
 \addcontentsline{toc}{chapter}{Twin-64Simulator}
 
-The Twin-64 simulator is an interactive program that runs a configured Twin-64 system. Running the simulator simply means launching the application in a terminal window. During the execution of the configured system, data can be displayed and modified. The simulator features a processor model, system memory and a simulated I/O system. The simulator terminal screen displays system data and allows the monitoring, modifying and tracing of the system execution. 
+The Twin-64 simulator is an interactive program that runs a configured Twin-64 system. Running the simulator simply means launching the simulator application in a terminal window. During the execution of the configured system, data can be displayed and modified. The simulator features a processor model, system memory and a simulated I/O system. The simulator terminal screen displays system data and allows the monitoring, modifying and tracing of the system execution. 
 
 %-------------------------------------------------------------------------------- 
 \section*{Simulator Environment}
@@ -80,51 +80,52 @@ The simulator environment is a set of configured modules. A module is a processo
 \label{fig:simulator-environment}
 \end{figure}
 
-The figure above shows a two processor system with a memory module and two I/O modules an a shared \textbf{system bus}. The simulator driver issues commands to the simulation environment. Examples are modifying a memory cell content, or single stepping the processors. The simulated environment provides execution data to the driver. The data is generally shown in \textbf{simulator windows}. The main window is the command window.
+The figure above shows a two processor system with a memory module and two I/O modules an a shared \textbf{system bus}. The simulator driver issues commands to the simulation environment. Examples are modifying a memory cell content, or single stepping the processors. The simulated environment provides execution data to the driver. 
+
+The data is generally shown in \textbf{simulator windows}. The main window is the command window. The simulator displays them arranged within a single terminal screen. Each window begins with a banner line shown in inverse video. The banner identifies the window and indicates its current state. The last window on the terminal screen is always the command window.
+
+The simulator normally operates with multiple windows visible, but it can also be placed into \textbf{line mode}. In this mode, only the command window is displayed. Commands are entered at the prompt line, and all output is shown sequentially, one line at a time.
 
 %--------------------------------------------------------------------------------
 \section*{Command Window}
 \addcontentsline{toc}{section}{Command Window}
 
-The \textbf{command window} is the primary interface where commands are entered and line-mode information is displayed. This window is always visible, regardless of whether the simulator is operating in windowed mode or line mode. It is always the last window displayed, that is, it appears at the bottom of the terminal screen. The command window prompts the user to enter a command:
+The \textbf{command window} is the primary interface where commands are entered and line-mode information is displayed. This window is always visible, regardless of whether the simulator is operating in windowed mode or line mode. It is always the last window displayed, that is, it appears at the bottom of the terminal screen. 
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMainWin.pdf}};
+\end{tikzpicture}
+\caption{Simulator — Main Window}
+\label{fig:simulator-main-window}
+\end{figure}
+
+The command window prompts the user to enter a command.
 
 \begin{lstlisting}[style=iPageOpStyle]
-
-    (commandNum) ->
-
+(commandNum) ->
 \end{lstlisting}
 
-The command number is an incrementing value. Each command entered is assigned a
-unique number, which can be used to re-execute or edit previously entered commands.
-Several commands display the command history, showing recent commands along with
-their associated command numbers. The \texttt{DO} command re-executes the specified
-command, while the \texttt{REDO} command retrieves a command from the history and
-presents it for editing before execution.
+The command number is an incrementing value. Each command entered is assigned a unique number, which can be used to re-execute or edit previously entered commands. Several commands display the command history, showing recent commands along with their associated command numbers. The \texttt{DO} command re-executes the specified command, while the \texttt{REDO} command retrieves a command from the history and presents it for editing before execution.
+
+Command lines are case insensitive. Internally all input, except those in quotation marks is upshifted before interpretation.
+
+
+%--------------------------------------------------------------------------------
+\section*{Expressions}
+\addcontentsline{toc}{section}{Expressions}
 
 Numeric data entered and displayed is shown in decimal or hexadecimal. A decimal number is a numeric string of the number digits 0 to 9. A hexadecimal number has the prefix "0x" and accepts the digits 0 to 9, A to F. Where the context is clear, a hexadecimal number may drop the "0x" prefix on output. A string is a sequence of characters enclosed in quotation marks.
 
 \begin{lstlisting}[style=iPageOpStyle]
-
     00123456            a decimal number 
     0xc00f0010          a hexadecimal number
     "simulator"         a string
-
 \end{lstlisting}
 
-Command lines are case insensitive. Internally all input, except those in quotation marks is upshifted before interpretation.
 
-%--------------------------------------------------------------------------------
-\section*{Line Mode and Windows Mode}
-\addcontentsline{toc}{section}{Line Mode and Windows Mode}
 
-The simulator displays several windows arranged within a single terminal screen.
-Each window begins with a banner line shown in inverse video. The banner identifies
-the window and indicates its current state. The last window on the terminal screen
-is always the command window.
-
-The simulator normally operates with multiple windows visible, but it can be placed
-into \textbf{line mode}. In this mode, only the command window is displayed. Commands
-are entered at the prompt line, and all output is shown sequentially, one line at a
-time.
  
 

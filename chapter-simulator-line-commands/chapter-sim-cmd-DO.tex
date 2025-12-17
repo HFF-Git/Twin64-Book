@@ -8,26 +8,43 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{DO } \\
+\texttt{do [ <cmdNum> ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{DO} command ...
+The \texttt{DO} command re-executes a command from the command history stack.
+The optional command number \texttt{cmdNum} selects the entry to be executed.
+
+If no command number is specified, the most recently entered command is
+re-executed. Command numbers correspond to the indices shown by the
+\texttt{HIST} command.
+
+The \texttt{DO} command itself is not aded to the command history stack.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
+
+The following example first displays the command history and then re-executes
+the command with history index \texttt{1}.
+
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+(4) ->hist
+[0]: help
+[1]: da 0x1000, 16
+[2]: help
+[3]: da 0x2000, 16
+(4) ->do 1
+00_0000_1000: 0000_0000_0000_0000  0000_0000_0000_0000
+(5) ->
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+See also the \texttt{HIST} command for further information on the command
+history mechanism.
 \end{iPageDescEntry}
