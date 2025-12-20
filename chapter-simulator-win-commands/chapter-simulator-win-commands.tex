@@ -1,7 +1,10 @@
 \chapter*{Simulator Window Commands}
 \addcontentsline{toc}{chapter}{Simulator Window Commands}
 
-Window commands apply to windows only. They feature window creation, arrangement and navigation. The following table provides a summary of the available commands.
+Window commands apply to windows only. They feature window creation, arrangement and navigation. 
+
+\section*{Command Syntax}
+\addcontentsline{toc}{section}{Command Syntax}
 
 \begin{longtable}{@{}p{0.3\linewidth}p{0.6\linewidth}@{}}
     \caption{Simulator Window Commands} \\
@@ -61,7 +64,18 @@ Window commands apply to windows only. They feature window creation, arrangement
 	\midrule
 	\textbf{WX} & exchange window \\	
 	\end{longtable}
+	
+\section*{Command Syntax}
+\addcontentsline{toc}{section}{Command Syntax}
+	
+Command syntax is described using the following conventions. Reserved words are written in uppercase letters. Parameters begin with a lowercase letters
 
+Optional elements are enclosed in square brackets \texttt{[ ]}. Elements that may be repeated are enclosed in curly braces \texttt{\{ \}}.
+
+Numeric values are shown with a \texttt{0x} prefix when expressed in hexadecimal notation. For improved readability, underscore characters may be used as digit separators within hexadecimal values.
+
+String literals are enclosed in apostrophes (\texttt{' '}).
+	
 The next pages present each window command in more detail, showing their purpose, syntax, arguments and an example.
 
 \input{chapter-simulator-win-commands/chapter-sim-cmd-CWC}
