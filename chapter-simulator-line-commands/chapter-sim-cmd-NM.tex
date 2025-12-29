@@ -1,0 +1,77 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\section*{NM - create a new T64 module}
+\addcontentsline{toc}{section}{NM - create a new T64 module}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{NM <mType> [ \{ , <key>=<val> \}* ] } \\
+
+??? or
+
+\texttt{NM <mType> , modNum [ \{ , <key>=<val> \}* ] } \\
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{NM} command ...
+
+??? need  table with all keywords...
+??? clarify module number. is it optional ? can there be a default ?
+
+\begin{flushleft}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Keyword}  & \textbf{Value} & \textbf{Usage} \\ \hline
+\texttt{MOD} & \texttt{modNum} & \texttt{...} \\ \hline
+\texttt{CPU} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{MEM} & \texttt{R\_ONLY | R\_W} & \texttt{...} \\ \hline
+\texttt{ITLB} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{DTLB} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{ICACHE} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{DCACHE} & \texttt{...} & \texttt{...} \\ \hline
+\end{tabular}
+\end{flushleft}
+
+\begin{flushleft}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Keyword}  & \textbf{Value} & \textbf{Usage} \\ \hline
+\texttt{TLB\_FA\_64S} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{TLB\_FA\_128S} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{CACHE\_SA\_2W\_128S\_4L} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{CACHE\_SA\_4W\_128S\_4L} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{CACHE\_SA\_8W\_128S\_4L} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{CACHE\_SA\_2W\_64S\_8L} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{CACHE\_SA\_4W\_64S\_8L} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{R\_ONLY} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{R\_W} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{SPA\_ADR} & \texttt{...} & \texttt{...} \\ \hline
+\texttt{SPA\_LEN} & \texttt{...} & \texttt{...} \\ \hline
+
+\end{tabular}
+\end{flushleft}
+
+
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Example}
+\begin{lstlisting}[style=iPageOpStyle]
+
+NM proc
+NM proc, mod=3, itlb=FA_64S
+
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None.
+\end{iPageDescEntry}

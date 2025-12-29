@@ -555,9 +555,10 @@ Twin-64 is a big-endian machine. The following figure shows the memory access fo
 \label{fig:Big endian mode}
 \end{figure}
 
+Twin-64 enforces natural alignment for memory accesses. Byte, half-word, word, and double-word data types must be aligned to 1, 2, 4, and 8-byte boundaries respectively. If an access does not meet the required alignment, a data-alignment trap is raised.
+
 The processor status register reserves a bit position, "E", for future support of mixed big and little endian memory access. Currently this bit is always set to zero.
 
-Twin-64 enforces natural alignment for memory accesses. Byte, half-word, word, and double-word data types must be aligned to 1, 2, 4, and 8-byte boundaries respectively. If an access does not meet the required alignment, a data-alignment trap is raised.
 
 \section*{Translation Lookaside Buffer}
 \addcontentsline{toc}{section}{Translation Lookaside Buffer}
@@ -576,7 +577,7 @@ Virtual address translations are stored in a translation lookaside buffer (TLB).
             fill=white,
             anchor=west] at (0,4.5) { };
     \node[anchor=west] at (0, 4.5) {Virtual page number};
-    \node[anchor=west] at (11,4.5) {38bit};
+    \node[anchor=west] at (11,4.5) {40bit};
             
   	\node[  tsRectangle, 
             minimum width=6cm,
@@ -595,12 +596,12 @@ Virtual address translations are stored in a translation lookaside buffer (TLB).
     \node[anchor=west] at (11,2.5) {4bit};
     
     \node[  tsRectangle, 
-            minimum width=2cm,
+            minimum width=1.5cm,
             minimum height=0.75cm,  
             fill=white,
             anchor=west] at (0,1.5) { };
-    \node[anchor=west] at (0, 1.5) {Page Size}; 
-    \node[anchor=west] at (11,1.5) {4bit};
+    \node[anchor=west] at (0, 1.5) {PgSize}; 
+    \node[anchor=west] at (11,1.5) {2bit};
     
     \def\fw{0.4} 
     
@@ -649,7 +650,7 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{Page Size} & 4-bit field encoding the supported page size: 
     		\[ \texttt{( 1U << ( pSize * 4 )) * T64\_PAGE\_SIZE} \] 
-    The pSize number 4 to 15 are reserved and result in an undefined operation. A page size is not allowed to cross region boundaries. The virtual address must be aligned with selected the page size.\\
+    A page size is not allowed to cross region boundaries. The virtual address must be aligned with selected the page size.\\
     \midrule
     \textbf{V} & Indicates if the entry is valid. \\
     \midrule
@@ -667,7 +668,7 @@ The first virtual memory regions, region 0 to 15, are special in that they bypas
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
 
-Twin-64 is a cache-visible architecture that supports both unified and separate instruction and data caches. While the hardware directly manages cache line insertion and replacement, software has explicit control over flushing and purging cache line entries. Twin-64 caches are virtually indexed and physically tagged. To accelerate memory access, the cache uses the virtual address to index into the arrays in parallel with the TLB lookup. A cache hit occurs when the physical address tag in the cache matches the physical page address from the TLB.
+Twin-64 is a cache-visible architecture that supports both unified and separate instruction and data caches. While the hardware directly manages cache line insertion and replacement, software has explicit control over flushing and purging cache line entries. Twin-64 caches are virtually indexed and physically tagged. To accelerate memory access, the cache uses a portion of the virtual address to index into the arrays in parallel with the TLB lookup. A cache hit occurs when the physical address tag in the cache matches the physical page address from the TLB.
 
 The architecture does not mandate specific cache line sizes, cache organization, or hierarchy models. Instead, it defines instructions for cache operations, such as deletion or flushing of cache lines.
 
@@ -678,7 +679,7 @@ Each TLB entry indicates whether the corresponding data should be cached. For re
 
 Twin-64 features a simple and efficient instruction set. All instructions are of fixed length, specifically a 32-bit word. The total number of instructions is relatively small, but many include execution options that make them highly versatile. Great care has been taken to ensure these options do not significantly complicate the pipeline or lengthen the data path.  
 
-Unlike CISC-style processors that support a wide variety of addressing modes, Twin-64 provides just two virtual memory addressing modes, both based on a simple base–offset calculation. No indirection or mode requiring a memory operand to compute an address is part of the architecture.
+Unlike CISC-style processors that support a wide variety of addressing modes, Twin-64 provides just two virtual memory addressing modes, both based on a simple base–-offset calculation. No indirection or mode requiring a memory operand to compute an address is part of the architecture.
 
 The instruction set is organized into five groups:  
 
@@ -689,9 +690,9 @@ The instruction set is organized into five groups:
  
   \item \textbf{Immediate instructions:} Instructions for constructing immediate values up to 64 bits. Several instructions embed immediate fields within the instruction word, but a full 64-bit constant requires a sequence of two or three instructions. There are also immediate instructions that support 32-bit address arithmetic, where calculations wrap around within the 32-bit offset field and never overflow into the region identifier portion.
  
-  \item \textbf{Memory reference instructions:} Load and store operations for both virtual and physical memory. These transfer data between memory and general registers in sizes of double--word, word, halfword, or byte. The design resembles a load/store architecture, but unlike strict load/store machines, several computational Twin-64 instructions allow memory operands directly. No instruction, however, both reads and writes data memory in the same operation.
+  \item \textbf{Memory reference instructions:} Load and store operations for both virtual and physical memory. These transfer data between memory and general registers in sizes of double--word, word, halfword, or byte. The design resembles a load/store architecture, but unlike strict load/store machines, several computational Twin-64 instructions also allow memory operands directly. No instruction, however, both reads and writes data memory in the same operation.
   
-  \item \textbf{Control flow instructions:} Both unconditional and conditional branches are supported. Unconditional branches may optionally save the return address in a general-purpose register. Conditional branches compare two operands and transfer control if the condition is satisfied, eliminating the need for a separate compare instruction.
+  \item \textbf{Control flow instructions:} Both unconditional and conditional branches are supported. Unconditional branches may optionally save the return address in a general-purpose register. Conditional branches compare two operands and transfer control if the condition is satisfied, eliminating the need for a separate compare instruction. Conditions  are either used directly or stored as result in a register. There are no status work bits which record flags that can be tested.
     
   \item \textbf{System control instructions:} Instructions for managing processor resources such as the TLB, cache, and control registers. Control registers can be accessed directly; the TLB can be updated with insert and remove operations; and the cache can be flushed or purged. Additional instructions generate traps or provide diagnostic functions for examining processor state. Most system instructions require execution in privileged mode.
 \end{itemize}

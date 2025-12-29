@@ -74,11 +74,11 @@ Stack frames are aligned on a 16-byte boundary. A stack frame consists of four m
 
 The \textbf{stack frame marker} holds a pointer to the previous stack frame along with the return link address, allowing the call chain to be restored during function returns. 
 
-The \textbf{parameter area} is used for passing arguments to the called function and for returning data. Although the first four parameters are passed in registers, space for them must still be reserved in memory. Any parameters beyond the first four are placed directly in this area.
+The \textbf{parameter area} is used for passing arguments to the called function and for returning data. Although by convention the first four parameters are passed in registers, space for them must still be reserved in memory. Any parameters beyond the first four are placed directly in this area.
 
 The \textbf{local area} stores the function’s local variables. This is the region the function uses for data that must persist throughout its execution.
 
-Finally, the \textbf{spill area} is used to save registers whose values must be preserved and restored before returning to the caller.
+Finally, the spill area is used to save register values that must be preserved for the caller and to spill intermediate values when register allocation cannot keep all live data in registers.
 
 \section*{Stack Frame Addressing}
 \addcontentsline{toc}{section}{Stack Frame Addressing}
@@ -135,7 +135,7 @@ The second word contains the \textbf{return link}, which is the address immediat
 \section*{Parameter Area}
 \addcontentsline{toc}{section}{Parameter Area}
 
-A stack frame includes a \textbf{parameter area} large enough to hold the largest argument list passed from the calling function to the callee. Although the first four parameters are normally passed in registers, corresponding space is still reserved in the frame to provide a uniform layout and to support cases where the callee needs to spill register arguments to memory. Any additional parameters beyond the first four are passed directly in the memory locations immediately below this register-parameter area. If a function neither receives parameters nor returns data, the parameter area is omitted from its stack frame, avoiding unnecessary stack usage. 
+A stack frame includes a \textbf{parameter area} large enough to hold the largest argument list passed from the calling function to the callee. Although the first four parameters are by convention passed in registers, corresponding space is still reserved in the frame to provide a uniform layout and to support cases where the callee needs to spill register arguments to memory. Any additional parameters beyond the first four are passed directly in the memory locations immediately below this register-parameter area. If a function neither receives parameters nor returns data, the parameter area is omitted from its stack frame, avoiding unnecessary stack usage. 
 
 \section*{Local Data Area}
 \addcontentsline{toc}{section}{Local Data Area}
@@ -145,6 +145,6 @@ Immediately below the parameter area lies the \textbf{local data area}, which ho
 \section*{Spill Area}
 \addcontentsline{toc}{section}{Spill Area}
 
-The \textbf{spill area} contains any registers that the function must temporarily save in order to preserve the calling convention. Registers that must remain unchanged across function calls are saved (``spilled'') into this area upon entry and restored before returning to the caller. The compiler allocates spill slots only when necessary; if a function does not need to save any registers, the spill area is not present in its stack frame. This selective allocation helps keep stack usage minimal while maintaining correct program behavior.
+The \textbf{spill area} contains any registers that the function must temporarily save in order to preserve the calling convention. Registers that must remain unchanged across function calls are saved (``spilled'') into this area upon entry and restored before returning to the caller. The compiler allocates spill slots only when necessary. If for example a function does not need to save any registers, the spill area is not present in its stack frame. This selective allocation helps keep stack usage minimal while maintaining correct program behavior.
 
 

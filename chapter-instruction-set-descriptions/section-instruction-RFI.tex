@@ -22,7 +22,8 @@
 
 \begin{iPageDescEntry}{Description}
     The \texttt{RFI} instruction restores processor state after an interrupt
-    or exception handler has completed. Execution resumes at the program counter saved during the interrupt and the processor state (including privilege level, interrupt enable flags, and other PSR fields) is restored from the saved copy.
+    or exception handler has completed. The content is loaded from the \texttt{IPSW} 
+    control register.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}

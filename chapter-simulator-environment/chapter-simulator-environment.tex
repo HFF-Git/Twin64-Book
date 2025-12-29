@@ -102,30 +102,6 @@ The \textbf{command window} is the primary interface where commands are entered 
 \label{fig:simulator-main-window}
 \end{figure}
 
-The command window prompts the user to enter a command.
+The command window prompts the user to enter a command. The command number is an incrementing value. Each command entered is assigned a unique number, which can be used to re-execute or edit previously entered commands. Several commands display the command history, showing recent commands along with their associated command numbers. The \texttt{DO} command re-executes the specified command, while the \texttt{REDO} command retrieves a command from the history and presents it for editing before execution.
 
-\begin{lstlisting}[style=iPageOpStyle]
-(commandNum) ->
-\end{lstlisting}
-
-The command number is an incrementing value. Each command entered is assigned a unique number, which can be used to re-execute or edit previously entered commands. Several commands display the command history, showing recent commands along with their associated command numbers. The \texttt{DO} command re-executes the specified command, while the \texttt{REDO} command retrieves a command from the history and presents it for editing before execution.
-
-Command lines are case insensitive. Internally all input, except those in quotation marks is upshifted before interpretation.
-
-
-%--------------------------------------------------------------------------------
-\section*{Expressions}
-\addcontentsline{toc}{section}{Expressions}
-
-Numeric data entered and displayed is shown in decimal or hexadecimal. A decimal number is a numeric string of the number digits 0 to 9. A hexadecimal number has the prefix "0x" and accepts the digits 0 to 9, A to F. Where the context is clear, a hexadecimal number may drop the "0x" prefix on output. A string is a sequence of characters enclosed in quotation marks.
-
-\begin{lstlisting}[style=iPageOpStyle]
-    00123456            a decimal number 
-    0xc00f0010          a hexadecimal number
-    "simulator"         a string
-\end{lstlisting}
-
-
-
- 
-
+Command lines are case insensitive. Internally all input, except those in quotation marks is upshifted before interpretation. Numeric data entered and displayed is shown in decimal or hexadecimal. A decimal number is a numeric string of the number digits 0 to 9. A hexadecimal number has the prefix "0x" and accepts the digits 0 to 9, A to F. Where the context is clear, a hexadecimal number may drop the "0x" prefix on output. A string is a sequence of characters enclosed in quotation marks.

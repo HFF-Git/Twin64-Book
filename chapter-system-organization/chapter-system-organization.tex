@@ -33,14 +33,14 @@ Twin-64 offers a large global address range, organized in regions. A region numb
 
 Virtual addresses are translated to physical addresses by the TLB when memory is referenced. For memory management purposes, the virtual address range can also be viewed as a set of pages. A region therefore contains $2^{20}$ pages of 4 KB each. A virtual page number, combining the region and the page number within that region, is a $2^{40}$ value. Address translations are performed at the page level. 
 
-The first regions in the virtual address space are special in that they actually represent the physical address range. An address in that range bypasses the TLB and accesses physical memory directly. 
+The first regions in the virtual address space are special in that they actually represent the physical address range. An address in that range bypasses the TLB and accesses physical memory directly. Access is only allowed at the highest privilege level.
 
 A TLB can optionally support different page sizes in addition to the architected 4 KB page size. Supported sizes are 4 Kbyte, 64 Kbytes, 1 Mbyte and 16 MByte. It is very common for the operating system and data to be mapped in consecutive physical pages, which can then be covered by a larger page size.
 
 \section*{Security and Protection Support}
 \addcontentsline{toc}{section}{Security and Protection Support}
 
-Twin-64 implements a protection model along two dimensions. The first dimension is \textbf{access type control} and privilege-level checking. Each page is associated with a page type. Page types include read-only, read–write, execute, and gateway. There are two privilege levels: user mode and supervisor mode. Access type and privilege level together form the access control information, which is checked for each instruction and data memory access. 
+Twin-64 implements a protection model along two dimensions. The first dimension is access type control and privilege-level checking. Each page is associated with a page type. Page types include read-only, read–write, execute, and gateway. There are two privilege levels: user mode and supervisor mode. Access type and privilege level together form the access control information, which is checked for each instruction and data memory access. 
 
 The second dimension of protection is the region ID itself. Twin-64 allows a set of region IDs to be recorded in processor control registers. For each access to a region that has the protection check bit set, one of the region ID control registers must match the region ID. If not, a protection violation trap is raised.
 

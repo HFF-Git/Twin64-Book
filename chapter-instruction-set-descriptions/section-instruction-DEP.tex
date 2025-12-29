@@ -25,11 +25,11 @@ The \texttt{DEP} instruction uses the special-13 instruction format. \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{DEP} instruction deposits a bit field from general register \texttt{RegB} into \texttt{RegR} at the specified position.  
+The \texttt{DEP} instruction deposits a bit field from general register \texttt{RegB} or an immediate value encoded in the instruction into \texttt{RegR} at the specified position.  
 
 The rightmost bit of the target field is specified by the \texttt{pos} instruction field, or by the Shift Amount Register (\texttt{SAR}) if the \texttt{A} bit is set. The length of the field is specified by the \texttt{len} instruction field.  
 
-If the \texttt{Z} bit is set, the target register \texttt{RegR} is cleared before depositing the field. If the \texttt{I} bit is set, the value to deposit is taken from the RegB field rather than a register in \texttt{RegB}.
+If the \texttt{Z} bit is set, the target register \texttt{RegR} is cleared before depositing the field. If the \texttt{I} bit is set, the value to deposit is taken from the RegB field rather than the value in register \texttt{RegB}.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------

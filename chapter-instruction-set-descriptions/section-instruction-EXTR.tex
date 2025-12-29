@@ -52,5 +52,17 @@ None
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None
+Twin-64 does not have instruction for shifting and rotating a register value. Instead the \texttt{EXTR} and \texttt{DSR} instructions are used. 
+
+An arithmetic shift right operation can easily be encoded as
+
+\begin{verbatim}
+ASR Rm, Rn, amt -> EXTR.S Rm, Rn, R0, amt, 64 - amt
+\end{verbatim}
+
+and an arithmetic shift left left operation: 
+
+\begin{verbatim}
+ASL Rm, Rn, amt -> EXTR.S Rn, Rm, amt, 64 - amt
+\end{verbatim}
 \end{iPageDescEntry}

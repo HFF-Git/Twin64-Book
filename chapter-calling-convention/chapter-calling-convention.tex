@@ -9,6 +9,9 @@ The previous chapters introduced the register-usage conventions and the overall 
 
 The discussion begins with the simplest form of call: the \emph{local call}, which transfers control between routines within the same module. Local calls illustrate the fundamental steps of the calling convention without the additional considerations required for inter-module calls.
 
+\section*{Calling Sequence}
+\addcontentsline{toc}{section}{Calling Sequence}
+
 A routine call proceeds through several well-defined stages. First, the caller evaluates all argument expressions and places the resulting values into the parameter area, either in registers or on the stack as required. After preparing the parameters, the caller saves any registers whose values must remain intact across the call. These caller-saved registers must be preserved by the caller before branching to another routine.
 
 The callee then begins execution at its entry point. It accesses the incoming parameters in the established layout of the parameter area, allocates a stack frame, records the return link, and saves any callee-saved registers it intends to overwrite. This setup ensures that caller and callee operate independently while maintaining a consistent runtime state.
@@ -46,6 +49,7 @@ The callee begins by saving the return link, allocating its stack frame, and sav
 ; called procedure
             
 target:     ST RL, -16(SP)	    ; save RL
+			ST SP, -8 (SP)      ; save PSP
 			LDO SP, size(SP) 	; allocate stack frame
 			...					; save callee save
 			
@@ -53,17 +57,17 @@ target:     ST RL, -16(SP)	    ; save RL
 			
 			
 			...					; restore callee saves
-			LDO SP, -size (SP) ; deallocate stack frame
+			LDO SP, -size (SP)  ; deallocate stack frame
 			LD RL, -16(SP)		; restore RL
 			BV (RL) 			; return to caller
 \end{lstlisting}
 \end{figure}
 
-This sequence shows all steps that may be required for a local call. Depending on the specific call and the nature of the callee, some steps may be omitted. For example, if the caller does not use any caller-saved registers, no saving is needed before the call. Likewise, a routine with no arguments does not need to evaluate arguments.
+This sequence shows all steps that may be required for a local call. Depending on the specific call and the nature of the callee, some steps may be omitted. For example, if the caller does not use any caller-saved registers, no saving is needed before the call. Likewise, a routine with no arguments does not need to evaluate arguments. Also, saving the previous stack pointer is an optional operation.
 
 The callee can also omit steps. A \emph{leaf procedure}, i.e. one that calls no other routines, does not need to save the return address. If it does not use any callee-saved registers, those need not be saved or restored. Finally, if a leaf procedure uses no caller-saved registers, has no local variables, and does not need to preserve temporary registers, it may require no stack frame at all.
 
-The instructions \texttt{B}, \texttt{BR}, and \texttt{BV} are used for local branches. The address computation, whether IA-relative or region-relative, does not modify the region portion of the instruction address. IT is always the region of the currently executing code.
+The instructions \texttt{B}, \texttt{BR}, and \texttt{BV} are used for local branches. The address computation, whether IA-relative or region-relative, does not modify the region portion of the instruction address. It is always the region of the currently executing code.
 
 \section*{Parameter passing}
 \addcontentsline{toc}{section}{Parameter passing}
@@ -102,8 +106,8 @@ Procedures may pass arguments to a callee and receive return values. The paramet
 				  	
   	% Fields
   	\node at ( \middleofs, 6.5 ) { Arg4 };
-  	\node at ( \middleofs, 5.5 ) { Arg3 };
-  	\node at ( \middleofs, 4.5 ) { Arg2 };
+  	\node at ( \middleofs, 5.5 ) { Arg3 / Ret3};
+  	\node at ( \middleofs, 4.5 ) { Arg2 / Ret2 };
   	\node at ( \middleofs, 3.5 ) { Arg1 / Ret1 };
   	\node at ( \middleofs, 2.5 ) { Arg0 / Ret0 };
   	\node at ( \middleofs, 1.5 ) { Return Address };
@@ -168,7 +172,7 @@ An external call is one that may cross a region boundary. The \texttt{BE} instru
 
 This snippet illustrates only the external branch. The full runtime convention is more elaborate. When calling an external function, the target address and its associated DP value must be obtained. This information is stored in the \textbf{linkage table}, which is populated with actual values at load time. This indirection allows compiled code to remain unchanged regardless of where the external function is ultimately located.
 
-Because there is no practical way for the callee to determine its correct DP value in a shared-code model, the caller is responsible for setting DP before branching outside its module. The necessary steps of loading the target address, loading the target DP, and performing the external branch are placed into a small piece of code called a \emph{stub}. A stub is generated at compile time and inserted into the module's code.
+Because there is no practical way for the callee to determine its correct DP value in a shared-code model, the caller is responsible for setting DP before branching outside its module. The necessary steps of loading the target address, loading the target DP, and performing the external branch are placed into a small piece of code called a \emph{stub}. A stub is generated at compile time and inserted into the module's code. The branch instruction is patched during the linking process.
 
 A generic external call sequence is shown below:
 
@@ -198,7 +202,7 @@ stubF1:		LD R1, -ofs(DP)		    ; load target address of F1
 \end{figure}
 
 
-Before the stub loads the new DP value, the caller must save the current DP. This step is always required, even if the calling function does not use DP. The Twin-64 runtime model performs this work in the caller's code before branching to the stub. This division has several benefits. First, the caller can optimize DP saving. For example, by dedicating a register to hold it so that only restoring DP is necessary after external calls. Second, the stub's sequence of loading the target address and DP value is shared for all calls to the same external function. Finally, the target function is unaware of whether it was reached by a local or external call:
+Before the stub loads the new DP value, the caller must save the current DP. This step is always required, even if the called function does not use DP. The Twin-64 runtime model performs this work in the caller's code before branching to the stub. This division has several benefits. First, the caller can optimize DP saving. For example, by dedicating a register to hold it so that only restoring DP is necessary after external calls. Second, the stub's sequence of loading the target address and DP value is shared for all calls to the same external function. Finally, the target function is unaware of whether it was reached by a local or external call:
 
 \begin{figure}[H]
 \centering
@@ -208,6 +212,7 @@ Before the stub loads the new DP value, the caller must save the current DP. Thi
 ; called code
 
 target:     ST RL, -16(SP)		; save RL
+            ST SP,  -8(SP)      ; save PSP
 			LDO SP, size(SP)    ; allocate stack frame of <size>
 			...					; save callee save regs
 			
@@ -302,14 +307,14 @@ The assembler or compiler generates the skeleton of the linkage table. The linka
 \label{fig: Linkage Table} 
 \end{figure}
 
-The figure illustrates two modules within a task's global data region. A module's global data is addressed as DP plus an offset, while linkage-table entries are addressed as DP minus an offset. The compiler constructs the linkage table during compilation. The linkage table contains per external library several entries. 
+The figure illustrates two modules within a task's global data region. All module global data is addressed as DP plus an offset, while linkage-table entries are addressed as DP minus an offset. The compiler constructs the linkage table during compilation. The linkage table contains per external library several entries. 
 
 The DP value entry starts the linkage subtable for a particular library. 
 
 \begin{center}
     \drawInstrFormatSixtyFour
        {0,3,16}
-        {0, DP value of Function Library}
+        {0, DP value of external Function Library}
 \end{center}
 
 The function target entry contains the target address of the function.
@@ -317,12 +322,9 @@ The function target entry contains the target address of the function.
 \begin{center}
     \drawInstrFormatSixtyFour
        {0,3,16}
-        {0, Virtual Address of Function}
+        {0, Virtual Address of external Function}
 \end{center}
 
-The runtime supports two methods for allocating linkage table entries. In the first method, each external function has its own pair of entries, the DP value followed by the target address. These can be accessed using constant offsets of 0 and 8 bytes, respectively.
-
-However, because the DP register value is identical for all external functions within a given external load module, it only needs to be stored once. In the second method, a single DP entry is placed at the start of the linkage table portion for the external module, followed by the target address entries for all external functions. This approach produces a more compact table.
 
 \section*{Function Labels}
 \addcontentsline{toc}{section}{Function Labels}
@@ -377,8 +379,8 @@ RISC designs, in contrast, expose only simple branch and jump instructions and r
 
 Twin-64 follows a similar model. External calls use an import stub, which is responsible for locating the target function and obtaining the external library’s DP value before issuing the external branch instruction. The caller saves its own DP value and restores it upon return.
 
-This approach adds two simple instructions at each external call site, but provides a key benefit: it avoids two additional branches, one from the import stub to the callee and one back from the import stub to the caller. It also centralizes DP handling. Because the stub does not manipulate the caller’s DP value, the caller has full flexibility. It may save DP to memory, move it to another register, or even save it once and reload it after each external call, depending on optimization goals.
+This approach adds two instructions at each external call site, but provides a key benefit: it avoids two additional branches, one from the import stub to the callee and one back from the import stub to the caller. It also centralizes DP handling. Because the stub does not manipulate the caller’s DP value, the caller has full flexibility. It may save DP to memory, move it to another register, or even save it once and reload it after each external call, depending on optimization goals.
 
-Thus an external call requires only one additional branch in the calling sequence, and the code expansion for saving the caller’s DP is modest. The callee is completely unaware of the caller’s region, so no export stub is required.
+Thus an external call requires only one additional branch in the calling sequence, and the code expansion for saving and restoring the caller’s DP is modest. The callee is completely unaware of the caller’s region, so no export stub is required.
 
-An additional advantage is that the compiler does not need to generate any special code for functions that may be called externally. Only imported functions must be DP-aware. This reduces complexity and places less burden on the compiler designer.
+An additional advantage is that the compiler does not need to generate any special code for functions that may be called externally. This reduces complexity and places less burden on the compiler designer.

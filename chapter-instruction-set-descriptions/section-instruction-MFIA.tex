@@ -8,7 +8,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{MFIA [.R/L/A] RegR}
+\texttt{MFIA [.R/L/A]  RegR}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -30,8 +30,8 @@ The \texttt{MFIA} instruction copies the current instruction address to register
  	\setlength{\itemsep}{0.5em}
     \setlength{\parskip}{0pt}
 	\item \texttt{.A} (mode = 0) — copies IA to \texttt{RegR}. This is the default operation.
-    \item \texttt{.L} (mode = 1) — Deposits 20 bits of \texttt{val} into bits [31..12] of \texttt{RegR}.  
-    \item \texttt{.S} (mode = 2) — Deposits 20 bits of \texttt{val} into bits [51..32] of \texttt{RegR}.  
+    \item \texttt{.L} (mode = 1) — Deposits 20 bits of \texttt{IA.[31..12]} into bits [31..12] of \texttt{RegR}. \texttt{RegR} is cleared before.
+    \item \texttt{.R} (mode = 2) — Deposits 20 bits of \texttt{IA.[51..32]} into bits [51..32] of \texttt{RegR}. \texttt{RegR} is cleared before. 
 \end{itemize}
 \end{iPageDescEntry}
 
@@ -40,7 +40,7 @@ The \texttt{MFIA} instruction copies the current instruction address to register
 \begin{lstlisting}[style=iPageOpStyle]
 RegR <- PSW.[IA]                          // .A mode (0)
 RegR <- (( PSW.[IA] & 0xFFFFF ) << 12 )   // .L mode (1)
-RegR <- (( PSW.[IA] & 0xFFFFF ) << 32 )   // .S mode (2)
+RegR <- (( PSW.[IA] & 0xFFFFF ) << 32 )   // .R mode (2)
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
@@ -51,7 +51,5 @@ None.
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-It would be beneficial to have the possibility to just a subject of the instruction address. How about options to get the segment, the page number in the segment and the status bits. It is very similar to LDIL fields.
-
-??? unclear operation think about what is needed .....
+None.
 \end{iPageDescEntry}

@@ -7,7 +7,7 @@
 \addcontentsline{toc}{section}{LD — Load Register}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{LD[.D/W/H/B/U] RegR, SignedImmed13( RegB )} \\
+    \texttt{LD[.D/W/H/B/U] RegR, ofs( RegB )} \\
     \texttt{LD[.D/W/H/B/U] RegR, RegX( RegB )}
 \end{iPageDescEntry}
 
@@ -28,7 +28,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{LD} instruction loads a data value from memory into a general-purpose register. Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
+    The \texttt{LD} instruction loads a data value from memory into a general-purpose register. Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted left by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address.
     
     If the data loaded is a byte, half-word or a word, the data is sign-extended. If the \texttt{U} option is set, the data is zero-extended instead.
     

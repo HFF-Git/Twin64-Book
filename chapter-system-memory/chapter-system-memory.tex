@@ -45,9 +45,9 @@ Twin-64 features a 52-bit virtual address range, organized into a 20-bit region 
             minimum width=1cm,
             minimum height=0.255cm,
             anchor=west,
-            fill=white!50] (blocks) at (9,8.875) { };
+            fill=white!50] (blocks) at (9,8.875) { data };
 		
-	\node at (\leftofs, 7) {Region};
+	\node at (\leftofs, 7) {\LARGE Region};
 		
 \end{tikzpicture}
 \end{center}
@@ -62,7 +62,8 @@ A virtual address is translated into a physical address. For translation purpose
 
 Twin-64 architecture features a 36-bit physical memory address range which allows a maximum physical memory of up to 64 GBytes. The following figure depicts the overall memory layout.
 
-\begin{figure}[ht]
+
+\begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.7, transform shape]
         
@@ -129,10 +130,6 @@ Twin-64 architecture features a 36-bit physical memory address range which allow
 
 Region IDs 0 to 15 represent the physical address space, with a maximum size of 64 GB. These regions are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these regions. Control Register 0 contains a field that encodes the actual physical memory size installed in the system.
 
-Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top 256 MB of the first region. I/O modules allocate their registers and storage within this range, and access to this area is uncached.
+Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top 256 MB of the region zero. I/O modules allocate addresses for their registers and storage within this range, and access to this area is uncached.
 
 The remaining address space is dedicated to virtual memory. Virtual storage is allocated dynamically, and the TLB provides the necessary translation to physical addresses while enforcing access rights.
-
-\simpleNote{ Explain the conceptual model of machine mode, supervisor mode and user mode and how this impacts address resolution. The term privileged code would need to be replaced with supervisor mode. Under evaluation. For now, there is privileged and user mode. Priv mode accesses the entire address range.}
-
-

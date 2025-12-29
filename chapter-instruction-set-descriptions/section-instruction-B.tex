@@ -30,7 +30,7 @@ The \texttt{B} instruction uses the following instruction format: \\
 The \texttt{B} instruction performs an unconditional instruction address relative branch.  
 The target address is computed by sign-extending the immediate offset, shifting it left by two bits, and adding the result to the current instruction address. The return link is stored in \texttt{RegR}. 
 
-The \texttt{.G} flag enables the \emph{gateway branch} option. In this case, the processor’s privilege level may be raised to the privilege level stored in the TLB entry of the page from which the gateway instruction is fetched. The change is only performed if it results in a higher privilege level; otherwise, the current privilege level remains unchanged. Execution then continues at the computed target address with the (possibly new) privilege level.  
+The \texttt{.G} flag enables the \emph{gateway branch} option. In this case, the processor’s privilege level may be raised to the privilege level stored in the TLB entry of the page from which the branch with gateway option instruction is fetched. The change is only performed if it results in a higher privilege level; otherwise, the current privilege level remains unchanged. Execution then continues at the computed target address with the (possibly new) privilege level.  
 
 \end{iPageDescEntry}
 

@@ -27,7 +27,7 @@ The MBR instruction uses the following instruction format:
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{MBR} instruction copies the contents of \texttt{RegB} into \texttt{RegR}.  If the condition specified in the \texttt{cond} field evaluates true for the new value in \texttt{RegR}, execution continues at the current instruction address plus the sign-extended offset. Otherwise, execution resumes with the next instruction.
+The \texttt{MBR} instruction copies the contents of \texttt{RegB} into \texttt{RegR}.  If the condition specified in the \texttt{cond} field evaluates true for the new value in \texttt{RegR}, execution continues at the current instruction address plus the sign-extended and shifted left by 2 bits  offset. Otherwise, execution resumes with the next instruction.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -58,8 +58,8 @@ The \texttt{cond} field encodes the branch condition as follows:
 RegR <- RegB;
 if ( cond( RegR )) {
 
-    PSW.[IA-OFS] <- addOfs32( PSW.[IA-OFS], 
-                              signExtend( ofs ) << 2 );
+    PSW.[IA-OFS] <- 
+    	addOfs32( PSW.[IA-OFS], signExtend( ofs ) << 2 );
 }
 else PSW.[IA-OFS] <- addOfs32( PSW.[IA-OFS], 4 );
 \end{lstlisting}
@@ -72,7 +72,7 @@ None.
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+See also the instruction notes on comparison and branch condition encoding in the appendix.
 \end{iPageDescEntry}
 
 

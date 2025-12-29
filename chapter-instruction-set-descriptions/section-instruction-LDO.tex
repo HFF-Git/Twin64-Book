@@ -31,7 +31,7 @@ The \texttt{LDO} instruction uses the following instruction formats: \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{LDO} instruction loads an offset into a general register. Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted right by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address. The computed value is then stored in \texttt{RegR}.
+The \texttt{LDO} instruction loads an offset into a general register. Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted left by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address. The computed value is then stored in \texttt{RegR}.
 
 \end{iPageDescEntry}
 

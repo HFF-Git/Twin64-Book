@@ -5,7 +5,7 @@
 \chapter*{Interruptions}
 \addcontentsline{toc}{chapter}{Interruptions}
 
-Twin-64 features a simple but powerful interrupt system. Interruptions in Twin-64 are divided into four classes—faults, traps, interrupts, and checks—that may occur during instruction execution.
+Twin-64 features a simple but powerful interrupt system. Interruptions in Twin-64 are divided into four classes - faults, traps, interrupts, and checks - that may occur during instruction execution.
 
 \begin{itemize} 
 \setlength{\itemsep}{0.5em}
@@ -62,6 +62,8 @@ Execution of the interrupt handler starts at \texttt{0x0000\_10A0}.
 
 \section*{Interrupt Vector Table}
 \addcontentsline{toc}{section}{Interrupt Vector Table}
+
+The following table lists the defined traps for Twin-64.
 
 
 \begin{longtable}{@{}p{0.075\linewidth}p{0.25\linewidth}p{0.2\linewidth}p{0.15\linewidth}p{0.15\linewidth}@{}}
@@ -122,9 +124,4 @@ Execution of the interrupt handler starts at \texttt{0x0000\_10A0}.
     \textbf{19} & Taken branch & next instruction & instruction & - \\
     \bottomrule
 \end{longtable}
-
-
-
-
-
 

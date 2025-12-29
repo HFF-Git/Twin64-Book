@@ -5,7 +5,7 @@
 \chapter*{Instruction Set}
 \addcontentsline{toc}{chapter}{Instruction Set}
 
-This part of the book presents the Twin-64 instruction set. Following the RISC design philosophy, it features a fixed-length format with a small number of regular instruction types. The total number of instructions is relatively small; however, many instructions encode execution options that make them highly versatile. Great care is taken to ensure that these options do not significantly complicate the pipeline or increase the overall data path length. Instead of supporting a wide variety of addressing modes, as commonly found in CISC-style CPUs, Twin-64 provides two virtual memory addressing modes based on a simple base–-offset calculation. No indirection or addressing mode that requires reading a memory operand to compute an address is part of the architecture.
+This part of the book presents the Twin-64 instruction set. Following the RISC design philosophy, it features a fixed-length format with a small number of regular instruction types. The total number of instructions is relatively small. However, many instructions encode execution options that make them highly versatile. Great care is taken to ensure that these options do not significantly complicate the pipeline or increase the overall data path length. Instead of supporting a wide variety of addressing modes, as commonly found in CISC-style CPUs, Twin-64 provides two virtual memory addressing modes based on a simple base–-offset calculation. No indirection or addressing mode that requires reading a memory operand to compute an address is part of the architecture.
 
 The instruction set is divided into five groups.  
 \begin{itemize}
@@ -35,22 +35,22 @@ The second group implements bit manipulation operations. The \texttt{EXTR} instr
 \section*{Immediate Instructions}
 \addcontentsline{toc}{section}{Immediate Instructions}
 
-The \texttt{LDI} and \texttt{ADDIL} instructions are used for forming large constants. With a 32-bit instruction word, it is not possible to encode even a full 32-bit constant in a single instruction. The \texttt{LDI} instruction includes a qualifier to load a constant value at a defined position in the target register. Using a short sequence of instructions, any 64-bit value can be loaded.
+The \texttt{LDIL} instruction is used for forming large constants. With a 32-bit instruction word, it is not possible to encode even a full 32-bit constant in a single instruction. The \texttt{LDIL} instruction includes a qualifier to load a constant value at a defined position in the target register. Using a short sequence of instructions, any 64-bit value can be loaded.
 
-The \texttt{ADDIL} instruction adds the upper portion of a 32-bit immediate value to the lower 32-bit half of a general register. This instruction is primarily used for address arithmetic, enabling access to any location within a segment. The \texttt{LDO} instruction loads an offset into a general register. The address is formed by adding the signed immediate value to a base register. Address arithmetic is performed as unsigned 32-bit arithmetic, wrapping around within the 32-bit range.
+The \texttt{ADDIL} instruction adds the upper portion of a 32-bit immediate value to the lower 32-bit half of a general register. This instruction is primarily used for address arithmetic, enabling access to any location within a region. The \texttt{LDO} instruction loads an offset into a general register. The address is formed by adding the signed immediate value to a base register. Address arithmetic is performed as unsigned 32-bit arithmetic, wrapping around within the 32-bit range.
 
 \section*{Memory Reference Instructions}
 \addcontentsline{toc}{section}{Memory Reference Instructions}
 
 Twin-64 is a register-–memory architecture. It supports the common load/store instructions as well as instructions that combine an operation with a memory reference. Memory reference instructions feature two addressing modes. The first is the base register plus offset mode, and the second is the base register plus register index mode.  
 
-The indexed instruction format loads the content of the memory address formed by adding the scaled 13-bit immediate field to the base register \texttt{RegB}, and adds the fetched data value to \texttt{RegA}. The \texttt{dw} field specifies the data width: a \texttt{dw} value of 0 loads an 8-bit value, 1 loads a 16-bit value, 2 loads a 32-bit value, and 3 loads a 64-bit value. In all cases, the fetched value is sign-extended to 64 bits. Additionally, the \texttt{dw} field scales the offset by left-shifting the immediate field according to the data width. For example, a \texttt{dw} value of 3 loads a double word from an address formed by shifting the 13-bit offset by three bits before adding it to the base register.  
+The indexed instruction format builds an effective address by adding the scaled 13-bit immediate field to the base register \texttt{RegB}. The \texttt{dw} field specifies the data width: a \texttt{dw} value of 0 loads an 8-bit value, 1 loads a 16-bit value, 2 loads a 32-bit value, and 3 loads a 64-bit value. In all cases, the fetched value is sign-extended to 64 bits. Additionally, the \texttt{dw} field scales the offset by left-shifting the immediate field according to the data width. For example, a \texttt{dw} value of 3 loads a double word from an address formed by shifting the 13-bit offset by three bits before adding it to the base register.  
 
 The register-indexed instruction format loads the content of the memory address formed by adding \texttt{RegX} to the base register \texttt{RegB}. The \texttt{dw} field specifies the data width, as in the indexed instruction format. The offset in \texttt{RegX} is interpreted as a byte offset, independent of the \texttt{dw} value. In both instruction formats, the fetched data is sign-extended to 64 bits.  
 
-The \texttt{LD} and \texttt{ST} instructions are the standard load and store instructions. In addition to the two addressing modes described above, they also support base register modification. 
+The \texttt{LD} and \texttt{ST} instructions are the standard load and store instructions. The \texttt{LD} instruction has an option to load the content and zero extend it. The default is sign extension of data smaller than 64-bit. The \texttt{ST} stores the data as is.  
 
-The \texttt{LDR} and \texttt{STC} instructions provide the base support for a pipeline-friendly method for semaphore operations. They only support the indexed instruction mode with double-word access, and the base register modification option is not available.  
+The \texttt{LDR} and \texttt{STC} instructions provide the base support for a pipeline-friendly method for semaphore operations. They only support the indexed instruction mode with double-word access.  
 
 The \texttt{ADD}, \texttt{SUB}, \texttt{AND}, \texttt{OR}, \texttt{XOR}, and \texttt{CMP} instructions perform the respective operations as described above, with one operand fetched from memory using the indexed addressing modes.
 
@@ -63,14 +63,14 @@ Unconditional branches fetch the next instruction address from the computed bran
 
 The \texttt{BB}, \texttt{CBR}, \texttt{MBR}, and \texttt{ABR} instructions implement conditional branching. If the specified condition is met, a branch to the target address is performed. The target address is always a local address, with the offset being instruction-address relative. Conditional branches adopt a static prediction model where forward branches are assumed not taken, while backward branches are assumed taken.  
 
-All branch address arithmetic is performed as 32-bit unsigned arithmetic with wraparound. Adding branch offsets will not overflow into the segment Id portion of the address.
+All branch address arithmetic is performed as 32-bit unsigned arithmetic with wraparound. Adding branch offsets will not overflow into the region Id portion of the address.
 
 \section*{System Instructions}
 \addcontentsline{toc}{section}{System Instructions}
 
 The final instruction group is the \textbf{special/system} instruction group. The system control instructions manage CPU resources such as the TLB, cache, and other hardware components. Most instructions in this group require the processor to run in privileged mode.  
 
-The \texttt{MFCR} and \texttt{MTCR} instructions are used to transfer data to and from a control register. Access to some control registers requires privileged mode. The \texttt{MFIA} instruction accesses the current instruction address, which is important for position-independent code. The \texttt{RSM} and \texttt{SSM} instructions allow setting or clearing an individual accessible bit in the status portion of the processor state.  
+The \texttt{MFCR} and \texttt{MTCR} instructions are used to transfer data to and from a control register. Access to some control registers requires privileged mode. The \texttt{MFIA} instruction accesses the current instruction address, which is important for supporting position-independent code. The \texttt{RSM} and \texttt{SSM} instructions allow setting or clearing an individual accessible bit in the status portion of the processor state.  
 
 The \texttt{LDPA}, \texttt{PRBR}, and \texttt{PRBW} instructions are used to obtain information about the virtual memory system. The \texttt{LDPA} instruction returns the physical address of the virtual page, if present in memory. The \texttt{PRBx} instructions test whether the desired access mode to an address is allowed.  
 
@@ -125,3 +125,15 @@ The \textbf{unsigned immediate U20 (U20)} format is used by the immediate instru
   	{0,1,3,5,6,16}
   	{Grp, OpCode, RegR, 0, U-IMM-20/special}
 \end{center}
+
+\section*{Synthetic Instructions}
+\addcontentsline{toc}{section}{Synthetic Instructions}
+
+The Twin-64 instruction set provides a rich set of options for individual instructions. By setting defined option bits, an instruction can enable additional functionality with minimal impact on the overall datapath. Likewise, instructions that use general register zero as an operand can take advantage of predefined behaviors.
+
+To improve readability and convenience, an assembler may offer synthetic instructions. These are higher-level mnemonics derived from the base instruction set that simplify programming by providing more natural or concise representations of commonly used instruction patterns.
+
+Synthetic instructions are also useful when a single machine instruction cannot fully express the desired operation. For example, loading an immediate value that exceeds the size of the instruction’s immediate field requires an instruction sequence. An assembler can therefore provide a generic “load immediate” synthetic instruction that automatically emits the appropriate sequence based on the value’s size. Similarly, if the offset from a base register is too small to reach a target data item, the assembler can transparently emit an additional ADDIL instruction to compute the correct address.
+
+Where applicable, the instruction descriptions include examples and implementation guidance for synthetic instructions. A complete list of supported synthetic instructions can be found in the Twin-64 Assembler document.
+

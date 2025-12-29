@@ -138,9 +138,7 @@ Each task also has a global data region. This task-level global data is formed b
 
 The data region further contains the linkage table, a structure that provides the information needed to access functions in external libraries. Details of this mechanism are described in the section on linkage tables.
 
-In this runtime design, the stack grows upward: new frames occupy increasing addresses, and older frame contents are typically referenced using expressions of the form SP - <ofs>. Each stack frame includes a frame marker containing the previous SP and the return link (RL), enabling structured returns and proper unwinding of frames.
-
-\textbf{Note.}  
+In this runtime design, the stack grows upward: new frames occupy increasing addresses, and older frame contents are typically referenced using expressions of the form \texttt{SP - offset}. Each stack frame includes a frame marker containing the previous SP and the return link (RL), enabling structured returns and proper unwinding of frames. 
 
 %--------------------------------------------------------------------------------
 \section*{Register Usage}
@@ -179,10 +177,10 @@ The CPU features general registers and control registers. All general registers 
 	\node at (\leftx + \width/2, {16*\height - 6.45}) {General use }; 
 	\node at (\leftx + \width/2, {16*\height - 7.45}) {General use }; 
 	\node at (\leftx + \width/2, {16*\height - 8.45}) {General use }; 
-	\node at (\leftx + \width/2, {16*\height - 9.45}) {General use  / Arg3 }; 
-	\node at (\leftx + \width/2, {16*\height - 10.45}) {General use / Arg2 }; 
-	\node at (\leftx + \width/2, {16*\height - 11.45}) {General use / Arg1 / Ret1};
-	\node at (\leftx + \width/2, {16*\height - 12.45}) {General use / Arg0 / Ret0}; 
+	\node at (\leftx + \width/2, {16*\height - 9.45}) {General use  / Arg3 / Ret3 }; 
+	\node at (\leftx + \width/2, {16*\height - 10.45}) {General use / Arg2 / Ret2 }; 
+	\node at (\leftx + \width/2, {16*\height - 11.45}) {General use / Arg1 / Ret1 };
+	\node at (\leftx + \width/2, {16*\height - 12.45}) {General use / Arg0 / Ret0 }; 
 	\node at (\leftx + \width/2, {16*\height - 13.45}) {General use / RL }; 
 	\node at (\leftx + \width/2, {16*\height - 14.45}) {General use / SP }; 
 	\node at (\leftx + \width/2, {16*\height - 15.45}) {General use / DP }; 

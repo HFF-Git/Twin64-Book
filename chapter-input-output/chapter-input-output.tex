@@ -8,9 +8,9 @@ Twin-64 uses a memory-mapped I/O architecture. A dedicated portion of the physic
 
 The I/O subsystem is organized around functional entities known as \textbf{modules}. Typical modules include processors, memory controllers, and various I/O devices. All modules connect to the \textbf{system bus}, which supports up to 64 modules in total. Although real systems often provide fewer physical slots, the architecture itself imposes no such restriction. At system startup, each module is assigned a dedicated 4-KB physical address page. This page defines the base address range to which the module responds and serves as a fixed anchor for its control and status information.
 
-Within each module, functionality is exposed through a collection of \textbf{registers}. These registers are accessed using standard load and store instructions, although they are not required to be 64 bits wide. A core set of registers is common across all modules, establishing a uniform interface for essential operations. Each module may define additional device-specific registers to implement its specialized capabilities. The registers within a module’s hard physical page are organized into register sets. The first is the architected supervisor register set, while the remaining sets are optional and depend on the particular I/O module.
+Within each module, functionality is exposed through a collection of \textbf{registers}. These registers are accessed using standard load and store instructions, although they are not required to be 64 bits wide. A core set of registers is common across all modules, establishing a uniform interface for essential operations. Each module may define additional device-specific registers to implement its specialized capabilities. 
 
-Many modules also require additional storage to manage their internal \textbf{I/O elements}. An I/O element—also called a \textbf{device}—is the smallest addressable functional unit within a module. For example, a console terminal module may expose two devices: one for input and one for output.
+Many modules also require additional storage to manage their internal \textbf{I/O elements}. An I/O element—also called a \textbf{device} is the smallest addressable functional unit within a module. For example, a console terminal module may expose two I/O elements: one for input and one for output.
 
 The system bus spans a 256-KB address space, aligned to a 256-KB boundary, with one 4-KB page reserved for every possible module. In practice, physical constraints often limit the number of installed modules, but the architecture supports growth by allowing multiple modules to reside on a single I/O card, with each card occupying one physical slot on the bus.
 
@@ -81,7 +81,7 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 
 The I/O address range is a 256 Mbyte area in the first 4 Gbyte region, i.e. region zero. The area is divided into several ranges. The first range contains the \textbf{processor dependent code}. There is a set of library functions to provide low-level primitives for the boot process and the operating system. 
 
-At the upper level of the I/O address range, there is the \textbf{hard physical address} range and the soft physical address range. It contains a page for each module connected at the system bus level. Up to 63 modules can be allocated. The last module is the broadcast module. At system reset or reboot, there is only the broadcast module. The processor will try to locate all other modules in the physical address range. Finally, each I/O module will then allocate its soft physical address range. Each module therefore listens to three distinct address ranges:
+At the upper level of the I/O address range there is the \textbf{hard physical address} range. It contains a page for each module connected at the system bus level. Up to 63 modules can be allocated. The last module slot is the broadcast HPA. At system reset or reboot, there is only the broadcast HPA. The processor will try to locate all other modules in the physical address range. Finally, each I/O module will then allocate its required soft physical address range. Each module therefore listens to three distinct address ranges:
 
 \begin{itemize}
     \item \textbf{Hard physical address range:}  
@@ -91,13 +91,13 @@ At the upper level of the I/O address range, there is the \textbf{hard physical 
     Certain modules require more than a single page of address space to support their full operational state. For such cases, additional memory pages may be dynamically allocated in the soft physical region, providing the necessary flexibility without compromising layout consistency.
 
     \item \textbf{Broadcast address range:}  
-    A write issued through the broadcast module HPA address updates the corresponding register in \emph{every} module on the bus. Broadcast writes are useful for system-wide resets, synchronization operations, or events that must be delivered simultaneously to all modules.
+    A write issued through the broadcast HPA address updates the corresponding register in \emph{every} module on the bus. Broadcast writes are useful for system-wide resets, synchronization operations, or events that must be delivered simultaneously to all modules.
 \end{itemize}
 
 \section*{Hard physical address range}
 \addcontentsline{toc}{section}{Hard physical address range}
 
-The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 63 I/O modules in the system bus. Each module provides a set of register sets in that page. A registers set has 32 registers. A register is a 64-bit word. The first 32 registers are the supervisory registers. This set is architected and must be implemented by each module. It contains the I/O module description and the IODC code entry point table. The remainder of the page contains the I/O ROM code.
+The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 63 I/O modules in the system bus. Each module provides a register set in that page. A registers set has 32 registers. A register is a 64-bit word. The first 32 registers are the supervisory registers. This set is architected and must be implemented by each module. It contains the I/O module description and the IODC code entry point table. The remainder of the page contains the I/O ROM code.
 
 \begin{figure}[H]
 \begin{center}
@@ -129,7 +129,7 @@ The \textbf{hard physical address} range contains an I/O page for each I/O modul
 	% Labels 
 	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0x0}};
 	\node[left] at (\leftofs, 10 - 0.2) {\texttt{0x80}};
-	\node[left] at (\leftofs, 7 - 0.2) {\texttt{0x100}};
+	\node[left] at (\leftofs, 8 - 0.2) {\texttt{0x100}};
 	\node[left] at (\leftofs, 0  + 0.2) {\texttt{0xFFF}};
 	
 	\node at (\leftofs + \width / 2, 11) {\textbf{Supervisor Register Set}};
@@ -146,48 +146,11 @@ The \textbf{hard physical address} range contains an I/O page for each I/O modul
 \label{fig:Hard physical Address Page}
 \end{figure}
 
-??? key decision to make: is there only ROM code in the HPA ? then where is the SPA address to find the module data... ? 
-
-??? a module could have an SPA address register.
-
-??? all other stuff is then stored in the I/O element, which is in SPA space.
-
-??? in here we also have the IODC code for the  functional entry points specific to the module. \\
-??? need to describe in the supervisor register set where this is located in the HPA page. \\
-
-??? a module still needs some mutable state at the module level:
-
-IO\_COMMAND for resetting
-
-IO\_ADDRESS  ( read from HAPOA page )
-
-IO\_DATA     ( data read )
-
-IO\_STATUS for module status / health
-
-IO\_SPA for finding the SPA address range
-
-??? immutable
-
-IO\_MODULE\_TYPE
-
-IO\_MODULE\_ID
-
-IO\_MODULE\_VERSION
-
-IO\_MODULE\_CAPABILITIES
-
-IO\_ENTRY\_POINT\_TAB\_OFS
-
-IO\_ENTRY\_POINT\_TAB\_LEN
-
- 
-
 
 \section*{Broadcast address range}
 \addcontentsline{toc}{section}{Broadcast address range}
 
-I/O module 63, i.e. the last page in the HPA address range, is the broadcast module. It is actually not a module and contains no actual functions. Writes issued to broadcastable registers using this module number are not directed to a single module. Instead, the write operation is applied simultaneously to all I/O modules on the system bus. This mechanism is typically used for system-wide commands such as resets, synchronization events, or configuration updates that must reach every module at once.
+I/O module 63, i.e. the last page in the HPA address range, is the broadcast address range. It is actually not a module and contains no actual functions. Writes issued to broadcastable registers using this module number are not directed to a single module. Instead, the write operation is applied simultaneously to all I/O modules on the system bus. This mechanism is typically used for system-wide commands such as resets, synchronization events, or configuration updates that must reach every module at once.
 
 At reset time, all modules only listen to their broadcastable registers. Only after system bus setup and module discovery, is the HPA address range available.
 
@@ -233,8 +196,13 @@ IO\_ENTRY\_POINT\_TAB\_OFS
 
 IO\_ENTRY\_POINT\_TAB\_LEN
 
+
 \section*{Supervisor Register Set}
 \addcontentsline{toc}{section}{Supervisor Register Set}
+
+??? architected
+
+??? mostly ROM data
 
 
 \begin{figure}[H]
