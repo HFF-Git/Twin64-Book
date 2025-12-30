@@ -24,28 +24,28 @@ Conditional branches combine a comparison with an instruction-relative branch. I
 
 \section*{Linkage}
 \addcontentsline{toc}{section}{Linkage}
-Certain branch instructions support procedure calls by saving the return address (the instruction immediately following the branch) into a general-purpose register. The linkage mechanism applies to both intra-region and cross region branches. The saved return address consists of both the region identifier and the instruction offset.
+Unconditional branch instructions support procedure calls by saving the return address (the instruction immediately following the branch) into a general-purpose register. The linkage mechanism applies to both intra-region and cross region branches. The saved return address consists of both the region identifier and the instruction offset.
 
 \section*{Cross-Region Branches}
 \addcontentsline{toc}{section}{Cross-Region Branches}
-Unconditional inter-segment branches are branches to another segment. The offset is computed from the offset portion in the address specified plus the immediate value encoded in the \texttt{BE} instruction.
+Unconditional cross-region branches are branches to another segment. The offset is computed from the offset portion in the address specified plus the immediate value encoded in the \texttt{BE} instruction.
 
 \section*{Privilege Level Changes}
 \addcontentsline{toc}{section}{Privilege Level Changes}
 Branch instructions may alter the current privilege level. Execution is only permitted if the current privilege level satisfies the requirements of the code or data being accessed.
 Traditionally, privilege changes are handled through traps into the operating system kernel. While secure, this approach incurs significant overhead due to pipeline flushes and handler setup.
 
-Twin-64 provides a more efficient gateway mechanism. An unconditional branch with the \texttt{.G} gateway option may enter a gateway page, raising the privilege level. The processor then executes at the privilege level specified by the gateway page, with the PSW privilege bit updated accordingly.
-When returning to code in a lower-privilege page, the CPU automatically lowers the current privilege level. Each instruction fetch checks the privilege level of the code page against the PSW \texttt{P}-bit:
+Twin-64 provides a more efficient gateway mechanism. An unconditional branch with the \texttt{.G} gateway option may enter a gateway page, raising the privilege level. The processor then executes at the privilege level specified by the gateway page, with the PSR privilege bit updated accordingly.
+When returning to code in a lower-privilege page, the CPU automatically lowers the current privilege level. Each instruction fetch checks the privilege level of the code page against the PSR \texttt{P}-bit:
 
 \begin{itemize}
 \setlength{\itemsep}{0.5em}
 \setlength{\parskip}{0pt}
-\item If the page requires higher privilege than the PSW indicates, a privilege violation trap occurs.
+\item If the page requires higher privilege than the PSR indicates, a privilege violation trap occurs.
 \item If the page requires lower privilege, execution privilege level is automatically demoted.
-\item If the G option on the branch instruction \texttt{B}  is set, the execution privilege is set to the privilege level of the gateway page where the branch instruction resides.
+\item If the G option on the branch instruction \texttt{B}\ is set and the page is a gateway page, the execution privilege is set to the privilege level of the gateway page where the branch instruction resides.
 \end{itemize}
 
 \section*{Traps Associated with Branches}
 \addcontentsline{toc}{section}{Traps Associated with Branches}
-Branch instructions may trigger traps depending on the PSW state. For example, if the PSW \texttt{T} - bit is set and a branch is taken, a \textit{taken-branch trap} is raised. This feature is primarily intended for debugging and tracing purposes.
+Branch instructions may trigger traps depending on the PSR state. For example, if the PSR \texttt{T} - bit is set and a branch is taken, a \textit{taken-branch trap} is raised. This feature is primarily intended for debugging and tracing purposes.

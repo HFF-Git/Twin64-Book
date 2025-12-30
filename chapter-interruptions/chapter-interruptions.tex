@@ -24,13 +24,10 @@ synchronous or asynchronous with respect to the instruction stream.
 
 All four classes of interruptions are handled in the same way. 
 
-
-
-
 \section*{Interrupt Handling}
 \addcontentsline{toc}{section}{Interrupt Handling}
 
-Handling of an interrupt is implemented as a fast context switch. When an interruption occurs, the hardware saves the PSW at the time of the interrupt to the IPSW control register. Depending on the interrupt type, this can be the current instruction of the next instruction. All status bits, which are part of the PSW, are saved too. The hardware will then set the PSW status bits as follows. The M bit is set if the interruption is a high priority machine check. All other bits are set to zero. Depending on the trap type, additional data is saved to the interrupt argument control registers IARG0 and IARG1.
+Handling of an interrupt is implemented as a fast context switch. When an interruption occurs, the hardware saves the PSR at the time of the interrupt to the IPSR control register. Depending on the interrupt type, this can be the current instruction of the next instruction. All status bits, which are part of the PSR, are saved too. The hardware will then set the PSR status bits as follows. The M bit is set if the interruption is a high priority machine check. All other bits are set to zero. Depending on the trap type, additional data is saved to the interrupt argument control registers IARG0 and IARG1.
 
 The control register \texttt{IVA} holds the virtual address of the interrupt vector table. Execution of the interrupt handler begins at the address computed using the trap number:
 
@@ -104,24 +101,26 @@ The following table lists the defined traps for Twin-64.
     \midrule
     \textbf{10} & Non-access Instruction TLB miss & current instruction & - & - \\
     \midrule
-    \textbf{11} & Instruction memory protection & current instruction & - & - \\
+    \textbf{11} & Instruction memory protection trap & current instruction & - & - \\
     \midrule
-    \textbf{12} & Data TLB miss& current instruction & instruction & target address \\
+    \textbf{12} & Instruction Alignment Trap & current instruction & instruction & target address \\
     \midrule
-    \textbf{13} & Non-access Data TLB miss & current instruction & instruction & target address \\
+    \textbf{13} & Data TLB miss& current instruction & instruction & target address \\
     \midrule
-    \textbf{14} & Data memory access rights & current instruction & instruction & target address \\
+    \textbf{14} & Non-access Data TLB miss & current instruction & instruction & target address \\
     \midrule
-    \textbf{15} & Data memory protection & current instruction & instruction & target address \\
+    \textbf{15} & Data memory access rights trap & current instruction & instruction & target address \\
     \midrule
-     \textbf{16} & Page reference & current instruction & instruction & target address \\
+    \textbf{16} & Data memory protection trap & current instruction & instruction & target address \\
     \midrule
-    \textbf{17} & Alignment & current instruction & instruction & target address \\
+    \textbf{17} & Data Alignment Trap & current instruction & instruction & target address \\
     \midrule
-    \textbf{18} & Break Instruction & current instruction & instruction & - \\
+      \textbf{18} & Page reference trap & current instruction & instruction & target address \\
+    \midrule
+    \textbf{19} & Break Instruction & current instruction & instruction & - \\
     \midrule
     \midrule
-    \textbf{19} & Taken branch & next instruction & instruction & - \\
+    \textbf{20} & Taken branch trap & next instruction & instruction & - \\
     \bottomrule
 \end{longtable}
 

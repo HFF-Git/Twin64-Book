@@ -107,10 +107,10 @@ Each memory access is checked against the allowed access type defined in the pag
 	\node at (\leftofs + 2.5, 1) {PL1};
 	\node at (\leftofs + 3.5, 1) {PL2};
 	
-	\node at (\leftofs+0.5,0.25) {3};
-	\node at (\leftofs+1.5,0.25) {2};
-    \node at (\leftofs+2.5,0.25) {1};
-   	\node at (\leftofs+3.5,0.25) {0};
+	\node at (\leftofs+0.75,0.25) {3};
+	\node at (\leftofs+1.75,0.25) {2};
+    \node at (\leftofs+2.75,0.25) {1};
+   	\node at (\leftofs+3.75,0.25) {0};
    	 	
 \end{tikzpicture}
 \end{center}
@@ -149,7 +149,7 @@ For read access, the privilege level must be at least as high as the PL1 field; 
 \section*{Access Protection}
 \addcontentsline{toc}{section}{Access Protection}
 
-The second dimension of protection is \textbf{region ID checking}. Twin-64 allows the processor to store up to eight region ID values in the control registers \texttt{CR4} through \texttt{CR7}, which are accessible to the currently executing process. For each access to a region with the region-check bit set, at least in one of the region ID registers a matching region ID must be stored. Otherwise, a protection violation trap is raised.
+The second dimension of access protection is \textbf{region ID checking}. Twin-64 allows the processor to store up to eight region ID values in the control registers \texttt{CR4} through \texttt{CR7}, which are accessible to the currently executing process. For each access to a region with the region-check bit set, at least in one of the region ID registers a matching region ID must be stored. Otherwise, a protection violation trap is raised.
 
 \begin{figure}[H]
 \begin{center}
@@ -164,16 +164,17 @@ The second dimension of protection is \textbf{region ID checking}. Twin-64 allow
             minimum height=1cm,  
             fill=white!50] (blocks) at (\leftofs + 4,1) { };
                 
-    \draw[-] (\leftofs+2.5,0.5) -- (\leftofs+2.5,1.5);
-    \draw[-] (\leftofs+7.5,0.5) -- (\leftofs+7.5,1.5);
+    \draw[-] (\leftofs+0.5,0.5) -- (\leftofs+0.5,1.5);
+    \draw[-] (\leftofs+3,0.5) -- (\leftofs+3,1.5);
   	  	
-  	\node at (\leftofs + 1.25, 1) {0};
-   	\node at (\leftofs + 4.75, 1) {Region Id};
-	\node at (\leftofs + 7.75, 1) {W};
+  	\node at (\leftofs + 1.5, 1) {0};
+   	\node at (\leftofs + 5.5, 1) {Region Id};
+	\node at (\leftofs + 0.25, 1) {W};
 		
 	\node at (\leftofs+0.25,0.25) {31};
-	\node at (\leftofs+2.25,0.25) {21};
-    \node at (\leftofs+7.25,0.25) {1};
+	\node at (\leftofs+0.75,0.25) {30};
+	\node at (\leftofs+2.75,0.25) {20};
+	\node at (\leftofs+3.25,0.25) {19};
    	\node at (\leftofs+7.75,0.25) {0};
    	 	
 \end{tikzpicture}
@@ -295,5 +296,5 @@ The following figures summarizes the protection and access mode checking during 
 \label{fig:Address translation}
 \end{figure}
 
-For a translation found TLB, the region portion of the virtual address is compared against the set of region Id registers. If there is no match, a protection Id trap is raised. The access mode of the instruction is compared against the access rights and TLB flags of the TLB entry. If the access mode does not match an access rights trap or a privilege violation trap is raised.
+For a translation found TLB, the region portion of the virtual address is compared against the set of region Id registers. If there is no match, a region Id trap is raised. The access mode of the instruction is compared against the access rights and TLB flags of the TLB entry. If the access mode does not match an access rights trap or a privilege violation trap is raised.
 
