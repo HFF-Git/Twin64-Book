@@ -16,7 +16,7 @@
     \begin{flushleft}
     \drawInstrFormat
         {0,1,3,5,6.5,8.5,9.5,11.5,16}
-        {\OpCodeGrpSYS, \OpCodeLPA, RegR, 1, RegB, 0, RegX, 0}
+        {\OpCodeGrpSYS, \OpCodeLPA, RegR, 0, RegB, 0, RegX, 0}
     \end{flushleft}
 \end{iPageDescEntry}
 
@@ -35,7 +35,7 @@ RegR <- tanslateAdr( addOfs32( RegB, RegX ));
 \end{iPageDescOpEntry}
 
 \begin{iPageDescEntry}{Exceptions}
-	- Alignment Trap \\
+	- Data Memory Alignment Trap \\
     - Privileged instruction trap. \\
     - Non access data TLB trap.
 \end{iPageDescEntry}

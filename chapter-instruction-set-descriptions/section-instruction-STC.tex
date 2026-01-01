@@ -24,7 +24,7 @@
     The \texttt{STC} instruction stores a value from a general-purpose register to memory only if the memory address is still reserved by a prior \texttt{LDR} instruction. If the reservation is valid, the store succeeds and clears the reservation. If the reservation has been lost (e.g., another processor wrote to the address), the store fails and the memory is unchanged.
 \end{iPageDescEntry}
 
-\begin{iPageDescEntry}{Operation}
+\begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 if ( isAddressReserved( memOperandImmIndexed( instr ))) {
 
@@ -34,12 +34,12 @@ if ( isAddressReserved( memOperandImmIndexed( instr ))) {
 }
 else RegR <- 0;
 \end{lstlisting}
-\end{iPageDescEntry}
+\end{iPageDescOpEntry}
 
 \begin{iPageDescEntry}{Exceptions}
-    - Data Alignment Trap \\
-    - Memory Access Violation Trap \\
-    - Memory Protection Violation Trap \\
+    - Data Memory Alignment Trap \\
+    - Data Memory Access Violation Trap \\
+    - Data Memory Protection Violation Trap \\
     - Data TLB Miss Trap
 \end{iPageDescEntry}
 

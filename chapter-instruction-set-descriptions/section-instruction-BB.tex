@@ -45,11 +45,14 @@ if ( instr.[A] )  pos <- SAR;
 else              pos <- instr.[pos];
 
 bVal <- testBit( RegR, pos );
-
 cond <- ( instr.[V] ? ( bVal == 1 ) : ( bVal == 0 ));
 
-if ( cond ) PSW.[IA-OFS] <- addOfs32( PSW.[IA-OFS], ofs << 2 );
-else        PSW.[IA-OFS] <- addOfs32( PSW.[IA-OFS], 4 );
+if ( cond ) {
+
+    tmpOfs <- signExtend( ofs ) << 2;
+    PSR.[IA-OFS] <- addOfs32( PSR.[IA-OFS], tmpOfs );
+}
+else PSR.[IA-OFS] <- addOfs32( PSR.[IA-OFS], 4 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

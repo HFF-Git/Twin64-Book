@@ -35,17 +35,17 @@
     The store address must be aligned to the data width specified. The value stored to memory is stored  as is in the data width specified.
 \end{iPageDescEntry}
 
-\begin{iPageDescEntry}{Operation}
+\begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 memStoreImmIndexed( instr, RegR );
 memStoreRegIndexed( instr, RegR );
 \end{lstlisting}
-\end{iPageDescEntry}
+\end{iPageDescOpEntry}
 
 \begin{iPageDescEntry}{Exceptions}
-    - Data Alignment Trap \\
-    - Memory Access Violation Trap \\
-    - Memory Protection Violation Trap \\
+    - Data Memory Alignment Trap \\
+    - Data Memory Access Violation Trap \\
+    - Data Memory Protection Violation Trap \\
     - Data TLB Miss Trap
 \end{iPageDescEntry}
 

@@ -22,6 +22,8 @@ describe the routines used in the instruction set operation part...
     \endlastfoot
     \textbf{addOfs32( base, ofs ) } & the offset is added to the base register using a 32-but unsigned arithmetic. The upper portion of the base register remains unchanged. \\
     \midrule
+    \textbf{signExtend( field ) } & the field in an instruction is sign extended to a 64-bit integer value. \\
+    \midrule
     \textbf{immOperand( instr ) } & the singed 15-bit immediate value field in the instruction is selected and sign extended. \\
     \midrule
     \textbf{adrImmIndexed( instr ) } & the signed 13-bit immediate value field in the instruction is selected, shifted left by the dw field and sign extended. It is added to the base register RegB using 32-bit unsigned arithmetic. The upper 32-bits of RegB remain unchanged.\\

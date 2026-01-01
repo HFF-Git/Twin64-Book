@@ -39,8 +39,8 @@ The \texttt{SHLxA} instruction shifts the contents of \texttt{RegB} left by the 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- ( RegB << instr.[amt] ) + RegA;                       (R)
-RegR <- ( RegB << instr.[amt] ) + signExtend( instr.[val] );  (I)
+RegR <- ( RegB << instr.[amt] ) + RegA;               (R)
+RegR <- ( RegB << instr.[amt] ) + signExtend( val );  (I)
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

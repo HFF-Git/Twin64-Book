@@ -160,41 +160,73 @@ At reset time, all modules only listen to their broadcastable registers. Only af
 In many cases, a module requires more addressable registers or data structures than can be  
 accommodated within its hard physical address page. The \textbf{soft physical address} range provides a flexible region where additional space may be allocated for an I/O module’s extended functionality. From a software perspective, the allocated area is termed \textbf{I/O Element}. However, the meaning of register sets in this range is entirely up to the module. A module responds to memory accesses within its configured soft physical address space, which may reside  either in the I/O address space or the general memory address space.
 
-For example, a memory controller has a hard physical page in the I/O address space, yet its soft physical region typically encompasses all or part of the system’s physical memory. Similarly, a processor may allocate a soft physical address range within the I/O space to store performance counters or diagnostic information that needs to be accessible without interfering with normal memory traffic.
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.7, transform shape]
+        
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(18,16);
 
-??? direct I/O and DMA use SPA space, up to two SPA spaces, so we can map one page in HPA and one in USER space.
+	% Rectangle dimensions
+	\def\width{8}
+	\def\leftofs{4}
+	\def\rightofs{\leftofs + \width}
 
-??? Processor has PDC as SPA space, each processor has an area in SPA
+	% Left side
+	\draw[thick, dashed] (\leftofs, 0) -- (\leftofs, 1);
+	\draw[thick] (\leftofs, 1) -- (\leftofs, 15); 
+	\draw[thick, dashed] (\leftofs, 15) -- (\leftofs, 16);
+	
 
-??? System Console has no SPA 
+	% Right side
+	\draw[thick, dashed] (\rightofs, 0) -- (\rightofs, 1);
+	\draw[thick] (\rightofs, 1) -- (\rightofs, 15); 
+	\draw[thick, dashed] (\rightofs, 15) -- (\rightofs, 16);
+	
+	%Fills
+	\node[anchor=north west, fill=gray!30, minimum width=8cm,
+  		  minimum height=0.75cm,] at (\leftofs, 10.5) { };
+  		  
+  	\node[anchor=north west, fill=gray!30, minimum width=8cm,
+  		  minimum height=0.25cm,] at (\leftofs, 3.25) { };
+		
+	% Edges
+	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
+	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
+	\draw[thick] (\leftofs, 10.5) -- (\rightofs, 10.5);
+	\draw[thick] (\leftofs, 9.75) -- (\rightofs, 9.75);
+	\draw[thick] (\leftofs, 4) -- (\rightofs, 4); 
+	\draw[thick] (\leftofs, 3.25) -- (\rightofs, 3.25);
+	\draw[thick] (\leftofs, 3) -- (\rightofs, 3);
+	\draw[thick] (\leftofs, 2) -- (\rightofs, 2); 
+	
+	% Labels 
+	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0x00\_F000\_0000}};
+	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0x00\_F0FF\_FFFF}};
+	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0x00\_F100\_0000}};
+	\node[left] at (\leftofs, 2 + 0.2) {\texttt{0x00\_FFFF\_FFFF}};
+	\node[left] at (\leftofs, 2 - 0.2) {\texttt{0x01\_0000\_0000}};	
+	
+	%allocation arrow
+	\draw[thick, -> ] (\leftofs, 3.15) -- (\leftofs - 1, 3.15) --
+	(\leftofs - 1, 10.5 ) -- (\leftofs, 10.5 ); 
+	
+	% brackets
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.2cm, mirror}] (\rightofs + 0.5,12) -- (\rightofs + 0.5,14)
+	node[midway, right=0.75cm, anchor=west]{\Large PDC};
+	
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.2cm, mirror}] (\rightofs + 0.5,4) -- (\rightofs + 0.5,12)
+	node[midway, right=0.75cm, anchor=west]{\Large SPA};
+	
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.2cm, mirror}] (\rightofs + 0.5,2) -- (\rightofs + 0.5,4)
+	node[midway, right=0.75cm, anchor=west]{\Large HPA};
+	
+\end{tikzpicture}
+\end{center}
+\caption{I/O Address Space}
+\label{fig:SPA Address Space Allocation}
+\end{figure}
 
-??? IODC data has info what to configure as SPA for a module
-
-??? a module still needs some mutable state at the module level:
-
-IO\_COMMAND for resetting
-
-IO\_ADDRESS  ( read from HAPOA page )
-
-IO\_DATA     ( data read )
-
-IO\_STATUS for module status / health
-
-IO\_SPA for finding the SPA address range
-
-??? immutable
-
-IO\_MODULE\_TYPE
-
-IO\_MODULE\_ID
-
-IO\_MODULE\_VERSION
-
-IO\_MODULE\_CAPABILITIES
-
-IO\_ENTRY\_POINT\_TAB\_OFS
-
-IO\_ENTRY\_POINT\_TAB\_LEN
+For example, a terminal I/O controller has a hard physical page in the I/O address space and a SPA address allocated for its terminal ports. As a another example, a memory controller has a hard physical page in the I/O address space, yet its soft physical region typically encompasses all or part of the system’s physical memory. Similarly, a processor may allocate a soft physical address range within the I/O space to store performance counters or diagnostic information that needs to be accessible without interfering with normal memory traffic.
 
 
 \section*{Supervisor Register Set}
@@ -204,6 +236,9 @@ IO\_ENTRY\_POINT\_TAB\_LEN
 
 ??? mostly ROM data
 
+??? entry point table to code sequences
+
+??? align with table ....
 
 \begin{figure}[H]
 \begin{center}
@@ -292,14 +327,58 @@ IO\_ENTRY\_POINT\_TAB\_LEN
 \label{fig:I/O Module Supervisory Registers}
 \end{figure}
 
-??? need to SPA places ?
 
+\begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
+    \caption{Supervisor Register Set} \\
+    \toprule
+    \textbf{Reg} & \textbf{Purpose} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{Reg} & \textbf{Purpose} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    \textbf{IO\_STATUS} & ... \\
+    \midrule
+    \textbf{IO\_COMMAND} & ... \\
+    \midrule
+    \textbf{IO\_DATA} & ... \\
+    \midrule
+    \textbf{IO\_SPA\_ADR\_0} & ... \\
+    \midrule
+    \textbf{IO\_SPA\_LEN\_0} & ... \\
+    \midrule
+    \textbf{IO\_SPA\_ADR\_1} & ... \\
+    \midrule
+    \textbf{IO\_SPA\_LEN\_1} & ... \\
+    \midrule
+    \textbf{IO\_MODULE\_ID} & ... \\
+    \midrule
+    \textbf{IO\_MODULE\_TYPE} & ... \\
+    \midrule
+    \textbf{IO\_MODULE\_VERSION} & ... \\
+    \midrule
+    \textbf{IO\_MODULE\_CAPABILITIES} & ... \\
+    \midrule
+    \textbf{IO\_ENTRY\_TAB\_OFS} & ... \\
+    \midrule
+    \textbf{IO\_ENTRY\_TAB\_LEN} & ... \\
+    \midrule
+\end{longtable}
 
 
 \section*{I/O Elements}
 \addcontentsline{toc}{section}{I/O Elements}
 
 Modules consist of I/O elements, smallest I/O unit of operation.
+
+??? a subset of registers, at least status, command and data.
 
 ??? several types of I/O Elements.
 
@@ -331,6 +410,10 @@ Each module has a EIREQ register. This register contains two fields. The first i
 ??? what it is 
 
 ??? how to access 
+
+??? entry point table
+
+??? code pieces
 
 
 \section*{Processor dependent Code}

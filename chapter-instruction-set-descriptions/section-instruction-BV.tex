@@ -31,11 +31,11 @@ Because \texttt{BV} is a region base relative branch, branching to a page with a
 \begin{lstlisting}[style=iPageOpStyle]
 if ( instr.[RegR] != 0 ) {
 	
-    RegR.[51:32] <- PSW.[IA-REG];
-    RegR.[31:0]  <- addOfs32( PSW.[IA-OFS], 4 );
+    RegR.[51:32] <- PSR.[IA-REG];
+    RegR.[31:0]  <- addOfs32( PSR.[IA-OFS], 4 );
 }
 
-PSW.[IA-OFS] <- addOfs32( RegB, RegX << 2 );
+PSR.[IA-OFS] <- addOfs32( RegB, RegX << 2 );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

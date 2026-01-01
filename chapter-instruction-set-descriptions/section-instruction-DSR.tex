@@ -50,19 +50,19 @@ None
 Twin-64 does not have instruction for shifting and rotating a register value. Instead the \texttt{EXTR} and \texttt{DSR} instructions are used. A shift left operation can easily be encoded as
 
 \begin{verbatim}
-ROL Rm, Rn, amt -> DSR Rm, Rn, R0, amt, 64 - amt
+    ROL Rm, Rn, amt -> DSR Rm, Rn, R0, amt, 64 - amt
 \end{verbatim}
 
 The instruction rotates \texttt{Rn} by the amount and stores the result in \texttt{Rm}. Likewise, a rotate right operation can be encoded as:
 
 \begin{verbatim}
-ROR Rm, Rn, amt -> DSR Rm, Rn, Rn, amt
+    ROR Rm, Rn, amt -> DSR Rm, Rn, Rn, amt
 \end{verbatim}
 
 and a rotate left operation: 
 
 \begin{verbatim}
-ROL Rm, Rn, amt -> DSR Rm, Rn, Rn, 64 - amt
+    ROL Rm, Rn, amt -> DSR Rm, Rn, Rn, 64 - amt
 \end{verbatim}
 
 \end{iPageDescEntry}

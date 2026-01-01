@@ -38,9 +38,9 @@ The \texttt{MFIA} instruction copies the current instruction address to register
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
-RegR <- PSW.[IA]                          // .A mode (0)
-RegR <- (( PSW.[IA] & 0xFFFFF ) << 12 )   // .L mode (1)
-RegR <- (( PSW.[IA] & 0xFFFFF ) << 32 )   // .R mode (2)
+RegR <- PSR.[IA]                          // .A mode (0)
+RegR <- (( PSR.[IA] >> 12 ) & 0xFFFFF )   // .L mode (1)
+RegR <- (( PSR.[IA] >> 32 ) & 0xFFFFF )   // .R mode (2)
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

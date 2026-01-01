@@ -39,8 +39,8 @@ The \texttt{.G} flag enables the \emph{gateway branch} option. In this case, the
 \begin{lstlisting}[style=iPageOpStyle]
 if ( instr.[RegR] != 0 ) {
 	
-	RegR.[51:32] <- PSW.[IA-REG];
-	RegR.[31:0]  <- addOfs32( PSW.[IA-OFS], 4 );
+	RegR.[51:32] <- PSR.[IA-REG];
+	RegR.[31:0]  <- addOfs32( PSR.[IA-OFS], 4 );
 }
 
 if ( instr.[G] ) {
@@ -49,7 +49,8 @@ if ( instr.[G] ) {
         PSW.[X] <- TLB[PSW.[IA]].[X];
 }
 
-PSW.[IA-OFS] <- addOfs32( PSW.[IA-OFS], ofs << 2 );
+tmpOfs <- signExtend( ofs ) << 2;
+PSR.[IA-OFS] <- addOfs32( PSR.[IA-OFS], tmpOfs );
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

@@ -11,7 +11,7 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-    The \texttt{SSM} instruction uses the follwing instruction format. \\
+    The \texttt{SSM} instruction uses the following instruction format. \\
 
     \begin{flushleft}
     \drawInstrFormat
@@ -25,9 +25,12 @@
     register from the bits encoded in the instruction. The previous mask is returned in \texttt{RegR}.  
 \end{iPageDescEntry}
 
-\begin{iPageDescEntry}{Operation}
-    \texttt{SystemMask <- SystemMask | instr.[5:0];}
-\end{iPageDescEntry}
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- PSR.[ST]
+PSR.[ST] <- PSR.[ST] | instr.[5:0];
+\end{lstlisting}
+\end{iPageDescOpEntry}
 
 \begin{iPageDescEntry}{Exceptions}
     - Privileged instruction trap.

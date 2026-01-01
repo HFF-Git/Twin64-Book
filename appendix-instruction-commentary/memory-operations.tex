@@ -5,9 +5,6 @@
 
 Twin-64 provides conventional load and store instructions together with a small, carefully chosen set of addressing modes. In addition, the computational instructions \texttt{ADD}, \texttt{SUB}, \texttt{AND}, \texttt{OR}, \texttt{XOR}, and \texttt{CMP} may use these addressing modes to obtain their second operand. This reflects the register-–memory character of the architecture.
 
-\subsection*{Addressing Modes and Data Access Model}
-\addcontentsline{toc}{subsection}{Addressing Modes and Data Access Model}
-
 Twin-64 supports two fundamental and orthogonal addressing modes for data access:
 \begin{enumerate}
 \setlength{\itemsep}{0.5em}
@@ -32,5 +29,5 @@ All data fetched by load instructions or by memory-operand computational instruc
 
 Some historical architectures provided pre-increment and post-increment addressing modes, in which the effective address is both computed and written back to the base register. Twin-64 intentionally omits these modes.
 
-Implicit updates require additional register-file write ports or multi-cycle update paths, increasing datapath and hazard complexity. They also introduce subtle ordering and forwarding constraints that complicate pipeline timing. Since modern compilers seldom use such addressing forms, their practical value does not justify the associated hardware and verification cost. Their omission helps preserve the simplicity and implementation efficiency of Twin-64.
+Implicit updates require additional register-file write ports or multi-cycle update paths, increasing data path and hazard complexity. They also introduce subtle ordering and forwarding constraints that complicate pipeline timing. Since modern compilers seldom use such addressing forms, their practical value does not justify the associated hardware and verification cost. Their omission helps preserve the simplicity and implementation efficiency of Twin-64.
 
