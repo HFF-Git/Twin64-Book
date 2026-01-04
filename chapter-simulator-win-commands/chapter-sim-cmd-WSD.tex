@@ -3,31 +3,37 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WSD - disable window stack}
-\addcontentsline{toc}{section}{WSD - disable window stack}
+\section*{WSD — Disable Window Stack}
+\addcontentsline{toc}{section}{WSD — Disable Window Stack}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WSD } \\
+\texttt{wsd [ <stackNum> ] | ALL} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WSD} command ...
+The \texttt{WSD} command disables one or more window stacks, removing all
+windows in the stack from the visible screen.
+
+Windows within a disabled stack are not deleted; all attributes, including
+layout, size, and position, are preserved.  
+
+\textbf{Parameters:}
+\begin{itemize}
+    \item \texttt{<stackNum>} — Optional: the stack number to disable.  
+          If omitted, the current stack is disabled.
+    \item \texttt{ALL} — Disable all window stacks.
+\end{itemize}
+
+If the current stack is disabled, the next available stack becomes the current
+stack.
 
 \end{iPageDescEntry}
-
-%--------------------------------------------------------------------------------
-\begin{iPageDescOpEntry}{Example}
-\begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
-\end{lstlisting}
-\end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
 None.
 \end{iPageDescEntry}
+

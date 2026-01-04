@@ -3,31 +3,56 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WN - create a window}
-\addcontentsline{toc}{section}{WN - create a window}
+\section*{WN — Create a Window}
+\addcontentsline{toc}{section}{WN — Create a Window}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WN } \\
+\texttt{wn <type> [ , <arg1> [ , <arg2> ]] } \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WN} command ...
+The \texttt{WN} command creates a new window. The mandatory \texttt{<type>}
+parameter specifies the type of window to create. Optional arguments provide
+additional data required for the window creation.
+
+The newly created window becomes the current window and is initialized with
+default attributes, such as the number of lines, layout, and numeric radix.
+
+\begin{flushleft}
+\begin{tabularx}{\textwidth}{|l|X|X|p{5cm}|}
+\hline
+\textbf{Type} & \textbf{Arg 1} & \textbf{Arg 2} & \textbf{Action} \\ \hline
+\texttt{MEM}         & \texttt{memAdr} & \texttt{-} & Create a memory window. \\ \hline
+\texttt{PROC}        & \texttt{modNum} & \texttt{-} & Create all PROC-related windows (CPU, ITLB, DTLB, ICACHE, DCACHE) for the module. \\ \hline
+\texttt{CPU}         & \texttt{modNum} & \texttt{-} & Create a CPU window. \\ \hline
+\texttt{ITLB}        & \texttt{modNum} & \texttt{-} & Create an instruction TLB window. \\ \hline
+\texttt{DTLB}        & \texttt{modNum} & \texttt{-} & Create a data TLB window. \\ \hline
+\texttt{ICACHE}      & \texttt{modNum} & \texttt{-} & Create an instruction cache window. \\ \hline
+\texttt{DCACHE}      & \texttt{modNum} & \texttt{-} & Create a data cache window. \\ \hline
+\texttt{TEXT}        & \texttt{filePath} & \texttt{-} & Create a text window displaying a file. \\ \hline
+\texttt{CODE}        & \texttt{memAdr} & \texttt{-} & Create a memory window showing assembly code. \\ \hline
+\end{tabularx}
+\end{flushleft}
+
+The window type \texttt{PROC} is a collection that includes CPU, ITLB, DTLB,
+ICACHE, and DCACHE windows for the specified module.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+wn mem, 0x1000      # Create a memory window at address 0x1000.
+wn cpu, 3           # Create a CPU window for module 3.
+wn dtlb, 4          # Create a data TLB window for module 4.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+All newly created windows start with default attributes, which can be modified
+later using commands like \texttt{WL} (set window lines) or \texttt{WR} (set window radix), if applicable for the window.
 \end{iPageDescEntry}

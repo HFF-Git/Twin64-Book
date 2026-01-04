@@ -3,27 +3,33 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WK - delete a window}
-\addcontentsline{toc}{section}{WK - delete a window}
+\section*{WK — Window delete}
+\addcontentsline{toc}{section}{WK —Window delete}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WK } \\
+\texttt{wk [ <start> [ , <end> ]] | ALL} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WK} command ...
+The \texttt{WK} command removes one or more windows from the screen.
+The \texttt{<start>} and \texttt{<end>} parameters specify a range of window
+numbers to delete.
+
+Alternatively, the \texttt{ALL} keyword removes all windows from the simulator.
+
+The command window itself cannot be created or deleted.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+wk 4                # Deletes window 4.
+wk 5, 10            # Deletes windows 5 through 10.
+wk ALL              # Deletes all windows.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

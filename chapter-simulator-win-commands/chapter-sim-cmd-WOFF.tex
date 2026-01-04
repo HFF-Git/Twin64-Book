@@ -3,31 +3,35 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WOFF - turn window display off}
-\addcontentsline{toc}{section}{WOFF - turn window display off}
+\section*{WOFF — Turn window display off}
+\addcontentsline{toc}{section}{WOFF — Turn window display off}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WOFF } \\
+\texttt{woff} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WOFF} command ...
+The \texttt{WOFF} command turns off the display of all windows, leaving only
+the command window visible.
+
+All windows are retained in their current state, including layout, size,
+position, and content. No windows are deleted or disabled. They can be
+restored to the screen using the \texttt{WON} command.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+woff              # Turn off all window displays.
+won               # Restore to their previous display state.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+See also the \texttt{WON} command for restoring windows.
 \end{iPageDescEntry}

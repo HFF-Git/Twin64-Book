@@ -3,27 +3,38 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WD - disable window}
-\addcontentsline{toc}{section}{WD - disable window}
+\section*{WD — Disable window}
+\addcontentsline{toc}{section}{WD — Disable window}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WD } \\
+\texttt{wd [ <start> [ , <end> ]] | ALL} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WD} command ...
+The \texttt{WD} command temporarily removes one or more windows from the visible list of
+windows. The windows remain part of the system and can be made visible again
+using the \texttt{WE} command.
+
+Disabling a range windows does not destroy them. All window attributes, including layout, size, and position, are preserved while the windows are disabled.
+
+If the window number parameter is omitted, the command applies to the current
+window.
+
+When the current window is disabled, the next available window is automatically
+selected as the current window.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
+wd                  # Disable the current window.
+wd 5                # Disable window number 5.
 
-... 
-
+we 5                # Re-enable window number 5.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

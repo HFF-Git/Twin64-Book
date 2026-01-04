@@ -3,27 +3,31 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{CWL - set command window lines}
-\addcontentsline{toc}{section}{CWL - set command window lines}
-
+\section*{CWL — Set command window lines}
+\addcontentsline{toc}{section}{CWL — Set command window lines}
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{CWL } \\
+\texttt{cwl <lines>} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{CWL} command ...
+The \texttt{CWL} command sets the number of content lines displayed in the command
+window.
+
+Changing this value controls how many lines of command output are visible at
+once. The command window is resized accordingly to accommodate the specified
+number of lines. 
+
+The cursor up and down keys scroll inside the command window.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+cwl 10             # Set the command window to display 10 lines.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

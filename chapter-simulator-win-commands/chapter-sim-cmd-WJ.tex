@@ -3,27 +3,35 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WJ - window jump}
-\addcontentsline{toc}{section}{WJ - window jump}
+\section*{WJ — Window jump}
+\addcontentsline{toc}{section}{WJ — Window jump}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WJ } \\
+\texttt{wj <pos> [ , <winNum> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WJ} command ...
+The \texttt{WJ} command sets the current item address of a scrollable window to a
+new location. If the window number is omitted, the command applies to the current
+window.
 
+The interpretation of the item address is window-type specific.
+For example, in a physical memory window the item address is an 8-byte-aligned
+memory address, whereas in a TLB window the item address specifies the TLB entry
+number.
+
+If the window number parameter is omitted, the command applies to the current window. Otherwise, it applies to the specified window.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+wn itlb, 3          # Create an ITLB window for module 3.
+wj 10               # Jump to TLB entry 10 in the current window.
+...
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

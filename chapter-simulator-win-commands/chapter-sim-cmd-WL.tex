@@ -3,31 +3,40 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WL - set window lines}
-\addcontentsline{toc}{section}{WL - set window lines}
+\section*{WL — Set window lines}
+\addcontentsline{toc}{section}{WL — Set window lines}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WL } \\
+\texttt{wl <lines> [ , <winNum> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WL} command ...
+The \texttt{WL} command sets the number of lines displayed in a scrollable
+window. The total number of lines includes the banner line.
+
+When the number of lines is increased, the terminal screen is enlarged to
+accommodate the additional content. Conversely, if the number of lines is
+reduced, the window shrinks accordingly.
+
+If the optional \texttt{<winNum>} parameter is omitted, the command applies to
+the current window; otherwise, it applies to the specified window.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+wn mem, 0x1000     # Create a memory window.
+wl 20              # Set to 20 lines (19 content lines + banner).
+wl 15, 2           # Set window number 2 to display 14 lines.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+Adjusting window lines may affect the layout of other windows if multiple
+windows share the terminal screen.
 \end{iPageDescEntry}

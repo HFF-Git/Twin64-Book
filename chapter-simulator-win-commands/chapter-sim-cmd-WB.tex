@@ -3,27 +3,46 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WB - scroll window backward}
-\addcontentsline{toc}{section}{WB - scroll window backward}
+\section*{WB — Window backward}
+\addcontentsline{toc}{section}{WB — Window backward}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WB } \\
+\texttt{wb [ <amt> ] [ , <winNum> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WB} command ...
+The \texttt{WB} command scrolls a window backward.
+The optional \texttt{<amt>} parameter specifies the number of items to move
+backward. The meaning of an item is window-type specific.
+For example, a physical memory window moves in units of 8 bytes, while a cache
+window moves in units of cache lines.
+
+If the \texttt{<amt>} parameter is omitted, the number of items to move backward
+is derived from the number of items per line and the number of lines currently
+displayed in the window. For example, a cache window displaying three lines moves
+backward by three cache-line entries.
+
+Each scrollable window has an item address limit determined by its window type.
+When scrolling past this limit, the address is set to the limit minus the number of lines to show.
+
+If the window number parameter is omitted, the command applies to the current
+window. Otherwise, it applies to the specified window.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
+wn icache, 3        # Create a cache window for module 3.
+wj 10               # set the window content start to entry 10.
+wb 5                # Move backward five items in the current window.
 
-... 
-
+wn mem, 0x1000      # Create a memory window.
+wl 5                # Set the number of displayed lines.
+wb                  # Window moves backward to address 0x0F80.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

@@ -3,27 +3,46 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WF - scroll window forward}
-\addcontentsline{toc}{section}{WF - scroll window forward}
+\section*{WF — Window forward}
+\addcontentsline{toc}{section}{WF — Window forward}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WF } \\
+\texttt{wf [ <amt> ] [ , <winNum> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WF} command ...
+The \texttt{WF} command scrolls a window forward.
+The optional \texttt{<amt>} parameter specifies the number of items to advance.
+The meaning of an item is window-type specific.
+For example, a physical memory window advances in units of 8 bytes, while a cache
+window advances in units of cache lines.
+
+If the \texttt{<amt>} parameter is omitted, the number of items to advance is
+derived from the number of items per line and the number of lines currently
+displayed in the window. For example, a cache window displaying three lines
+advances by three cache-line entries.
+
+Each scrollable window has an item address limit determined by its window type.
+When scrolling past this limit, the address is set to the limit minus the number of lines to show.
+
+If the window number parameter is omitted, the command applies to the current
+window. Otherwise, it applies to the specified window.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
+wn icache, 3        # Create a cache window for module 3.
+wf                  # Advance the window by one page.
+wf 5                # Advance five items in the current window.
 
-... 
-
+wn mem, 0x1000      # Create a memory window.
+wl 5                # Set the number of displayed lines.
+wf                  # Window advances to address 0x1080.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

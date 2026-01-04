@@ -3,31 +3,47 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WE - enable window}
-\addcontentsline{toc}{section}{WE - enable window}
+\section*{WE — Enable Window}
+\addcontentsline{toc}{section}{WE — Enable Window}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WE } \\
+\texttt{we [ <start> [ , <end> ]] | ALL} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WE} command ...
+The \texttt{WE} command restores one or more previously disabled windows to the
+visible list of windows.
+
+Enabling a window does not alter any of its attributes; layout, size, position,
+and content are preserved from the time it was disabled.
+
+If the window number parameter is omitted, the command applies to the current
+window. If a range of windows is specified, all windows in the range are enabled.
+The \texttt{ALL} keyword enables all currently disabled windows.
+
+When a window is re-enabled, the current window selection remains unchanged
+unless no window is currently active, in which case the first enabled window
+becomes the current window.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
+wd                  # Disable the current window.
+we                  # Re-enable the current window.
 
-... 
-
+wd 4                # Disable window 4.
+wd 5,10             # Disable windows 5 through 10.
+we 5,7              # Re-enable windows 5 through 7.
+we ALL              # Re-enable all disabled windows.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+See also the \texttt{WD} command for disabling windows.
 \end{iPageDescEntry}

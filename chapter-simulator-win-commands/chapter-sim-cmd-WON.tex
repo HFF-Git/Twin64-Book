@@ -3,31 +3,38 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WON - turn window display on}
-\addcontentsline{toc}{section}{WON - turn window display on}
+\section*{WON — Turn Window Display On}
+\addcontentsline{toc}{section}{WON — Turn Window Display On}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WON } \\
+\texttt{won} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WON} command ...
+The \texttt{WON} command restores the display of all windows that were
+previously hidden by the \texttt{WOFF} command.
+
+All windows are restored to their previous state, including layout, size,
+position, and content. No windows are created or deleted; the command simply
+makes them visible again on the screen.
+
+The current window remains the same as it was before \texttt{WOFF}, or the
+first window in the restored list becomes the current window if none was active.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+woff              # Turn off all window displays.
+won               # Restore all windows to their previous display state.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+See also the \texttt{WOFF} command for turning off window displays.
 \end{iPageDescEntry}

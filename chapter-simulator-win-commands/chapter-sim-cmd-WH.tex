@@ -3,27 +3,35 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WH - set window to home position}
-\addcontentsline{toc}{section}{WH - set window to home position}
+\section*{WH — Window home}
+\addcontentsline{toc}{section}{WH — Window home}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WH } \\
+\texttt{WH [ <itemAdr> ] [ , <winNum> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WH} command ...
+A scrollable window has a home item address. The home item address is window-type specific and is shown in the window banner line.
+
+The \texttt{WH} command returns the window’s current item address to its home location. This is useful after the window has been scrolled using the \texttt{WF} or \texttt{WB} commands, or moved away from its home location using the \texttt{WJ} command.
+
+The home item address can also be changed by supplying a new item address. The interpretation of the item address is window-type specific.
+
+If the window number parameter is omitted, the command applies to the current window. Otherwise, it applies to the specified window.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+wn mem, 0x1000      # Create a memory window at address 0x1000.
+wj 0x2000           # Move the window to address 0x2000.
+wh                  # Return the window to its original location.
+...
+wh 0x4000           # Set a new home address.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
@@ -31,3 +39,4 @@ The \texttt{WH} command ...
 \begin{iPageDescEntry}{Notes}
 None.
 \end{iPageDescEntry}
+

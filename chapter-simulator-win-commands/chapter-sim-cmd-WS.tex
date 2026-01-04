@@ -3,31 +3,50 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WS - set window to stack}
-\addcontentsline{toc}{section}{WS - set window to stack}
+\section*{WS — Move windows to stack}
+\addcontentsline{toc}{section}{WS — Move windows to stack}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WS } \\
+\texttt{ws <stackNum> [ , <wStart> ] [ , <wEnd> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WS} command ...
+The \texttt{WS} command moves one or more windows into a specific stack.  
+A stack is a vertical column of windows. Multiple stacks are arranged
+horizontally on the screen and are ordered by their stack number.
+
+Within a stack, windows are sorted by their window number.  
+Windows can be enabled, disabled, or hidden independently of their stack
+placement.
+
+\textbf{Parameters:}
+\begin{itemize}
+    \item \texttt{<stackNum>} — The target stack number.
+    \item \texttt{<wStart>} — Optional: the first window number to move.
+    \item \texttt{<wEnd>} — Optional: the last window number to move.  
+          If omitted, only the window specified by \texttt{<wStart>} is moved.
+\end{itemize}
+
+If no window numbers are provided, the current window is moved to the target
+stack.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+wn mem, 0x1000       # Create a memory window, window 1.
+wn proc, 3            # Create processor windows, window 2 to 6.
+ws 2, 2, 6            # Move windows 2 through 6 to stack 2.
+ws 1, 1               # Move window 1 to stack 1.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+Stacks allow grouping windows for easier organization on the screen.  
+Windows maintain all their attributes when moved between stacks.
 \end{iPageDescEntry}

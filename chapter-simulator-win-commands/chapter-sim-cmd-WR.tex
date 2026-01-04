@@ -3,31 +3,44 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WR - set window radix}
-\addcontentsline{toc}{section}{WR - set window radix}
+\section*{WR — Set window radix}
+\addcontentsline{toc}{section}{WR — Set window radix}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WR } \\
+\texttt{wr [ <radix> [ , <winNum> ]]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WR} command ...
+The \texttt{WR} command sets the numeric display radix for a window.  
+The optional \texttt{<radix>} parameter specifies the desired format:
+\begin{itemize}
+    \item \texttt{HEX} — Display numbers in hexadecimal format.
+    \item \texttt{DEC} — Display numbers in decimal format.
+\end{itemize}
+
+If the \texttt{winNum} parameter is omitted, the command applies to the current
+window. Otherwise, it applies to the specified window.
+
+If the radix parameter is omitted, the command sets the radix to the window default.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+wn mem, 0x1000      # Create a memory window.
+wr HEX              # Display numbers in hexadecimal.
+wr DEC, 2           # Window number 2 display in decimal.
+wr                  # Set current window radix to default.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+Changing the radix affects only the display of numeric data. The underlying values remain unchanged.
+For some window types, certain content is always shown in a fixed radix.
+For example, addresses in a memory window are always displayed in hexadecimal, while the data values follow the selected radix.
 \end{iPageDescEntry}
