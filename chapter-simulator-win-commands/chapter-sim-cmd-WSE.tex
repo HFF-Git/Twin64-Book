@@ -3,32 +3,21 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WSE — Enable Window Stack}
-\addcontentsline{toc}{section}{WSE — Enable Window Stack}
+\section*{WSE — Enable window stack}
+\addcontentsline{toc}{section}{WSE — Enable window stack}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{wse [ <stackNum> ] | ALL} \\
+\texttt{wse <stackNum> | ALL } \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WSE} command restores one or more previously disabled window
-stacks to the visible screen.
+The \texttt{WSE} command restores a previously disabled window
+stack to the visible screen. The ALL keyword enables all window stacks.
 
-All windows in the stack are restored with their previous attributes, including
-layout, size, position, and content.  
-
-\textbf{Parameters:}
-\begin{itemize}
-    \item \texttt{<stackNum>} — Optional: the stack number to enable.  
-          If omitted, the current stack is enabled.
-    \item \texttt{ALL} — Enable all disabled stacks.
-\end{itemize}
-
-If no stack was active when enabling, the first restored stack becomes the
-current stack.
+All windows in the stack are restored with their previous attributes, including layout, size, position, and content.  
 
 \end{iPageDescEntry}
 

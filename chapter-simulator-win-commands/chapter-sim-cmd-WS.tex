@@ -22,16 +22,9 @@ Within a stack, windows are sorted by their window number.
 Windows can be enabled, disabled, or hidden independently of their stack
 placement.
 
-\textbf{Parameters:}
-\begin{itemize}
-    \item \texttt{<stackNum>} — The target stack number.
-    \item \texttt{<wStart>} — Optional: the first window number to move.
-    \item \texttt{<wEnd>} — Optional: the last window number to move.  
-          If omitted, only the window specified by \texttt{<wStart>} is moved.
-\end{itemize}
+If the stackNum parameter is omitted, the current stack is taken as the stack number argument. 
 
-If no window numbers are provided, the current window is moved to the target
-stack.
+If the window range is omitted, the current window is selected. If just the start window is specified, this window is selected for moving to the stack.
 
 \end{iPageDescEntry}
 

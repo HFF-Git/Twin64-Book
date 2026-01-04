@@ -3,27 +3,28 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WX - exchange window ID}
-\addcontentsline{toc}{section}{WX - exchange window ID}
+\section*{WX - Window exchange}
+\addcontentsline{toc}{section}{WX - Window exchange}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WX } \\
+\texttt{WX <winNum>} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WX} command ...
+Windows are displayed in order of their window ID. Often, however, the order needs to be changed to display windows in another order. 
+The \texttt{WX} command exchanges the window Id of the current window with the window specified in the command. After the exchange operation the window screen is redrawn.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+wn mem, 0x1000     # create mem window, window 1
+wn mem, 0x2000     # create mem window, window 2 is current
+wx 1               # exchange window 2 with 1
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

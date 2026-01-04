@@ -8,7 +8,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{wsd [ <stackNum> ] | ALL} \\
+\texttt{wsd <stackNum> | ALL } \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -20,15 +20,9 @@ windows in the stack from the visible screen.
 Windows within a disabled stack are not deleted; all attributes, including
 layout, size, and position, are preserved.  
 
-\textbf{Parameters:}
-\begin{itemize}
-    \item \texttt{<stackNum>} — Optional: the stack number to disable.  
-          If omitted, the current stack is disabled.
-    \item \texttt{ALL} — Disable all window stacks.
-\end{itemize}
+If the stack number is omitted, the stack that hosts the current window is disabled. The keyword ALL disabled all window stacks.
 
-If the current stack is disabled, the next available stack becomes the current
-stack.
+If the stack hosting the current window is disabled, the first window in the next lower stack is selected.
 
 \end{iPageDescEntry}
 
