@@ -1,0 +1,156 @@
+\chapter*{Appendix -Debug and Trace Support}
+\addcontentsline{toc}{chapter}{Appendix - Debug and Trace Support}
+
+Twin-64 architecture provides two independent control bits in the processor status
+word to support debugging and controlled execution:
+
+\begin{itemize}
+  \item \textbf{B} --- Break Enable
+  \item \textbf{T} --- Trace (Single-Step) Enable
+\end{itemize}
+
+These bits control distinct exception mechanisms and are designed to be used
+together to implement software breakpoints and single-instruction stepping.
+
+\section*{B --- Break Enable Bit}
+
+When \textbf{B = 1}, execution of a \texttt{BREAK} instruction causes a
+\emph{breakpoint exception}.
+
+When \textbf{B = 0}, \texttt{BREAK} instructions execute as no-ops and do not
+generate an exception.
+
+A breakpoint exception is taken \emph{before} the \texttt{BREAK} instruction
+completes. The architectural state reflects execution up to, but not including,
+the \texttt{BREAK} instruction.
+
+\subsection{Purpose of the B Bit}
+
+The B bit exists to give software explicit control over breakpoint recognition.
+It is intended to:
+
+\begin{itemize}
+  \item Temporarily disable breakpoints while handling a breakpoint exception
+  \item Prevent recursive breakpoint exceptions
+  \item Allow \texttt{BREAK} instructions to safely exist in debugger or privileged code
+  \item Permit a breakpoint instruction to be replaced, executed past, and reinstalled
+        without instruction emulation
+\end{itemize}
+
+The B bit affects only the recognition of \texttt{BREAK} instructions. It has no
+effect on other traps, faults, or exceptions.
+
+\section{T --- Trace (Single-Step) Enable Bit}
+
+When \textbf{T = 1}, the processor generates a \emph{trace exception} after the
+next instruction completes, regardless of the instruction type.
+
+The instruction is allowed to:
+
+\begin{itemize}
+  \item Execute normally
+  \item Modify architectural state
+  \item Access memory
+  \item Change control flow (branch, call, return, or trap)
+\end{itemize}
+
+After the instruction retires, a trace exception is taken and the T bit is cleared
+automatically.
+
+The trace exception reflects a precise architectural state \emph{after}
+instruction completion.
+
+\subsection{Properties of the T Bit}
+
+\begin{itemize}
+  \item The trace exception is taken after, not during, instruction execution.
+  \item The exception occurs even if the instruction is not a branch.
+  \item The exception occurs after exactly one instruction, not after a fixed number
+        of cycles.
+  \item The trace mechanism is independent of fault recovery or assist mechanisms.
+\end{itemize}
+
+The T bit shall not be implemented using micro-architectural progress counters,
+recovery counters, or cycle-based mechanisms.
+
+\subsection{Purpose of the T Bit}
+
+The T bit is intended to:
+
+\begin{itemize}
+  \item Support debugger single-instruction stepping
+  \item Support post-instruction execution tracing
+  \item Allow execution to resume precisely after one instruction without
+        instruction emulation
+\end{itemize}
+
+\section{Interaction Between B and T}
+
+The B and T bits control independent mechanisms with different exception timing,
+as shown in Table~\ref{tab:bt-interaction}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|l|l|}
+\hline
+\textbf{Bit} & \textbf{Function} & \textbf{Exception Timing} \\
+\hline
+B & Enables breakpoint instruction traps & Before instruction execution \\
+T & Enables trace (single-step) trap & After instruction execution \\
+\hline
+\end{tabular}
+\caption{Interaction Between B and T Bits}
+\label{tab:bt-interaction}
+\end{table}
+
+Both bits may be set or cleared independently.
+
+\section{Typical Debugger Usage}
+
+\subsection{Software Breakpoint Handling}
+
+A typical debugger sequence for handling software breakpoints is:
+
+\begin{enumerate}
+  \item Replace an instruction with \texttt{BREAK}
+  \item Execute with \textbf{B = 1}, \textbf{T = 0}
+  \item On breakpoint exception:
+    \begin{itemize}
+      \item Restore the original instruction
+      \item Disable breakpoints (\textbf{B = 0})
+      \item Enable tracing (\textbf{T = 1})
+      \item Resume execution
+    \end{itemize}
+  \item After one instruction completes, a trace exception occurs
+  \item Reinstall the breakpoint and resume normal execution
+\end{enumerate}
+
+\subsection{Single-Step Execution}
+
+To execute exactly one instruction without triggering breakpoints:
+
+\begin{itemize}
+  \item Set \textbf{B = 0}
+  \item Set \textbf{T = 1}
+  \item Resume execution
+\end{itemize}
+
+The processor executes one instruction and then generates a trace exception.
+
+\section{Design Rationale (Non-Normative)}
+
+The B bit controls whether breakpoint instructions trap, while the T bit controls
+when execution stops between instructions. Separating these functions avoids
+instruction emulation, simplifies debugger design, and ensures that trace
+exceptions occur strictly at instruction boundaries, independent of instruction
+complexity or execution latency.
+
+\section{Summary}
+
+\begin{quote}
+\textbf{The B bit controls recognition of breakpoint instructions.\\
+The T bit controls trapping after execution of one instruction.}
+\end{quote}
+
+Together, these bits provide a complete, precise, and low-overhead debugging
+model.

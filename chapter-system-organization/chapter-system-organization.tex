@@ -54,9 +54,7 @@ Twin-64 implements gateways for privilege promotion. A special option on the unc
 \section*{Debugging Support}
 \addcontentsline{toc}{section}{Debugging Support}
 
-A fundamental requirement is the ability to set instruction and data breakpoints. An instruction breakpoint is triggered by encountering the \texttt{TRAP} instruction. The break instruction causes an instruction break trap and passes control to the trap handler. Since break instructions are normally not present in the instruction stream, they must be inserted dynamically in place of the instruction normally found at that address. Upon continuation, if the breakpoint is still valid, it must be reinserted after the original instruction is executed. To facilitate this mechanism, a bit in the status word provides an easy way to trap again after the instruction has been executed.
-
-Data breakpoints are traps taken when a data reference to a page occurs. They do not modify the instruction stream. Depending on the data access, the trap may occur before or after the instruction that accesses the data. A write operation is trapped before the data is written, while a read instruction is trapped after the original instruction has executed.
+A fundamental requirement is the ability to set instruction and data breakpoints. An instruction breakpoint is triggered by encountering the \texttt{TRAP} instruction. The break instruction causes an instruction break trap and passes control to the trap handler. Since break instructions are normally not present in the instruction stream, they must be inserted dynamically in place of the instruction normally found at that address. Upon continuation, if the breakpoint is still valid, it must be reinserted after the original instruction is executed. To facilitate this mechanism, the break and trace enable bits in the status word provide support for debug and trace tools.
 
 \section*{Input/Output}
 \addcontentsline{toc}{section}{Input/Output}

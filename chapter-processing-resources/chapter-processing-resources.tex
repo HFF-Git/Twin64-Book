@@ -320,13 +320,13 @@ The processor state register (\texttt{PSR}) contains the virtual address of the 
 	\node at (\fw * 2 - 0.2, 1) {E};
 	\node at (\fw * 3 - 0.2, 1) {X};
 	\node at (\fw * 4 - 0.2, 1) {R};
-	\node at (\fw * 5 - 0.2, 1) {T};
-	\node at (\fw * 6 - 0.2, 1) {-};
+	\node at (\fw * 5 - 0.2, 1) {B};
+	\node at (\fw * 6 - 0.2, 1) {T};
 	\node at (\fw * 7 - 0.2, 1) {-};
 	\node at (\fw * 8 - 0.2, 1) {-};
 	\node at (\fw * 9 - 0.2, 1) {-};
-	\node at (\fw * 10 - 0.2, 1) {C};
-	\node at (\fw * 11 - 0.2, 1) {D};
+	\node at (\fw * 10 - 0.2, 1) {-};
+	\node at (\fw * 11 - 0.2, 1) {-};
 	\node at (\fw * 12 - 0.2, 1) {I};
 	
 	\node at (\fw * 1 - 0.2,0.25) {\small{1}};
@@ -388,18 +388,16 @@ The instruction address portion of the PSR registers contains the region id and 
     \midrule
     \textbf{X} & When set, the processor runs in privileged ( supervisor ) mode. \\
     \midrule
-     \textbf{R} & Recovery counter enable. When set the recovery counter trap is issued when the recovery counter becomes negative. \\
+    \textbf{R} & Recovery counter enable. When set the recovery counter trap is issued when the recovery counter becomes negative. \\
     \midrule
-    \textbf{T} & When set, taken branch traps are enabled. Any branch taken will result in a trap. \\
+    \textbf{B} & Break enable. When set execution of a BREAK instruction causes a breakpoint exception. \\
+    \midrule
+    \textbf{T} & Trace enable. When set, the processor generates a trace exception after the next instruction completes, regardless of the instruction type. \\
     \midrule
     \textbf{I} & When set, external interrupts are enabled. \\
     \midrule 
     \textbf{V} & Reserved. \\
     \midrule 
-    \textbf{C} & Instruction memory break disable. The C-bit is cleared after the execution of each instruction, except for the \texttt{RFI} instruction which may set it. When set, instruction memory break traps are disabled. This bit allows a simple mechanism to trap on an instruction and then proceed past the trapping instruction. \\
-    \midrule 
-    \textbf{D} & Data memory break disable. The D-bit is cleared after the execution of each instruction, except for the \texttt{RFI} instruction which may set it. When set, data memory break traps are disabled. This bit allows a simple mechanism to trap on a data store and then proceed past the trapping instruction. \\
-    \midrule
 \end{longtable}
 
 \section*{Data Types}

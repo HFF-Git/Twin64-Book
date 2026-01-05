@@ -3,31 +3,65 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{WT - toggle window content}
-\addcontentsline{toc}{section}{WT - toggle window content}
+\section*{WT — Window toggle}
+\addcontentsline{toc}{section}{WT — Window toggle}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{WT } \\
+\texttt{wt [ <toggle> ] [ , <winNum> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WT} command ...
+The \texttt{WT} command changes the display view of a window by selecting one of
+its available toggle modes.
+
+Each window type may define one or more toggle views. The current toggle value
+controls how the window content is interpreted and displayed.
+
+When the \texttt{<toggle>} parameter is omitted, the command advances to the
+next available toggle view. When the maximum toggle value is reached, the
+toggle wraps around to zero.
+
+When a toggle value is specified, the window jumps directly to that toggle
+view. Toggle values range from \texttt{0} to \texttt{maxToggle}, where
+\texttt{maxToggle} is window-type specific.
+
+If the window number parameter is omitted, the command applies to the current
+window.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
+wn mem, 0x1000      # Create a memory window.
 
-... 
+wt                  # Advance to the next display mode.
+wt                  # Advance again.
 
+wt 0                # Jump to toggle view 0 (e.g. hex32).
+wt 1                # Jump to toggle view 1 (e.g. hex64).
+wt 2                # Jump to toggle view 2 (e.g. decimal).
+wt 3                # Jump to toggle view 3 (e.g. ASCII).
+
+wn dcache, 3        # Create a data cache window.
+wt                  # Switch to next cache way view.
+wt 1                # Display cache way 1 directly.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+
+The meaning of toggle values is window-type specific.  
+For example:
+\begin{itemize}
+    \item Memory windows may use toggles to switch between data formats such as
+          32-bit hexadecimal, 64-bit hexadecimal, decimal, or ASCII.
+    \item Cache windows may use toggles to display individual ways of a
+          set-associative cache.
+\end{itemize}
+
 \end{iPageDescEntry}
