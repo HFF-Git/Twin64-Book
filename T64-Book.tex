@@ -3,7 +3,22 @@
 % Main TWIN-64 Architecture Document
 %
 %--------------------------------------------------------------------------------
-\documentclass[a4paper,11pt]{book} 
+
+%----------------------------------------------------------------------------
+% Central layout switch: control chapter start behavior
+%----------------------------------------------------------------------------
+\newif\ifOpenRight
+%\OpenRighttrue   % Chapters start on right-hand pages (default book behavior)
+\OpenRightfalse % Uncomment to allow chapters to start on any page (no empty pages)
+
+%----------------------------------------------------------------------------
+% Load document class based on the switch
+%----------------------------------------------------------------------------
+\ifOpenRight
+  \documentclass[a4paper, 11pt, openright]{book} 
+\else
+  \documentclass[a4paper, 11pt, openany]{book} 
+\fi 
 
 %--------------------------------------------------------------------------------
 % Load packages and styles

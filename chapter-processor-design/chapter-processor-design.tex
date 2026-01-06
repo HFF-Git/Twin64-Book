@@ -1,8 +1,63 @@
 \chapter*{Processor Design}
 \addcontentsline{toc}{chapter}{Processor Design}
 
+\section*{Pipeline Stages}
+\addcontentsline{toc}{section}{Pipeline Stages}
 
-\section*{Pipeline}
+The simulator implements a three-stage instruction pipeline, with each stage
+divided into two substages. The pipeline stages and their respective substages
+are described below. This design allows instruction fetch, decoding, memory
+access, and execution to overlap, improving overall instruction throughput.
+
+%--------------------------------------------------------------------------------
+\paragraph{1. Fetch/Decode Stage}
+This stage is responsible for retrieving instructions from memory, decoding
+them, and accessing the register file. It combines the initial instruction fetch
+with the preparation of operands required for execution.
+
+\subparagraph{Instruction Memory Access}
+Fetch the next instruction from the instruction cache using the program state
+register. The program counter (PC) is updated to point to the next sequential
+instruction or prepared for a branch target if a branch was predicted in a
+previous cycle. This substage ensures that the instruction is available for
+decoding without delay.
+
+\subparagraph{Instruction Decode}
+Decode the instruction opcode to determine the operation type, source and
+destination operands, and any immediate values. This substage also prepares
+control signals and identifies register file accesses needed for the next stages.
+
+%--------------------------------------------------------------------------------
+\paragraph{2. Access Stage}
+The access stage handles address computation and memory operations. It is
+responsible for calculating memory addresses for load/store instructions and
+branch target addresses for conditional or unconditional branches, as well as
+accessing the data cache when required.
+
+\subparagraph{Address Computation}
+Compute memory addresses for load/store instructions or the target address for
+branch instructions. This includes evaluating effective addresses, offsets,
+and index computations as required by the instruction.
+
+\subparagraph{Memory Access}
+Perform read or write operations to the data cache. This substage ensures that
+data is available for execution or written back to memory as needed.
+
+%--------------------------------------------------------------------------------
+\paragraph{3. Execution Stage}
+This stage performs arithmetic, logical, and branch resolution operations,
+committing results to the destination registers or updating the program state
+register. Both substages are capable of executing a single operation per cycle.
+
+\subparagraph{Execution / Branch Resolution}
+Execute arithmetic or logical instructions and commit the results to the
+destination registers. For branch instructions, evaluate the branch condition
+and update the program state register accordingly to reflect the correct next
+instruction address.
+
+
+%--------------------------------------------------------------------------------
+\section*{Single Issue Pipeline}
 \addcontentsline{toc}{section}{Pipeline}
 
 Twin-64 has a three stage pipeline, with each stage have two subStages.
@@ -48,7 +103,7 @@ Twin-64 has a three stage pipeline, with each stage have two subStages.
   		
   	\draw[thick, decorate, decoration={brace, amplitude=0.2cm}] (
   		\maStageLeftOfs, \height+0.5) -- (\maStageLeftOfs + \stageWidth, \height+0.5 )
-  		node[midway, yshift=0.6cm, anchor=south] {\Large AccessMemory};
+  		node[midway, yshift=0.6cm, anchor=south] {\Large Memory Access};
   		
   	\draw[thick, decorate, decoration={brace, amplitude=0.2cm}] 
   		(\exStageLeftOfs,\height+0.5) -- (\exStageLeftOfs + \stageWidth, \height+0.5 )
@@ -64,14 +119,14 @@ Twin-64 has a three stage pipeline, with each stage have two subStages.
   	\node at ( \exStageLeftOfs + \subStageWidth / 2, \height / 2 ) {\huge C};
   	\node at (\exStageLeftOfs + \subStageWidth + \subStageWidth / 2, \height / 2 ) {\huge C };
 
-	
 \end{tikzpicture}
 \end{center}
 \caption{Single Instruction Pipeline}
 \label{fig:Single Instruction Pipeline}
 \end{figure}
 
-
+\section*{Dual Issue Pipeline}
+\addcontentsline{toc}{section}{Dual Issue Pipeline}
 
 \begin{figure}[H]
 \begin{center}

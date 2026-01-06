@@ -15,14 +15,9 @@
 \begin{iPageDescEntry}{Description}
 
 The \texttt{WSD} command disables one or more window stacks, removing all
-windows in the stack from the visible screen.
+windows in the stack from the visible screen. Windows within a disabled stack are not deleted. All attributes, including layout, size, and position, are preserved.  
 
-Windows within a disabled stack are not deleted; all attributes, including
-layout, size, and position, are preserved.  
-
-If the stack number is omitted, the stack that hosts the current window is disabled. The keyword ALL disabled all window stacks.
-
-If the stack hosting the current window is disabled, the first window in the next lower stack is selected.
+The keyword ALL disabled all window stacks. If the stack hosting the current window is disabled, the previous window is set as current window.
 
 \end{iPageDescEntry}
 

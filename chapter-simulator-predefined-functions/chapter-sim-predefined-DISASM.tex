@@ -3,31 +3,57 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{DISASM - ... }
-\addcontentsline{toc}{section}{DISASM  - ...}
+\section*{DISASM — Disassemble instruction}
+\addcontentsline{toc}{section}{DISASM — Disassemble instruction}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{disasm ( instr  )} \\
+\texttt{disasm ( instr )} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{DISASM} predefined function ...
+The \texttt{DISASM} predefined function disassembles a single machine
+instruction and returns its assembly representation as a string.
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Parameters}
+
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\ \hline
+\texttt{instr} & \texttt{u32} &
+The machine instruction to disassemble, provided as a 32-bit unsigned integer. \\ \hline
+\end{tabularx}
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Return Value}
+
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\ \hline
+\texttt{asmStr} & \texttt{string} &
+The disassembled instruction as a single-line assembly string. \\ \hline
+\end{tabularx}
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+(6) -> w disasm(0x2c42e00c)
+"LDO r1, 100(r5)"
+(7) ->
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+The instruction is disassembled using the currently selected target architecture
+and disassembler settings.
 \end{iPageDescEntry}

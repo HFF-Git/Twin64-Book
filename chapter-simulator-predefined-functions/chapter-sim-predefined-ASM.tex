@@ -3,8 +3,8 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{ASM - ... }
-\addcontentsline{toc}{section}{ASM  - ...}
+\section*{ASM — Inline assembler}
+\addcontentsline{toc}{section}{ASM — Inline assembler}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
@@ -14,20 +14,46 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{ASM} predefined function ...
+The \texttt{ASM} predefined function assembles a single assembly instruction
+and returns its encoded machine instruction as a numeric value.
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Parameters}
+
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\ \hline
+\texttt{argStr} & \texttt{string} &
+The assembly instruction to assemble, provided as a single line of text. \\ \hline
+\end{tabularx}
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Return Value}
+
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Description} \\ \hline
+\texttt{instr} & \texttt{u32} &
+The assembled instruction encoded as a 32-bit unsigned integer. \\ \hline
+\end{tabularx}
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-... 
-
+(4) -> w asm("LDO r1, 100(r5)")
+0x2c42e00c
+(5) ->
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+The instruction is assembled using the currently selected target architecture
+and assembler settings.
 \end{iPageDescEntry}

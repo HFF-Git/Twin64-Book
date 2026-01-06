@@ -1,3 +1,83 @@
 \chapter*{Simulator Configuration}
 \addcontentsline{toc}{chapter}{Simulator Configuration}
 
+The simulator can be configured using a set of global options that control its
+startup behavior and runtime environment.
+
+Configuration information can be supplied through multiple mechanisms:
+\begin{itemize}
+    \item Program command-line parameters
+    \item Environment variables
+    \item Simulator commands executed during initialization
+\end{itemize}
+
+These mechanisms work together to define the initial simulator state before
+interactive use begins.
+
+%--------------------------------------------------------------------------------
+\section*{Program Parameters}
+\addcontentsline{toc}{section}{Program Parameters}
+
+Program parameters are specified on the simulator command line and control
+basic startup behavior, such as output verbosity, configuration file selection,
+and version or help display.
+
+The following table lists the supported command-line parameters.
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\textbf{Name} & \textbf{Type} & \textbf{Usage} \\ \hline
+\texttt{help} &
+No argument &
+Displays a summary of available command-line options and exits. \\ \hline
+
+\texttt{version} &
+No argument &
+Displays the simulator version information and exits. \\ \hline
+
+\texttt{verbose} &
+No argument &
+Enables verbose output during simulator initialization and execution. \\ \hline
+
+\texttt{config} &
+Required argument &
+Specifies the path to a configuration file containing simulator commands to be
+executed at startup. \\ \hline
+
+\texttt{log} &
+Required argument &
+Specifies the path to the log file used for runtime logging. \\ \hline
+\end{tabularx}
+\caption{Simulator command-line options}
+\end{table}
+
+%--------------------------------------------------------------------------------
+\section*{Configuration Files}
+\addcontentsline{toc}{section}{Configuration Files}
+
+In addition to command-line parameters, the simulator can be configured using
+a configuration file specified with the \texttt{--config} program option.
+
+A configuration file contains a sequence of simulator commands that are
+executed automatically after the initial program setup is complete. This
+mechanism allows complex simulator setups to be reproduced reliably and
+consistently.
+
+Configuration files are typically used to:
+\begin{itemize}
+    \item Set environment variables
+    \item Create and initialize simulator windows
+    \item Instantiate Twin-64 system modules
+    \item Establish an initial debugging or inspection layout
+\end{itemize}
+
+After all commands in the configuration file have been executed, control is
+passed to the interactive command interface.
+
+%--------------------------------------------------------------------------------
+\section*{Configuration Example}
+\addcontentsline{toc}{section}{Configuration Example}
+
+to do ...
