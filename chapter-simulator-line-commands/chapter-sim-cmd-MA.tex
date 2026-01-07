@@ -8,13 +8,13 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{MA } \\
+\texttt{ma <adr> <expr> } \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{MA} command ...
+The \texttt{MA} command modifies a double word in absolute memory. The expression must be a numeric value.
 
 \end{iPageDescEntry}
 
@@ -22,7 +22,8 @@ The \texttt{MA} command ...
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+(100)-> ma 0x1000 0x100       # set memory at location 0x1000 
+                              # to the value of 0x100.
 
 \end{lstlisting}
 \end{iPageDescOpEntry}

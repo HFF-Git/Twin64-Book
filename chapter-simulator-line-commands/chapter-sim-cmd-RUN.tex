@@ -3,18 +3,33 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{RUN - run simulation}
-\addcontentsline{toc}{section}{RUN - run simulation}
+\section*{RUN — Run the simulation}
+\addcontentsline{toc}{section}{RUN — Run the simulation}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{RUN } \\
+\texttt{RUN} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{RUN} command ...
+The \texttt{RUN} command starts continuous execution of the simulation. It is
+functionally equivalent to repeatedly stepping the simulation without an
+explicit step count.
+
+Once invoked, control is transferred to the TWIN-64 system, and all configured
+and enabled processors execute instructions continuously. Execution proceeds
+until a condition occurs that returns control to the simulator.
+
+Control is returned to the simulator when a trap, breakpoint exception, trace
+exception, machine check, or other architectural exception is raised. At that
+point, execution halts and the simulator command interface becomes active again,
+allowing inspection or modification of system state.
+
+Unlike the \texttt{STEP} command, \texttt{RUN} does not impose a limit on the
+number of executed instructions and continues indefinitely until an exceptional
+event occurs.
 
 \end{iPageDescEntry}
 
@@ -22,12 +37,16 @@ The \texttt{RUN} command ...
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+(80)->run          # start continuous simulation execution
 
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+
+The \texttt{RUN} command respects breakpoint and trace settings. If breakpoints or
+single-step tracing are enabled, execution may stop shortly after \texttt{RUN}
+is issued.
+
 \end{iPageDescEntry}

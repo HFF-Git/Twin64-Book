@@ -3,18 +3,40 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{IITLB - insert into instruction TLB}
-\addcontentsline{toc}{section}{IITLB - insert into instruction TLB}
+\section*{IITLB — Insert into Instruction TLB}
+\addcontentsline{toc}{section}{IITLB — Insert into Instruction TLB}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{IITLB } \\
+\texttt{iitlb <vAdr> , <pAdr> , <size> , <acc> [ , L [ , U ]]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{IITLB} command ...
+The \texttt{IITLB} command inserts a translation entry into the instruction
+Translation Lookaside Buffer (TLB). The \texttt{vAdr} parameter specifies the
+virtual address of the mapping, while \texttt{pAdr} specifies the corresponding
+physical memory address.
+
+To reduce TLB lookup overhead and improve translation efficiency, the instruction
+TLB supports mappings over contiguous virtual address ranges rather than only
+fixed-size pages. Multiple page sizes are supported, allowing software to choose
+an appropriate granularity based on usage patterns. The supported page sizes are
+4~KB, 64~KB, 1~MB, and 16~MB.
+
+The \texttt{acc} parameter encodes the access permissions and privilege
+requirements for the translation. It specifies whether the mapped page may be read, written, or executed, as well as whether it is a gateway page along with the minimum privilege level required for instruction fetch. Every instruction fetch is checked against these access attributes, and violations result in a protection fault.
+
+Optional flags may be supplied to control the behavior of the TLB entry. These
+flags determine how the entry participates in replacement and caching decisions.
+
+\begin{smallGapItemize}
+  \item \textbf{L} — Locks the TLB entry so that it is not considered during
+        replacement candidate selection.
+  \item \textbf{U} — Marks the mapped page as uncached; instruction fetches bypass
+        the instruction cache for this translation.
+\end{smallGapItemize}
 
 \end{iPageDescEntry}
 
@@ -22,7 +44,11 @@ The \texttt{IITLB} command ...
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+# insert a translation for 0x1000_FFFF_0000 at 0x5000 with a 
+# page size of 4Kb, access rights read-write, supervisor level
+# and lock the translation 
+
+(3)->iitlb 0x1000_FFFF_0000, 0x5000, 0, 0x4, L
 
 \end{lstlisting}
 \end{iPageDescOpEntry}

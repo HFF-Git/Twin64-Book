@@ -8,13 +8,17 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{MR } \\
+\texttt{mr <reg> <expr> } \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{MR} command ...
+The \texttt{MR} command modifies a register of the CPU in the current CPU window. The command reports an error if the current window is not a CPU window.
+
+The \texttt{expr} parameter represents a simple expression. Numeric values can be added, predefined functions used.
+
+Register can also be used in expressions. Their name refers to the current CPU window. If a register from another CPU is to be used, the register name is appended the module number of the processor. 
 
 \end{iPageDescEntry}
 
@@ -22,7 +26,14 @@ The \texttt{MR} command ...
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+(4)->mr R5 100                  # set R5 of the CPU to 100
+(5)->
+
+(5)->mr R10 (0x100 + 0x10) * 2  # set R10 to 0x220
+(6)->
+
+(7)->mr R15 R7:3                # set R15 of the current CPU
+                                # to the value of R7 in CPU 3.
 
 \end{lstlisting}
 \end{iPageDescOpEntry}

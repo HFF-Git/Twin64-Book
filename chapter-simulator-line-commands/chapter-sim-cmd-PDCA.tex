@@ -3,18 +3,24 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{PDCA - purge data cache}
-\addcontentsline{toc}{section}{PDCA - purge data cache}
+\section*{PDCA — Purge Data Cache Line}
+\addcontentsline{toc}{section}{PDCA — Purge Data Cache Line}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{PDCA } \\
+\texttt{pdca <vAdr>}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{PDCA} command ...
+The \texttt{PDCA} command invalidates a single cache line in the data cache. The
+\texttt{vAdr} parameter specifies a viertual memory address that identifies the
+cache line to be purged. The address is interpreted as any byte within the target
+cache line.
+
+If the cache line is present and marked dirty, its contents are discarded without
+being written back to memory.
 
 \end{iPageDescEntry}
 
@@ -22,7 +28,8 @@ The \texttt{PDCA} command ...
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+# purge the data cache line containing physical address 0x100_8000_1000
+(3)->pdca 0x100_8000_1000
 
 \end{lstlisting}
 \end{iPageDescOpEntry}

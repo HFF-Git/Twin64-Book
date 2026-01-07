@@ -2,19 +2,32 @@
 %
 %
 %--------------------------------------------------------------------------------
-\pagebreak
-\section*{W - display an expression value}
-\addcontentsline{toc}{section}{W - display an expression value}
+\pagebreak 
+\section*{W - Display an expression value} 
+\addcontentsline{toc}{section}{W - Display an expression value} 
 
-%--------------------------------------------------------------------------------
-\begin{iPageDescEntry}{Syntax}
-\texttt{W } \\
+%------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax} 
+\texttt{W <expr>} \\ 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{W} command ...
+The \texttt{W} command evaluates a simulator expression and displays its
+current value. Expressions can include:
+
+\begin{smallGapItemize}
+  \item Registers and control/status registers
+  \item Memory locations (by virtual or physical address)
+  \item Arithmetic operations, logical operations, and constants
+  \item Predefined functions provided by the simulator
+\end{smallGapItemize}
+
+The command is primarily used for inspecting system state during simulation
+or debugging. The evaluated value is printed in the current radix or display
+format of the active window. If no expression is provided, the command may
+display a prompt or an error, depending on the simulator configuration.
 
 \end{iPageDescEntry}
 
@@ -22,12 +35,24 @@ The \texttt{W} command ...
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+# display the value of general-purpose register R1
+(12)-> w R1
+0x0000_0000_1234_5678
+
+# display the value at virtual memory address 0x1000
+(13)-> w [0x1000]
+0xDEAD_BEEF
+
+# evaluate an arithmetic expression
+(14)-> w R1 + R2 * 4
+0x0000_0000_2468_ACF0
 
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+
+The \texttt{W} command is read-only and does not modify registers or memory. It is useful for inspecting register or memory values and evaluating expressions for debugging. 
+
 \end{iPageDescEntry}

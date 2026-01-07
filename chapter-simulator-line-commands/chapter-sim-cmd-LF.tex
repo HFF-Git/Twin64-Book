@@ -8,13 +8,15 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{LF } \\
+\texttt{lf "<filePath>" } \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{LF} command ...
+The \texttt{LF} command opens an ELF format file and places the ELF segments at the specified address. 
+
+This command is currently under construction and will be finalized when the actual ELF file segments and sections are defined for Twin-64.
 
 \end{iPageDescEntry}
 
@@ -22,7 +24,7 @@ The \texttt{LF} command ...
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+(5)-> LF "~/elf-file"    # load elf-file
 
 \end{lstlisting}
 \end{iPageDescOpEntry}

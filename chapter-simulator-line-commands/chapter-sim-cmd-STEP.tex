@@ -3,18 +3,33 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{STEP - step in a simulation}
-\addcontentsline{toc}{section}{STEP - step in a simulation}
+\section*{STEP — Step the simulation}
+\addcontentsline{toc}{section}{STEP — Step the simulation}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{STEP } \\
+\texttt{STEP [ <expr> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{STEP} command ...
+The \texttt{STEP} command advances the simulation by executing instructions in
+single-step mode. When invoked without an argument, the simulator executes
+exactly one instruction and then returns control to the user.
+
+When an expression is provided, the simulator executes the specified number of
+instructions before stopping. The expression must evaluate to a positive integer
+value.
+
+Stepping advances all configured and enabled processors in lockstep. Each step
+corresponds to the architectural completion of an instruction on every active
+processor, ensuring a consistent and deterministic simulation state across
+multiple cores.
+
+After the requested number of steps has completed, execution halts and control
+returns to the simulator command interface, allowing inspection of state,
+registers, memory, or windows.
 
 \end{iPageDescEntry}
 
@@ -22,12 +37,20 @@ The \texttt{STEP} command ...
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+(5)->s             # execute a single instruction
+(6)->
+
+(6)->s 10          # execute ten instructions
+(7)->
 
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+
+The \texttt{STEP} command respects breakpoint and trace settings. A breakpoint or
+trace exception encountered during stepping may cause execution to stop before
+the requested number of steps has completed.
+
 \end{iPageDescEntry}

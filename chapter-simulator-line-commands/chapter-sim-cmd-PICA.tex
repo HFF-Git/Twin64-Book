@@ -3,18 +3,24 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{PICA - purge from instruction cache}
-\addcontentsline{toc}{section}{PICA - purge from instruction cache}
+\section*{PICA — Purge Instruction Cache Line}
+\addcontentsline{toc}{section}{PICA — Purge Instruction Cache Line}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{PICA } \\
+\texttt{pdca <vAdr>}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{PICA} command ...
+The \texttt{PICA} command invalidates a single cache line in the instruction cache. The
+\texttt{vAdr} parameter specifies a virtual memory address that identifies the
+cache line to be purged. The address is interpreted as any byte within the target
+cache line.
+
+If the cache line is present and marked dirty, its contents are discarded without
+being written back to memory.
 
 \end{iPageDescEntry}
 
@@ -22,7 +28,8 @@ The \texttt{PICA} command ...
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+# purge the instruction cache line containing physical address 0x100_4000_1000
+(3)->pdca 0x100_4000_1000
 
 \end{lstlisting}
 \end{iPageDescOpEntry}

@@ -5,29 +5,71 @@
 \chapter*{Interruptions}
 \addcontentsline{toc}{chapter}{Interruptions}
 
-Twin-64 features a simple but powerful interrupt system. Interruptions in Twin-64 are divided into four classes - faults, traps, interrupts, and checks - that may occur during instruction execution.
+Twin-64 features a simple but powerful interrupt system. Interruptions in Twin-64 are divided into four classes - faults, traps, interrupts, and checks - that may occur during instruction execution or at instruction boundaries.
 
-\begin{itemize} 
-\setlength{\itemsep}{0.5em}
-\setlength{\parskip}{0pt}
-\item \textbf{Fault} - The current instruction cannot be carried out due to a system problem, such as the absence of a page from main memory. After the system problem has been corrected, the faulting instruction should execute as intended. Faults are synchronous with respect to the instruction stream.
+\begin{smallGapItemize}
+\item \textbf{Fault} --- The current instruction cannot be carried out due to a system problem, such as the absence of a page from main memory. After the system problem has been corrected, the faulting instruction is restarted and should execute as intended. Faults are synchronous with respect to the instruction stream and are detected during instruction execution.
 
-\item \textbf{Trap} - There are two kind of traps. The types are traps raised because the function requested by the current instruction cannot or should not be carried out. A good example is the arithmetic signed overflow trap. Such an instruction is normally not re-executed. The second type of traps are raised so that the system can intervene before the or after the instruction is executed. An example for this type of trap is the debugging breakpoint trap. Traps are synchronous with respect to the instruction stream.
+\item \textbf{Trap} --- There are two kinds of traps. The first kind consists of traps raised because the function requested by the current instruction cannot or should not be carried out. A typical example is the arithmetic signed overflow trap. Such instructions are normally not re-executed. These traps are synchronous and occur during instruction execution.
 
-\item \textbf{Interrupt} - An external entity such as an I/O module requires attention. Interrupts are asynchronous with respect to the instruction stream.
+The second kind of traps are boundary traps, raised so that the system can intervene at an instruction boundary, either immediately after completion of an instruction or before execution of the next instruction. Examples include debugging breakpoint and trace traps. Boundary traps are synchronous with respect to the instruction stream.
 
-\item \textbf{Check} - The processor has detected an internal fault or malfunction. Checks can be either
-synchronous or asynchronous with respect to the instruction stream.
+\item \textbf{Interrupt} --- An external entity such as an I/O module requires attention. Interrupts are asynchronous with respect to the instruction stream but are taken only at well-defined instruction boundaries.
 
-\end{itemize}
+\item \textbf{Check} --- The processor has detected an internal fault or malfunction. Checks may be synchronous or asynchronous with respect to the instruction stream.
+\end{smallGapItemize}
 
+All four classes of interruptions are handled in a uniform manner.
 
-All four classes of interruptions are handled in the same way. 
+\section*{Interruption Architecture} 
+\addcontentsline{toc}{chapter}{Interruption Architecture}
+The Twin-64 processor status register contains two bits for supporting debugging traps and traces. When the T bit is set, the processor executes exactly one instruction and then takes a trace exception at the following instruction boundary, before execution of the next instruction.
+
+At an instruction boundary, multiple boundary exception conditions may be present. When multiple exception conditions are present, the processor resolves them according to the priority rules defined in Table~\ref{tab:exception-priority}. Instruction-caused exceptions always take priority over boundary exceptions. Among boundary exceptions, breakpoint traps have the highest priority.
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\linewidth}{|c|l|X|}
+\hline
+\textbf{Pri.} & \textbf{Exception Type} & \textbf{Notes} \\
+\hline
+1 (High) & Instruction-caused exception &
+TLB miss, page fault, alignment fault, arithmetic overflow, illegal instruction \\
+\hline
+2 & Debug breakpoint trap &
+\texttt{TRAP} instruction with breakpoint code, recognized only if B = 1 \\
+\hline
+3 & Trace trap &
+Raised when T = 1 at the instruction boundary after one instruction completes \\
+\hline
+4 & External interrupt &
+Asynchronous event taken at an instruction boundary \\
+\hline
+5 (Low) & Check &
+Deferred or recoverable processor checks \\
+\hline
+\end{tabularx}
+\caption{Twin-64 Exception Priority}
+\label{tab:exception-priority}
+\end{table}
+
+The B bit controls recognition of breakpoint instructions. When B is cleared, \texttt{BREAK} instructions do not generate breakpoint exceptions and execute as no-ops. This allows trace exceptions to be taken deterministically while stepping over instructions, including instructions located at breakpoint addresses.
+
+Twin-64 provides a general-purpose \texttt{TRAP} instruction which causes a synchronous trap and transfers control to the trap handler. The \texttt{TRAP} instruction includes a trap information code that identifies the reason for the trap.
+
+One trap information code is reserved for use as a debugging breakpoint. When a \texttt{TRAP} instruction with the breakpoint trap code is encountered, it is treated as a boundary trap. Recognition of breakpoint traps is controlled by the B bit. If B is cleared, breakpoint \texttt{TRAP} instructions execute as no-ops and do not cause a trap.
+
+All other \texttt{TRAP} instruction codes are unaffected by the B bit and always generate a trap. These traps are synchronous with respect to the instruction stream and are taken during instruction execution.
 
 \section*{Interrupt Handling}
 \addcontentsline{toc}{section}{Interrupt Handling}
 
-Handling of an interrupt is implemented as a fast context switch. When an interruption occurs, the hardware saves the PSR at the time of the interrupt to the IPSR control register. Depending on the interrupt type, this can be the current instruction of the next instruction. All status bits, which are part of the PSR, are saved too. The hardware will then set the PSR status bits as follows. The M bit is set if the interruption is a high priority machine check. All other bits are set to zero. Depending on the trap type, additional data is saved to the interrupt argument control registers IARG0 and IARG1.
+Handling of an interruption is implemented as a fast context switch. When an interruption occurs, the hardware saves the processor status register (PSR) at the time of the interruption into the IPSR control register. For instruction-caused interruptions, the saved instruction address corresponds to the faulting instruction. For boundary-caused interruptions, the saved instruction address corresponds to the next instruction to be executed. All status bits contained in the PSR are saved.
+
+The hardware then initializes the PSR for handler execution. The M bit is set if the interruption is a high-priority machine check. All other status bits are cleared. Depending on the interruption type, additional information may be saved into the interrupt argument control registers IARG0 and IARG1.
+
+\section*{Interrupt Vector Table}
+\addcontentsline{toc}{section}{Interrupt Vector Table}
 
 The control register \texttt{IVA} holds the virtual address of the interrupt vector table. Execution of the interrupt handler begins at the address computed using the trap number:
 
@@ -38,30 +80,7 @@ The control register \texttt{IVA} holds the virtual address of the interrupt vec
 \)
 \end{flushleft}
 
-Each entry consists of 8 instructions that can be executed. It is the responsibility of interruption handlers to unmask external interrupts as soon as possible, so as to minimize interrupt latency. The interruptions are categorized into four groups.
-
-\paragraph{Example.}  
-Suppose the interrupt vector table base address is:  
-
-\begin{flushleft}
-\hspace*{2em}%
-\(\texttt{IVA} = \texttt{0x0000\_1000}\)
-\end{flushleft}
-
-Now, if a \textbf{trap number 5} (Illegal Instruction) occurs, the handler entry point is calculated as:  
-
-\begin{flushleft}
-\hspace*{2em}%
-\(\texttt{0x0000\_1000} + ( 32 * 5 ) = \texttt{0x0000\_10A0}\)
-\end{flushleft}
-
-Execution of the interrupt handler starts at \texttt{0x0000\_10A0}.
-
-\section*{Interrupt Vector Table}
-\addcontentsline{toc}{section}{Interrupt Vector Table}
-
-The following table lists the defined traps for Twin-64.
-
+Each entry consists of 8 instructions that can be executed. It is the responsibility of interruption handlers to unmask external interrupts as soon as possible, so as to minimize interrupt latency. The interruptions are categorized into four groups. The following table lists the defined traps for Twin-64.
 
 \begin{longtable}{@{}p{0.075\linewidth}p{0.25\linewidth}p{0.2\linewidth}p{0.15\linewidth}p{0.15\linewidth}@{}}
     \caption{Trap Table} \\
@@ -79,48 +98,56 @@ The following table lists the defined traps for Twin-64.
     \endfoot
     \bottomrule
     \endlastfoot
+
     \textbf{1} & Machine Check & current instruction & check type & - \\
-    \midrule
     \midrule
     \textbf{2} & Power Failure & current instruction & - & - \\
     \midrule
     \textbf{3} & Recovery Counter & current instruction & - & - \\
     \midrule
-    \textbf{4} & External Interrupt & next instruction & - & - \\
+    \textbf{4} & External Interrupt & next instruction & interrupt ID & - \\
     \midrule
+
+    \textbf{5} & Illegal Instruction & current instruction & instruction & - \\
     \midrule
-    \textbf{5} & Illegal instruction & current instruction & instruction & - \\
+    \textbf{6} & Privileged Operation & current instruction & instruction & - \\
     \midrule
-    \textbf{6} & Privileged operation & current instruction & instruction & - \\
+    \textbf{7} & Privileged Register & current instruction & instruction & - \\
     \midrule
-    \textbf{7} & Privileged register & current instruction & instruction & - \\
+    \textbf{8} & Integer Overflow & current instruction & instruction & - \\
     \midrule
-    \textbf{8} & Integer Overflow& current instruction & instruction & - \\
+
+    \textbf{9} & Instruction TLB Miss & current instruction & - & - \\
     \midrule
-    \textbf{9} & Instruction TLB miss& current instruction & - & - \\
+    \textbf{10} & Non-access Instruction TLB Miss & current instruction & - & - \\
     \midrule
-    \textbf{10} & Non-access Instruction TLB miss & current instruction & - & - \\
+    \textbf{11} & Instruction Memory Protection & current instruction & - & - \\
     \midrule
-    \textbf{11} & Instruction memory protection trap & current instruction & - & - \\
+    \textbf{12} & Instruction Alignment & current instruction & instruction & target address \\
     \midrule
-    \textbf{12} & Instruction Alignment Trap & current instruction & instruction & target address \\
+
+    \textbf{13} & Data TLB Miss & current instruction & instruction & target address \\
     \midrule
-    \textbf{13} & Data TLB miss& current instruction & instruction & target address \\
+    \textbf{14} & Non-access Data TLB Miss & current instruction & instruction & target address \\
     \midrule
-    \textbf{14} & Non-access Data TLB miss & current instruction & instruction & target address \\
+    \textbf{15} & Data Access Rights & current instruction & instruction & target address \\
     \midrule
-    \textbf{15} & Data memory access rights trap & current instruction & instruction & target address \\
+    \textbf{16} & Data Protection & current instruction & instruction & target address \\
     \midrule
-    \textbf{16} & Data memory protection trap & current instruction & instruction & target address \\
+    \textbf{17} & Data Alignment & current instruction & instruction & target address \\
     \midrule
-    \textbf{17} & Data Alignment Trap & current instruction & instruction & target address \\
+    \textbf{18} & Page Reference Trap & current instruction & instruction & target address \\
     \midrule
-      \textbf{18} & Page reference trap & current instruction & instruction & target address \\
+
+    \textbf{19} & Breakpoint Trap & current instruction & instruction & trap code \\
     \midrule
-    \textbf{19} & Break Instruction & current instruction & instruction & - \\
-    \midrule
-    \midrule
-    \textbf{20} & Taken branch trap & next instruction & instruction & - \\
-    \bottomrule
+    \textbf{20} & Trace Trap & next instruction & - & - \\
+
 \end{longtable}
+
+\section*{Summary}
+\addcontentsline{toc}{section}{Summary}
+
+Twin-64 interruptions provide a uniform mechanism for faults, traps, interrupts, and checks. Instruction-caused exceptions take priority, while boundary traps like breakpoints and trace traps allow precise debugging using the B and T bits. Saved state distinguishes the faulting instruction from the next instruction, enabling deterministic handling and correct single-stepping. The interrupt vector table maps trap numbers to handler routines, ensuring efficient and consistent exception management.
+
 
