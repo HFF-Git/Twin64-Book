@@ -61,9 +61,9 @@ In contrast, the \texttt{.M} and \texttt{.U} variants deposit their immediate va
 For example constructing a 52-bit value, the instruction sequence \\
 
 \begin{lstlisting}[style=iPageOpStyle]
-    LDIL   R1, L%0xA_BCDE_1234_5678  ; load    0x1234_5000 into R1
-    ADDIL  R1, R%0xA_BCDE_1234_5678  ; add     0x678       into R1
-    LDIL.M R1, M%0xA_BCDE_1234_5678  ; deposit 0xA_BCDE    into R1 
+    LDIL   R1, L%0xA_BCDE_1234_5678  ; load    		0x1234_5000 into R1
+    LDO    R1, R%0xA_BCDE_1234_5678  ; load offset 	0x678       into R1
+    LDIL.M R1, M%0xA_BCDE_1234_5678  ; deposit 		0xA_BCDE    into R1 
 \end{lstlisting}
 
 loads the constant \texttt{0xA\_BCDE\_1234\_5678} into R1.

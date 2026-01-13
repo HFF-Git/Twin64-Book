@@ -22,6 +22,8 @@
 
 \begin{iPageDescEntry}{Description}
     The \texttt{STC} instruction stores a value from a general-purpose register to memory only if the memory address is still reserved by a prior \texttt{LDR} instruction. If the reservation is valid, the store succeeds and clears the reservation. If the reservation has been lost (e.g., another processor wrote to the address), the store fails and the memory is unchanged.
+    
+    offset must be 8-byte aligned.
 \end{iPageDescEntry}
 
 \begin{iPageDescOpEntry}{Operation}
