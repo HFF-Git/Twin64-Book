@@ -4,8 +4,10 @@
 %--------------------------------------------------------------------------------
 \chapter*{System Organization}
 \addcontentsline{toc}{chapter}{System Organization}
+This chapter provides an overview of the Twin-64 system architecture and its major design elements. It begins by describing the register–memory programming model and the overall system organization built around a shared system bus. The processor’s internal structure and its role in address generation and execution are then outlined.
 
-This chapter introduces Twin-64 by highlighting the major components and design concepts.
+Subsequent sections introduce the virtual memory model, including address regions, page-based translation, and protection mechanisms. The chapter also explains Twin-64’s security model, privilege levels, and the gateway mechanism used for efficient privilege transitions. Support for debugging, memory-mapped input/output, direct memory access, and the interrupt system is described last, completing a high-level view of how computation, protection, and external interaction are coordinated in a Twin-64 system.
+
 
 \section*{A Register–Memory Architecture}
 \addcontentsline{toc}{section}{A Register–Memory Architecture}
