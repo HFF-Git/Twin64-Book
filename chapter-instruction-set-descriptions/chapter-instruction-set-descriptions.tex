@@ -8,42 +8,78 @@
 This chapter provides a detailed description of the Twin-64 instruction set. Each instruction entry includes:
 
 \begin{itemize}
-	\setlength{\itemsep}{0.5em}
+	\setlength{\itemsep}{0.2em}
+    \setlength{\topsep}{0pt}
     \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}
     \item The instruction word layout.
     \item A concise description of the instruction.
-    \item A high-level pseudo code representation of its operation.
+    \item A high-level pseudo-code representation of its operation.
 \end{itemize}
 
-Instruction operations are expressed using C-style pseudo code. The routines and conventions used are listed in the appendix. Registers are referenced by class and index:
+\section*{Instruction Operations}
+\addcontentsline{toc}{section}{Instruction Operations}
+
+Instruction operations are expressed using C-style pseudo code. The conventions and helper routines used in these descriptions are defined in the appendix. Registers are referenced by class and index:
 
 \begin{itemize}
-    \setlength{\itemsep}{0.5em}
+    \setlength{\itemsep}{0.2em}
+    \setlength{\topsep}{0pt}
     \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}
     \item \texttt{GR[5]} — general register 5
     \item \texttt{CR[1]} — control register 1
-    \item Some registers have dedicated names, e.g., the shift amount control register is \texttt{SAR}.
 \end{itemize}
 
-Subfields of an instruction are accessed using a dot and the field name in square brackets. For example:
+Some registers have dedicated names; for example, the shift-amount control register is \texttt{SAR}.
+
+\section*{Instruction Options}
+\addcontentsline{toc}{section}{Instruction Options}
+
+Instruction options are specified in assembler syntax by appending a dot to the instruction mnemonic, followed by one or more option characters. Each character represents a defined option. For example:
 
 \begin{itemize}
-    \setlength{\itemsep}{0.5em}
+    \setlength{\itemsep}{0.2em}
+    \setlength{\topsep}{0pt}
     \setlength{\parskip}{0pt}
-    \item The interrupt enable bit in the PSR register: \texttt{PSR.[I]}.
+    \setlength{\parsep}{0pt}
+    \item \texttt{AND.N ...} — the \texttt{AND} instruction with the negate-result option.
+    \item \texttt{LD.B ... } - the texttt{LD} instruction with loading a byte option.    
 \end{itemize}
 
-Instruction options are specified in assembler syntax by a dot after the instruction mnemonic followed by one or more characters, each representing a defined option. For example:
+The order of option characters is insignificant. All valid options for an instruction are listed in the corresponding option set.
+
+\section*{Instruction Subfields}
+\addcontentsline{toc}{section}{Instruction Subfields}
+
+Individual subfields of an instruction or register are accessed using a dot followed by the field name enclosed in square brackets. For example:
 
 \begin{itemize}
-    \setlength{\itemsep}{0.5em}
+    \setlength{\itemsep}{0.2em}
+    \setlength{\topsep}{0pt}
     \setlength{\parskip}{0pt}
-    \item \texttt{AND.N ...} — the \texttt{AND} instruction with the negate result option.
-    \item The order of option characters does not matter; all defined options are listed in the relevant character set.
+    \setlength{\parsep}{0pt}
+    \item The interrupt-enable bit in the program state register: \texttt{PSR.[I]}.
 \end{itemize}
 
-Fields marked as reserved are intended for future enhancements and should always be set to zero. Any other value in a reserved field results in undefined behavior.
+Fields marked as \emph{reserved} are intended for future extensions and must always be set to zero. Any non-zero value in a reserved field results in undefined behavior.
 
+\section*{Constant Expressions}
+\addcontentsline{toc}{section}{Constant Expressions}
+
+Constant expressions are 64-bit values. When encoding a numeric field that cannot be represented directly, a sequence of instructions may be required to construct the value in the destination word. To support this, constant values may be preceded by a field qualifier that selects a portion of the 64-bit value.
+
+The available field qualifiers are \texttt{U\%}, \texttt{M\%}, \texttt{L\%}, and \texttt{R\%}. Each qualifier, when applied to a 64-bit numeric value, extracts the corresponding field and right-shifts it to form the resulting expression.
+
+The following figure illustrates the individual fields selected by each qualifier:
+
+\begin{center}
+    \drawInstrFormatSixtyFour
+       {0, 3, 8, 13, 16}
+        {U, M, L, R}
+\end{center}
+
+Examples of constant expression usage can be found in the descriptions of the \texttt{ADDIL}, \texttt{LDIL}, and \texttt{MFIA} instructions
 
 %--------------------------------------------------------------------------------
 %
