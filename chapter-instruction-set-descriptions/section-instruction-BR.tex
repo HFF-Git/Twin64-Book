@@ -5,7 +5,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{BR RegB [, RegR ]}
+\texttt{BR [.W/D/Q] RegB [, RegR ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -14,39 +14,51 @@ The \texttt{BR} instruction uses the following instruction format: \\
 
 \begin{flushleft}
 \drawInstrFormat
-    {0,1,3,5,6.5,8.5,16} % adjust positions as needed
-    {\OpCodeGrpBR, \OpCodeBR, RegR, 0, RegB, 0}
+    {0,1,3,5,6.5,8.5,9.5,16}
+    {\OpCodeGrpBR, \OpCodeBR, RegR, 0, RegB, scale, 0}
 \end{flushleft}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{BR} instruction performs an unconditional branch to a target address computed relative to the current instruction address segment (\texttt{IA}). The target address is formed by taking the contents of \texttt{RegB}, shifting it left by two bits, and adding it to the \texttt{IA} offset portion. The return link is stored in \texttt{RegR}.
+
+The \texttt{BR} instruction performs an unconditional branch to a target address computed relative to the current instruction address (\texttt{IA}). The target address is formed by taking the contents of \texttt{RegB}, shifting the value according to the selected scale factor, and adding the result to the instruction address offset portion.
+
+Optionally, a return link may be written to \texttt{RegR}. When specified, \texttt{RegR} receives the address of the next sequential instruction, allowing the \texttt{BR} instruction to be used for procedure calls or control-flow transfers that require a return address.
+
+The scale factor determines the effective alignment and range of the branch offset. If no suffix is specified, the default scaling is applied.
+
+\begin{smallGapItemize}
+    \item \texttt{.W} (scale = 0) - \texttt{RegB} is shifted left by 2 bits.
+    \item \texttt{.D} (scale = 1) - \texttt{RegB} is shifted left by 3 bits.
+    \item \texttt{.Q} (scale = 2) - \texttt{RegB} is shifted left by 4 bits.
+\end{smallGapItemize}
+
+This mechanism enables efficient branching to word-, doubleword-, or quadword- aligned targets while keeping the instruction encoding compact.
+
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Operation}
 \begin{lstlisting}[style=iPageOpStyle]
 if ( instr.[RegR] != 0 ) {
-	
-    RegR.[51:32] <- PSR.[IA-REG];
+
+    RegR.[51:32] <- PSR.[IA-REG];
     RegR.[31:0]  <- addOfs32( PSR.[IA-OFS], 4 );
 }
 
-PSR.[IA-OFS] <- addOfs32( PSR.[IA-OFS], RegB.[31:0] << 2 );
+PSR.[IA-OFS] <- addOfs32( PSR.[IA-OFS], scale( RegB.[31:0], scale ));
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Exceptions}
-Taken Branch Trap\\
+Taken Branch Trap \\
 Instruction TLB Miss Trap
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+
+This instruction is typically used for branch tables. A branch table entry can be 1, 2, or 4 words, depending on the selected scale scheme. The branch target is computed entirely in the address-generation path and does not require additional arithmetic instructions. The optional link register write allows the instruction to serve both as a general control-flow branch and as a lightweight call mechanism.
 \end{iPageDescEntry}
-
-??? check if this is word aligned or just the register...
-
