@@ -148,9 +148,7 @@ For read access, the privilege level must be at least as high as the PL1 field; 
 \section*{Access Protection}
 \addcontentsline{toc}{section}{Access Protection}
 
-The second dimension of access protection is \textbf{region ID checking}. Twin-64 allows the processor to store up to eight protection ID values in the control registers \texttt{CR4} through \texttt{CR7}, which are accessible to the currently executing process. For each access to an object within a region with the protection-check bit set, at least one of the protection ID registers must contain a matching object and region ID. Otherwise, a protection violation trap is raised.
-
-A protection ID consists of two parts. The region ID corresponds to the region portion of a virtual address. Access to the region is permitted only when the region ID matches. The object ID is an additional field that allows individual protection of objects within the same region. This value is an arbitrary number selected by system software at object creation time. An object ID value of zero bypasses this additional check.
+The second dimension of access protection is \textbf{region ID checking}. Twin-64 allows the processor to store up to eight region ID values in the control registers \texttt{CR4} through \texttt{CR7}, which are accessible to the currently executing process. For each access to a region at least one of the protection ID registers must contain a matching region ID. Otherwise, a protection violation trap is raised.
 
 \begin{figure}[H]
 \begin{center}
@@ -168,7 +166,7 @@ A protection ID consists of two parts. The region ID corresponds to the region p
     \draw[-] (\leftofs+0.5,0.5) -- (\leftofs+0.5,1.5);
     \draw[-] (\leftofs+3,0.5) -- (\leftofs+3,1.5);
   	  	
-  	\node at (\leftofs + 1.5, 1) {Object Id};
+  	\node at (\leftofs + 1.5, 1) {0};
    	\node at (\leftofs + 5.5, 1) {Region Id};
 	\node at (\leftofs + 0.25, 1) {W};
 		
@@ -184,9 +182,9 @@ A protection ID consists of two parts. The region ID corresponds to the region p
 \label{fig:Protection id}
 \end{figure}
 
-When protection ID checking is enabled, the eight protection identifiers are compared with the region and object ID stored in the TLB entry for the target address to validate the requested access. The rightmost bit of each region ID register serves as a write-disable (W) bit. When the W bit is set, that protection ID cannot be used to grant write access.
+The rightmost bit of each region ID register stored in the one of the control registers \texttt{CR4} to \texttt{CR7} serves as a write-disable (W) bit. When the W bit is set, that protection ID cannot be used to grant write access.
 
-Protection ID checking is typically used to enforce controlled access to shared or private memory regions. A common example is a stack data region accessible at user privilege level. Since the CPU implements a global virtual memory address space, any task could potentially access the stack of another task. By enabling protection ID checking and loading the corresponding object/region ID into one of the protection ID registers for the owning process, only that user task is permitted to access its stack data region with a matching protectoon ID.
+Protection ID checking is typically used to enforce controlled access to shared or private memory regions. A common example is a stack data region accessible at user privilege level. Since the CPU implements a global virtual memory address space, any task could potentially access the stack of another task. By enabling protection ID checking and loading the corresponding object/region ID into one of the protection ID registers for the owning process, only that user task is permitted to access its stack data region with a matching protection ID.
 
 
 \section*{Access Check Flow}
