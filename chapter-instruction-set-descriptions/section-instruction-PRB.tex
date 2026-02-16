@@ -7,8 +7,8 @@
 \addcontentsline{toc}{section}{PRB — Probe Virtual Address}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{PRB RegR, RegB, RegA} \\
-    \texttt{PRB RegR, RegB, mode}
+    \texttt{PRB.A RegR, RegB, RegA} \\
+    \texttt{PRB .R/W/X RegR, RegB}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
@@ -26,19 +26,8 @@
     The \texttt{PRB} instruction probes the Translation Lookaside Buffer (TLB) 
     to determine whether the effective address in \texttt{RegB} has a valid mapping. 
     The result of the probe is returned in \texttt{RegR}. A value of \texttt{0} indicates that no mapping exists, while a \texttt{1} indicates a valid mapping.  
-
-    The mode specifies the type of access being probed:
     
-    \begin{center}
-    \begin{tabular}{|c|l|}
-    \hline
-    \textbf{Value} & \textbf{Access type} \\ \hline
-    0 & \texttt{Read access}  \\ \hline
-    1 & \texttt{Write access} \\ \hline
-    2 & \texttt{Execute access} \\ \hline
-    3 & \texttt{RegA.[1..0] contains the mode} \\ \hline
-    \end{tabular}
-    \end{center}
+    The test option is encoded in the mode field. An instruction option of \texttt{R} encodes as zero, a \texttt{W} encodes as one and \texttt{X} encodes as two. A mode field value of three indicates that the instruction option is encoded in right most two bits of \texttt{RegA}. Here a value of 3 is undefined.
 \end{iPageDescEntry}
 
 \begin{iPageDescOpEntry}{Operation}
