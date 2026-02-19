@@ -8,7 +8,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{DIAG id, RegB, RegA}
+\texttt{DIAG id, RegB, RegA [ , RegR ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ The \texttt{DIAG} instruction uses the following instruction format: \\
 \begin{iPageDescEntry}{Description}
 The \texttt{DIAG} instruction provides a mechanism for diagnostic and system level operations.  
 
-The concatenated \texttt{id1} and \texttt{id2} fields specify the diagnostic function. The \texttt{RegB} and \texttt{RegA} fields may provide operands or data required by the diagnostic function. Any result is returned in \texttt{RegR}.
+The concatenated \texttt{id1} and \texttt{id2} fields specify the diagnostic function. The \texttt{RegB} and \texttt{RegA} fields may provide operands or data required by the diagnostic function. An optional result is returned in \texttt{RegR}.
  
 \end{iPageDescEntry}
 
