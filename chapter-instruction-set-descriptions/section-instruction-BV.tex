@@ -21,7 +21,7 @@ The \texttt{BV} instruction uses the following instruction format: \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-he \texttt{BV} instruction performs an unconditional region relative branch. The target address offset is formed by taking the contents of \texttt{RegX}, shifting the value according to the selected scale factor, and adding the result to \texttt{RegB}. The target address region is unchanged.
+he \texttt{BV} instruction performs an unconditional region relative branch. The target address offset is formed by taking the contents of \texttt{RegX}, shifting the value according to the selected scale factor, and adding the result to \texttt{RegB}. The target address region is  the region portion of the current instruction address.
 
 Optionally, a return link may be written to \texttt{RegR}. When specified, \texttt{RegR} receives the address of the next sequential instruction, allowing the \texttt{BV} instruction to be used for procedure calls or control-flow transfers that require a return address.
 
