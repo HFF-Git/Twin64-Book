@@ -16,7 +16,7 @@
 
     \begin{flushleft}
     \drawInstrFormat
-        {0, 1,3,5,6.5,8.5,9.5,11.5,16}
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
         {\OpCodeGrpSYS, \OpCodePTLB, RegR, 0, RegB, 0, RegA, 0}
     \end{flushleft}
     
@@ -47,9 +47,13 @@
     
     \begin{flushleft}
 	\drawInstrFormatSixtyFour
-        {0, 2, 5, 6, 7, 13, 16}
-        {Flags, 0, Acc, Size, PPN, 0}
+        {0,0.25,0.5, 5, 6, 7, 13, 16}
+        {L,U, 0, Acc, Size, PPN, 0}
     \end{flushleft}
+    
+    The L bit will lock the entry in the TLB. When looking for a free entry, these entries are skipped. If all entries are locked entry 0, TLB entry zero is selected for replacement. 
+    
+    The U bit will mark the address range described by the TLB entry as uncached.
 \end{iPageDescEntry}
 
 \begin{iPageDescOpEntry}{Operation}
