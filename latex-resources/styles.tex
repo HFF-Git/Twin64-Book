@@ -41,6 +41,20 @@
   {Part \thepart}
   {20pt}
   {\Huge}
+  
+ %--------------------------------------------------------------------------------
+% Unnumbered chapter and section style.
+%
+%--------------------------------------------------------------------------------
+\newcommand{\unnumberedChapter}[1]{%
+  \chapter*{#1}%
+  \addcontentsline{toc}{chapter}{#1}%
+}
+
+\newcommand{\unnumberedSection}[1]{%
+  \section*{#1}%
+  \addcontentsline{toc}{section}{#1}%
+}
 
 %--------------------------------------------------------------------------------
 % Chapter title settings 
