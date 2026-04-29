@@ -47,13 +47,13 @@
     
     \begin{flushleft}
 	\drawInstrFormatSixtyFour
-        {0,0.25,0.5, 5, 6, 7, 13, 16}
-        {L,U, 0, Acc, Size, PPN, 0}
+        {0,0.25,0.5, 0.75, 5, 6, 7, 13, 16}
+        {0, L,U, 0, Acc, Size, PPN, 0}
     \end{flushleft}
     
-    The L bit will lock the entry in the TLB. When looking for a free entry, these entries are skipped. If all entries are locked entry 0, TLB entry zero is selected for replacement. 
+    The L bit will lock the entry in the TLB. When looking for a free entry, these entries are skipped. If all entries are locked entry 0, TLB entry zero is selected for replacement. The U bit will mark the address range described by the TLB entry as uncached.
     
-    The U bit will mark the address range described by the TLB entry as uncached.
+    The TLB arguments layout shows a page size of 4Kb. Depending on the page size specified in the size field, the VPN and PPN fields are shorter and the offset is larger. The sum of both fields is however always 52 bits for virtual pages, and 36 bits for physical pages.
 \end{iPageDescEntry}
 
 \begin{iPageDescOpEntry}{Operation}

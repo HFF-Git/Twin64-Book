@@ -31,7 +31,9 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
-    The \texttt{PxTLB} instructions purge (remove) an entry from the translation lookaside buffer (TLB). The entry to remove is identified by the effective address formed from \texttt{RegB} and \texttt{RegX}. This is privileged instruction.
+    The \texttt{PxTLB} instructions purge (remove) an entry from the translation lookaside buffer (TLB). The entry to remove is identified by the effective address formed by adding \texttt{RegX} to \texttt{RegB}. This is privileged instruction.
+    
+    On multi-processor system, the purge TLB instruction affects the TLB of all processors.
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Operation}

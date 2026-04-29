@@ -1,0 +1,37 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\section*{PTLB — Purge TLB entry}
+\addcontentsline{toc}{section}{PDTLB — Purge TLB entry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{ptlb [ <vAdr> ]}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{PDTLB} command invalidates entries in the unified Translation Lookaside Buffer (TLB). If a virtual address \texttt{vAdr} is specified, only the TLB entry matching that virtual address range is purged. If no address is supplied, all data TLB entries are invalidated.
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Example}
+\begin{lstlisting}[style=iPageOpStyle]
+
+(3)-># purge the entire instruction TLB
+(3)->ptlb
+
+(4)-># purge the instruction TLB entry covering virtual address 0x1000_0000
+(4)->ptlb 0x80_1000_0000
+
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+If the simulator environment consists of serval processors, all TLBs will invalidate the specified virtual address range.
+\end{iPageDescEntry}

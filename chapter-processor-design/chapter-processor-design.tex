@@ -1,6 +1,8 @@
 \chapter*{Processor Design}
 \addcontentsline{toc}{chapter}{Processor Design}
 
+// ??? simulator does use a pipelined design. This chapter is for reference.
+
 \section*{Pipeline Stages}
 \addcontentsline{toc}{section}{Pipeline Stages}
 
@@ -15,14 +17,14 @@ This stage is responsible for retrieving instructions from memory, decoding
 them, and accessing the register file. It combines the initial instruction fetch
 with the preparation of operands required for execution.
 
-\subparagraph{Instruction Memory Access}
+\subparagraph{Instruction Memory Access Substage}
 Fetch the next instruction from the instruction cache using the program state
 register. The program counter (PC) is updated to point to the next sequential
 instruction or prepared for a branch target if a branch was predicted in a
 previous cycle. This substage ensures that the instruction is available for
 decoding without delay.
 
-\subparagraph{Instruction Decode}
+\subparagraph{Instruction Decode Substage}
 Decode the instruction opcode to determine the operation type, source and
 destination operands, and any immediate values. This substage also prepares
 control signals and identifies register file accesses needed for the next stages.
@@ -34,22 +36,22 @@ responsible for calculating memory addresses for load/store instructions and
 branch target addresses for conditional or unconditional branches, as well as
 accessing the data cache when required.
 
-\subparagraph{Address Computation}
+\subparagraph{Address Computation Substage}
 Compute memory addresses for load/store instructions or the target address for
 branch instructions. This includes evaluating effective addresses, offsets,
 and index computations as required by the instruction.
 
-\subparagraph{Memory Access}
+\subparagraph{Memory Access Substage}
 Perform read or write operations to the data cache. This substage ensures that
 data is available for execution or written back to memory as needed.
 
 %--------------------------------------------------------------------------------
-\paragraph{3. Execution Stage}
+\paragraph{3. Execution Stage Substage}
 This stage performs arithmetic, logical, and branch resolution operations,
 committing results to the destination registers or updating the program state
 register. Both substages are capable of executing a single operation per cycle.
 
-\subparagraph{Execution / Branch Resolution}
+\subparagraph{Execution / Branch Resolution Substage}
 Execute arithmetic or logical instructions and commit the results to the
 destination registers. For branch instructions, evaluate the branch condition
 and update the program state register accordingly to reflect the correct next

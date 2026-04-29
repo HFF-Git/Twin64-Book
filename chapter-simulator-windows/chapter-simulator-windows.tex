@@ -109,28 +109,10 @@ Toggling the window once more displays the full set of control registers.
 As with all simulator windows, multiple instances of the same window type may be created. In the case of the CPU window, all three view modes can be displayed simultaneously by creating multiple windows and toggling each one to the desired view.
 
 %--------------------------------------------------------------------------------
-\section*{Cache Window}
-\addcontentsline{toc}{section}{Cache Window}
-
-In addition to the CPU core, a processor may include one or more caches. The simulator supports instruction caches, data caches, and optionally a unified cache. All cache-related information is displayed in cache windows.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCache.pdf}};
-\end{tikzpicture}
-\caption{Simulator Cache Window}
-\label{fig:simulator-cache-window}
-\end{figure}
-
-A cache window displays the cache type, the processor to which it belongs, the currently selected cache set, and the line index at which the window body begins. The window body presents cache contents line by line. Each cache line includes its status bits, tag value, and cache block data.
-
-%--------------------------------------------------------------------------------
 \section*{TLB Window}
 \addcontentsline{toc}{section}{TLB Window}
 
-The TLB (Translation Lookaside Buffer) window displays the contents of the processor’s address translation cache. The TLB accelerates virtual-to-physical address translation by caching recently used page table entries. The simulator supports instruction TLBs, data TLBs, and optionally a unified TLB. All TLB-related information is presented in TLB windows.
+The TLB (Translation Lookaside Buffer) window displays the contents of the processor’s address translation cache. The TLB accelerates virtual-to-physical address translation by caching recently used page table entries. The simulator supports a unified TLB with instruction TLB and data TLB entries cached at the CPU level. All unified TLB-related information is presented in TLB windows.
 
 \begin{figure}[H]
 \centering

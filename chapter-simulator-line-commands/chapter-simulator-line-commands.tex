@@ -34,17 +34,11 @@ This chapter presents the line mode commands. Although they are called line mode
 	\midrule
 	\textbf{EXIT} & leave the Twin-64 simulator \\
 	\midrule
-	\textbf{FDCA} & flush data cache from CPU \\
-	\midrule
-	\textbf{FICA} & flush instruction cache from CPU \\
-	\midrule
-	\textbf{HELP} & display help infomration \\
+	\textbf{HELP} & display help information \\
 	\midrule
 	\textbf{HIST} & display command history stack \\
 	\midrule
-	\textbf{IDTLB} & insert into a data TLB of a CPU \\
-	\midrule
-	\textbf{IDTLB} & insert into a instruction TLB of a CPU \\
+	\textbf{ITLB} & insert into the unified TLB of a CPU \\
 	\midrule
 	\textbf{LF} & load ELF file into memory \\
 	\midrule
@@ -54,13 +48,7 @@ This chapter presents the line mode commands. Although they are called line mode
 	\midrule
 	\textbf{NM} & add a module to the simulated environment \\
 	\midrule
-	\textbf{PDCA} & purge from data cache of a CPU \\
-	\midrule
-	\textbf{PDTLB} & purge from data TLB of a CPU \\
-	\midrule
-	\textbf{PICA} & purge from instruction cache of a CPU \\
-	\midrule
-	\textbf{PITLB} & purge from instruction TLB of a CPU \\
+	\textbf{PTLB} & purge from the unified TLB of a CPU \\
 	\midrule
 	\textbf{REDO} & edit and do a command from the command history stack \\
 	\midrule
@@ -110,20 +98,14 @@ syntax, parameters, and usage examples.
 \input{chapter-simulator-line-commands/chapter-sim-cmd-DW}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-ENV}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-EXIT}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-FDCA}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-FICA}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-HELP}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-HIST}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-IDTLB}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-IITLB}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-ITLB}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-LF}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-MA}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-MR}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-NM}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-PDCA}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-PDTLB}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-PICA}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-PITLB}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-PTLB}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-REDO}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-RM}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-RESET}
