@@ -3,18 +3,18 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{RESET - Reset T64 modules}
-\addcontentsline{toc}{section}{RESET - Reset T64 modules}
+\section*{HALT — Halt a T64 module}
+\addcontentsline{toc}{section}{HALT — Halt a T64 module}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{RESET <modNum> | ALL } \\
+\texttt{HALT [ <modNum> | ALL  ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{RESET} command resets a module or the entire system.
+The \texttt{HALT} command will stop a T64 module or the entire simulation. Modules running in a thread, such as processors and I7O modules, will enter the HALT state and wait for restarting.
 
 \end{iPageDescEntry}
 
@@ -22,12 +22,18 @@ The \texttt{RESET} command resets a module or the entire system.
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+(5)->halt 3        # halt module 3
+(6)->
+
+(6)->halt all      # halt the entire simulation
+(7)->
 
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
+
 None.
+
 \end{iPageDescEntry}
