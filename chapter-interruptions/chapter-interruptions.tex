@@ -121,29 +121,27 @@ Each entry consists of 8 instructions that can be executed. It is the responsibi
     \midrule
     \textbf{10} & Non-access Instruction TLB Miss & current instruction & - & - \\
     \midrule
-    \textbf{11} & Instruction Memory Protection & current instruction & - & - \\
+    \textbf{11} & Instruction Access Rights & current instruction & - & - \\
     \midrule
-    \textbf{12} & Instruction Alignment & current instruction & instruction & target address \\
+    \textbf{12} & Instruction Memory Protection & current instruction & - & - \\
     \midrule
-
-    \textbf{13} & Data TLB Miss & current instruction & instruction & target address \\
-    \midrule
-    \textbf{14} & Non-access Data TLB Miss & current instruction & instruction & target address \\
-    \midrule
-    \textbf{15} & Data Access Rights & current instruction & instruction & target address \\
-    \midrule
-    \textbf{16} & Data Protection & current instruction & instruction & target address \\
-    \midrule
-    \textbf{17} & Data Alignment & current instruction & instruction & target address \\
-    \midrule
-    \textbf{18} & Page Reference Trap & current instruction & instruction & target address \\
+    \textbf{13} & Instruction Alignment & current instruction & instruction & target address \\
     \midrule
 
-    \textbf{19} & Breakpoint Trap & current instruction & instruction & trap code \\
+    \textbf{14} & Data TLB Miss & current instruction & instruction & target address \\
     \midrule
-    \textbf{20} & Trace Trap & next instruction & - & - \\
-
-\end{longtable}
+    \textbf{15} & Non-access Data TLB Miss & current instruction & instruction & target address \\
+    \midrule
+    \textbf{16} & Data Access Rights & current instruction & instruction & target address \\
+    \midrule
+    \textbf{17} & Data Protection & current instruction & instruction & target address \\
+    \midrule
+    \textbf{18} & Data Alignment & current instruction & instruction & target address \\
+    \midrule
+    \textbf{19} & Page Reference Trap & current instruction & instruction & target address \\
+    \midrule
+    \textbf{20} & Breakpoint Trap & current instruction & instruction & trap code \\
+   \end{longtable}
 
 \section*{Summary}
 \addcontentsline{toc}{section}{Summary}

@@ -118,7 +118,9 @@ Each memory access is checked against the allowed access type defined in the pag
 \label{fig:Access control information field}
 \end{figure}
 
-For read access, the privilege level must be at least as high as the PL1 field; for write access, it must be at least as high as PL2. Exceptions are execute and gateway pages, where write access is allowed only for privileged code. For execute access, the privilege level must be at least PL1 and no higher than PL2. If the instruction’s privilege level falls outside these bounds, a privilege violation trap is raised. If the page type does not match the instruction’s access type, an access violation trap is raised. In both cases, the instruction is aborted, and a memory protection trap occurs.
+A CPU running in privilege mode bypasses the access check. 
+
+For read access, the privilege level must be at less than or equal as the PL1 field; for write access, it must be less than or equal as the PL2 field. Exceptions are execute and gateway pages, where write access is allowed only for privileged code. For execute access, the privilege level must be less than or equal than the PL1 field. and no higher than PL2. If the instruction’s privilege level falls outside these bounds, a privilege violation trap is raised. If the page type does not match the instruction’s access type, an access violation trap is raised. In both cases, the instruction is aborted, and a memory protection trap occurs.
 
 \begin{longtable}{@{}p{0.2\linewidth}p{0.2\linewidth}p{0.2\linewidth}p{0.25\linewidth}@{}}
     \caption{Access type checking} \\
@@ -136,13 +138,13 @@ For read access, the privilege level must be at least as high as the PL1 field; 
     \endfoot
     \bottomrule
     \endlastfoot
-    \texttt{0 - read-only} & \texttt{PL <= PL1} & \texttt{not allowed} & \texttt{not allowed} \\
+    \texttt{0 - read-only} & \texttt{PL <= PL1} & \texttt{PL == 0} & \texttt{not allowed} \\
     \midrule 
     \texttt{1 - read-write} & \texttt{PL <= PL1} & \texttt{PL <= PL2} & \texttt{not allowed} \\
     \midrule 
-    \texttt{2 - execute} & \texttt{PL <= PL1} & \texttt{PL == 0} & \texttt{PL2 <= PL <= PL1} \\
+    \texttt{2 - execute} & \texttt{PL <= PL1} & \texttt{PL == 0} & \texttt{PL <= PL1} \\
     \midrule 
-    \texttt{3 - gateway} & \texttt{PL <= PL1} & \texttt{PL == 0} & \texttt{PL2 <= PL <= PL1} \\
+    \texttt{3 - gateway} & \texttt{PL <= PL1} & \texttt{PL == 0} & \texttt{PL <= PL1} \\
 \end{longtable}
 
 \section*{Access Protection}
