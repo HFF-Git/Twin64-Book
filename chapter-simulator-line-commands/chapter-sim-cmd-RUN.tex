@@ -8,15 +8,15 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{RUN} \\
+\texttt{RUN [ <modNum ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{RUN} command starts continuous execution of the simulation. Once invoked, control is transferred to the TWIN-64 system, and all configured and enabled processors execute instructions continuously. Execution proceeds until a condition occurs that returns control to the simulator.
+The \texttt{RUN} command starts continuous execution of the simulation or resumes a halted simulation. Once invoked, control is transferred to the TWIN-64 system, and all configured and enabled processors execute instructions continuously. Execution proceeds until a condition occurs that returns control to the simulator.
 
-// ??? explain what the conditions for halting are ...
+The module parameter allows to specifically place a halted processor module into running mode.
 
 \end{iPageDescEntry}
 

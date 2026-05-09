@@ -7,7 +7,7 @@
 \addcontentsline{toc}{section}{CWL — Set command window lines}
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{cwl <lines>} \\
+\texttt{cwl [ <lines> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -16,9 +16,7 @@
 The \texttt{CWL} command sets the number of content lines displayed in the command
 window.
 
-Changing this value controls how many lines of command output are visible at
-once. The command window is resized accordingly to accommodate the specified
-number of lines. 
+Changing this value controls how many lines of command output are visible at once. The command window is resized accordingly to accommodate the specified number of lines. If the parameter is omitted, the simulator default value for the window type will be used.
 
 The cursor up and down keys scroll inside the command window. If the lines argument is omitted, the window default value is used.
 

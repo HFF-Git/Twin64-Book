@@ -16,7 +16,7 @@
 
 The \texttt{ITLB} command inserts a translation entry into the unified Translation Lookaside Buffer (TLB). The \texttt{vAdr} parameter specifies the virtual address of the mapping, while \texttt{pAdr} specifies the corresponding physical memory address.
 
-To reduce TLB lookup overhead and improve translation efficiency, the instruction TLB supports mappings over contiguous virtual address ranges rather than only fixed-size pages. Multiple page sizes are supported, allowing software to choose an appropriate granularity based on usage patterns. The supported page sizes are 4~KB, 64~KB, 1~MB, and 16~MB.
+To reduce TLB lookup overhead and improve translation efficiency, the TLB supports mappings over contiguous virtual address ranges rather than only fixed-size pages. Multiple page sizes are supported, allowing software to choose an appropriate granularity based on usage patterns. The supported page sizes are 4~KB, 64~KB, 1~MB, and 16~MB.
 
 The \texttt{acc} parameter encodes the access permissions and privilege requirements for the translation as shown in the TLB description. It specifies whether the mapped page may be read, written, or executed, as well as whether it is a gateway page along with the minimum privilege level required for data fetch. Every data fetch is checked against these access attributes, and violations result in a protection fault trap.
 
@@ -33,10 +33,10 @@ Optional flags may be supplied to control the behavior of the TLB entry. These f
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-# insert a translation for 0x4000_FFFF_0000 at 0x01_1000 with a 
+# insert a translation for 0x1000_FFFF_0000 at 0x1_0000 with a 
 # page size of 64Kb, access rights read-write, user level
 
-(8)->idtlb 0x1000_FFFF_0000, 0x5000, 1, 0x7
+(8)->itlb 0x1000_FFFF_0000, 0x1_0000, 1, 0x7
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

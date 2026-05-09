@@ -30,12 +30,13 @@ default attributes, such as the number of lines, layout, and numeric radix.
 \texttt{CPU}         & \texttt{modNum} & \texttt{-} & Create a CPU window. \\ \hline
 \texttt{TLB}         & \texttt{modNum} & \texttt{-} & Create a TLB window. \\ \hline
 \texttt{TEXT}        & \texttt{filePath} & \texttt{-} & Create a text window displaying the content of a text file. \\ \hline
-\texttt{CODE}        & \texttt{memAdr} & \texttt{-} & Create a memory window showing assembly code. \\ \hline
+\texttt{CODE}        & \texttt{memAdr} & \texttt{-} & Create a memory window showing assembly code. The first argument is the memory address, the second the module number of the processor.\\ \hline
 \end{tabularx}
 \end{flushleft}
 
-The window type \texttt{PROC} is a collection that includes CPU, ITLB, DTLB,
-ICACHE, and DCACHE windows for the specified module.
+The window type \texttt{PROC} is a collection that includes CPU and TLB  windows for the specified module.
+
+The window type \texttt{CODE} accepts in addition to the memory address a processor module number. When the module is known, the module instruction address can be compared to the memory window address range and an indicator where the instruction is will be displayed.
 
 \end{iPageDescEntry}
 
@@ -44,7 +45,7 @@ ICACHE, and DCACHE windows for the specified module.
 \begin{lstlisting}[style=iPageOpStyle]
 wn mem, 0x1000      # Create a memory window at address 0x1000.
 wn cpu, 3           # Create a CPU window for module 3.
-wn dtlb, 4          # Create a data TLB window for module 4.
+wn tlb, 4           # Create a TLB window for module 4.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

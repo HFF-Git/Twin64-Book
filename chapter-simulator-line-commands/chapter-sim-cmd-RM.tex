@@ -8,13 +8,15 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{RM modNum | ALL} \\
+\texttt{RM <modNum> | ALL} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{RM} command removes a T64 module from the system. If there are any windows associated with the module, they will be removed as well. The ALL option removes all modules.
+The \texttt{RM} command removes a T64 module from the Twin-64 system. If there are any windows associated with the module, they will be removed as well. The ALL option removes all modules.
+
+Removing a module should be done with care. There could be interdependencies between modules, and removing one can cause invalid addresses and so on. It is however good practice to issue an remove all command in a module configuration file to ensure a clean state, especially when module configurations are loaded into a simulator that has already loaded a set of modules. 
 
 \end{iPageDescEntry}
 

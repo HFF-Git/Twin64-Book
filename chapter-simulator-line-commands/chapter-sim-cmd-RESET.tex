@@ -14,7 +14,9 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{RESET} command resets a module or the entire system.
+The \texttt{RESET} command resets a module or the entire system. The module will execute its defined reset tasks. The result is module specific. A memory module will clear its memory range, an I/O module will reset its internal state, and a processor will clear its internal registers and start at the architected instruction address.
+
+Like all commands dealing with module management, this command should be taken with care. A common use could be to have this command as the last command in a configuration file to start the Twin-64 system.
 
 \end{iPageDescEntry}
 
@@ -22,7 +24,7 @@ The \texttt{RESET} command resets a module or the entire system.
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+RESET 3               # reset module number three.
 
 \end{lstlisting}
 \end{iPageDescOpEntry}

@@ -14,7 +14,9 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{WB} command scrolls a window backward. The optional \texttt{<amt>} parameter specifies the number of items to move backward. The meaning of an item is window-type specific. For example, a physical memory window moves in units of 8 bytes, while a cache window moves in units of cache lines. If this parameter is omitted, the number of items to move backward is derived from the number of items per line and the number of lines currently displayed in the window. For example, a cache window displaying three lines moves backward by three cache-line entries.
+The \texttt{WB} command scrolls a window backward. The optional \texttt{<amt>} parameter specifies the number of items to move backward. The meaning of an item is window-type specific. For example, a physical memory window moves in units of 8 bytes, while a cache window moves in units of cache lines. 
+
+If the parameter is omitted, the number of items to move backward is derived from the number of items per line and the number of lines currently displayed in the window. For example, a TLB window displaying three lines moves backward by three TLB entries.
 
 Each scrollable window has an item address limit determined by its window type. When scrolling past this limit, the address is set to the limit minus the number of lines to show.
 

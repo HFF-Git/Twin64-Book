@@ -16,7 +16,9 @@
 
 The \texttt{STEP} command advances the a T64 processor module by executing one or more instructions. When invoked without an argument, the simulator executes exactly one instruction and then returns control to the simulator console. If the module number is omitted, the module number of the currently selected processor window is used.
 
-After the requested number of steps has completed, execution halts and control returns to the simulator command interface, allowing inspection of state, registers, memory, or windows.
+After the requested number of steps have completed, execution halts and control returns to the simulator command interface, allowing inspection of state, registers, memory, or windows.
+
+Only a halted processor accepts step commands. The sequence is typically that a processor module encountered a trap or debug breakpoint and passed control to the simulator. After inspection the step command resumes execution of the processor module.
 
 \end{iPageDescEntry}
 
@@ -29,6 +31,9 @@ After the requested number of steps has completed, execution halts and control r
 
 (6)->s 10          # execute ten instructions
 (7)->
+
+(8)->s 10, 5       # execute ten instructions on processor module 5
+(9)->
 
 \end{lstlisting}
 \end{iPageDescOpEntry}

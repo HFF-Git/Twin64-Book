@@ -8,13 +8,15 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{HALT [ <modNum> | ALL  ]} \\
+\texttt{HALT [ <modNum>  ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{HALT} command will stop a T64 module or the entire simulation. Modules running in a thread, such as processors and I7O modules, will enter the HALT state and wait for restarting.
+The \texttt{HALT} command will stop a T64 module or the entire simulation. Modules running in a thread, such as processors and I/O modules, will enter the HALT state and wait for restarting. If the module number is omitted, the entire system is halted.
+
+Care should be taken arbitrarily halt a module. During execution there are perhaps dependencies between modules. The effect of halting a module can also impact other modules. 
 
 \end{iPageDescEntry}
 

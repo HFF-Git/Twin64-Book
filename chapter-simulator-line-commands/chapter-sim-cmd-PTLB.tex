@@ -8,13 +8,13 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{ptlb [ <vAdr> ]}
+\texttt{ptlb [ <vAdr> | ALL ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{PDTLB} command invalidates entries in the unified Translation Lookaside Buffer (TLB). If a virtual address \texttt{vAdr} is specified, only the TLB entry matching that virtual address range is purged. If no address is supplied, all data TLB entries are invalidated.
+The \texttt{PDTLB} command invalidates entries in the unified Translation Lookaside Buffer (TLB). If a virtual address \texttt{vAdr} is specified, only the TLB entry matching that virtual address range is purged. The \texttt{ALL} parameter will remove all entries from the TLB. The virtual address parameter will remove all TLB entries covering this address. 
 
 \end{iPageDescEntry}
 
