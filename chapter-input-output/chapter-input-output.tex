@@ -311,12 +311,12 @@ For example, a terminal I/O controller has a hard physical page in the I/O addre
 	\node at ( \middleofs, {5 + 0.5}) { reserved, set to zero };
 	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
   	
-  	% IOREG14
+  	% IOREG30
   	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);
   	\node[anchor = east] at ({\leftofs - 0.75}, {1 + 0.5}) { IOREG30 };
   	\node at ( \middleofs, {1 + 0.5}) { 0 };
   	
-  	% IOREG15
+  	% IOREG31
   	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
   	\node[anchor = east] at ({\leftofs - 0.75}, {0 + 0.5}) { IOREG31 };
   	\node at ( \middleofs, {0 + 0.5}) { 0 };
@@ -350,6 +350,16 @@ For example, a terminal I/O controller has a hard physical page in the I/O addre
     \midrule
     \textbf{IO\_DATA} & ... \\
     \midrule
+    \textbf{IO\_EIR} & ... \\
+    \midrule
+    \textbf{IO\_MODULE\_CONFIG} & ... \\
+    \midrule
+    \textbf{IO\_MODULE\_VERSION} & ... \\
+    \midrule
+    \textbf{IO\_MODULE\_ID} & ... \\
+    \midrule
+    \textbf{IO\_MODULE\_TYPE} & ... \\
+    \midrule
     \textbf{IO\_SPA\_ADR\_0} & ... \\
     \midrule
     \textbf{IO\_SPA\_LEN\_0} & ... \\
@@ -357,14 +367,6 @@ For example, a terminal I/O controller has a hard physical page in the I/O addre
     \textbf{IO\_SPA\_ADR\_1} & ... \\
     \midrule
     \textbf{IO\_SPA\_LEN\_1} & ... \\
-    \midrule
-    \textbf{IO\_MODULE\_ID} & ... \\
-    \midrule
-    \textbf{IO\_MODULE\_TYPE} & ... \\
-    \midrule
-    \textbf{IO\_MODULE\_VERSION} & ... \\
-    \midrule
-    \textbf{IO\_MODULE\_CAPABILITIES} & ... \\
     \midrule
     \textbf{IO\_ENTRY\_TAB\_OFS} & ... \\
     \midrule
@@ -401,17 +403,23 @@ A module can set a bit in the external interrupt request register. There are 64 
 
 When not masked by the EIMR register, the interrupt is handled.
 
-Each module has a EIREQ register. This register contains two fields. The first is the target processor HPA page, the second is the bit position to set in the EIRR register. This is normally set up at system initialization time, but can also be set for each I/O request. 
+Each module has a \texttt{EIR} register. This register contains two fields. The first is the target processor HPA page address, the second is the bit position to set in the EIRR register. This is normally set up at system initialization time, but can also be set for each I/O request. 
+
+\begin{center}
+\drawInstrFormatSixtyFour
+        {0, 8, 14.5, 16}
+        {0, ProcHpa, EIR-Bit}
+\end{center}
 
 
-\section*{I/O dependent Code}
-\addcontentsline{toc}{section}{I/O dependent Code}
+\section*{Module dependent Code}
+\addcontentsline{toc}{section}{Module dependent Code}
 
 ??? what it is 
 
 ??? how to access 
 
-??? entry point table
+??? entry point table in HPA
 
 ??? code pieces
 

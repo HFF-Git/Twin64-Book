@@ -1,0 +1,46 @@
+\chapter*{Processor Dependent Code}
+\addcontentsline{toc}{chapter}{Processor Dependent Code}
+This chapter presents the Twin-64 processor dependent code....
+
+\section*{Concepts}
+\addcontentsline{toc}{section}{Concepts}
+´
+\section*{PDC Address Space}
+\addcontentsline{toc}{section}{PDC Address Space}
+
+0xF000\_0000 - start of PDC. Reset vector. 
+
+0xF000\_0004 - PDC entry point. Jumps to PDC entry function.
+
+0xF000\_0008 - reserved.
+
+0xF000\_000C - reserved.
+
+Calling convention:
+
+ARG0 - entry point number.
+
+ARG1, ARg2, ARG3 - arguments.
+
+All also function as RET0 to RET3.
+
+REGn - REGm - caller saves are used locally.
+
+PDC has perhaps a memory area in page zero to use as working memory.
+
+PDC also needs a stack to run on -> in lower memory.
+
+PDC is called privileged, interrupts disabled, uncached.
+
+
+ 
+
+\section*{Design Rationale}
+\addcontentsline{toc}{section}{Design Rationale}
+
+\chapter*{Processor Dependent Code Functions}
+\addcontentsline{toc}{chapter}{Processor Dependent Code}
+
+
+
+
