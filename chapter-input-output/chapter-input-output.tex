@@ -25,7 +25,7 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 \begin{center}
 \begin{tikzpicture}[scale=0.7, transform shape]
         
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(18,16);
+  	\draw[help lines, gray!70, dashed] (0,0) grid(18,16);
 
 	% Rectangle dimensions
 	\def\width{8}
@@ -58,6 +58,10 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0x00\_F000\_0000}};
 	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0x00\_F0FF\_FFFF}};
 	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0x00\_F100\_0000}};
+	
+	\node[left] at (\leftofs, 4 + 0.2) {\texttt{0x00\_FFFB\_FFFF}};
+	\node[left] at (\leftofs, 4 - 0.2) {\texttt{0x00\_FFFC\_0000}};
+	
 	\node[left] at (\leftofs, 2 + 0.2) {\texttt{0x00\_FFFF\_FFFF}};
 	\node[left] at (\leftofs, 2 - 0.2) {\texttt{0x01\_0000\_0000}};		
 	

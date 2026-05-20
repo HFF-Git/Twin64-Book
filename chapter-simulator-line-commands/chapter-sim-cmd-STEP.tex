@@ -3,8 +3,8 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{STEP — Step a T64 module}
-\addcontentsline{toc}{section}{STEP — Step a T64 module}
+\section*{STEP — Step a T64 system}
+\addcontentsline{toc}{section}{STEP — Step a T64 system}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
@@ -14,11 +14,15 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{STEP} command advances the a T64 processor module by executing one or more instructions. When invoked without an argument, the simulator executes exactly one instruction and then returns control to the simulator console. If the module number is omitted, the module number of the currently selected processor window is used.
+The \texttt{STEP} command advances T64 processor module by executing one or more instructions or step units on an I/O module. There can be one or more processors configured. When the step command is invoked without an argument, the simulator executes exactly one instruction on all processors and one unit on all I/O modules and then returns control to the simulator console. If the step count is provided, all modules advance that many steps. If the module number is provided, only that module will advance.
 
 After the requested number of steps have completed, execution halts and control returns to the simulator command interface, allowing inspection of state, registers, memory, or windows.
 
 Only a halted processor accepts step commands. The sequence is typically that a processor module encountered a trap or debug breakpoint and passed control to the simulator. After inspection the step command resumes execution of the processor module.
+
+// ??? we need to decide how we want to handle a step. Is it explicitly for just the HALTED processor, or will all processors halt ? It seems that the step command should rather just handle one processor or I/O module, while RUN will just run all processors not halted.
+
+// ??? the RUN  command should run all non-halted processors in that case. STEP applies on to halted processors then ...
 
 \end{iPageDescEntry}
 
