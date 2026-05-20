@@ -13,3 +13,141 @@ On a TLB miss, we start with the base page index and walk the collision chain. I
 The main challenge arises during write-back. We want to write back only the modified portions, not the entire region. To achieve this, a region is initially allocated as read-only. Any write attempt triggers a trap, at which point the region is split into two parts: one remains read-only, and the other is marked dirty. The split size is critical, as the size of the dirty portion cannot be changed later.
 
 In practice, large regions are typically read-only and contain data such as libraries or program code. As a result, write-back situations are relatively rare, and the overhead of the write-back algorithm is justified. 
+
+\section*{Pseudo-OpCode Load Immediate}
+The most common requirement is to load large immediate values, which do not fit into an instruction word. The approach is to emit a combination of \texttt{LDI} and \texttt{LDO} instructions. The \texttt{LDO} instruction offers a scaled offset, which can be used to optimize for the cases where the value is aligned to what the scale field offers. Th3 following table depicts the instruction sequences to emit for immediate values.
+
+\newcolumntype{T}[1]{>{\raggedright\arraybackslash}p{#1}}
+\begin{longtable}{@{}T{0.25\linewidth}T{0.3\linewidth}T{0.3\linewidth}@{}}
+    \caption{Load Immediate Pseudo OpCode} \\
+    \toprule
+    \textbf{Reach} & \textbf{Aligned} & \textbf{Non-Aligned} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{Reach} & \textbf{Aligned} & \textbf{Non-Aligned} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{3}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    
+    \texttt{13bit ( +/- 4Kb )} & 
+    \texttt{LDO.B Rn, <val>(R0)} & 
+    \texttt{LDO.B Rn, <val>(R0)} \\
+    \midrule
+    
+   	\texttt{14bit ( +/- 8Kb )} & 
+	\texttt{LDO.S Rn, <val>(R0)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{LDI.L Rn, L\%<val>(Rn)} \\
+	\texttt{LDO.B Rn, R\%<val>(Rn)}
+	} \\ 
+	\midrule
+	
+	\texttt{15bit ( +/- 16Kb )} & 
+	\texttt{LDO.W Rn, <val>(R0)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{LDI.L Rn, L\%<val>(Rn)} \\
+	\texttt{LDO.B Rn, R\%<val>(Rn)}
+	} \\ 
+	\midrule
+	
+	\texttt{16bit ( +/- 32Kb )} & 
+	\texttt{LDO.D Rn, <val>(R0)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{LDI.L Rn, L\%<val>(Rn)} \\
+	\texttt{LDO.B Rn, R\%<val>(Rn)}
+	} \\ 
+	\midrule
+	
+	\texttt{32bit} & 
+	same as non-aligned&
+	\parbox[t]{\linewidth}{
+	\texttt{LDI.L Rn, L\%<val>(Rn)} \\
+	\texttt{LDO.B Rn, R\%<val>(Rn)}
+	} \\ 
+	\midrule
+	
+	\texttt{52bit} & 
+	same as non-aligned&
+	\parbox[t]{\linewidth}{
+	\texttt{LDI.L Rn, L\%<val>(Rn)} \\
+	\texttt{LDI.R Rn, M\%<val>(Rn)} \\
+	\texttt{LDO.B Rn, R\%<val>(Rn)}
+	} \\ 
+	\midrule
+	
+	\texttt{64bit} & 
+	same as non-aligned&
+	\parbox[t]{\linewidth}{
+	\texttt{LDI.L Rn, L\%<val>(Rn)} \\
+	\texttt{LDI.M Rn, M\%<val>(Rn)} \\
+	\texttt{LDI.U Rn, U\%<val>(Rn)} \\
+	\texttt{LDO.B Rn, R\%<val>(Rn)}
+	} \\ 
+    \bottomrule
+\end{longtable}
+
+\section*{Pseudo-OpCode Load/Store with large offset}
+
+The load and store instructions offer a scaled offset field. This field is shifted by the data length for aligned access. This increases the reach for short, word and double word access. For larger offsets than what the scaled offset can encode, a combination of the \texttt{ADDIL} and the load and store instructions is required.
+
+\newcolumntype{T}[1]{>{\raggedright\arraybackslash}p{#1}}
+\begin{longtable}{@{}T{0.25\linewidth}T{0.3\linewidth}T{0.3\linewidth}@{}}
+    \caption{Load Immediate Pseudo OpCode} \\
+    \toprule
+    \textbf{Reach} & \textbf{In reach} & \textbf{Large than reach} \\
+    \midrule
+    \endfirsthead
+    \toprule
+     \textbf{Reach} & \textbf{In reach} & \textbf{Large than reach} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{3}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+        
+   	\texttt{Byte} & 
+	\texttt{LD.B Rn, <ofs>(Rb)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{ADDIL Rb, L\%<ofs>} \\
+	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	} \\ 
+	\midrule
+	
+	\texttt{Short} & 
+	\texttt{LD.S Rn, <ofs>(Rb)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{ADDIL Rb, L\%<ofs>} \\
+	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	} \\ 
+	\midrule
+	
+	\texttt{Word} & 
+	\texttt{LD.W Rn, <ofs>(Rb)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{ADDIL Rb, L\%<ofs>} \\
+	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	} \\ 
+	\midrule
+	
+	\texttt{Double} & 
+	\texttt{LD.D Rn, <ofs>(Rb)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{ADDIL Rb, L\%<ofs>} \\
+	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	} \\ 
+	\bottomrule
+\end{longtable}
+
+
+
+
+\end{document}
