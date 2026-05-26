@@ -30,3 +30,60 @@ Some historical architectures provided pre-increment and post-increment addressi
 
 Implicit updates require additional register-file write ports or multi-cycle update paths, increasing data path and hazard complexity. They also introduce subtle ordering and forwarding constraints that complicate pipeline timing. Since modern compilers seldom use such addressing forms, their practical value does not justify the associated hardware and verification cost. Their omission helps preserve the simplicity and implementation efficiency of Twin-64.
 
+
+\section*{Pseudo-OpCode Load/Store with large offset}
+
+The load and store instructions offer a scaled offset field. This field is shifted by the data length for aligned access. This increases the reach for short, word and double word access. For larger offsets than what the scaled offset can encode, a combination of the \texttt{ADDIL} and the load and store instructions is required.
+
+\newcolumntype{T}[1]{>{\raggedright\arraybackslash}p{#1}}
+\begin{longtable}{@{}T{0.25\linewidth}T{0.3\linewidth}T{0.3\linewidth}@{}}
+    \caption{Load Immediate Pseudo OpCode} \\
+    \toprule
+    \textbf{Reach} & \textbf{In reach} & \textbf{Large than reach} \\
+    \midrule
+    \endfirsthead
+    \toprule
+     \textbf{Reach} & \textbf{In reach} & \textbf{Large than reach} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{3}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+        
+   	\texttt{Byte} & 
+	\texttt{LD.B Rn, <ofs>(Rb)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{ADDIL Rb, L\%<ofs>} \\
+	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	} \\ 
+	\midrule
+	
+	\texttt{Short} & 
+	\texttt{LD.S Rn, <ofs>(Rb)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{ADDIL Rb, L\%<ofs>} \\
+	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	} \\ 
+	\midrule
+	
+	\texttt{Word} & 
+	\texttt{LD.W Rn, <ofs>(Rb)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{ADDIL Rb, L\%<ofs>} \\
+	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	} \\ 
+	\midrule
+	
+	\texttt{Double} & 
+	\texttt{LD.D Rn, <ofs>(Rb)} & 
+	\parbox[t]{\linewidth}{
+	\texttt{ADDIL Rb, L\%<ofs>} \\
+	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	} \\ 
+	\bottomrule
+\end{longtable}
+
+

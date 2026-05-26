@@ -1,0 +1,12 @@
+\chapter*{Appendix - Translation Lookaside Buffer}
+\addcontentsline{toc}{chapter}{Appendix - Translation Lookaside Buffer}
+
+\section*{TLB}
+
+Twin-64 TLBs support variable page sizes, aligned to the page size. The hash function still hashes to the base page when traversing the page table. The page table is now a set of entries rather than a one-to-one mapping between physical and virtual pages. Consequently, we maintain a table with one entry per physical page for memory management.
+
+On a TLB miss, we start with the base page index and walk the collision chain. If no entry is found, we then examine the next larger region size, hashing the start address of that region. If the region is not found in any chain, a page fault is raised.
+
+The main challenge arises during write-back. We want to write back only the modified portions, not the entire region. To achieve this, a region is initially allocated as read-only. Any write attempt triggers a trap, at which point the region is split into two parts: one remains read-only, and the other is marked dirty. The split size is critical, as the size of the dirty portion cannot be changed later.
+
+In practice, large regions are typically read-only and contain data such as libraries or program code. As a result, write-back situations are relatively rare, and the overhead of the write-back algorithm is justified. 
