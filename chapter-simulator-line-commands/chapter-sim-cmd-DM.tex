@@ -3,43 +3,54 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{DM - List Module Info}
-\addcontentsline{toc}{section}{DM - List Module Info}
+\section*{DM - Display Memory}
+\addcontentsline{toc}{section}{DM - Display Physical Memory}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{dm [ <modNum> ]}
+\texttt{dm <adr> [ , <len> [ , <fmt> ]]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{DM} command displays the configured modules of the Town64 system.
-Each module is listed with its module number, type, hard physical address
-(\texttt{HPA}), and the optional soft physical address range
-(\texttt{SPA}) and size.
+The \texttt{DM} command displays data from physical memory, starting at address
+\texttt{adr} and continuing for \texttt{len} bytes. If \texttt{len} is omitted,
+a default length of 8 bytes is used.
 
-If no module number is specified, all modules are displayed. If a module
-number is provided, only the selected module is shown.
+For numeric data display, the starting address is rounded down to an 8-byte
+boundary. For code display, the starting address is rounded down to a 4-byte
+boundary.
+
+The optional \texttt{fmt} parameter selects the output format. Supported formats
+include hexadecimal (default), decimal, and disassembled instruction words.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-\begin{iPageDescOpEntry}{Example}
+\begin{iPageDescEntry}{Example}
+The following example displays 16 bytes starting at address \texttt{0x1000}.
+
 \begin{lstlisting}[style=iPageOpStyle]
-(1) ->dm
-Mod  Type   HPA             SPA             Size    
-00   MEM    0x00_ffe0_0000  0x00_f000_0000  0000_4000  
-01   MEM    0x00_ffe0_1000  0x00_0000_0000  0004_0000  
-02   MEM    0x00_ffe0_2000  0x00_0004_0000  0004_0000  
-03   PROC   0x00_ffe0_3000  
+(3) ->da 0x1000, 10 
+00_0000_1000: 0000_0000_0000_0000  0000_0000_0000_0000
 
-(2) ->dm 2
- 02   MEM    0x00_ffe0_2000  0x00_0004_0000  0004_0000
-
-(3) ->
+(4) ->   
 \end{lstlisting}
-\end{iPageDescOpEntry}
+
+The \texttt{fmt} option can be used to display the data as disassembled
+instruction words.
+
+\begin{lstlisting}[style=iPageOpStyle]
+(4) ->dm 0x1000, 10, code
+00_0000_4000: NOP
+00_0000_4010: NOP
+00_0000_4020: NOP
+
+(5) ->
+\end{lstlisting}
+
+\end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}

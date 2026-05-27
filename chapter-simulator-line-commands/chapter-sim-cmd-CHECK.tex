@@ -1,0 +1,46 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\section*{CHECK - test a condition}
+\addcontentsline{toc}{section}{CHECK - test a condition}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{check  <expr>  [  , <msgStr>  ]}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{CHECK} command evaluates the specified expression and reports whether the condition passed or failed. Unlike the \texttt{ASSERT} command, a failed check does not generate an assertion failure or interrupt execution. Instead, the result is simply reported to the user.
+
+If the expression evaluates to true, the command reports a \texttt{PASS} condition. If the expression evaluates to false, the command reports a \texttt{FAIL} condition. An optional message string may be supplied to describe the purpose of the check or identify the condition being tested.
+
+The \texttt{CHECK} command is useful for lightweight testing, validation, and interactive diagnostics where failures should be reported without stopping execution.
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Example}
+
+The following example evaluates two expressions. The first condition passes, while the second condition fails and displays the associated message string.
+
+\begin{lstlisting}[style=iPageOpStyle]
+(4) -> check ( 2 < 3 )
+PASS
+(5) -> check ( 3 < 2 ), "A simple test"
+"A simple test" : FAIL
+(6) ->
+\end{lstlisting}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+
+\texttt{CHECK} reports failures but does not stop execution. The optional message string can be used to identify individual tests. The expression is considered successful if it evaluates to a non-zero or true value.
+
+// ??? how about an ENV variable with a default message text ?
+
+\end{iPageDescEntry}

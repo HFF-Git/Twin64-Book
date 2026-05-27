@@ -22,9 +22,13 @@ This chapter presents the line mode commands. Although they are called line mode
     \endfoot
     \bottomrule
     \endlastfoot
-    	\textbf{DA} & display absolute memory \\
+    \textbf{ASSERT} & ensure condition \\
 	\midrule
-	\textbf{DM} & display configured Twin-64 modules \\
+	\textbf{CHECK} & test condition \\
+	\midrule
+    \textbf{DM} & display memory \\
+	\midrule
+	\textbf{DMOD} & display configured Twin-64 modules \\
 	\midrule
 	\textbf{DO} & execute a command from the command history stack \\
 	\midrule
@@ -42,19 +46,25 @@ This chapter presents the line mode commands. Although they are called line mode
 	\midrule
 	\textbf{ITLB} & insert into the unified TLB of a CPU \\
 	\midrule
-	\textbf{LF} & load ELF file into memory \\
+	\textbf{LOADELF} & load ELF file into memory \\
 	\midrule
-	\textbf{MA} & modify absolute memory \\
+	\textbf{MB} & modify memory byte data item ( 8 bit )\\
 	\midrule
-	\textbf{MR} & modify a register of a CPU \\
+	\textbf{MS} & modify memory short data item ( 16 bit )\\
 	\midrule
-	\textbf{NM} & add a module to the simulated environment \\
+	\textbf{MW} & modify memory word data item ( 32 bit )\\
+	\midrule
+	\textbf{MD} & modify memory double data item ( 64 bit )\\
+	\midrule
+	\textbf{MR} & modify a processor register \\
+	\midrule
+	\textbf{NMOD} & add a module to the simulated environment \\
 	\midrule
 	\textbf{PTLB} & purge from the unified TLB of a CPU \\
 	\midrule
 	\textbf{REDO} & edit and do a command from the command history stack \\
 	\midrule
-	\textbf{RM} & remove a module from the simulated environment \\
+	\textbf{RMOD} & remove a module from the simulated environment \\
 	\midrule
 	\textbf{RESET} & reset a module \\
 	\midrule
@@ -93,24 +103,25 @@ before the carriage return.
 The following sections describe each command in detail, including its purpose,
 syntax, parameters, and usage examples.
 
-
-\input{chapter-simulator-line-commands/chapter-sim-cmd-DA}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-ASSERT}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-CHECK}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-DM}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-DMOD}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-DO}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-DW}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-DWIN}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-ENV}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-EXIT}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-HALT}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-HELP}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-HIST}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-ITLB}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-LF}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-MA}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-LOADELF}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-MM}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-MR}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-NM}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-NMOD}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-PTLB}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-REDO}
-\input{chapter-simulator-line-commands/chapter-sim-cmd-RM}
+\input{chapter-simulator-line-commands/chapter-sim-cmd-RMOD}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-RESET}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-RUN}
 \input{chapter-simulator-line-commands/chapter-sim-cmd-STEP}

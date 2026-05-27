@@ -1,0 +1,55 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\section*{NMOD - create a new T64 module}
+\addcontentsline{toc}{section}{NMOD - create a new T64 module}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{NMOD <mType> , <modNum>  [ \{ , <key>=<val> \}* ] } \\
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+A Twin-64 system is a set of modules with at least one processor, one memory and one I7O module. The \texttt{NM} command adds a module to the Twin-64 simulator module table. The command is intended to be used by a configuration file. A configuration file will simply contains a list of commands to setup a system. 
+
+The \texttt{module type} parameter defines the module to be added. There are three types, \texttt{PROC}, \texttt{MEM} and \texttt{IO}. The module number parameter assigns the module number. The Twin-64 system supports up to 64 modules at the system level. 
+
+The remaining optional parameters pass configuration values for the module. They all are of the form "\texttt{name=val}". 
+
+\begin{flushleft}
+\begin{tabularx}{\linewidth}{|l|l|X|}
+\hline
+\textbf{Keyword}  & \textbf{Value} & \textbf{Usage} \\ \hline
+\texttt{SPA\_ADR} & \texttt{32-bit address} & Soft physical address start. The address must be aligned to the length parameter. \\ \hline
+\texttt{SPA\_LEN} & \texttt{32-bit size} & Soft physical address length. The size is the pageSize multiplied by a power of 2.\\ \hline
+\texttt{TLB} & \texttt{TLB\_FA\_xxS} & \ TLB set size. The defined values are 16, 32, 64 and 128. \\ \hline
+\texttt{MEM} & \texttt{RAM | ROM} & Memory access type. There are read/write and read only memories. \\ \hline
+\end{tabularx}
+\end{flushleft}
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Example}
+\begin{lstlisting}[style=iPageOpStyle]
+
+# add a processor module - 3 - with defaults.
+NMOD proc, 3
+
+# add a processor module - 4 - with a larger TLB                   
+NM proc, 4, tlb=TLB_FA_128S
+
+# add a memory module covering the first 256 pages
+NM mem, 7, spa_adr=0x0, spa_len=256*0x1000
+
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None.
+\end{iPageDescEntry}

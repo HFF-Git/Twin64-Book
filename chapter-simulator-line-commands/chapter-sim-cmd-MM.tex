@@ -1,0 +1,37 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\section*{Mx - modify memory}
+\addcontentsline{toc}{section}{Mx - modify memory}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{mb <adr> , <expr> } \\
+\texttt{ms <adr> , <expr> } \\
+\texttt{mw <adr> , <expr> } \\
+\texttt{md <adr> , <expr> } \\
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{Mx} command modifies a data item in memory. The expression must be a numeric value. There are four commands. The \texttt{MB} command modifies a byte at a byte aligned address, the \texttt{MS}, \texttt{MW} and \texttt{MD} command handle a short, word and double word data item at their natural alignment.
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Example}
+\begin{lstlisting}[style=iPageOpStyle]
+
+(100)-> ma 0x1000, 0x100      # set memory at location 0x1000 
+                              # to the value of 0x100.
+
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None.
+\end{iPageDescEntry}

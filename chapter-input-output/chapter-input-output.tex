@@ -101,7 +101,7 @@ At the upper level of the I/O address range there is the \textbf{hard physical a
 \section*{Hard physical address range}
 \addcontentsline{toc}{section}{Hard physical address range}
 
-The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 63 I/O modules in the system bus. Each module provides a register set in that page. A registers set has 32 registers. A register is a 64-bit word. The first 32 registers are the supervisory registers. This set is architected and must be implemented by each module. It contains the I/O module description and the IODC code entry point table. The remainder of the page contains the I/O ROM code.
+The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 63 I/O modules in the system bus. Each module has a hard physical address page, which consists of up to 16 register sets of 32 registers each. A register itself is a 64-bit word. The first register set is the supervisory register set. This set is architected and must be implemented by each module. It contains the I/O module description. The remainder of the registers in this set and the organization of the remaining register set is specific to the I/O module. 
 
 \begin{figure}[H]
 \begin{center}
@@ -115,17 +115,18 @@ The \textbf{hard physical address} range contains an I/O page for each I/O modul
 	\def\rightofs{\leftofs + \width}
 
 	% Left side
-	\draw[thick] (\leftofs, 0) -- (\leftofs, 2); 
-	\draw[thick, dashed] (\leftofs, 2) -- (\leftofs, 6);
-	\draw[thick] (\leftofs, 6) -- (\leftofs, 12);
+	\draw[thick] (\leftofs, 0) -- (\leftofs, 3); 
+	\draw[thick, dashed] (\leftofs, 3) -- (\leftofs, 7);
+	\draw[thick] (\leftofs, 7) -- (\leftofs, 12);
 	
 	% Right side
-	\draw[thick] (\rightofs, 0) -- (\rightofs, 2); 
-	\draw[thick, dashed] (\rightofs, 2) -- (\rightofs, 6);
-	\draw[thick] (\rightofs, 6) -- (\rightofs, 12); 		
+	\draw[thick] (\rightofs, 0) -- (\rightofs, 3); 
+	\draw[thick, dashed] (\rightofs, 3) -- (\rightofs, 7);
+	\draw[thick] (\rightofs, 7) -- (\rightofs, 12); 		
 		
 	% Edges
 	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
+	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
 	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
 	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
 	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
@@ -134,12 +135,14 @@ The \textbf{hard physical address} range contains an I/O page for each I/O modul
 	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0x0}};
 	\node[left] at (\leftofs, 10 - 0.2) {\texttt{0x80}};
 	\node[left] at (\leftofs, 8 - 0.2) {\texttt{0x100}};
+	\node[left] at (\leftofs, 2 - 0.2) {\texttt{0xF00}};
 	\node[left] at (\leftofs, 0  + 0.2) {\texttt{0xFFF}};
 	
 	\node at (\leftofs + \width / 2, 11) {\textbf{Supervisor Register Set}};
-	\node at (\leftofs + \width / 2, 9) {\textbf{Entry Point Table}};
-	\node at (\leftofs + \width / 2, 5) {\textbf{IODC code}};
-	
+	\node at (\leftofs + \width / 2, 9) {\textbf{Register Set 1}};
+	\node at (\leftofs + \width / 2, 1) {\textbf{Register Set 15}};
+
+		
 	% bracket
 	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,0) -- (\rightofs + 0.5,12)
 	node[midway, right=1cm, anchor=west]{\Large HPA Page};
@@ -236,13 +239,7 @@ For example, a terminal I/O controller has a hard physical page in the I/O addre
 \section*{Supervisor Register Set}
 \addcontentsline{toc}{section}{Supervisor Register Set}
 
-??? architected
-
-??? mostly ROM data
-
-??? entry point table to code sequences
-
-??? align with table ....
+The supervisor registers implements the architected set of registers for configuring and managing the I/O module. The \texttt{REG 0} to \texttt{REG 7} are implemented by each module. \texttt{REG 8} to \texttt{REG 31} are module specific.
 
 \begin{figure}[H]
 \begin{center}
@@ -265,8 +262,12 @@ For example, a terminal I/O controller has a hard physical page in the I/O addre
 	\node at (\rightofs  - 0.25,16 + 0.25) {\small 0};
 
 	% Box
-	\draw[thick] (\leftofs, 0) -- (\leftofs, 16);
-	\draw[thick] (\rightofs, 0) -- (\rightofs, 16);
+	\draw[thick] (\leftofs, 0) -- (\leftofs, 3);
+	\draw[thick, dashed] (\leftofs, 3) -- (\leftofs, 7);
+	\draw[thick] (\leftofs, 7) -- (\leftofs, 16);
+	\draw[thick] (\rightofs, 0) -- (\rightofs, 3);
+	\draw[thick, dashed] (\rightofs, 3) -- (\rightofs, 7);
+	\draw[thick] (\rightofs, 7) -- (\rightofs, 16);
 	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
 	\draw[thick] (\leftofs, 16) -- (\rightofs, 16);
 	
@@ -284,55 +285,55 @@ For example, a terminal I/O controller has a hard physical page in the I/O addre
   	% IOREG2
   	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
   	\node[anchor = east] at ({\leftofs - 0.75}, {13 + 0.5}) { IOREG2 };
-  	\node at ( \middleofs, {13 + 0.5}) { IO\_DATA };
+  	\node at ( \middleofs, {13 + 0.5}) { IO\_CONFIG };
 
   	% IOREG3
   	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
   	\node[anchor = east] at ({\leftofs - 0.75}, {12 + 0.5}) { IOREG3 };
-  	\node at ( \middleofs, {12 + 0.5}) { IO\_SPA\_CONFIG };
+  	\node at ( \middleofs, {12 + 0.5}) { IO\_VERSION };
   	
   	% IOREG4
   	\draw[thick] (\leftofs, 11) -- (\rightofs, 11);
     \node[anchor = east] at ({\leftofs - 0.75}, {11 + 0.5}) { IOREG4 };
-    \node at ( \middleofs, {11 + 0.5}) { IO\_SPA\_VERSION };
+    \node at ( \middleofs, {11 + 0.5}) { IO\_SPA\_ADR };
   
   	% IOREG5
   	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
   	\node[anchor = east] at ({\leftofs - 0.75}, {10 + 0.5}) { IOREG5 };
-  	\node at ( \middleofs, {10 + 0.5}) { IO\_SPA\_ADR };
+  	\node at ( \middleofs, {10 + 0.5}) { IO\_RESERVED\_1 };
   	
   	% IOREG6
   	\draw[thick] (\leftofs, 9) -- (\rightofs, 9);
   	\node[anchor = east] at ({\leftofs - 0.75}, {9 + 0.5}) { IOREG6 };
-  	\node at ( \middleofs, {9 + 0.5}) { IO\_SPA\_LEN };
+  	\node at ( \middleofs, {9 + 0.5}) { IO\_RESERVED\_2 };
 
   	% IOREG7
   	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
   	\node[anchor = east] at ({\leftofs - 0.75}, {8 + 0.5}) { IOREG7 };  
-  	\node at ( \middleofs, {8 + 0.5}) { IO\_EIR };
+  	\node at ( \middleofs, {8 + 0.5}) { IO\_RESERVED\_3 };
 
 
-	\node at ( \middleofs, {5 + 0.5}) { reserved, set to zero };
+	\node at ( \middleofs, {5 + 0.5}) { module specific };
 	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
   	
   	% IOREG30
   	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);
   	\node[anchor = east] at ({\leftofs - 0.75}, {1 + 0.5}) { IOREG30 };
-  	\node at ( \middleofs, {1 + 0.5}) { 0 };
+  	\node at ( \middleofs, {1 + 0.5}) { module specific };
   	
   	% IOREG31
   	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
   	\node[anchor = east] at ({\leftofs - 0.75}, {0 + 0.5}) { IOREG31 };
-  	\node at ( \middleofs, {0 + 0.5}) { 0 };
+  	\node at ( \middleofs, {0 + 0.5}) { module specific };
 			
 \end{tikzpicture}
 \end{center}
 \caption{I/O Module Supervisory Registers}
 \label{fig:I/O Module Supervisory Registers}
 \end{figure}
+The following table lists the architected registers for an I/O module. Access to these registers is always on a double word boundary.
 
-
-\begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
+\begin{longtable}{@{}p{0.35\linewidth}p{0.5\linewidth}@{}}
     \caption{Supervisor Register Set} \\
     \toprule
     \textbf{Reg} & \textbf{Purpose} \\
@@ -348,41 +349,83 @@ For example, a terminal I/O controller has a hard physical page in the I/O addre
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{IO\_STATUS} & ... \\
+    \textbf{IO\_STATUS} & I/O module status \\
     \midrule
-    \textbf{IO\_COMMAND} & ... \\
+    \textbf{IO\_COMMAND} & I/O module command and EIR data \\
     \midrule
-    \textbf{IO\_DATA} & ... \\
+    \textbf{IO\_CONFIG} & I/O module configuration data \\
     \midrule
-    \textbf{IO\_EIR} & ... \\
+    \textbf{IO\_VERSION} & I/O module version data \\
     \midrule
-    \textbf{IO\_MODULE\_CONFIG} & ... \\
+    \textbf{IO\_SPA\_ADR\_0} & I/O module soft physical address range \\
     \midrule
-    \textbf{IO\_MODULE\_VERSION} & ... \\
+    \textbf{IO\_RESERVED\_1} & reserved for future use \\
     \midrule
-    \textbf{IO\_MODULE\_ID} & ... \\
+    \textbf{IO\_RESERVED\_2} & reserved for future use \\
     \midrule
-    \textbf{IO\_MODULE\_TYPE} & ... \\
-    \midrule
-    \textbf{IO\_SPA\_ADR\_0} & ... \\
-    \midrule
-    \textbf{IO\_SPA\_LEN\_0} & ... \\
-    \midrule
-    \textbf{IO\_SPA\_ADR\_1} & ... \\
-    \midrule
-    \textbf{IO\_SPA\_LEN\_1} & ... \\
-    \midrule
-    \textbf{IO\_ENTRY\_TAB\_OFS} & ... \\
-    \midrule
-    \textbf{IO\_ENTRY\_TAB\_LEN} & ... \\
+    \textbf{IO\_RESERVED\_3} & reserved for future use \\
     \midrule
 \end{longtable}
+
+
+\begin{itemize}
+
+
+\item \textbf{I/O Status Register}. bla bla ...
+
+\begin{center}
+\drawInstrFormatSixtyFour
+        {0,  16}
+        {0 }
+\end{center}
+
+\item \textbf{I/O Command Register}
+
+\begin{center}
+\drawInstrFormatSixtyFour
+        {0,  16}
+        {0 }
+\end{center}
+
+\item \textbf{I/O Configuration Register}
+
+\begin{center}
+\drawInstrFormatSixtyFour
+        {0, 15, 16}
+        {0, 0 }
+\end{center}
+
+\item \textbf{I/O Version Register}
+
+\begin{center}
+\drawInstrFormatSixtyFour
+        {0,  16}
+        {0 }
+\end{center}
+
+\item \textbf{I/O Soft Physical Address}
+
+\begin{center}
+\drawInstrFormatSixtyFour
+        {0,  16}
+        {0 }
+\end{center}
+
+\item \textbf{I/O Reserved Register 1 to 3}
+
+... reserved for future use
+
+
+
+
+\end{itemize}
+
 
 
 \section*{I/O Elements}
 \addcontentsline{toc}{section}{I/O Elements}
 
-Modules consist of I/O elements, smallest I/O unit of operation.
+Modules typically consist of I/O elements. They represent the smallest I/O unit of operation.
 
 ??? a subset of registers, at least status, command and data.
 
@@ -397,35 +440,15 @@ Modules consist of I/O elements, smallest I/O unit of operation.
 \section*{Interrupt Processing}
 \addcontentsline{toc}{section}{Interrupt Processing}
 
-what do we need to store for interrupt processing in the registers ???
+A processor has two control registers. The external interrupt register and the external interrupt mask register. Both are ANDed and checked after each instruction execution. An I/O module can set a bit in the processor external interrupt request register. There are 64 interrupt groups in the EIRR control register. When not masked by the EIMR register, the interrupt is handled.
 
-A processor has two control registers. The external interrupt register and the external interrupt mask register. 
-
-Both are ANDed and checked after each instruction execution. 
-
-A module can set a bit in the external interrupt request register. There are 64 interrupt groups in the EIRR control register. 
-
-When not masked by the EIMR register, the interrupt is handled.
-
-Each module has a \texttt{EIR} register. This register contains two fields. The first is the target processor HPA page address, the second is the bit position to set in the EIRR register. This is normally set up at system initialization time, but can also be set for each I/O request. 
+When an I/O operation is started, the command contains in addition to the command a 32-bit field, which provides the target processor HPA page address and the bit position to set in the EIRR register of the target processor. This part of the command register is normally set up at system initialization time, but can also be set for each I/O request. 
 
 \begin{center}
 \drawInstrFormatSixtyFour
-        {0, 8, 14.5, 16}
-        {0, ProcHpa, EIR-Bit}
+        {0, 1.5, 8, 16}
+        {EIR-Bit, ProcHpa, command data}
 \end{center}
-
-
-\section*{Module dependent Code}
-\addcontentsline{toc}{section}{Module dependent Code}
-
-??? what it is 
-
-??? how to access 
-
-??? entry point table in HPA
-
-??? code pieces
 
 
 \section*{Processor dependent Code}
