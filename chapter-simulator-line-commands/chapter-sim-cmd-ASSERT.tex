@@ -26,7 +26,7 @@
 
 The \texttt{ASSERT} command evaluates the specified expression and checks whether the result is true or false. If the expression evaluates to true, execution continues normally and no output is generated. If the expression evaluates to false, the assertion fails and an error message is displayed.
 
-An optional message string may be provided to help identify the purpose of the assertion or the condition that failed. This is useful when debugging scripts, testing expressions, or validating program state during execution.
+An optional message string may be provided to help identify the purpose of the assertion or the condition that failed. This is useful when debugging scripts, testing expressions, or validating program state during execution. If the message text is omitted, the text is taken from the environment variable \texttt{ENV\_ASSERT\_DEF\_MSG}.
 
 Assertions are commonly used to verify assumptions, detect unexpected values, and simplify debugging.
 

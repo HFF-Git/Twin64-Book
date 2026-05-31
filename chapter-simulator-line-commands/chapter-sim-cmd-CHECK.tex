@@ -16,7 +16,7 @@
 
 The \texttt{CHECK} command evaluates the specified expression and reports whether the condition passed or failed. Unlike the \texttt{ASSERT} command, a failed check does not generate an assertion failure or interrupt execution. Instead, the result is simply reported to the user.
 
-If the expression evaluates to true, the command reports a \texttt{PASS} condition. If the expression evaluates to false, the command reports a \texttt{FAIL} condition. An optional message string may be supplied to describe the purpose of the check or identify the condition being tested.
+If the expression evaluates to true, the command reports a \texttt{PASS} condition. If the expression evaluates to false, the command reports a \texttt{FAIL} condition. An optional message string may be supplied to describe the purpose of the check or identify the condition being tested. If the message text is omitted, the text is taken from the environment variable \texttt{ENV\_CHECK\_DEF\_MSG}.
 
 The \texttt{CHECK} command is useful for lightweight testing, validation, and interactive diagnostics where failures should be reported without stopping execution.
 

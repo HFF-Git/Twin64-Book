@@ -3,8 +3,8 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{STEP — Step a T64 system}
-\addcontentsline{toc}{section}{STEP — Step a T64 system}
+\section*{STEP — Step a T64 module}
+\addcontentsline{toc}{section}{STEP — Step a T64 module}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
@@ -14,15 +14,9 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{STEP} command advances T64 processor module by executing one or more instructions or step units on an I/O module. There can be one or more processors configured. When the step command is invoked without an argument, the simulator executes exactly one instruction on all processors and one unit on all I/O modules and then returns control to the simulator console. If the step count is provided, all modules advance that many steps. If the module number is provided, only that module will advance.
+The \texttt{STEP} command advances a T64 module by executing one or more instructions or step units on an I/O module. There can be one or more processors and I/O modules configured. When the step command is invoked without an argument, the simulator executes exactly one instruction on the module that is associated with the current window and then returns control to the simulator console. If the step count is provided, modules advance that many steps. If the module number is provided, the module specified will advance.
 
-After the requested number of steps have completed, execution halts and control returns to the simulator command interface, allowing inspection of state, registers, memory, or windows.
-
-Only a halted processor accepts step commands. The sequence is typically that a processor module encountered a trap or debug breakpoint and passed control to the simulator. After inspection the step command resumes execution of the processor module.
-
-// ??? we need to decide how we want to handle a step. Is it explicitly for just the HALTED processor, or will all processors halt ? It seems that the step command should rather just handle one processor or I/O module, while RUN will just run all processors not halted.
-
-// ??? the RUN  command should run all non-halted processors in that case. STEP applies on to halted processors then ...
+After the requested number of steps have completed, execution halts and control returns to the simulator command interface, allowing inspection of state, registers, memory, or windows. Only a halted modules accepts step commands. The sequence is typically that a module encountered a trap or debug breakpoint and passed control to the simulator. After inspection the step command resumes execution of the processor module.
 
 \end{iPageDescEntry}
 
@@ -30,13 +24,13 @@ Only a halted processor accepts step commands. The sequence is typically that a 
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-(5)->s             # execute a single instruction
+(5)->s        # execute a single instruction on the current window.
 (6)->
 
-(6)->s 10          # execute ten instructions
+(6)->s 10     # execute ten instructions
 (7)->
 
-(8)->s 10, 5       # execute ten instructions on processor module 5
+(8)->s 10, 5  # execute ten instructions on module 5
 (9)->
 
 \end{lstlisting}

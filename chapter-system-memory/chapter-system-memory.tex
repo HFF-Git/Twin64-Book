@@ -97,7 +97,7 @@ A virtual address is translated into a physical address. For translation purpose
 \section*{Address Space Layout}
 \addcontentsline{toc}{section}{Address Space Layout}
 
-Twin-64 architecture features a 36-bit physical memory address range which allows a maximum physical memory of up to 64 GBytes. The following figure depicts the overall memory layout.
+Twin-64 architecture features a 40-bit physical memory address range which allows a maximum physical memory of up to 1 TByte. The following figure depicts the overall memory layout.
 
 
 \begin{figure}[H]
@@ -143,8 +143,8 @@ Twin-64 architecture features a 36-bit physical memory address range which allow
 	\node[left] at (\leftofs, 13 - 0.2) {\texttt{0x00\_F000\_0000}};
 	\node[left] at (\leftofs, 11 + 0.2) {\texttt{0x00\_FFFF\_FFFF}};
 	\node[left] at (\leftofs, 11 - 0.2) {\texttt{0x01\_0000\_0000}};
-	\node[left] at (\leftofs, 7 + 0.2) {\texttt{0x0F\_FFFF\_FFFF}};
-	\node[left] at (\leftofs, 7 - 0.2) {\texttt{0x10\_0000\_0000}};
+	\node[left] at (\leftofs, 7 + 0.2) {\texttt{0xFF\_FFFF\_FFFF}};
+	\node[left] at (\leftofs, 7 - 0.2) {\texttt{0x100\_0000\_0000}};
 	\node[left] at (\leftofs, 0 + 0.2) {\texttt{0xF\_FFFF\_FFFF\_FFFF}};
 		
 	\node at (\leftofs + \width / 2, 14.5) {\textbf{Physical Memory Address Space}};
@@ -165,7 +165,7 @@ Twin-64 architecture features a 36-bit physical memory address range which allow
 \label{fig:Memory Address Ranges}
 \end{figure}
 
-Region IDs 0 to 15 represent the physical address space, with a maximum size of 64 GB. These regions are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these regions. Control Register 0 contains a field that encodes the actual physical memory size installed in the system.
+Region IDs 0 to 255 represent the physical address space, with a maximum size of 1 TB. These regions are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these regions. Control Register 0 contains a field that encodes the actual physical memory size installed in the system.
 
 Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top 256 MB of the region zero. I/O modules allocate addresses for their registers and storage within this range, and access to this area is uncached.
 

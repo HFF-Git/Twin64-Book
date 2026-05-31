@@ -14,22 +14,15 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{XF} command opens a text file and executes the simulator commands
-contained in that file as if they were entered interactively at the simulator
-command prompt.
+The \texttt{XF} command opens a text file and executes the simulator commands contained in that file as if they were entered interactively at the simulator command prompt.
 
-Commands are read sequentially from the specified file and processed in the
-order in which they appear. Each line in the file is interpreted using the
-normal command parsing rules, including support for comments, expressions, and
-multi-line commands.
+Commands are read sequentially from the specified file and processed in the order in which they appear. Each line in the file is interpreted using the normal command parsing rules, including support for comments, expressions, and multi-line commands.
 
-Execution of the command file continues until the end of the file is reached.
-Errors encountered while executing individual commands are reported, but do
-not terminate command file execution. Control returns to the simulator only
-after all commands in the file have been processed.
+Execution of the command file continues until the end of the file is reached. Errors encountered while executing individual commands are reported, but do not terminate command file execution. Control returns to the simulator only after all commands in the file have been processed.
 
-The \texttt{XF} command is commonly used to automate simulator setup, initialize
-system state, configure windows, or execute repeatable test sequences.
+Command files may invoke additional \texttt{XF} commands, allowing command files to be structured hierarchically. Care should be taken to avoid unintended recursive execution.
+
+The \texttt{XF} command is commonly used to automate simulator setup, initialize system state, configure windows, or execute repeatable test sequences.
 
 \end{iPageDescEntry}
 
@@ -37,26 +30,18 @@ system state, configure windows, or execute repeatable test sequences.
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
 # initialize simulator state
 xf "init.sim"
 
 # load a test program and start execution
 xf "boot_sequence.sim"
-
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
 
-At present, command execution continues after errors encountered within a
-command file. Future versions of the simulator may provide options to alter
-this behavior, such as aborting execution on the first error.
-
-Command files may invoke additional \texttt{XF} commands, allowing command files
-to be structured hierarchically. Care should be taken to avoid unintended
-recursive execution.
+At present, command execution continues after errors encountered within a command file. Future versions of the simulator may provide options to alter this behavior, such as aborting execution on the first error.
 
 \end{iPageDescEntry}
 

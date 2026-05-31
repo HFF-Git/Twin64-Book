@@ -8,24 +8,13 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{itlb <vAdr> , <pAdr> , <size> , <acc> [ , L [ , U ]]}
+\texttt{itlb <vAdr> , <info>}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{ITLB} command inserts a translation entry into the unified Translation Lookaside Buffer (TLB). The \texttt{vAdr} parameter specifies the virtual address of the mapping, while \texttt{pAdr} specifies the corresponding physical memory address.
-
-To reduce TLB lookup overhead and improve translation efficiency, the TLB supports mappings over contiguous virtual address ranges rather than only fixed-size pages. Multiple page sizes are supported, allowing software to choose an appropriate granularity based on usage patterns. The supported page sizes are 4~KB, 64~KB, 1~MB, and 16~MB.
-
-The \texttt{acc} parameter encodes the access permissions and privilege requirements for the translation as shown in the TLB description. It specifies whether the mapped page may be read, written, or executed, as well as whether it is a gateway page along with the minimum privilege level required for data fetch. Every data fetch is checked against these access attributes, and violations result in a protection fault trap.
-
-Optional flags may be supplied to control the behavior of the TLB entry. These flags determine how the entry participates in replacement and caching decisions.
-
-\begin{smallGapItemize}
-  \item \textbf{L} — Locks the TLB entry so that it is not considered during replacement candidate selection.
-  \item \textbf{U} — Marks the mapped page as uncached
-\end{smallGapItemize}
+The \texttt{ITLB} command inserts a translation entry into the unified Translation Lookaside Buffer (TLB). The \texttt{vAdr} parameter specifies the virtual address of the mapping, while \texttt{info} specifies the corresponding physical memory address and attributes. The \texttt{info} parameter directly corresponds to the \texttt{ITLB} instruction info fields.
 
 \end{iPageDescEntry}
 
@@ -33,10 +22,13 @@ Optional flags may be supplied to control the behavior of the TLB entry. These f
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-# insert a translation for 0x1000_FFFF_0000 at 0x1_0000 with a 
-# page size of 64Kb, access rights read-write, user level
+# insert a translation for virtual address 0x1000_FFFF_0000 
+# physical address 0x1_0000 with a 
+# page size of 4Kb
+# access rights of read-write
+# user level privilege.
 
-(8)->itlb 0x1000_FFFF_0000, 0x1_0000, 1, 0x7
+(8)->itlb 0x1000_FFFF_0000, 0x0030_0000_0001_0000
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

@@ -610,7 +610,7 @@ Virtual address translations are stored in a translation lookaside buffer (TLB).
             fill=white,
             anchor=west] at (0,0.5) { };
            
-    \foreach \i/\lbl in {0/V,1/M,2/L,3/U} {
+    \foreach \i/\lbl in {0/V,1/L,2/U,3/M} {
     	\draw (\fw*\i,0.125) -- (\fw*\i,1 - 0.125);
     	\node at (\fw*\i + 0.2, 0.5 ) {\lbl};
 	}         
@@ -652,12 +652,12 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     A page size is not allowed to cross region boundaries. The virtual address must be aligned with selected the page size.\\
     \midrule
     \textbf{V} & When set, the entry is valid. \\
-    \midrule
-    \textbf{M} & When set, the page has been modified. \\
-    \midrule
+     midrule
     \textbf{L} & When set, the TLB entry is locked and will not be selected during a replacement candidate search. \\
     \midrule
     \textbf{U} & When set, the page represented by the TLB entry is not cached. \\
+    \midrule
+    \textbf{M} & When set, the page has been modified. \\
 \end{longtable}
 
 The first 16 virtual memory regions, region 0 to 15, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
