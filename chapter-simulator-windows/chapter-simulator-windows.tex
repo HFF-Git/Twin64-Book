@@ -67,8 +67,8 @@ Simulator windows can be organized into \textbf{window stacks}. All visible stac
 Naturally, a monitor screen cannot display more than two or three stacks next to each other. Stacks, like windows, can therefore be disabled. A disabled stack is not shown. The command window has a little status filed in its banner line which shows what stacks have been created. 
 
 %--------------------------------------------------------------------------------
-\section*{CPU Window}
-\addcontentsline{toc}{section}{CPU Window}
+\section*{Processor Window}
+\addcontentsline{toc}{section}{Processor Window}
 
 The CPU window displays the register set of a processor. Several view modes are available, between which the user can toggle. The default view shows the general register set in the window body. The banner line displays the window identifier, the processor module number, the current instruction address, and the CPU status register.
 
@@ -76,35 +76,13 @@ The CPU window displays the register set of a processor. Several view modes are 
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
     \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCpuGreg.pdf}};
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinProcReg.pdf}};
 \end{tikzpicture}
 \caption{Simulator CPU Window — General Registers}
 \label{fig:simulator-cpu-window-greg}
 \end{figure}
 
-In addition to the general registers, control registers that are visible to user-mode programs can be displayed. These registers are shown when the window toggle command is issued.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCpuGregPid}};
-\end{tikzpicture}
-\caption{Simulator CPU Window — User-Visible Control Registers}
-\label{fig:simulator-cpu-window-creg-user}
-\end{figure}
-
-Toggling the window once more displays the full set of control registers.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinCpuCreg.pdf}};
-\end{tikzpicture}
-\caption{Simulator CPU Window — Control Registers}
-\label{fig:simulator-cpu-window-creg}
-\end{figure}
+The window consist of two main parts. The first part shows the processor register set. This part can be toggled to show the general registers, ( default ), the control registers and a user visible subset of the control registers. The second pat depicts the actual code where the instruction address register points to. This area can be modified to show more than the default lines of 6 lines. A mark shows where exactly the current instruction address is located.
 
 As with all simulator windows, multiple instances of the same window type may be created. In the case of the CPU window, all three view modes can be displayed simultaneously by creating multiple windows and toggling each one to the desired view.
 

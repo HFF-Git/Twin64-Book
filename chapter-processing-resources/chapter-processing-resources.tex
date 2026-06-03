@@ -562,7 +562,7 @@ The processor status register reserves a bit position, "E", for future support o
 \section*{Translation Lookaside Buffer}
 \addcontentsline{toc}{section}{Translation Lookaside Buffer}
 
-Virtual address translations are stored in a translation lookaside buffer (TLB). The TLB is essentially a cache of page table entries representing the virtual pages currently mapped to physical addresses. Depending on the hardware implementation, there may be a single combined TLB or separate instruction and data TLBs. Each TLB entry stores the virtual page number (VPN) along with its attributes and the corresponding physical page number (PPN). The current architecture supports a 36-bit physical address space, allowing a maximum of 64  GByte of memory.
+Virtual address translations are stored in a translation lookaside buffer (TLB). The TLB is essentially a cache of page table entries representing the virtual pages currently mapped to physical addresses. Depending on the hardware implementation, there may be a single combined TLB or separate instruction and data TLBs. Each TLB entry stores the virtual page number (VPN) along with its attributes and the corresponding physical page number (PPN). The current architecture supports a 40-bit physical address space, allowing a maximum of 1 Tb of memory.
 
 \begin{figure}[H]
 \begin{center}
@@ -584,7 +584,7 @@ Virtual address translations are stored in a translation lookaside buffer (TLB).
             fill=white,
             anchor=west] at (0,3.5) { };
     \node[anchor=west] at (0, 3.5) {Physical page number};   
-    \node[anchor=west] at (11,3.5) {24bit};
+    \node[anchor=west] at (11,3.5) {28bit};
      
     \node[  tsRectangle, 
             minimum width=2cm,
@@ -623,7 +623,7 @@ Virtual address translations are stored in a translation lookaside buffer (TLB).
 \label{fig: Tlb info}
 \end{figure}
 
-To reduce TLB processing overhead, the TLB is capable of storing virtual address ranges. There is support for a larger page sizes. The supported sizes are 4 Kbyte, 64 Kbyte, 1 MByte and 16Mbyte. 
+To reduce TLB processing overhead, the TLB is capable of storing virtual address ranges. There is support for a larger page sizes. The supported sizes are from 4 Kbyte to 4Gb in factors of four. 
 
 \begin{longtable}{@{}p{0.25\linewidth}p{0.6\linewidth}@{}}
     \caption{TLB Fields} \\
@@ -648,11 +648,11 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \textbf{Access Rights} & Encodes the access type (read, write, and execute) and the required privilege level for the operation. \\
     \midrule
     \textbf{Page Size} & 4-bit field encoding the supported page size: 
-    		\[ \texttt{( 1U << ( pSize * 4 )) * T64\_PAGE\_SIZE} \] 
-    A page size is not allowed to cross region boundaries. The virtual address must be aligned with selected the page size.\\
+    		\[ \texttt{( 1U << ( pSize * 2 )) * T64\_PAGE\_SIZE} \] 
+    A page size is not allowed to cross region boundaries. The virtual address in the TLB entry must be aligned with selected the page size.\\
     \midrule
     \textbf{V} & When set, the entry is valid. \\
-     midrule
+    \midrule
     \textbf{L} & When set, the TLB entry is locked and will not be selected during a replacement candidate search. \\
     \midrule
     \textbf{U} & When set, the page represented by the TLB entry is not cached. \\
