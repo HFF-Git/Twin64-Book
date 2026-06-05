@@ -148,7 +148,7 @@ If the instruction’s privilege level falls outside these bounds, a privilege v
 \section*{Access Protection}
 \addcontentsline{toc}{section}{Access Protection}
 
-The second dimension of access protection is \textbf{region ID checking}. Twin-64 allows the processor to store up to eight region ID values in the control registers \texttt{CR4} through \texttt{CR7}, which are accessible to the currently executing process. For each access to a region at least one of the protection ID registers must contain a matching region ID. Otherwise, a protection violation trap is raised.
+The second dimension of access protection is \textbf{region ID checking}. Twin-64 allows the processor to store up to eight region ID values in the control registers \texttt{CR4} through \texttt{CR7}, which are accessible to the currently executing process. For each data memory access to a region at least one of the protection ID registers must contain a matching region ID. Otherwise, a protection violation trap is raised.
 
 \begin{figure}[H]
 \begin{center}
@@ -185,6 +185,8 @@ The second dimension of access protection is \textbf{region ID checking}. Twin-6
 The rightmost bit of each region ID register stored in the one of the control registers \texttt{CR4} to \texttt{CR7} serves as a write-disable (W) bit. When the W bit is set, that protection ID cannot be used to grant write access.
 
 Protection ID checking is typically used to enforce controlled access to shared or private memory regions. A common example is a stack data region accessible at user privilege level. Since the CPU implements a global virtual memory address space, any task could potentially access the stack of another task. By enabling protection ID checking and loading the corresponding object/region ID into one of the protection ID registers for the owning process, only that user task is permitted to access its stack data region with a matching protection ID.
+
+Protection ID checking is not performed for instruction memory access. Code is in general a shared object and only access rights are checked.
 
 
 \section*{Access Check Flow}
