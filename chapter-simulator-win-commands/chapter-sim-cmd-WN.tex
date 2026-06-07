@@ -25,12 +25,11 @@ default attributes, such as the number of lines, layout, and numeric radix.
 \begin{tabularx}{\textwidth}{|l|X|X|p{5cm}|}
 \hline
 \textbf{Type} & \textbf{Arg 1} & \textbf{Arg 2} & \textbf{Action} \\ \hline
-\texttt{MEM}         & \texttt{memAdr} & \texttt{-} & Create a memory window. \\ \hline
+\texttt{MEM}         & \texttt{memAdr} & \texttt{mode} & Create a memory window with an initial view of type specified in mode. ( PROC, TLB, MEM, TEXT ) \\ \hline
 \texttt{PROC}        & \texttt{modNum} & \texttt{-} & Create all PROC-related windows (CPU, TLB) for the module. \\ \hline
 \texttt{CPU}         & \texttt{modNum} & \texttt{-} & Create a CPU window. \\ \hline
 \texttt{TLB}         & \texttt{modNum} & \texttt{-} & Create a TLB window. \\ \hline
 \texttt{TEXT}        & \texttt{filePath} & \texttt{-} & Create a text window displaying the content of a text file. \\ \hline
-\texttt{CODE}        & \texttt{memAdr} & \texttt{-} & Create a memory window showing assembly code. The first argument is the memory address, the second the module number of the processor.\\ \hline
 \end{tabularx}
 \end{flushleft}
 
@@ -43,9 +42,10 @@ The window type \texttt{CODE} accepts in addition to the memory address a proces
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-wn mem, 0x1000      # Create a memory window at address 0x1000.
-wn cpu, 3           # Create a CPU window for module 3.
-wn tlb, 4           # Create a TLB window for module 4.
+wn mem, 0x1000       # Create a memory window at address 0x1000.
+wn mem, 0x3000, code # create a memory code window at address 0x3000.
+wn cpu, 3            # Create a CPU window for module 3.
+wn tlb, 4            # Create a TLB window for module 4.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
