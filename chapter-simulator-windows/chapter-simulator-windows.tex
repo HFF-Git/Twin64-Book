@@ -17,27 +17,27 @@ A window consists of a \textbf{window banner line} and a \textbf{window body}. T
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
 
-    % \draw[help lines, gray!70, dashed] (0,0) grid (16,14);
+    \draw[help lines, gray!70, dashed] (0,0) grid (16,16);
 
     % Image
     \node[anchor=south west] (img) at (0, 0)
         {\includegraphics[width=16cm]{chapter-simulator-environment/SimWindows.pdf}};
 
     % Arrows
-    \draw[gray, thick] (0.45, 9.5) -- (1, 14);
-    \node[anchor=west] at ( 1.25, 14 ) {\Large Window is Current};
+    \draw[gray, thick] (0.6, 13.25) -- (1.2, 16);
+    \node[anchor=west] at ( 1.25, 16 ) {\Large Window is Current};
     
-    \draw[gray, thick] (0.75, 9.5) -- (2, 13);
-    \node[anchor=west] at ( 2.25, 13 ) {\Large Window Stack Number};
+    \draw[gray, thick] (0.9, 13.25) -- (2.25, 15.25);
+    \node[anchor=west] at ( 2.25, 15.25 ) {\Large Window Stack Number};
     
-    \draw[gray, thick] (1.1, 9.5) -- (3, 12);
-    \node[anchor=west] at ( 3.25, 12 ) {\Large Window Number};
+    \draw[gray, thick] (1.25, 13.25) -- (3.25, 14.5);
+    \node[anchor=west] at ( 3.25, 14.5 ) {\Large Window Number};
     
-    \draw[gray, thick] (9, 9.45) -- (11, 13);
-    \node[anchor=west] at ( 11.25, 13 ) {\LARGE Window Banner};
+    \draw[gray, thick] (9.2, 13.1) -- (11.25, 15.25);
+    \node[anchor=west] at ( 11.25, 15.25 ) {\LARGE Window Banner};
     
-    \draw[gray, thick] (10, 8.75) -- (12, 12);
-    \node[anchor=west] at ( 12.25, 12 ) {\LARGE Window Body};
+    \draw[gray, thick] (10, 10.75) -- (12.25, 14.5);
+    \node[anchor=west] at ( 12.25, 14.5 ) {\LARGE Window Body};
     
 \end{tikzpicture}
 \caption{Simulator Windows}
@@ -64,13 +64,15 @@ Simulator windows can be organized into \textbf{window stacks}. All visible stac
 \label{fig:simulator-window-stacks}
 \end{figure}
 
+Window stack are very useful when handling several processors and memory content. For example, all windows related to a processor can be grouped in a stack. Windows in a stack can be sorted and individual windows can be enabled or disabled. Disabled windows, like disabled stacks, do not disappear for the overall window list. They are just not displayed.
+
 Naturally, a monitor screen cannot display more than two or three stacks next to each other. Stacks, like windows, can therefore be disabled. A disabled stack is not shown. The command window has a little status filed in its banner line which shows what stacks have been created. 
 
 %--------------------------------------------------------------------------------
 \section*{Processor Window}
 \addcontentsline{toc}{section}{Processor Window}
 
-The CPU window displays the register set of a processor. Several view modes are available, between which the user can toggle. The default view shows the general register set in the window body. The banner line displays the window identifier, the processor module number, the current instruction address, and the CPU status register.
+The processor window displays the register set of a processor and the current instruction address code position. Several view modes are available, between which the user can toggle. The default view shows the general register set in the window body. The banner line displays the window identifier, the processor module number, the current instruction address, and the CPU status register. The alternate toggle display the control registers.
 
 \begin{figure}[H]
 \centering
@@ -82,15 +84,16 @@ The CPU window displays the register set of a processor. Several view modes are 
 \label{fig:simulator-cpu-window-greg}
 \end{figure}
 
-The window consist of two main parts. The first part shows the processor register set. This part can be toggled to show the general registers, ( default ), the control registers and a user visible subset of the control registers. The second pat depicts the actual code where the instruction address register points to. This area can be modified to show more than the default lines of 6 lines. A mark shows where exactly the current instruction address is located.
+The window consist of two main parts. The first part shows the processor register set. This part can be toggled to show the general registers, ( default ), the control registers and a user visible subset of the control registers. The second pat depicts the actual code where the instruction address register points to. This area can be modified to show more than the default lines of 6 lines. A mark shows where exactly the current instruction address is located. Values modified are highlighted until the next command.
 
 As with all simulator windows, multiple instances of the same window type may be created. In the case of the CPU window, all three view modes can be displayed simultaneously by creating multiple windows and toggling each one to the desired view.
+
 
 %--------------------------------------------------------------------------------
 \section*{TLB Window}
 \addcontentsline{toc}{section}{TLB Window}
 
-The TLB (Translation Lookaside Buffer) window displays the contents of the processor’s address translation cache. The TLB accelerates virtual-to-physical address translation by caching recently used page table entries. The simulator supports a unified TLB with instruction TLB and data TLB entries cached at the CPU level. All unified TLB-related information is presented in TLB windows.
+The TLB (Translation Lookaside Buffer) window displays the contents of the simulator global TLB module. The TLB accelerates virtual-to-physical address translation by caching recently used page table entries. The global TLB module is the TLB which all processors consult when in need for a translation.  The translation result is then kept in local TLB buffers on the processor module. Featuring a global TLB allows all memory commands and windows to use physical and virtual addresses without being dependent on which processor actually has a valid translation.
 
 \begin{figure}[H]
 \centering
@@ -102,15 +105,13 @@ The TLB (Translation Lookaside Buffer) window displays the contents of the proce
 \label{fig:simulator-tlb-window}
 \end{figure}
 
-A TLB window displays the TLB type, the processor to which it belongs, the selected TLB set or entry range, and the index at which the window body begins. The window body shows TLB entries line by line. Each entry includes the virtual page tag, the corresponding physical page number, and the associated status and permission bits. The TLB window also supports the window toggle mechanism for unified TLBs, which have a small ITLB and DTLB buffer.
+The global TLB window displays the TLB entries line by line. Each entry includes the virtual page tag, the corresponding physical page number, and the associated tlbInfo. The final field is the tlb page mask when the TLB supports a variable page size. 
 
 %--------------------------------------------------------------------------------
 \section*{Memory Window}
 \addcontentsline{toc}{section}{Memory Window}
 
-The memory window displays the contents of physical memory. The banner line contains the window identifier, the memory module number, and the window's home address. This information allows the user to quickly identify the memory region being examined. 
-
-The memory window provides several display modes that allow memory data to be viewed in different formats, depending on the debugging task at hand. The window can be toggled between these modes while maintaining the same base address and line alignment.
+The memory window displays the contents of physical or virtual memory. The banner line contains the window identifier, the memory module number, and the window's home address. This information allows the user to quickly identify the memory region being examined. 
 
 \begin{figure}[H]
 \centering
@@ -122,63 +123,15 @@ The memory window provides several display modes that allow memory data to be vi
 \label{fig:simulator-mem-window-hex32}
 \end{figure}
 
+The memory window provides several display modes that allow memory data to be viewed in different formats, depending on the debugging task at hand. The window can be toggled between these modes while maintaining the same base address and line alignment.
+
 In the 32-bit hexadecimal display mode, memory is shown as a sequence of 32-bit words formatted in hexadecimal notation. This view is useful for inspecting instruction streams and word-oriented data structures.
 
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemHex64.pdf}};
-\end{tikzpicture}
-\caption{Simulator Memory Window — Hexadecimal (64-bit)}
-\label{fig:simulator-mem-window-hex64}
-\end{figure}
-
-The 64-bit hexadecimal display mode presents memory as 64-bit quantities. This format is convenient for examining double-word data values and pointer-sized objects.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemDec.pdf}};
-\end{tikzpicture}
-\caption{Simulator Memory Window — Decimal}
-\label{fig:simulator-mem-window-dec}
-\end{figure}
-
-In decimal mode, memory contents are displayed as signed decimal values. This view is intended primarily for examining numeric data produced or consumed by applications.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemAscii.pdf}};
-\end{tikzpicture}
-\caption{Simulator Memory Window — ASCII}
-\label{fig:simulator-mem-window-ascii}
-\end{figure}
+The 64-bit hexadecimal display mode presents memory as 64-bit quantities. This format is convenient for examining double-word data values and pointer-sized objects. In decimal mode, memory contents are displayed as signed decimal values. This view is intended primarily for examining numeric data produced or consumed by applications.
 
 The ASCII display mode interprets memory bytes as printable characters. Non-printable bytes are shown using a placeholder representation. This mode is useful for inspecting strings, text buffers, and structured data with embedded character fields.
 
-%--------------------------------------------------------------------------------
-\section*{Code Window}
-\addcontentsline{toc}{section}{Code Window}
-
 The code window toggle of a memory window displays the contents of memory in a disassembled form, allowing the user to examine instructions as human-readable assembly code. This window helps in debugging by showing the relationship between machine code in memory and its corresponding assembly instructions.
-
-The banner line contains the window identifier, the memory module number, and the window's home address, allowing the user to quickly identify which memory region is being disassembled.
-
-\begin{figure}[H]
-\centering
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-    \node[anchor=south west] (img) at (0, 0)
-        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMemCode.pdf}};
-\end{tikzpicture}
-\caption{Simulator Memory Window — Disassembled Code}
-\label{fig:simulator-mem-window-code}
-\end{figure}
-
-Each line in the code window represents a memory address and the instruction stored at that address. Additional information such as instruction operands, addresses, and instruction lengths may also be displayed, depending on the simulator configuration.
 
 %--------------------------------------------------------------------------------
 \section*{Text Window}

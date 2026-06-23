@@ -1,0 +1,49 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+
+\section*{LOG - Write a log entry to the log file}
+\addcontentsline{toc}{section}{LOG - Write a log entry to the log file}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{log  <logMsg>  [ , <expr> ]}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{LOG} command writes an entry to the log file. A log entry consists of a message string \texttt{logMsg} and an optional expression value. The expression is evaluated and its resulting value is included in the log output. If no log file is available, the command report an error.
+
+The \texttt{LOG} command is intended for recording diagnostic information, execution traces, and test-related output during script execution. It can be used independently, or in combination with the \texttt{CHECK} and \texttt{ASSERT} commands.
+
+Both \texttt{CHECK} and \texttt{ASSERT} automatically write their results to the log file when logging is enabled. This includes the evaluation status (\texttt{PASS}/\texttt{FAIL}) and any associated message string.
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Example}
+
+The following examples demonstrate the usage of the \texttt{LOG} command. The first example logs a simple message, while the second logs a message together with the result of a boolean expression.
+
+\begin{lstlisting}[style=iPageOpStyle]
+
+(4) -> log "a log entry message"
+
+(5) -> log "test a boolean expression", 2 < 3
+
+(6) ->
+
+\end{lstlisting}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+
+Log files can be used to record execution traces and test results for debugging and validation purposes. The \texttt{CHECK} and \texttt{ASSERT} commands automatically extend this log by recording their evaluation results when logging is enabled.
+
+\texttt{LOG} does not affect program flow and has no side effects other than producing log output.
+
+\end{iPageDescEntry}

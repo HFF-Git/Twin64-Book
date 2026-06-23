@@ -3,18 +3,23 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\section*{REDO - redo command from history stack}
-\addcontentsline{toc}{section}{REDO - redo command from history stack}
+
+\section*{REDO - Redo command from history stack}
+\addcontentsline{toc}{section}{REDO - Redo command from history stack}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{REDO } \\
+\texttt{REDO}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{REDO} command displays a command from the history stack for editing. The edits are removing or inserting characters at the cursor position. A carriage return will then submit the command for execution.
+The \texttt{REDO} command recalls a previously executed command from the history stack and opens it for editing in the interactive command line.
+
+Editing is performed directly in the command line buffer. Characters can be inserted or removed at the cursor position. Pressing \texttt{Enter} submits the modified command for execution.
+
+The \texttt{REDO} command is only available in interactive console sessions (TTY). It is not available when input is read from a script file or redirected from a non-interactive source.
 
 \end{iPageDescEntry}
 
@@ -22,12 +27,14 @@ The \texttt{REDO} command displays a command from the history stack for editing.
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-... 
+...
 
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+
+The command depends on interactive terminal input and is therefore disabled in non-interactive execution modes such as script files or piped input.
+
 \end{iPageDescEntry}

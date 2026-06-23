@@ -1,60 +1,46 @@
 %--------------------------------------------------------------------------------
-
 %
-
 %
-
 %--------------------------------------------------------------------------------
-
 \pagebreak
-
-\section*{ASSERT - ensure a condition}
-
-\addcontentsline{toc}{section}{ASSERT - ensure a condition}
+\section*{ASSERT - Ensure a condition}
+\addcontentsline{toc}{section}{ASSERT - Ensure a condition}
 
 %--------------------------------------------------------------------------------
-
 \begin{iPageDescEntry}{Syntax}
-
-\texttt{assert  <expr>  [  , <msgStr>  ]}
-
+\texttt{assert  <expr>  [ , <msgStr> ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-
 \begin{iPageDescEntry}{Description}
 
 The \texttt{ASSERT} command evaluates the specified expression and checks whether the result is true or false. If the expression evaluates to true, execution continues normally and no output is generated. If the expression evaluates to false, the assertion fails and an error message is displayed.
 
-An optional message string may be provided to help identify the purpose of the assertion or the condition that failed. This is useful when debugging scripts, testing expressions, or validating program state during execution. If the message text is omitted, the text is taken from the environment variable \texttt{ENV\_ASSERT\_DEF\_MSG}.
+An optional message string may be provided to describe the purpose of the assertion or to identify the condition that failed. If the message text is omitted, the default text is taken from the environment variable \texttt{ENV\_ASSERT\_DEF\_MSG}.
 
-Assertions are commonly used to verify assumptions, detect unexpected values, and simplify debugging.
+If a log file is available, the \texttt{ASSERT} command also writes its result to the log file, including the evaluation status and any associated message.
+
+Assertions are intended to verify assumptions and detect unexpected program states during execution.
 
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-
 \begin{iPageDescEntry}{Example}
 
-The following example evaluates an expression and if the expression evaluates to false, the assertion fails and the specified message string is displayed.
+The following examples demonstrate the \texttt{ASSERT} command. If the expression evaluates to false, the assertion fails and the specified message string is displayed.
 
 \begin{lstlisting}[style=iPageOpStyle]
-
 (4) -> assert ( 2 < 3 )
 (5) ->
 (6) -> assert ( 3 < 2 ), "Assert Test 25"
-"Assert test 25" : FAIL
+"Assert Test 25" : FAIL
 (7) ->
-
 \end{lstlisting}
-
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
-
 \begin{iPageDescEntry}{Notes}
-Assertions are primarily intended for debugging and testing. If no message string is specified, a default failure message may be used. The expression is considered successful if it evaluates to a non-zero or true value.
 
-// ??? how about an ENV variable with a default message text ?
+Assertions are primarily intended for debugging and testing. If no message string is specified, a default failure message may be used. The expression is considered successful if it evaluates to a non-zero or true value.
 
 \end{iPageDescEntry}
