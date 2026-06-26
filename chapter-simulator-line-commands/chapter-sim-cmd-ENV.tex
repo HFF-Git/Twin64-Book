@@ -14,7 +14,7 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{ENV} command manages environment variables. An environment variable is a simple name–value pair. Variable names must be unique and are case-insensitive. Names may contain underscores, but the first character must be alphabetic.
+The \texttt{ENV} command manages environment variables. An environment variable is a simple name–value pair. Variable names must be unique and are case-insensitive. Names may contain underscores, but the first character must be alphabetic. ENV variables are stored in upper case, but can entered either way.
 
 Invoking \texttt{ENV} with no arguments lists all defined variables. Providing only a variable name displays its value, if the variable exists. Providing both a variable name and a value sets the variable. If the variable does not exist, it is created. Providing a variable name followed by the \texttt{-} character removes the variable.
 
@@ -40,11 +40,11 @@ Invoking \texttt{ENV} with no arguments lists all defined variables. Providing o
  WIN_TEXT_WIDTH                  NUM:     90
 
 (14) ->
-(14) -> env A_VAR 100
+(14) -> env A_VAR, 100
 (15) -> env A_VAR
  A_VAR                           NUM:     100
 (15) ->
-(16) -> env A_VAR -
+(16) -> env A_VAR, -
 (17) ->
 (17) -> env A_VAR
  ENV variable not found
