@@ -19,7 +19,7 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 \section*{I/O Address Space}
 \addcontentsline{toc}{section}{I/O Address Space}
 
- As shown in the overall physical memory layout, the physical memory address range dedicated to I/O modules is located from \texttt{0x00\_F000\_0000} to \texttt{0x00\_FFFF\_FFFF}. The following figure depicts the I/O memory address space ranges.
+ As shown in the overall physical memory layout, the physical memory address range dedicated to I/O modules is located from \texttt{0xFF\_0000\_0000} to \texttt{0xFF\_FFFF\_FFFF}. The following figure depicts the I/O memory address space ranges.
 
 \begin{figure}[H]
 \begin{center}
@@ -55,15 +55,14 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 	\draw[thick] (\leftofs, 2) -- (\rightofs, 2); 
 	
 	% Labels 
-	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0x00\_F000\_0000}};
-	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0x00\_F0FF\_FFFF}};
-	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0x00\_F100\_0000}};
+	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0xFF\_0000\_0000}};
+	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0xFF\_0FFF\_FFFF}};
+	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0xFF\_1000\_0000}};
 	
-	\node[left] at (\leftofs, 4 + 0.2) {\texttt{0x00\_FFFB\_FFFF}};
-	\node[left] at (\leftofs, 4 - 0.2) {\texttt{0x00\_FFFC\_0000}};
+	\node[left] at (\leftofs, 4 + 0.2) {\texttt{0xFF\_FFFB\_FFFF}};
+	\node[left] at (\leftofs, 4 - 0.2) {\texttt{0xFF\_FFFC\_0000}};
 	
-	\node[left] at (\leftofs, 2 + 0.2) {\texttt{0x00\_FFFF\_FFFF}};
-	\node[left] at (\leftofs, 2 - 0.2) {\texttt{0x01\_0000\_0000}};		
+	\node[left] at (\leftofs, 2 + 0.2) {\texttt{0xFF\_FFFF\_FFFF}};
 	
 	\node at (\leftofs + \width / 2, 13) {\textbf{Processor dependent Code}};
 	\node at (\leftofs + \width / 2, 8) {\textbf{Soft physical address space}};
@@ -83,7 +82,7 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 \label{fig:I/O Address Space}
 \end{figure}
 
-The I/O address range is a 256 Mbyte area in the first 4 Gbyte region, i.e. region zero. The area is divided into several ranges. The first range contains the \textbf{processor dependent code}. There is a set of library functions to provide low-level primitives for the boot process and the operating system. 
+The I/O address range is a 4 Gbyte area at the end of the 40-bit physical address spaace. The area is divided into several ranges. The first range contains the \textbf{processor dependent code}. There is a set of library functions to provide low-level primitives for the boot process and the operating system. 
 
 At the upper level of the I/O address range there is the \textbf{hard physical address} range. It contains a page for each module connected at the system bus level. Up to 63 modules can be allocated. The last module slot is the broadcast HPA. At system reset or reboot, there is only the broadcast HPA. The processor will try to locate all other modules in the physical address range. Finally, each I/O module will then allocate its required soft physical address range. Each module therefore listens to three distinct address ranges:
 
@@ -100,6 +99,8 @@ At the upper level of the I/O address range there is the \textbf{hard physical a
 
 \section*{Hard physical address range}
 \addcontentsline{toc}{section}{Hard physical address range}
+
+// ??? should we increase to 256 modules ? Easier to mask... 
 
 The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 63 I/O modules in the system bus. Each module has a hard physical address page, which consists of up to 16 register sets of 32 registers each. A register itself is a 64-bit word. The first register set is the supervisory register set. This set is architected and must be implemented by each module. It contains the I/O module description. The remainder of the registers in this set and the organization of the remaining register set is specific to the I/O module. 
 
@@ -207,12 +208,12 @@ accommodated within its hard physical address page. The \textbf{soft physical ad
 	\draw[thick] (\leftofs, 2) -- (\rightofs, 2); 
 	
 	% Labels 
-	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0x00\_F000\_0000}};
-	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0x00\_F0FF\_FFFF}};
-	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0x00\_F100\_0000}};
-	\node[left] at (\leftofs, 2 + 0.2) {\texttt{0x00\_FFFF\_FFFF}};
-	\node[left] at (\leftofs, 2 - 0.2) {\texttt{0x01\_0000\_0000}};	
-	
+	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0xFF\_0000\_0000}};
+	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0xFF\_0FFF\_FFFF}};
+	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0xFF\_1000\_0000}};
+	\node[left] at (\leftofs, 4 - 0.2) {\texttt{0xFF\_FFFC\_0000}};
+	\node[left] at (\leftofs, 2 + 0.2) {\texttt{0xFF\_FFFF\_FFFF}};
+		
 	%allocation arrow
 	\draw[thick, -> ] (\leftofs, 3.15) -- (\leftofs - 1, 3.15) --
 	(\leftofs - 1, 10.5 ) -- (\leftofs, 10.5 ); 
@@ -371,7 +372,7 @@ The following table lists the architected registers for an I/O module. Access to
 \begin{itemize}
 
 
-\item \textbf{I/O Status Register}. bla bla ...
+\item \textbf{I/O Status Register}. 
 
 \begin{center}
 \drawInstrFormatSixtyFour
@@ -416,10 +417,7 @@ The following table lists the architected registers for an I/O module. Access to
 ... reserved for future use
 
 
-
-
 \end{itemize}
-
 
 
 \section*{I/O Elements}
@@ -451,16 +449,12 @@ When an I/O operation is started, the command contains in addition to the comman
 \end{center}
 
 
-\section*{Processor dependent Code}
-\addcontentsline{toc}{section}{Processor dependent Code}
-
-??? should it be in the I/O chapter ?
-
-
 \section*{Design Rationale}
 \addcontentsline{toc}{section}{Design Rationale}
 
 ??? simple but flexible design
+
+??? a rather large address range, forward looking 
 
 ??? closely modeled after PA-RISC, broadcast is simplified
 

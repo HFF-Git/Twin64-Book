@@ -99,12 +99,11 @@ A virtual address is translated into a physical address. For translation purpose
 
 Twin-64 architecture features a 52-bit address space with a 40-bit physical memory address range that allows a maximum physical memory of up to 1 TByte. The following figure depicts the overall address space layout.
 
-
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[scale=0.7, transform shape]
         
-  	\% draw[help lines, gray!70, dashed] (0,0) grid(17,16);
+  	draw[help lines, gray!70, dashed] (0,0) grid(17,16);
 
 	% Rectangle dimensions
 	\def\width{8}
@@ -113,43 +112,35 @@ Twin-64 architecture features a 52-bit address space with a 40-bit physical memo
 
 	% Left side
 	\draw[thick] (\leftofs, 0) -- (\leftofs, 1);
-	\draw[thick, dashed] (\leftofs, 1) -- (\leftofs, 6); 
-	\draw[thick] (\leftofs, 6) -- (\leftofs, 8);
-	\draw[thick, dashed] (\leftofs, 8) -- (\leftofs, 10); 	
-	\draw[thick] (\leftofs, 10) -- (\leftofs, 14);
-	\draw[thick, dashed] (\leftofs, 14) -- (\leftofs, 15); 	
+	\draw[thick, dashed] (\leftofs, 1) -- (\leftofs, 8); 
+	\draw[thick] (\leftofs, 6) -- (\leftofs, 12); 	
+	\draw[thick, dashed] (\leftofs, 12) -- (\leftofs, 15); 	
 	\draw[thick] (\leftofs, 15) -- (\leftofs, 16);
 
 	% Right side
 	\draw[thick] (\rightofs, 0) -- (\rightofs, 1);
-	\draw[thick, dashed] (\rightofs, 1) -- (\rightofs, 6); 
-	\draw[thick] (\rightofs, 6) -- (\rightofs, 8);
-	\draw[thick, dashed] (\rightofs, 8) -- (\rightofs, 10); 	
-	\draw[thick] (\rightofs, 10) -- (\rightofs, 14);
-	\draw[thick, dashed] (\rightofs, 14) -- (\rightofs, 15); 	
+	\draw[thick, dashed] (\rightofs, 1) -- (\rightofs, 8); 
+	\draw[thick] (\rightofs, 6) -- (\rightofs, 12);
+	\draw[thick, dashed] (\rightofs, 12) -- (\rightofs, 15); 	
 	\draw[thick] (\rightofs, 15) -- (\rightofs, 16);
 			
 	% Edges
 	\draw[thick] (\leftofs, 0) -- (\rightofs, 0); 
-	\draw[thick] (\leftofs, 7) -- (\rightofs, 7); 
+	\draw[thick] (\leftofs, 9) -- (\rightofs, 9); 
 	\draw[thick] (\leftofs, 11) -- (\rightofs, 11);
-	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
 	\draw[thick] (\leftofs, 16) -- (\rightofs, 16);
 	
 	
 	% Labels 
-	\node[left] at (\leftofs, 16 - 0.2) {\texttt{0x00\_0000\_0000}};
-	\node[left] at (\leftofs, 13 + 0.2) {\texttt{0x00\_EFFF\_FFFF}};	
-	\node[left] at (\leftofs, 13 - 0.2) {\texttt{0x00\_F000\_0000}};
-	\node[left] at (\leftofs, 11 + 0.2) {\texttt{0x00\_FFFF\_FFFF}};
-	\node[left] at (\leftofs, 11 - 0.2) {\texttt{0x01\_0000\_0000}};
-	\node[left] at (\leftofs, 7 + 0.2) {\texttt{0xFF\_FFFF\_FFFF}};
-	\node[left] at (\leftofs, 7 - 0.2) {\texttt{0x100\_0000\_0000}};
+	\node[left] at (\leftofs, 16 - 0.2) {\texttt{0x0\_0000\_0000\_0000}};
+	\node[left] at (\leftofs, 11 + 0.2) {\texttt{0x0\_00EF\_FFFF\_FFFF}};	
+	\node[left] at (\leftofs, 11 - 0.2) {\texttt{0x0\_00FF\_0000\_0000}};
+	\node[left] at (\leftofs, 9 + 0.2) {\texttt{0x0\_00FF\_FFFF\_FFFF}};
+	\node[left] at (\leftofs, 9 - 0.2) {\texttt{0x0\_0100\_0000\_0000}};
 	\node[left] at (\leftofs, 0 + 0.2) {\texttt{0xF\_FFFF\_FFFF\_FFFF}};
 		
 	\node at (\leftofs + \width / 2, 14.5) {\textbf{Physical Memory Address Space}};
-	\node at (\leftofs + \width / 2, 12) {\textbf{I/O Address Space}};
-	\node at (\leftofs + \width / 2, 9) {\textbf{Physical Memory Address Space}};
+	\node at (\leftofs + \width / 2, 10) {\textbf{I/O Address Space}};
 	\node at (\leftofs + \width / 2, 4) {\textbf{Virtual Memory Address Space}};
 	
 	% bracket
@@ -167,6 +158,6 @@ Twin-64 architecture features a 52-bit address space with a 40-bit physical memo
 
 Region IDs 0 to 255 represent the physical address space, with a maximum size of 1 TB. These regions are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these regions. Control Register 0 contains a field that encodes the actual physical memory size installed in the system.
 
-Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top 256 MB of the region zero. I/O modules allocate addresses for their registers and storage within this range, and access to this area is uncached.
+Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top region, region 255, of the physical address space. I/O modules allocate addresses for their registers and storage within this range, and access to this area is uncached.
 
 The remaining address space is dedicated to virtual memory. Virtual storage is allocated dynamically, and the TLB provides the necessary translation to physical addresses while enforcing access rights.
