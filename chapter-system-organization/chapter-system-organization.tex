@@ -37,7 +37,7 @@ Virtual addresses are translated to physical addresses by the TLB when memory is
 
 The first regions in the virtual address space are special in that they actually represent the physical address range. An address in that range bypasses the TLB and accesses physical memory directly. Access is only allowed at the highest privilege level.
 
-A TLB can optionally support different page sizes in addition to the architected 4 KB page size. Supported sizes are 4 Kbyte, 64 Kbytes, 1 Mbyte and 16 MByte. It is very common for the operating system and data to be mapped in consecutive physical pages, which can then be covered by a larger page size.
+A TLB can optionally support different page sizes in addition to the architected 4 KB page size. It is very common for the operating system and data to be mapped in consecutive physical pages, which can then be covered by a larger page size.
 
 \section*{Security and Protection Support}
 \addcontentsline{toc}{section}{Security and Protection Support}

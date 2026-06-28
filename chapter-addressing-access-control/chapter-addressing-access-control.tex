@@ -116,9 +116,9 @@ Twin-64 implements a protection model along two dimensions. The first dimension 
 \label{fig:Access control information field}
 \end{figure}
 
-There are furthermore two privilege levels: user mode and supervisor mode. The combination of access type and privilege level forms the access control information, which is verified for every instruction and data memory access. For read access, the privilege level must be at less than or equal as the PL1 field; for write access, it must be less than or equal as the PL2 field. Exceptions are execute and gateway pages, where write access is allowed only for privileged code. For execute access, the privilege level must be less than or equal than the PL1 field. and no higher than PL2. 
+There are furthermore two privilege levels: user mode and supervisor mode. The combination of access type and privilege level forms the access control information, which is verified for every instruction and data memory access. For read access, the privilege level must be at less than or equal as the PL1 field; for write access, it must be less than or equal as the PL2 field. Exceptions are execute and gateway pages, where write access is allowed only for privileged code. For execute access, the privilege level must be less than or equal than the PL1 field.
 
-If the instruction’s privilege level falls outside these bounds, a privilege violation trap is raised. If the page type does not match the instruction’s access type, an access violation trap is raised. In both cases, the instruction is aborted, and a memory protection trap occurs. A CPU running in privilege mode bypasses the access check. 
+If the instruction’s privilege level falls outside these bounds, a privilege violation trap is raised. If the page type does not match the instruction’s access type, an access violation trap is raised. In both cases, the instruction is aborted, and a trap occurs. A CPU running in privilege mode bypasses the access check. 
 
 \begin{longtable}{@{}p{0.2\linewidth}p{0.2\linewidth}p{0.2\linewidth}p{0.25\linewidth}@{}}
     \caption{Access type checking} \\

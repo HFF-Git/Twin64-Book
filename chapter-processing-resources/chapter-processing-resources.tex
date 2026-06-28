@@ -217,7 +217,7 @@ The processor configuration register contains information about the current syst
 
 \begin{center}
 \drawInstrFormatSixtyFour
-  	{0, 8, 12, 13, 14, 15, 16}
+  	{0, 8, 10, 12, 13, 14, 16}
   	{Cycles per millisecond, Flags,  PNum, RID, AId, MSize }
 \end{center}
 
@@ -239,7 +239,7 @@ The following table lists the processor configuration fields.
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{Memory Size (MSize)} & The available physical memory in 4 Gbyte increments. The minimum size is 4 Gbyte, encoded as a zero. The maximum size is 64 Gbyte encoded as a 15. \\
+    \textbf{Memory Size (MSize)} & The available physical memory in 4 Gbyte increments. \\
     \midrule
     \textbf{Architecture Id (AId) } & ... \\
     \midrule
@@ -267,7 +267,7 @@ The shift amount register ( \texttt{ SAR} ) is a 6-bit register used by the ext
 \subsection*{Region Id Registers}
 \addcontentsline{toc}{subsection}{Region Id Registers}
 
-Twin-64 allows to record a set of up to 8 region IDs in the processor control registers \texttt{CR4} to \texttt{CR7} which are accessible to the currently executing task. For each access to a region that has the protection check bit set, one of the protection Id control registers must match the region Id. If not, a protection violation trap is raised. The rightmost bit of each of the eight RIDs is the write disable (W) bit. When the bit is set, that RID data cannot be used to grant write access. See also the chapter on addressing and access control.
+Twin-64 allows to record a set of up to 8 region IDs in the processor control registers \texttt{CR4} to \texttt{CR7} which are accessible to the currently executing task. For each access to a region that has the protection check bit set, one of the protection Id control registers must match the region Id. If not, a protection violation trap is raised. The rightmost bit of each of the eight RIDs is the write disable (W) bit. When this bit is set, that RID data cannot be used to grant write access. See also the chapter on addressing and access control.
 
 \subsection*{Interrupt Vector Table Address}
 \addcontentsline{toc}{subsection}{Interrupt Vector Table Address}
@@ -277,22 +277,22 @@ The Interruption Vector Table Address (IVA) control register, \texttt{CR8}, hold
 \subsection*{External Interrupt Enable Mask}
 \addcontentsline{toc}{subsection}{External Interrupt Enable Mask}
 
-The External Interrupt Enable Mask (EIEM) is stored in \texttt{CR15}. It is a 64-bit register, with each bit corresponding to one of the 64 external interrupts. A cleared bit in the EIEM masks the external interrupt associated with that position.
+The External Interrupt Enable Mask (EIEM) is stored in \texttt{CR9}. It is a 64-bit register, with each bit corresponding to one of the 64 external interrupts. A cleared bit in the EIEM masks the external interrupt associated with that position.
 
 \subsection*{Interruption PSR}
 \addcontentsline{toc}{subsection}{Interruption PSR}
 
-Upon an interrupt, the address of the interrupted instruction and the processor status bits are saved to this control register.
+\texttt{CR10} is the interruption processor status word register. Upon an interrupt, the address of the interrupted instruction and the processor status bits are saved to this control register.
 
 \subsection*{Interruption Argument Registers}
 \addcontentsline{toc}{subsection}{Argument Registers}
 
-The Interruption Argument Registers are used to pass an instruction and a virtual address to an interruption handler. The values of these registers for each interruption class are described in the chapter on interrupts.
+\texttt{CR1} ad \texttt{CR2} are the interruption argument registers. They are used to pass an instruction and a virtual address to an interruption handler. The values of these registers for each interruption class are described in the chapter on interrupts.
 
 \subsection*{Scratch Registers}
 \addcontentsline{toc}{subsection}{External Interrupt Register}
 
-Control registers \texttt{CR13}, \texttt{CR14}, and C\texttt{CR15} are scratch registers used by interrupt handlers or similar routines. \texttt{CR13} and \texttt{CR14} are privileged and can only be accessed from code running at a privileged level, whereas \texttt{CR15} is accessible from any privilege level. 
+Control registers \texttt{CR13}, \texttt{CR14}, and \texttt{CR15} are scratch registers used by interrupt handlers or similar routines. \texttt{CR13} and \texttt{CR14} are privileged and can only be accessed from code running at a privileged level, whereas \texttt{CR15} is accessible from any privilege level. 
 
 \section*{Program State Register}
 \addcontentsline{toc}{section}{Processor State Register}
@@ -322,7 +322,7 @@ The processor state register (\texttt{PSR}) contains the virtual address of the 
 	\node at (\fw * 4 - 0.2, 1) {R};
 	\node at (\fw * 5 - 0.2, 1) {B};
 	\node at (\fw * 6 - 0.2, 1) {T};
-	\node at (\fw * 7 - 0.2, 1) {-};
+	\node at (\fw * 7 - 0.2, 1) {J};
 	\node at (\fw * 8 - 0.2, 1) {-};
 	\node at (\fw * 9 - 0.2, 1) {-};
 	\node at (\fw * 10 - 0.2, 1) {-};
@@ -393,6 +393,8 @@ The instruction address portion of the PSR registers contains the region id and 
     \textbf{B} & Break enable. When set execution of a BREAK instruction causes a breakpoint exception. \\
     \midrule
     \textbf{T} & Trace enable. When set, the processor generates a trace exception after the next instruction completes, regardless of the instruction type. \\
+    \midrule
+    \textbf{J} & Taken branch trap enable. When set, the processor generates a trap on each taken branch.  \\
     \midrule
     \textbf{I} & When set, external interrupts are enabled. \\
     \midrule 
@@ -655,12 +657,12 @@ To reduce TLB processing overhead, the TLB is capable of storing virtual address
     \midrule
     \textbf{L} & When set, the TLB entry is locked and will not be selected during a replacement candidate search. \\
     \midrule
-    \textbf{U} & When set, the page represented by the TLB entry is not cached. \\
+    \textbf{U} & When set, access to the page represented by the TLB entry is not cached. \\
     \midrule
     \textbf{M} & When set, the page has been modified. \\
 \end{longtable}
 
-The first 16 virtual memory regions, region 0 to 15, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0x03\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
+The first 256 memory regions, region 0 to 255, are special in that they bypass the TLB entirely. A virtual address in the range 0x00\_0000\_0000 to 0xFF\_FFFF\_FFFF directly maps to the physical address of the same range. The address range represents physical memory and can only be accessed in privileged mode. 
 
 \section*{Caches}
 \addcontentsline{toc}{section}{Caches}
@@ -669,7 +671,7 @@ Twin-64 is a cache-visible architecture that supports both unified and separate 
 
 The architecture does not mandate specific cache line sizes, cache organization, or hierarchy models. Instead, it defines instructions for cache operations, such as deletion or flushing of cache lines. Cacher insertion is handled transparently by hardware.
 
-Each TLB entry indicates whether the corresponding data should be cached. For regions 0 to 15, where the TLB is bypassed. All physical memory address ranges as well as the I/O address range are therefore not cached.
+For a virtual address, the TLB entry indicates whether the corresponding data should be cached. All physical memory address ranges as well as the I/O address range are not cached. Care needs therefore to be taken when referencing a data its by its virtual address and the mapped physical address. The corresponding cache entry perhaps needs to be flushed first. 
 
 \section*{Instruction Set}
 \addcontentsline{toc}{section}{Instruction Set}

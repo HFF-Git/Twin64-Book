@@ -50,7 +50,16 @@ None.
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None
+
+The \texxtt{LDO} instruction is often used to load immediate values. 
+
+\begin{verbatim}
+    LDI Rm, val -> LDO Rm, val( R0 )
+\end{verbatim}
+
+If value to load is larger than the 13-bit offset, a sequence of instruction is however necessary.
+
+
 \end{iPageDescEntry}
 
 

@@ -144,10 +144,10 @@ Twin-64 architecture features a 52-bit address space with a 40-bit physical memo
 	\node at (\leftofs + \width / 2, 4) {\textbf{Virtual Memory Address Space}};
 	
 	% bracket
-	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,7) -- (\rightofs + 0.5,16)
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,9) -- (\rightofs + 0.5,16)
 	node[midway, right=1cm, anchor=west]{Physical Address range};
 	
-	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,0) -- (\rightofs + 0.5,7)
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,0) -- (\rightofs + 0.5,9)
 	node[midway, right=1cm, anchor=west]{Virtual Address range};
 
 \end{tikzpicture}
@@ -156,7 +156,7 @@ Twin-64 architecture features a 52-bit address space with a 40-bit physical memo
 \label{fig:Memory Address Ranges}
 \end{figure}
 
-Region IDs 0 to 255 represent the physical address space, with a maximum size of 1 TB. These regions are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these regions. Control Register 0 contains a field that encodes the actual physical memory size installed in the system.
+Region IDs 0 to 255 represent the physical address space, with a maximum size of 1 TB. These regions are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these regions. Control Register 0 contains a field that contains the actual physical memory size installed in the system.
 
 Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top region, region 255, of the physical address space. I/O modules allocate addresses for their registers and storage within this range, and access to this area is uncached.
 

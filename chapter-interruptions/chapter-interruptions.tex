@@ -21,46 +21,6 @@ The second kind of traps are boundary traps, raised so that the system can inter
 
 All four classes of interruptions are handled in a uniform manner.
 
-\section*{Interruption Architecture} 
-\addcontentsline{toc}{chapter}{Interruption Architecture}
-The Twin-64 processor status register contains two bits for supporting debugging traps and traces. When the T bit is set, the processor executes exactly one instruction and then takes a trace exception at the following instruction boundary, before execution of the next instruction.
-
-At an instruction boundary, multiple boundary exception conditions may be present. When multiple exception conditions are present, the processor resolves them according to the priority rules defined in Table~\ref{tab:exception-priority}. Instruction-caused exceptions always take priority over boundary exceptions. Among boundary exceptions, breakpoint traps have the highest priority.
-
-\begin{table}[h]
-\centering
-\begin{tabularx}{\linewidth}{|c|l|X|}
-\hline
-\textbf{Pri.} & \textbf{Exception Type} & \textbf{Notes} \\
-\hline
-1 (High) & Instruction-caused exception &
-TLB miss, page fault, alignment fault, arithmetic overflow, illegal instruction \\
-\hline
-2 & Debug breakpoint trap &
-\texttt{TRAP} instruction with breakpoint code, recognized only if B = 1 \\
-\hline
-3 & Trace trap &
-Raised when T = 1 at the instruction boundary after one instruction completes \\
-\hline
-4 & External interrupt &
-Asynchronous event taken at an instruction boundary \\
-\hline
-5 (Low) & Check &
-Deferred or recoverable processor checks \\
-\hline
-\end{tabularx}
-\caption{Twin-64 Exception Priority}
-\label{tab:exception-priority}
-\end{table}
-
-The B bit controls recognition of breakpoint instructions. When B is cleared, \texttt{BREAK} instructions do not generate breakpoint exceptions and execute as no-ops. This allows trace exceptions to be taken deterministically while stepping over instructions, including instructions located at breakpoint addresses.
-
-Twin-64 provides a general-purpose \texttt{TRAP} instruction which causes a synchronous trap and transfers control to the trap handler. The \texttt{TRAP} instruction includes a trap information code that identifies the reason for the trap.
-
-One trap information code is reserved for use as a debugging breakpoint. When a \texttt{TRAP} instruction with the breakpoint trap code is encountered, it is treated as a boundary trap. Recognition of breakpoint traps is controlled by the B bit. If B is cleared, breakpoint \texttt{TRAP} instructions execute as no-ops and do not cause a trap.
-
-All other \texttt{TRAP} instruction codes are unaffected by the B bit and always generate a trap. These traps are synchronous with respect to the instruction stream and are taken during instruction execution.
-
 \section*{Interrupt Handling}
 \addcontentsline{toc}{section}{Interrupt Handling}
 
@@ -142,10 +102,43 @@ Each entry consists of 8 instructions that can be executed. It is the responsibi
     \midrule
     \textbf{20} & Breakpoint Trap & current instruction & instruction & trap code \\
    \end{longtable}
+   
+\section*{Debug and Trace Support} 
+\addcontentsline{toc}{chapter}{Interruption Architecture}
+The Twin-64 processor status register contains two bits for supporting debugging traps and traces. When the T bit is set, the processor executes exactly one instruction and then takes a trace exception at the following instruction boundary, before execution of the next instruction.
 
-\section*{Summary}
-\addcontentsline{toc}{section}{Summary}
+At an instruction boundary, multiple boundary exception conditions may be present. When multiple exception conditions are present, the processor resolves them according to the priority rules defined in Table~\ref{tab:exception-priority}. Instruction-caused exceptions always take priority over boundary exceptions. Among boundary exceptions, breakpoint traps have the highest priority.
 
-Twin-64 interruptions provide a uniform mechanism for faults, traps, interrupts, and checks. Instruction-caused exceptions take priority, while boundary traps like breakpoints and trace traps allow precise debugging using the B and T bits. Saved state distinguishes the faulting instruction from the next instruction, enabling deterministic handling and correct single-stepping. The interrupt vector table maps trap numbers to handler routines, ensuring efficient and consistent exception management.
+\begin{table}[h]
+\centering
+\begin{tabularx}{\linewidth}{|c|l|X|}
+\hline
+\textbf{Pri.} & \textbf{Exception Type} & \textbf{Notes} \\
+\hline
+1 (High) & Instruction-caused exception &
+TLB miss, page fault, alignment fault, arithmetic overflow, illegal instruction \\
+\hline
+2 & Debug breakpoint trap &
+\texttt{TRAP} instruction with breakpoint code, recognized only if B = 1 \\
+\hline
+3 & Trace trap &
+Raised when T = 1 at the instruction boundary after one instruction completes \\
+\hline
+4 & External interrupt &
+Asynchronous event taken at an instruction boundary \\
+\hline
+5 (Low) & Check &
+Deferred or recoverable processor checks \\
+\hline
+\end{tabularx}
+\caption{Twin-64 Exception Priority}
+\label{tab:exception-priority}
+\end{table}
 
+The B bit controls recognition of breakpoint instructions. When B is cleared, \texttt{BREAK} instructions do not generate breakpoint exceptions and execute as no-ops. This allows trace exceptions to be taken deterministically while stepping over instructions, including instructions located at breakpoint addresses.
 
+Twin-64 provides a general-purpose \texttt{TRAP} instruction which causes a synchronous trap and transfers control to the trap handler. The \texttt{TRAP} instruction includes a trap information code that identifies the reason for the trap.
+
+One trap information code is reserved for use as a debugging breakpoint. When a \texttt{TRAP} instruction with the breakpoint trap code is encountered, it is treated as a boundary trap. Recognition of breakpoint traps is controlled by the B bit. If B is cleared, breakpoint \texttt{TRAP} instructions execute as no-ops and do not cause a trap.
+
+All other \texttt{TRAP} instruction codes are unaffected by the B bit and always generate a trap. These traps are synchronous with respect to the instruction stream and are taken during instruction execution.
