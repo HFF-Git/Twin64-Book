@@ -59,8 +59,8 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0xFF\_0FFF\_FFFF}};
 	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0xFF\_1000\_0000}};
 	
-	\node[left] at (\leftofs, 4 + 0.2) {\texttt{0xFF\_FFFB\_FFFF}};
-	\node[left] at (\leftofs, 4 - 0.2) {\texttt{0xFF\_FFFC\_0000}};
+	\node[left] at (\leftofs, 4 + 0.2) {\texttt{0xFF\_FFEF\_FFFF}};
+	\node[left] at (\leftofs, 4 - 0.2) {\texttt{0xFF\_FFF0\_0000}};
 	
 	\node[left] at (\leftofs, 2 + 0.2) {\texttt{0xFF\_FFFF\_FFFF}};
 	
@@ -82,9 +82,9 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 \label{fig:I/O Address Space}
 \end{figure}
 
-The I/O address range is a 4 Gbyte area at the end of the 40-bit physical address spaace. The area is divided into several ranges. The first range contains the \textbf{processor dependent code}. There is a set of library functions to provide low-level primitives for the boot process and the operating system. 
+The I/O address range is a 4 Gbyte area at the end of the 40-bit physical address space. The area is divided into several ranges. The first range contains the \textbf{processor dependent code}. There is a set of library functions to provide low-level primitives for the boot process and the operating system. 
 
-At the upper level of the I/O address range there is the \textbf{hard physical address} range. It contains a page for each module connected at the system bus level. Up to 63 modules can be allocated. The last module slot is the broadcast HPA. At system reset or reboot, there is only the broadcast HPA. The processor will try to locate all other modules in the physical address range. Finally, each I/O module will then allocate its required soft physical address range. Each module therefore listens to three distinct address ranges:
+At the upper level of the I/O address range there is the \textbf{hard physical address} range. It contains a page for each module connected at the system bus level. Up to 256 modules can be allocated. The last module slot is the broadcast HPA. At system reset or reboot, there is only the broadcast HPA. The processor will try to locate all other modules in the physical address range. Finally, each I/O module will then allocate its required soft physical address range. Each module therefore listens to three distinct address ranges:
 
 \begin{itemize}
     \item \textbf{Hard physical address range:}  
