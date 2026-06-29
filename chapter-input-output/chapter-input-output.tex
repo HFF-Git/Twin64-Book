@@ -56,8 +56,8 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 	
 	% Labels 
 	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0xFF\_0000\_0000}};
-	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0xFF\_0FFF\_FFFF}};
-	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0xFF\_1000\_0000}};
+	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0xFF\_00FF\_FFFF}};
+	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0xFF\_0100\_0000}};
 	
 	\node[left] at (\leftofs, 4 + 0.2) {\texttt{0xFF\_FFEF\_FFFF}};
 	\node[left] at (\leftofs, 4 - 0.2) {\texttt{0xFF\_FFF0\_0000}};
@@ -100,9 +100,7 @@ At the upper level of the I/O address range there is the \textbf{hard physical a
 \section*{Hard physical address range}
 \addcontentsline{toc}{section}{Hard physical address range}
 
-// ??? should we increase to 256 modules ? Easier to mask... 
-
-The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 63 I/O modules in the system bus. Each module has a hard physical address page, which consists of up to 16 register sets of 32 registers each. A register itself is a 64-bit word. The first register set is the supervisory register set. This set is architected and must be implemented by each module. It contains the I/O module description. The remainder of the registers in this set and the organization of the remaining register set is specific to the I/O module. 
+The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 256 I/O modules in the system bus. Each module has a hard physical address page, which consists of up to 16 register sets of 32 registers each. A register itself is a 64-bit word. The first register set is the supervisory register set. This set is architected and must be implemented by each module. It contains the I/O module description. The remainder of the registers in this set and the organization of the remaining register set is specific to the I/O module. 
 
 \begin{figure}[H]
 \begin{center}
@@ -158,7 +156,7 @@ The \textbf{hard physical address} range contains an I/O page for each I/O modul
 \section*{Broadcast address range}
 \addcontentsline{toc}{section}{Broadcast address range}
 
-I/O module 63, i.e. the last page in the HPA address range, is the broadcast address range. It is actually not a module and contains no actual functions. Writes issued to broadcastable registers using this module number are not directed to a single module. Instead, the write operation is applied simultaneously to all I/O modules on the system bus. This mechanism is typically used for system-wide commands such as resets, synchronization events, or configuration updates that must reach every module at once.
+I/O module 255, i.e. the last page in the HPA address range, is the broadcast address range. It is actually not a module and contains no actual functions. Writes issued to broadcastable registers using this module number are not directed to a single module. Instead, the write operation is applied simultaneously to all I/O modules on the system bus. This mechanism is typically used for system-wide commands such as resets, synchronization events, or configuration updates that must reach every module at once.
 
 At reset time, all modules only listen to their broadcastable registers. Only after system bus setup and module discovery, is the HPA address range available.
 
@@ -211,7 +209,7 @@ accommodated within its hard physical address page. The \textbf{soft physical ad
 	\node[left] at (\leftofs, 14 - 0.2) {\texttt{0xFF\_0000\_0000}};
 	\node[left] at (\leftofs, 12 + 0.2) {\texttt{0xFF\_0FFF\_FFFF}};
 	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0xFF\_1000\_0000}};
-	\node[left] at (\leftofs, 4 - 0.2) {\texttt{0xFF\_FFFC\_0000}};
+	\node[left] at (\leftofs, 4 - 0.2) {\texttt{0xFF\_FFF0\_0000}};
 	\node[left] at (\leftofs, 2 + 0.2) {\texttt{0xFF\_FFFF\_FFFF}};
 		
 	%allocation arrow

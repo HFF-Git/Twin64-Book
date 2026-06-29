@@ -1,0 +1,35 @@
+\unnumberedChapter{Firmware Architecture}
+This chapter presents the Twin-64 firmware architecture overview and concepts 
+
+
+
+
+
+\unnumberedSection{PAL/SAL Address Space}
+
+0xFF\_F000\_0000 - start of PDC. Reset vector. 
+
+0xFF\_F000\_0004 - PDC entry point. Jumps to PDC entry function.
+
+0xFF\_F000\_0008 - reserved.
+
+0xFF\_F000\_000C - reserved.
+
+\unnumberedSection{PAL/SAL Calling Convention}
+
+ARG0 - entry point number.
+
+ARG1, ARg2, ARG3 - arguments.
+
+All also function as RET0 to RET3.
+
+REGn - REGm - caller saves are used locally.
+
+PDC has perhaps a memory area in page zero to use as working memory.
+
+PDC also needs a stack to run on -> in lower memory.
+
+PDC is called privileged, interrupts disabled, uncached.
+
+
+ 
