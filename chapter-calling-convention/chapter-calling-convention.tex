@@ -31,10 +31,10 @@ A local call is the most common form of procedure call. The following code snipp
 \begin{lstlisting}
 ; calling procedure
 
-			...					; load arguments
-			...					; save caller saves
-			BL target, RL 		; branch to "target", save return
-			...					; restore caller saves
+			...					# load arguments
+			...					# save caller saves
+			BL target, RL 		# branch to "target", save return
+			...					# restore caller saves
 \end{lstlisting}
 \end{figure}
 
@@ -48,18 +48,18 @@ The callee begins by saving the return link, allocating its stack frame, and sav
 \begin{lstlisting}
 ; called procedure
             
-target:     ST RL, -16(SP)	    ; save RL
-			ST SP, -8 (SP)      ; save PSP
-			LDO SP, size(SP) 	; allocate stack frame
-			...					; save callee save
+target:     ST RL, -16(SP)	    # save RL
+			ST SP, -8 (SP)      # save PSP
+			LDO SP, size(SP) 	# allocate stack frame
+			...					# save callee save
 			
-			...					; do the work
+			...					# do the work
 			
 			
-			...					; restore callee saves
-			LDO SP, -size (SP)  ; deallocate stack frame
-			LD RL, -16(SP)		; restore RL
-			BV (RL) 			; return to caller
+			...					# restore callee saves
+			LDO SP, -size (SP)  # deallocate stack frame
+			LD RL, -16(SP)		# restore RL
+			BV (RL) 			# return to caller
 \end{lstlisting}
 \end{figure}
 
@@ -161,11 +161,11 @@ An external call is one that may cross a region boundary. The \texttt{BE} instru
 
 ; calling code
 
-			...					; load arguments
-			...					; save caller saves
-			LD R1, <target>)    ; obtain the target address    
-			BE R1, RL    		; branch to "target", save return
-			...					; restore caller saves
+			...					# load arguments
+			...					# save caller saves
+			LD R1, <target>)    # obtain the target address    
+			BE R1, RL    		# branch to "target", save return
+			...					# restore caller saves
 \end{lstlisting}
 \end{figure}
 
@@ -184,19 +184,19 @@ A generic external call sequence is shown below:
 ;calling code
 
 			...
-            ...						; load arguments
-			...						; save caller saves
-			...						; save DP
-			B stubF1				; branch to the stub for "F1"
-			...						; restore DP
-			...						; restore caller saves
+            ...						# load arguments
+			...						# save caller saves
+			...						# save DP
+			B stubF1				# branch to the stub for "F1"
+			...					    # restore DP
+			...						# restore caller saves
 			...
 			
 ;stubF1
 
-stubF1:		LD R1, -ofs(DP)		    ; load target address of F1
-			LD DP, -ofs + 8(DP)     ; load target DP value
-			BE (R1)					; branch to target
+stubF1:		LD R1, -ofs(DP)		    # load target address of F1
+			LD DP, -ofs + 8(DP)     # load target DP value
+			BE (R1)					# branch to target
 
 \end{lstlisting}
 \end{figure}
@@ -211,17 +211,17 @@ Before the stub loads the new DP value, the caller must save the current DP. Thi
 
 ; called code
 
-target:     ST RL, -16(SP)		; save RL
-            ST SP,  -8(SP)      ; save PSP
-			LDO SP, size(SP)    ; allocate stack frame of <size>
-			...					; save callee save regs
+target:     ST RL, -16(SP)			# save RL
+            ST SP,  -8(SP)          # save PSP
+			LDO SP, size(SP)        # allocate stack frame
+			...					    # save callee save regs
 			
-			...					; do the function work
+			...					    # do the function work
 			
-			...					; restore callee saves
-			LDO SP, -size(SP)   ; deallocate stack frame
-			LD RL, -16(SP)      ; restore RL
-			BE (RL) 		    ; branch to return location	
+			...					    # restore callee saves
+    	    LDO SP, -size(SP)       # deallocate stack frame
+		    LD RL, -16(SP)          # restore RL
+		    BE (RL)                 # branch to return location	
 \end{lstlisting}
 \end{figure}
 
@@ -345,8 +345,8 @@ A function label is a reference to a function which is resolved at calling time.
 \begin{lstlisting}
 
 ; example
-			...					; 
-			...					; 
+			...					# 
+			...					# 
 		
 \end{lstlisting}
 \end{figure}
@@ -363,8 +363,8 @@ A function label is a reference to a function which is resolved at calling time.
 \begin{lstlisting}
 
 ; example
-			...					; 
-			...					; 
+			...					# 
+			...					# 
 		
 \end{lstlisting}
 \end{figure}
