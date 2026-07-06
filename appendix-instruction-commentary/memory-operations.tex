@@ -65,7 +65,7 @@ The load and store instructions offer a scaled offset field. This field is shift
 	\texttt{LD.S Rn, <ofs>(Rb)} & 
 	\parbox[t]{\linewidth}{
 	\texttt{ADDIL Rb, L\%<ofs>} \\
-	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	\texttt{LD.S  Rn, R\%<ofs>(R1)}
 	} \\ 
 	\midrule
 	
@@ -73,7 +73,7 @@ The load and store instructions offer a scaled offset field. This field is shift
 	\texttt{LD.W Rn, <ofs>(Rb)} & 
 	\parbox[t]{\linewidth}{
 	\texttt{ADDIL Rb, L\%<ofs>} \\
-	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	\texttt{LD.W  Rn, R\%<ofs>(R1)}
 	} \\ 
 	\midrule
 	
@@ -81,7 +81,7 @@ The load and store instructions offer a scaled offset field. This field is shift
 	\texttt{LD.D Rn, <ofs>(Rb)} & 
 	\parbox[t]{\linewidth}{
 	\texttt{ADDIL Rb, L\%<ofs>} \\
-	\texttt{LD.B  Rn, R\%<ofs>(R1)}
+	\texttt{LD.D  Rn, R\%<ofs>(R1)}
 	} \\ 
 	\bottomrule
 \end{longtable}

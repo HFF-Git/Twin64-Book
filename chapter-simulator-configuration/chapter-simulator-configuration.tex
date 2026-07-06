@@ -1,3 +1,4 @@
+%\unnumberedChapter{Simulator configuration}
 \chapter*{Simulator Configuration}
 \addcontentsline{toc}{chapter}{Simulator Configuration}
 
@@ -5,11 +6,12 @@ The simulator can be configured using a set of global options that control its
 startup behavior and runtime environment.
 
 Configuration information can be supplied through multiple mechanisms:
-\begin{itemize}
+
+\begin{smallGapItemize}
     \item Program command-line parameters
     \item Environment variables
     \item Simulator commands executed during initialization
-\end{itemize}
+\end{smallGapItemize}
 
 These mechanisms work together to define the initial simulator state before
 interactive use begins.
@@ -58,7 +60,7 @@ Specifies the path to the log file used for runtime logging. \\ \hline
 \addcontentsline{toc}{section}{Configuration Files}
 
 In addition to command-line parameters, the simulator can be configured using
-a configuration file specified with the \texttt{--config} program option.
+a configuration file specified with the \texttt{--configfile} program option.
 
 A configuration file contains a sequence of simulator commands that are
 executed automatically after the initial program setup is complete. This
@@ -66,12 +68,12 @@ mechanism allows complex simulator setups to be reproduced reliably and
 consistently.
 
 Configuration files are typically used to:
-\begin{itemize}
+\begin{smallGapItemize}
     \item Set environment variables
     \item Create and initialize simulator windows
     \item Instantiate Twin-64 system modules
     \item Establish an initial debugging or inspection layout
-\end{itemize}
+\end{smallGapItemize}
 
 After all commands in the configuration file have been executed, control is
 passed to the interactive command interface.

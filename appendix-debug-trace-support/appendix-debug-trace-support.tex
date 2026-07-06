@@ -1,5 +1,6 @@
+%\unnumberedChapter{Appendix -Debug and Trace Support}
 \chapter*{Appendix -Debug and Trace Support}
-\addcontentsline{toc}{chapter}{Appendix - Debug and Trace Support}
+\addcontentsline{toc}{chapter}{Appendix -Debug and Trace Support}
 
 \noindent
 \textbf{Note:} The examples and mechanisms described in this appendix are fully consistent with the interruption architecture and trap table presented in Chapter~\ref{chap:interruptions}. In Twin-64, the \texttt{BREAK} instruction is implemented as a \texttt{TRAP} instruction with a specific breakpoint trap code. Recognition of breakpoint traps is controlled by the \textbf{B} bit, and single-instruction stepping is controlled by the \textbf{T} bit. This appendix illustrates how these bits are used together to provide precise, deterministic debugging and tracing, including correct handling of branch instructions, instruction boundaries, and breakpoint reinstallation. All sequences assume the debugger maintains breakpoint addresses and trap codes independently of the processor’s saved instruction address.
@@ -18,6 +19,7 @@ together to implement software breakpoints and single-instruction stepping.
 
 \section*{B - Break Enable Bit}
 \addcontentsline{toc}{section}{B - Break Enable Bit}
+
 The behavior of the \texttt{BREAK} instruction is controlled by the breakpoint enable flag, which determines whether the instruction triggers an exception or executes normally. When \textbf{B = 1}, executing a \texttt{BREAK} instruction triggers a \emph{breakpoint exception}, allowing the debugger or runtime environment to halt execution and inspect the architectural state. 
 
 In contrast, when \textbf{B = 0}, \texttt{BREAK} instructions are treated as no-ops and do not generate an exception, enabling programs that contain \texttt{BREAK} instructions to run uninterrupted. A breakpoint exception occurs \emph{before} the \texttt{BREAK} instruction completes, so the architectural state reflects all execution up to, but not including, the instruction itself. This behavior ensures that the system state is consistent and predictable at the moment the exception is taken, which is essential for accurate debugging and reliable exception handling.

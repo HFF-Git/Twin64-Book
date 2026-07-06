@@ -1,10 +1,13 @@
-\chapter*{Processor Design}
-\addcontentsline{toc}{chapter}{Processor Design}
+%\unnumberedChapter{Appendix - Processor Design}
+\chapter*{Appendix - Processor Design}
+\addcontentsline{toc}{chapter}{Appendix - Processor Design}
 
-// ??? simulator does use a pipelined design. This chapter is for reference.
+// ??? to intro ....
 
-\section*{Pipeline Stages}
-\addcontentsline{toc}{section}{Pipeline Stages}
+\unnumberedSection{Pipeline Stages}
+%\section*{Pipeline Stages}
+%\addcontentsline{toc}{section}{Pipeline Stages}
+
 
 The simulator implements a three-stage instruction pipeline, with each stage
 divided into two substages. The pipeline stages and their respective substages
@@ -59,8 +62,11 @@ instruction address.
 
 
 %--------------------------------------------------------------------------------
+%\unnumberedSection{Single Issue Pipeline}
+
 \section*{Single Issue Pipeline}
-\addcontentsline{toc}{section}{Pipeline}
+\addcontentsline{toc}{section}{Single Issue Pipeline}
+
 
 Twin-64 has a three stage pipeline, with each stage have two subStages.
 
@@ -126,6 +132,8 @@ Twin-64 has a three stage pipeline, with each stage have two subStages.
 \caption{Single Instruction Pipeline}
 \label{fig:Single Instruction Pipeline}
 \end{figure}
+
+%\unnumberedSection{Single Issue Pipeline}
 
 \section*{Dual Issue Pipeline}
 \addcontentsline{toc}{section}{Dual Issue Pipeline}
@@ -210,4 +218,6 @@ Address computation uses 32-bit adders.
 ALU is 64 Bit. We only need one, since we can compute two substages one result each.
 
  
+
+
 

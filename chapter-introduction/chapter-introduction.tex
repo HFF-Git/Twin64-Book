@@ -1,7 +1,3 @@
-%--------------------------------------------------------------------------------
-%
-%
-%--------------------------------------------------------------------------------
 \unnumberedChapter{Introduction}
 
 Designers of CPUs in the seventies and early eighties almost all used a microcoded approach with hundreds of instructions. RISC was just beginning to emerge. Registers were typically not fully general-purpose but often had special functions or meanings, and many instructions were rather complicated, though designers believed them useful. Compiler writers, however, often used only a small subset, ignoring these complex instructions because they were too specialized. In the late eighties and nineties the shift moved to RISC-based designs, with large sets of registers, fixed instruction word lengths, large virtual memory address ranges, and instructions that were in general much more pipeline-friendly. Today, processors are highly complex, with superscalar deep pipelines and multilevel cache hierarchies—just a few of the hallmarks of modern CPU design. CPU designs have become so large and complex that no single person can completely understand them. But what if there were a simple design that one person could fully understand?
@@ -32,7 +28,5 @@ This document serves as a comprehensive guide to the Twin-64 processor, its inst
 \textbf{Part Six} presents the T64 firmware architecture.  ( ??? PAL, SAL, etc. Reset sequence, etc. )
 
 \textbf{Part Seven} presents a reference implementation of the architecture and instruction set processor in a simulator environment.
-
-\textbf{Part Eight} examines processor design options. While multiple design approaches are of course possible, this section provides a reference implementation that highlights key architectural concepts, practical trade-offs, and performance considerations.
 
 Finally, the \textbf{Appendix} provides supplementary material, including additional design notes, tables, and clarifications to support the main text and offer deeper insight into the Twin-64 system.
