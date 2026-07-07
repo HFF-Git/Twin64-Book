@@ -1,12 +1,11 @@
 %--------------------------------------------------------------------------------
-\section*{Immediate Instructions}
-\addcontentsline{toc}{section}{Immediate Instructions}
+\unnumberedSection{Immediate Instructions}
 
-ADDIL, LDI, LDO
+ADDIL, LDIL, LDO
 
 
-\section*{Pseudo-OpCode Load Immediate}
-The most common requirement is to load large immediate values, which do not fit into an instruction word. The approach is to emit a combination of \texttt{LDI} and \texttt{LDO} instructions. The \texttt{LDO} instruction offers a scaled offset, which can be used to optimize for the cases where the value is aligned to what the scale field offers. Th3 following table depicts the instruction sequences to emit for immediate values.
+\unnumberedSection{Pseudo-OpCode Load Immediate}
+The most common requirement is to load large immediate values, which do not fit into an instruction word. The approach is to emit a combination of \texttt{LDI} and \texttt{LDO} instructions. The \texttt{LDO} instruction offers a scaled offset, which can be used to optimize for the cases where the value is aligned to what the scale field offers. The following table depicts the instruction sequences to emit for immediate values.
 
 \newcolumntype{T}[1]{>{\raggedright\arraybackslash}p{#1}}
 \begin{longtable}{@{}T{0.25\linewidth}T{0.3\linewidth}T{0.3\linewidth}@{}}

@@ -17,8 +17,7 @@ This chapter provides a detailed description of the Twin-64 instruction set. Eac
     \item A high-level pseudo-code representation of its operation.
 \end{itemize}
 
-\section*{Instruction Operations}
-\addcontentsline{toc}{section}{Instruction Operations}
+\unnumberedSection{Instruction Operations}
 
 Instruction operations are expressed using C-style pseudo code. The conventions and helper routines used in these descriptions are defined in the appendix. Registers are referenced by class and index:
 
@@ -33,8 +32,7 @@ Instruction operations are expressed using C-style pseudo code. The conventions 
 
 Some registers have dedicated names; for example, the shift-amount control register is \texttt{SAR}.
 
-\section*{Instruction Options}
-\addcontentsline{toc}{section}{Instruction Options}
+\unnumberedSection{Instruction Options}
 
 Instruction options are specified in assembler syntax by appending a dot to the instruction mnemonic, followed by one or more option characters. Each character represents a defined option. For example:
 
@@ -49,8 +47,7 @@ Instruction options are specified in assembler syntax by appending a dot to the 
 
 The order of option characters is insignificant. All valid options for an instruction are listed in the corresponding option set.
 
-\section*{Instruction Subfields}
-\addcontentsline{toc}{section}{Instruction Subfields}
+\unnumberedSection{Instruction Subfields}
 
 Individual subfields of an instruction or register are accessed using a dot followed by the field name enclosed in square brackets. For example:
 
@@ -64,8 +61,7 @@ Individual subfields of an instruction or register are accessed using a dot foll
 
 Fields marked as \emph{reserved} are intended for future extensions and must always be set to zero. Any non-zero value in a reserved field results in undefined behavior.
 
-\section*{Constant Expressions}
-\addcontentsline{toc}{section}{Constant Expressions}
+\unnumberedSection{Constant Expressions}
 
 Constant expressions are 64-bit values. When encoding a numeric field that cannot be represented directly, a sequence of instructions may be required to construct the value in the destination word. To support this, constant values may be preceded by a field qualifier that selects a portion of the 64-bit value.
 

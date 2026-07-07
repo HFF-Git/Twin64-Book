@@ -1,34 +1,22 @@
 %--------------------------------------------------------------------------------
-\section*{Boolean Operation Instructions}
-\addcontentsline{toc}{section}{Boolean Operation Instructions}
+\unnumberedSection{Boolean Operation Instructions}
 
-The Twin-64 architecture supports the standard Boolean instructions: 
-\texttt{AND}, \texttt{OR}, and \texttt{XOR}. These instructions allow 
-complementing the second operand as well as the output, enabling flexible 
-masking and bit-field manipulation.
+The Twin-64 architecture supports the standard Boolean instructions: \texttt{AND}, \texttt{OR}, and \texttt{XOR}. These instructions allow complementing the second operand as well as the output, enabling flexible  masking and bit-field manipulation.
 
-For example, one can apply a mask directly or use its complement to isolate 
-or clear specific bits in a register efficiently.
+For example, one can apply a mask directly or use its complement to isolate or clear specific bits in a register efficiently.
 
-When a Boolean instruction uses an immediate value as one operand, there are 
-two possible interpretations for the immediate field:
-\begin{itemize}
-    \item \textbf{Unsigned zero-extended:} the immediate is treated as a 
-          positive value and zero-extended to the machine word size. This 
-          is convenient for constructing masks affecting only low-order bits.
-    \item \textbf{Signed sign-extended:} the immediate is interpreted as a 
-          signed value and extended with its sign bit. This allows the use 
-          of negative constants, which produce masks with high-order bits set.
-\end{itemize}
+When a Boolean instruction uses an immediate value as one operand, there are two possible interpretations for the immediate field:
 
-Twin-64 adopts \emph{sign-extension} for logical immediate values. The primary
-motivation is uniformity: the logical I-type instructions share the same 
-immediate decoding path as arithmetic instructions such as \texttt{ADDI}, 
-avoiding additional decode logic.  
+\begin{smallGapItemize}
+    \item \textbf{Unsigned zero-extended:} the immediate is treated as a positive value and zero-extended to the machine word size. This is convenient for constructing masks affecting only low-order bits.
+    \item \textbf{Signed sign-extended:} the immediate is interpreted as a signed value and extended with its sign bit. This allows the use of negative constants, which produce masks with high-order bits set.
+\end{smallGapItemize}
 
-Sign-extension also enables several useful bit-manipulation idioms without 
-requiring extra instructions. Examples include:
-\begin{itemize}
+Twin-64 adopts \emph{sign-extension} for logical immediate values. The primary motivation is uniformity: the logical I-type instructions share the same immediate decoding path as arithmetic instructions such as \texttt{ADDI}, avoiding additional decode logic.  
+
+Sign-extension also enables several useful bit-manipulation idioms without requiring extra instructions. Examples include:
+
+\begin{smallGapItemize}
     \item \texttt{AND Rn, Rm, -2} produces the mask \texttt{0x\ldots FFFE}, 
           which clears the least significant bit.
     \item \texttt{AND Rn, Rm, -4096} yields \texttt{0x\ldots F800}, aligning 
@@ -37,32 +25,25 @@ requiring extra instructions. Examples include:
           computing a bitwise NOT in a single instruction.
     \item \texttt{OR Rn, Rm, -256} creates \texttt{0x\ldots FF00}, forcing 
           the upper byte of a register to ones.
-\end{itemize}
+\end{smallGapItemize}
 
-Using sign-extension for logical immediate values therefore provides both a 
-straightforward hardware implementation and a flexible set of common masking 
-and bit-twiddling operations.
+Using sign-extension for logical immediate values therefore provides both a straightforward hardware implementation and a flexible set of common masking and bit-twiddling operations.
 
 %--------------------------------------------------------------------------------
-\section*{Bit Operation Instructions}
-\addcontentsline{toc}{section}{Bit Operation Instructions}
+\unnumberedSection{Bit Operation Instructions}
 
-Twin-64 provides specialized bit-manipulation instructions such as 
-\texttt{EXTR}, \texttt{DEP}, and \texttt{DSR} to support shifts, rotates, 
-and other fine-grained operations on register fields. 
+Twin-64 provides specialized bit-manipulation instructions such as \texttt{EXTR}, \texttt{DEP}, and \texttt{DSR} to support shifts, rotates, and other fine-grained operations on register fields. 
 
 These instructions are commonly used for:
-\begin{itemize}
+
+\begin{smallGapItemize}
     \item Extracting a subset of bits from a register (\texttt{EXTR}).
     \item Depositing a value into a specific bit field (\texttt{DEP}).
     \item Performing data shifts and rotations (\texttt{DSR}), which can emulate 
           traditional shift/rotate instructions without dedicated opcodes.
-\end{itemize}
+\end{smallGapItemize}
 
-For example, the \texttt{EXTR} instruction can be combined with 
-\texttt{AND} masks to isolate or manipulate specific bits efficiently. This 
-approach provides the functionality of classic shift and rotate instructions, 
-while maintaining a compact instruction set.
+For example, the \texttt{EXTR} instruction can be combined with \texttt{AND} masks to isolate or manipulate specific bits efficiently. This approach provides the functionality of classic shift and rotate instructions, while maintaining a compact instruction set.
 
 
 

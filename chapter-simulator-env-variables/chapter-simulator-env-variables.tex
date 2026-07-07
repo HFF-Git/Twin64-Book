@@ -1,9 +1,26 @@
-\chapter*{Simulator Variables}
-\addcontentsline{toc}{chapter}{Simulator Variables}
+\unnumberedChapter{Simulator Variables}
 
-\begin{tabularx}{\linewidth}{|l|l|X|}
-\hline
-\textbf{Name} & \textbf{Type} & \textbf{Description} \\ \hline
-\texttt{...} & \texttt{...} &
-... \\ \hline
-\end{tabularx}
+
+\begin{longtable}{@{}p{0.2\linewidth}p{0.1\linewidth}p{0.1\linewidth}p{0.3\linewidth}@{}}
+    \caption{Predefined Simulator Variables} \\
+    \toprule
+    \textbf{Name} & \textbf{Type } & \textbf{Access } & \textbf{Purpose} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{Name} & \textbf{Type } & \textbf{Access } & \textbf{Purpose} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    \textbf{R0 .. R15} & numeric & R/W & General register. \\
+    \midrule
+    \textbf{C0 .. C15} & numeric & R/W & Control register. \\
+    \midrule
+    \textbf{IA} & numeric & R/W & Instruction address register. \\
+    \midrule
+\end{longtable}

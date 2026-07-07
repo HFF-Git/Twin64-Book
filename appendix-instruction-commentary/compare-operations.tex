@@ -1,16 +1,15 @@
-\section*{Comparison and Branch Condition Encoding}
-\addcontentsline{toc}{section}{Comparison and Branch Condition Encoding}
+\unnumberedSection{Comparison and Branch Condition Encoding}
 
 This appendix explains the condition encoding and implementation philosophy used by the \texttt{CMP}, \texttt{CBR}, \texttt{ABR}, and \texttt{MBR} instructions. The design goal is to minimize hardware complexity by reusing a single subtraction/comparator path. Comparison operators are encoded in a compact and symmetric way that makes condition inversion trivial.
 
 The following instructions use the same 3-bit comparison field (\texttt{cond}):
 
-\begin{itemize}
+\begin{smallGapItemize}
   \item \textbf{CMP} — Compares two operands using the 3-bit \texttt{cond} field and produces a boolean result (0/1) in a register.
   \item \textbf{CBR} — Compares two registers and branches based on the same 3-bit \texttt{cond} field. This performs a direct comparison without requiring a preceding \texttt{CMP}.
   \item \textbf{ABR} — Performs an add operation and branches using a 3-bit \texttt{cond} field that tests the \emph{add result} against zero or other simple predicates. Intended for loop counters or pointer walking.
   \item \textbf{MBR} — Performs a move operation and branches using the same 3-bit \texttt{cond} field. The comparison is applied to the source operand, typically against zero.
-\end{itemize}
+\end{smallGapItemize}
 
 All four instructions share a uniform 3-bit condition encoding, allowing common decoder and comparator logic.  
 Branch target computation uses a sign-extended 15-bit offset shifted left by two, allowing word-aligned branch destinations within a \texttt{±64\,KB} range relative to the current instruction address.

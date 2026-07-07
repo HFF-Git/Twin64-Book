@@ -1,48 +1,41 @@
 \unnumberedChapter{Simulator User Interface}
 
-The simulator is controlled through an interactive command-line interface.
-Each command is entered at the command prompt and is executed immediately.
-A command consists of a command name followed by zero or more arguments.
-Arguments are not limited to literal values; they may be arbitrary expressions
-containing constants, variables, register values, memory references, and
-function calls.
-
-This chapter introduces the syntax of the command language. The individual
-commands are described in detail in the following chapter.
+The simulator is controlled through an interactive command-line interface. Each command is entered at the command prompt and is executed immediately. A command consists of a command name followed by zero or more arguments. Arguments are not limited to literal values; they may be arbitrary expressions containing constants, variables, register values, memory references, and function calls. This chapter introduces the syntax of the command language. The individual commands are described in detail in the following chapter.
 
 \unnumberedSection{Command Line}
 
-The simulator displays a command prompt before accepting each command. The
-prompt contains a command counter which uniquely identifies every command
-entered during the session.
+The simulator displays a command prompt before accepting each command. The prompt contains a command counter which uniquely identifies every command entered during the session.
 
+\begin{list}{}{\leftmargin=2em}
+\item
 \begin{verbatim}
 (100) ->
 \end{verbatim}
+\end{list}
 
-A command consists of a command name followed by an optional list of
-comma-separated arguments.
+A command consists of a command name followed by an optional list of comma-separated arguments.
 
+\begin{list}{}{\leftmargin=2em}
+\item
 \begin{verbatim}
 command arg1, arg2, arg3
 \end{verbatim}
+\end{list}
 
 Each argument may be a literal value or an arbitrary expression.
 
-Long commands may be split over several input lines by terminating each
-continued line with a backslash (\verb|\|). The simulator concatenates the
-lines before parsing the command.
+Long commands may be split over several input lines by terminating each continued line with a backslash (\verb|\|). The simulator concatenates the lines before parsing the command.
 
+\begin{list}{}{\leftmargin=2em}
+\item
 \begin{verbatim}
 WRITE R1, \
       R2 + 4, \
       "Hello"
 \end{verbatim}
+\end{list}
 
-The simulator maintains a history of previously entered commands.
-The \texttt{HIST} command displays the command history, while the
-\texttt{DO} and \texttt{REDO} commands allow previously entered commands to
-be executed again or edited before execution.
+The simulator maintains a history of previously entered commands. The \texttt{HIST} command displays the command history, while the \texttt{DO} and \texttt{REDO} commands allow previously entered commands to be executed again or edited before execution.
 
 \unnumberedSection{Data Types}
 
@@ -50,18 +43,16 @@ The command language supports three basic data types:
 
 \begin{smallGapItemize}
 \item Numbers. A number is signed 64-bit quantity.
-\item Booleans. Boolean have the value "true" or "false".
-\item Strings. A string is character sequence enclosed in apostrophies.
+\item Booleans. Boolean has the value "true" or "false".
+\item Strings. A string is character sequence enclosed in apostrophes.
 \end{smallGapItemize}
 
 \unnumberedSubsection{Numbers}
 
-All numbers are represented as signed 64-bit integers.
+All numbers are represented as signed 64-bit integers. Numbers may be entered in decimal, hexadecimal, or binary notation. Hexadecimal numbers use the prefix \verb|0x|, while binary numbers use \verb|0b|.
 
-Numbers may be entered in decimal, hexadecimal, or binary notation.
-Hexadecimal numbers use the prefix \verb|0x|, while binary numbers use
-\verb|0b|.
-
+\begin{list}{}{\leftmargin=2em}
+\item
 \begin{verbatim}
 12345
 -17
@@ -72,45 +63,52 @@ Hexadecimal numbers use the prefix \verb|0x|, while binary numbers use
 0b01101001
 0b1010_1111_0000
 \end{verbatim}
+\end{list}
 
-Underscore characters may be inserted between digits to improve readability.
-They do not affect the numerical value.
+Underscore characters may be inserted between digits to improve readability. They do not affect the numerical value.
 
 \unnumberedSubsection{Booleans}
 
 Boolean values represent logical truth and may assume one of the two values
 
+\begin{list}{}{\leftmargin=2em}
+\item
 \begin{verbatim}
 true
 false
 \end{verbatim}
+\end{list}
 
-Boolean values are typically produced by comparison operators but may also be
-entered directly.
+Boolean values are typically produced by comparison operators but may also be entered directly.
 
 \unnumberedSubsection{Strings}
 
 Strings are enclosed in double quotation marks.
 
+\begin{list}{}{\leftmargin=2em}
+\item
 \begin{verbatim}
 "Hello World"
 \end{verbatim}
+\end{list}
 
-Adjacent string literals are automatically concatenated, allowing long strings
-to span multiple input lines.
+Adjacent string literals are automatically concatenated, allowing long strings to span multiple input lines.
 
+\begin{list}{}{\leftmargin=2em}
+\item
 \begin{verbatim}
 "This is a very long "
 "string which is "
 "assembled automatically."
 \end{verbatim}
+\end{list}
 
 \unnumberedSection{Expressions}
 
-Most command arguments are expressions. Expressions are evaluated before the
-command itself is executed.
+Most command arguments are expressions. Expressions are evaluated before the command itself is executed.
 
-\begin{center}
+\begin{list}{}{\leftmargin=2em}
+\item
 \begin{tabular}{lll}
 \textbf{Operator} & \textbf{Operand Type} & \textbf{Description} \\ \hline
 \verb|+|  & Number           & Addition \\
@@ -133,42 +131,53 @@ command itself is executed.
 \verb+||+ & Boolean          & Logical OR \\
 \verb|!|  & Boolean          & Logical NOT \\
 \end{tabular}
-\end{center}
+\end{list}
 
 Parentheses may be used to explicitly control the order of evaluation. Typical expressions are
 
+\begin{list}{}{\leftmargin=2em}
+\item
 \begin{verbatim}
 R1 + 4
 (R2 + R3) * 8
 (R5 & 0xff) == 0x80
 (R1 + [0x1000]) / 4
 \end{verbatim}
-
-\unnumberedSection{Variables}
-
-The simulator provides a collection of predefined variables describing the
-current machine state. These include the general-purpose registers, control
-registers, processor status, and other architectural state.
-
-General-purpose registers are named
-
-\begin{list}{}{\leftmargin=2em}
-\item
-\begin{verbatim}
-R0 ... R15
-\end{verbatim}
 \end{list}
 
-while control registers are named
+\unnumberedSection{Predefined Variables}
 
-\begin{list}{}{\leftmargin=2em}
-\item
-\begin{verbatim}
-C0 ... C15
-\end{verbatim}
-\end{list}
+The simulator provides a collection of predefined variables describing the current machine state. These include the general-purpose registers, control registers, processor status, and other architectural state.
 
-Additional predefined variables may be listed using the \texttt{ENV} command. User-defined variables may also be created. Once defined, they may be used wherever expressions are accepted.
+\begin{longtable}{@{}p{0.2\linewidth}p{0.2\linewidth}p{0.3\linewidth}@{}}
+    \caption{Predefined Variables} \\
+    \toprule
+    \textbf{Name} & \textbf{Type} & \textbf{Purpose} \\
+    \midrule
+    \endfirsthead
+    \toprule
+     \textbf{Name} & \textbf{Type} & \textbf{Purpose} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    \textbf{R0 .. R15} & numeric & General register. \\
+    \midrule
+    \textbf{C0 .. C15} & numeric & Control register. \\
+    \midrule
+    \textbf{IA} & numeric & Instruction address register. \\
+    \midrule
+\end{longtable}
+
+Additional predefined variables may be listed using the \texttt{ENV} command. 
+
+\unnumberedSection{User Defined Variables}
+
+User-defined variables may also be created. Once defined, they may be used wherever expressions are accepted.
 
 \begin{list}{}{\leftmargin=2em}
 \item
@@ -176,7 +185,6 @@ Additional predefined variables may be listed using the \texttt{ENV} command. Us
 (8) -> ENV a_var, 200
 \end{verbatim}
 \end{list}
-
 
 \unnumberedSection{Predefined Functions}
 
@@ -208,8 +216,7 @@ Memory contents may be accessed directly within expressions. The general syntax 
 \end{verbatim}
 \end{list}
 
-where \textit{address} is any expression evaluating to a memory address and
-\textit{type} specifies the access size.
+where \textit{address} is any expression evaluating to a memory address and \textit{type} specifies the access size.
 
 The supported access types are
 

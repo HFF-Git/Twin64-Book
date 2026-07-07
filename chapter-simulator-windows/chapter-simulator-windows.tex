@@ -4,11 +4,10 @@
 %--------------------------------------------------------------------------------
 \unnumberedChapter{Simulator Windows}
 
-At the heart of the simulator is the concept of a window to show and modify the simulation environment.
- 
-%-------------------------------------------------------------------------------- 
-\section*{Window Concepts}
-\addcontentsline{toc}{section}{Window Concepts}
+At the heart of the simulator is the concept of a window to show and modify the simulation environment. 
+
+%--------------------------------------------------------------------------------
+\unnumberedSection{Window}
 
 A window consists of a \textbf{window banner line} and a \textbf{window body}. The banner line begins with the window identification, which includes the window stack number and the window number. The window number is a unique identifier that can be used to refer to a specific window. Beneath the window banner line is the window body, which consists of several lines of ascii text. Both areas are window types specific and display status information, messages and simulator output. 
 
@@ -65,6 +64,27 @@ Simulator windows can be organized into \textbf{window stacks}. All visible stac
 Window stack are very useful when handling several processors and memory content. For example, all windows related to a processor can be grouped in a stack. Windows in a stack can be sorted and individual windows can be enabled or disabled. Disabled windows, like disabled stacks, do not disappear for the overall window list. They are just not displayed.
 
 Naturally, a monitor screen cannot display more than two or three stacks next to each other. Stacks, like windows, can therefore be disabled. A disabled stack is not shown. The command window has a little status filed in its banner line which shows what stacks have been created. 
+
+%--------------------------------------------------------------------------------
+\section*{Command Window}
+\addcontentsline{toc}{section}{Command Window}
+
+The \textbf{command window} is the primary interface where commands are entered and line-mode information is displayed. This window is always visible, regardless of whether the simulator is operating in windowed mode or line mode. It is always the last window displayed, that is, it appears at the bottom of the terminal screen. 
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
+    \node[anchor=south west] (img) at (0, 0)
+        {\includegraphics[width=16cm]{chapter-simulator-environment/SimWinMainWin.pdf}};
+\end{tikzpicture}
+\caption{Simulator — Main Window}
+\label{fig:simulator-main-window}
+\end{figure}
+
+The command window prompts the user to enter a command. The command number is an incrementing value. Each command entered is assigned a unique number, which can be used to re-execute or edit previously entered commands. Several commands display the command history, showing recent commands along with their associated command numbers. The \texttt{DO} command re-executes the specified command, while the \texttt{REDO} command retrieves a command from the history and presents it for editing before execution.
+
+Command lines are case insensitive. Internally all input, except those in quotation marks is upshifted before interpretation. Numeric data entered and displayed is shown in decimal or hexadecimal. A decimal number is a numeric string of the number digits 0 to 9. A hexadecimal number has the prefix "0x" and accepts the digits 0 to 9, A to F. Where the context is clear, a hexadecimal number may drop the "0x" prefix on output. A string is a sequence of characters enclosed in quotation marks.
+
 
 %--------------------------------------------------------------------------------
 \unnumberedSection{Processor Window}
