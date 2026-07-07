@@ -56,8 +56,8 @@
   \addcontentsline{toc}{section}{#1}%
 }
 
-\newcommand{\unnumberedSubSection}[1]{%
-  \subsection*{#1}%
+\newcommand{\unnumberedSubsection}[1]{%
+  \subsection*{\normalfont\large\bfseries #1}%
   \addcontentsline{toc}{subsection}{#1}%
 }
 
@@ -108,7 +108,7 @@
 }
 
 %--------------------------------------------------------------------------------
-%
+% Smaller item list.
 %
 %--------------------------------------------------------------------------------
 \newenvironment{smallGapItemize}{

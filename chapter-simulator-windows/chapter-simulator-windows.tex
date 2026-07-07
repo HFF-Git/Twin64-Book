@@ -2,8 +2,7 @@
 %
 %
 %--------------------------------------------------------------------------------
-\chapter*{Simulator Windows}
-\addcontentsline{toc}{chapter}{Simulator Windows}
+\unnumberedChapter{Simulator Windows}
 
 At the heart of the simulator is the concept of a window to show and modify the simulation environment.
  
@@ -49,8 +48,7 @@ Windows can be organized into stacks. This allows related windows—for example,
 The remainder of the banner line is specific to the window type and is described in the following sections of this manual. At the right edge of the banner line, each window displays the radix format used for presenting its data. The command window banner line displays the currently defined window stacks at the right edge.
 
 %--------------------------------------------------------------------------------
-\section*{Window Stacks}
-\addcontentsline{toc}{section}{Window Stacks}
+\unnumberedSection{Window Stacks}
 
 Simulator windows can be organized into \textbf{window stacks}. All visible stacks are displayed horizontally with the terminal screen size adjusted accordingly. The following figure shows a two stack example.
 
@@ -69,8 +67,7 @@ Window stack are very useful when handling several processors and memory content
 Naturally, a monitor screen cannot display more than two or three stacks next to each other. Stacks, like windows, can therefore be disabled. A disabled stack is not shown. The command window has a little status filed in its banner line which shows what stacks have been created. 
 
 %--------------------------------------------------------------------------------
-\section*{Processor Window}
-\addcontentsline{toc}{section}{Processor Window}
+\unnumberedSection{Processor Window}
 
 The processor window displays the register set of a processor and the current instruction address code position. Several view modes are available, between which the user can toggle. The default view shows the general register set in the window body. The banner line displays the window identifier, the processor module number, the current instruction address, and the CPU status register. The alternate toggle display the control registers.
 
@@ -90,8 +87,7 @@ As with all simulator windows, multiple instances of the same window type may be
 
 
 %--------------------------------------------------------------------------------
-\section*{TLB Window}
-\addcontentsline{toc}{section}{TLB Window}
+\unnumberedSection{TLB Window}
 
 The TLB (Translation Lookaside Buffer) window displays the contents of the simulator global TLB module. The TLB accelerates virtual-to-physical address translation by caching recently used page table entries. The global TLB module is the TLB which all processors consult when in need for a translation.  The translation result is then kept in local TLB buffers on the processor module. Featuring a global TLB allows all memory commands and windows to use physical and virtual addresses without being dependent on which processor actually has a valid translation.
 
@@ -108,8 +104,7 @@ The TLB (Translation Lookaside Buffer) window displays the contents of the simul
 The global TLB window displays the TLB entries line by line. Each entry includes the virtual page tag, the corresponding physical page number, and the associated tlbInfo. The final field is the tlb page mask when the TLB supports a variable page size. 
 
 %--------------------------------------------------------------------------------
-\section*{Memory Window}
-\addcontentsline{toc}{section}{Memory Window}
+\unnumberedSection{Memory Window}
 
 The memory window displays the contents of physical or virtual memory. The banner line contains the window identifier, the memory module number, and the window's home address. This information allows the user to quickly identify the memory region being examined. 
 
@@ -134,8 +129,7 @@ The ASCII display mode interprets memory bytes as printable characters. Non-prin
 The code window toggle of a memory window displays the contents of memory in a disassembled form, allowing the user to examine instructions as human-readable assembly code. This window helps in debugging by showing the relationship between machine code in memory and its corresponding assembly instructions.
 
 %--------------------------------------------------------------------------------
-\section*{Text Window}
-\addcontentsline{toc}{section}{Text Window}
+\unnumberedSection{Text Window}
 
 The text window displays the contents of a text file. The banner line contains the window identifier, the memory or file module number, and the window's home address, allowing the user to quickly identify the source and location of the displayed text.
 
