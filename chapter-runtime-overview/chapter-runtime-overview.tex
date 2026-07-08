@@ -2,14 +2,12 @@
 %
 %
 %--------------------------------------------------------------------------------
-\chapter*{Runtime Overview}
-\addcontentsline{toc}{chapter}{Runtime Overview}
+\unnumberedChapter{Runtime Overview}
 
 No CPU architecture with an idea of a runtime environment. Although the instruction set can be used to implement many models of runtime environments, there are common principles that exploit the CPU architecture. In fact, several CPU concepts were selected with a certain runtime already in mind. This chapter will present the Twin-64 runtime environment and describe the high level system model, the register usage convention, the execution model and calling convention.
 
 %--------------------------------------------------------------------------------
-\section*{System Environment}
-\addcontentsline{toc}{section}{System Environment}
+\unnumberedSection{System Environment}
 
 The following figure depicts a high-level overview of the overall software environment for the Twin-64 system. At the center of the execution model is the execution thread, referred to as a \textbf{task}. A task consists of the currently running execution object together with its private task-local data area, including its own stack and runtime context. All tasks of a job share a common job data area. At the highest level is the \textbf{system}, which contains the global data area for the system. 
 
@@ -74,8 +72,7 @@ The system level contains the global data area, system libraries, and all servic
 The number of active tasks at any moment typically corresponds to the number of available processors in the system, allowing the system to take full advantage of available parallelism. While each task maintains its own private data and execution state, tasks within a single job share access to the job data area. All tasks, regardless of job, also have access to system-level services and global resources.
 
 %--------------------------------------------------------------------------------
-\section*{Runtime Environment}
-\addcontentsline{toc}{section}{Runtime Environment}
+\unnumberedSection{Runtime Environment}
 
 The processor is a general-purpose CPU. The runtime model presented here represents one possible implementation strategy, chosen to support the calling conventions and execution model that will be described in later sections. The following figure depicts a high-level overview of the runtime environment.
 
@@ -141,8 +138,7 @@ The data region further contains the linkage table, a structure that provides th
 In this runtime design, the stack grows upward: new frames occupy increasing addresses, and older frame contents are typically referenced using expressions of the form \texttt{SP - offset}. Each stack frame includes a frame marker containing the previous SP and the return link (RL), enabling structured returns and proper unwinding of frames. 
 
 %--------------------------------------------------------------------------------
-\section*{Register Usage}
-\addcontentsline{toc}{section}{Register Usage}
+\unnumberedSection{Register Usage}
 
 The CPU features general registers and control registers. All general registers can do computation as well as address computation. The runtime architecture builds on the general register file and assigns specific meaning to each register. 
 

@@ -1,9 +1,9 @@
-\chapter*{Control Flow}
-\addcontentsline{toc}{chapter}{Control Flow}
+\unnumberedChapter{Control Flow}
+
 In Twin-64, control normally proceeds to the next sequential instruction in memory unless explicitly changed by a branch or interrupted by an exception. From the programmer’s perspective, instructions execute in program order. Internally, however, the hardware may employ techniques such as out-of-order execution. This chapter presents the logical execution model, describing how branching and interruptions alter control flow.
 
-\section*{Unconditional Branches}
-\addcontentsline{toc}{section}{Unconditional Branches}
+\unnumberedSection{Unconditional Branches}
+
 Unconditional branch instructions always redirect control flow and may optionally save the return address in a general-purpose register. The branch target address can be computed in two ways:
 \begin{itemize}
 \setlength{\itemsep}{0.5em}
@@ -19,21 +19,19 @@ Both methods use 32-bit unsigned arithmetic with wrap-around on overflow. For ex
 
 Since the addition is performed modulo $2^{32}$, the high-order carry is discarded. The effective branch target is therefore \texttt{0x0000\_000C}.
 
-\section*{Conditional Branches}
-\addcontentsline{toc}{section}{Conditional Branches}
+\unnumberedSection{Conditional Branches}
+
 Conditional branches combine a comparison with an instruction-relative branch. If the specified condition is true, control transfers to the branch target; otherwise, execution continues sequentially. Conditional branches are always instruction address relative.
 
-\section*{Linkage}
-\addcontentsline{toc}{section}{Linkage}
+\unnumberedSection{Linkage}
+
 Unconditional branch instructions support procedure calls by saving the return address (the instruction immediately following the branch) into a general-purpose register. The linkage mechanism applies to both intra-region and cross region branches. The saved return address consists of both the region identifier and the instruction offset.
 
-\section*{Cross-Region Branches}
+\unnumberedSection{Cross-Region Branches}
 
-\addcontentsline{toc}{section}{Cross-Region Branches}
 Unconditional cross-region branches are branches to another segment. The offset is computed from the offset portion in the address specified plus the immediate value encoded in the \texttt{BE} instruction.
 
-\section*{Privilege Level Changes}
-\addcontentsline{toc}{section}{Privilege Level Changes}
+\unnumberedSection{Privilege Level Changes}
 
 Branch instructions may alter the current privilege level. Execution is only permitted if the current privilege level satisfies the requirements of the code or data being accessed. Traditionally, privilege changes are handled through traps into the operating system kernel. While secure, this approach incurs significant overhead due to pipeline flushes and handler setup.
 
@@ -47,6 +45,6 @@ Twin-64 provides a more efficient gateway mechanism. An unconditional branch wit
 \item If the G option on the branch instruction \texttt{B}\ is set and the page is a gateway page, the execution privilege is set to the privilege level of the gateway page where the branch instruction resides.
 \end{itemize}
 
-\section*{Traps Associated with Branches}
-\addcontentsline{toc}{section}{Traps Associated with Branches}
+\unnumberedSection{Traps Associated with Branches}
+
 Branch instructions may trigger traps depending on the PSR state. For example, if the PSR \texttt{J} - bit is set and a branch is taken, a \textit{taken-branch trap} is raised. This feature is primarily intended for debugging and tracing purposes.

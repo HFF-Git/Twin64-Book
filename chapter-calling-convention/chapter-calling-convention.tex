@@ -2,15 +2,13 @@
 %
 %
 %--------------------------------------------------------------------------------
-\chapter*{Calling Convention}
-\addcontentsline{toc}{chapter}{Calling Convention}
+\unnumberedChapter{Calling Convention}
 
 The previous chapters introduced the register-usage conventions and the overall stack layout defined by the runtime architecture. Building on that foundation, this chapter describes the mechanisms used to invoke routines and the conventions that govern control transfer, parameter passing, register preservation, and stack-frame management.
 
 The discussion begins with the simplest form of call: the \emph{local call}, which transfers control between routines within the same module. Local calls illustrate the fundamental steps of the calling convention without the additional considerations required for inter-module calls.
 
-\section*{Calling Sequence}
-\addcontentsline{toc}{section}{Calling Sequence}
+\unnumberedSection{Calling Sequence}
 
 A routine call proceeds through several well-defined stages. First, the caller evaluates all argument expressions and places the resulting values into the parameter area, either in registers or on the stack as required. After preparing the parameters, the caller saves any registers whose values must remain intact across the call. These caller-saved registers must be preserved by the caller before branching to another routine.
 
@@ -20,8 +18,7 @@ When the callee completes its work, it restores all callee-saved registers, retr
 
 As described earlier, the general-purpose register set is partitioned into caller-save and callee-save regions. A compiler selects registers from these regions as needed, balancing the work of saving and restoring state between the caller and the callee. When possible, redundant saves and restores are eliminated. The runtime architecture distinguishes between two basic categories of calls: \emph{local calls}, which remain within a single module, and \emph{external calls}, which cross module boundaries and require additional handling. The following sections describe these types in detail.
 
-\section*{Local Call}
-\addcontentsline{toc}{section}{Local Call}
+\unnumberedSection{Local Call}
 
 A local call is the most common form of procedure call. The following code snippet illustrates such a call. The caller loads the arguments, saves any registers the callee might modify, and branches to the callee. After the callee returns, the caller restores its saved registers and continues execution.
 
@@ -29,7 +26,7 @@ A local call is the most common form of procedure call. The following code snipp
 \centering
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
-; calling procedure
+# calling procedure
 
 			...					# load arguments
 			...					# save caller saves
@@ -46,7 +43,7 @@ The callee begins by saving the return link, allocating its stack frame, and sav
 
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
-; called procedure
+# called procedure
             
 target:     ST RL, -16(SP)	    # save RL
 			ST SP, -8 (SP)      # save PSP
@@ -69,8 +66,7 @@ The callee can also omit steps. A \emph{leaf procedure}, i.e. one that calls no 
 
 The instructions \texttt{B}, \texttt{BR}, and \texttt{BV} are used for local branches. The address computation, whether IA-relative or region-relative, does not modify the region portion of the instruction address. It is always the region of the currently executing code.
 
-\section*{Parameter passing}
-\addcontentsline{toc}{section}{Parameter passing}
+\unnumberedSection{Parameter passing}
 
 Procedures may pass arguments to a callee and receive return values. The parameter area is located in the caller's stack frame, below the frame marker.
 
@@ -149,8 +145,7 @@ The first four arguments are passed in registers \texttt{ARG0} through \texttt{A
 
 Arguments and return values are addressed relative to the caller's frame pointer. Because the callee may allocate its own stack frame, the size of the callee's frame must be added to the fixed offsets of the arguments in the caller's frame.
 
-\section*{External Calls}
-\addcontentsline{toc}{section}{External Calls}
+\unnumberedSection{External Calls}
 
 An external call is one that may cross a region boundary. The \texttt{BE} instruction computes the effective address from a general register and an immediate offset encoded in the instruction. Like local branches, this computation produces a 32-bit unsigned address offset. However, unlike local branches, the base register contains the full virtual address, region and offset, not just an offset. The \texttt{BE} instruction is used both to call a target in another region and to return from it. The following code snippets shows a basic external call.
 
@@ -159,7 +154,7 @@ An external call is one that may cross a region boundary. The \texttt{BE} instru
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
 
-; calling code
+# calling code
 
 			...					# load arguments
 			...					# save caller saves
@@ -181,7 +176,7 @@ A generic external call sequence is shown below:
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
 
-;calling code
+# calling code
 
 			...
             ...						# load arguments
@@ -192,7 +187,7 @@ A generic external call sequence is shown below:
 			...						# restore caller saves
 			...
 			
-;stubF1
+# stubF1
 
 stubF1:		LD R1, -ofs(DP)		    # load target address of F1
 			LD DP, -ofs + 8(DP)     # load target DP value
@@ -209,7 +204,7 @@ Before the stub loads the new DP value, the caller must save the current DP. Thi
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
 
-; called code
+# called code
 
 target:     ST RL, -16(SP)			# save RL
             ST SP,  -8(SP)          # save PSP
@@ -227,8 +222,7 @@ target:     ST RL, -16(SP)			# save RL
 
 Local calls may use \texttt{BV} to return, since the region portion of the address does not change. Exported functions, however, may return either locally or externally, and therefore must use \texttt{BE}. It is recommended to simply always use the \texttt{BE} instruction.
 
-\section*{Linkage Table}
-\addcontentsline{toc}{section}{Linkage Table}
+\unnumberedSection{Linkage Table}
 
 The assembler or compiler generates the skeleton of the linkage table. The linkage table resides below the global data area. Entries are addressed using negative DP offsets.
 
@@ -326,8 +320,7 @@ The function target entry contains the target address of the function.
 \end{center}
 
 
-\section*{Function Labels}
-\addcontentsline{toc}{section}{Function Labels}
+\unnumberedSection{Function Labels}
 
 A function label is a reference to a function which is resolved at calling time. Therefore each function that is accessed via a function label has an entry in the linkage table. The function label itself is then the index into the linkage table. 
 
@@ -344,7 +337,7 @@ A function label is a reference to a function which is resolved at calling time.
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
 
-; example
+# example
 			...					# 
 			...					# 
 		
@@ -353,8 +346,7 @@ A function label is a reference to a function which is resolved at calling time.
 
 
 
-\section*{Privilege Level Changes}
-\addcontentsline{toc}{section}{Privilege Level Changes}
+\unnumberedSection{Privilege Level Changes}
 
 
 \begin{figure}[H]
@@ -362,7 +354,7 @@ A function label is a reference to a function which is resolved at calling time.
 \lstset{style=codesnippetstyle}
 \begin{lstlisting}
 
-; example
+# example
 			...					# 
 			...					# 
 		
@@ -370,8 +362,7 @@ A function label is a reference to a function which is resolved at calling time.
 \end{figure}
 
 
-\section*{Design Rationale}
-\addcontentsline{toc}{section}{Design Rationale}
+\unnumberedSection{Design Rationale}
 
 There are many possible ways to organize modules and their external linkages. Classic CISC architectures provided simple call instructions that implicitly performed all the required steps such as address computation, access-rights checking, and memory references needed to resolve external linkages.
 

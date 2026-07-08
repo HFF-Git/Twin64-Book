@@ -2,13 +2,11 @@
 %
 %
 %--------------------------------------------------------------------------------
-\chapter*{Stack Layout}
-\addcontentsline{toc}{chapter}{Stack Layout}
+\unnumberedChapter{Stack Layout}
 
 Most modern programming languages rely on a \textbf{stack} to manage function calls, local variables, and return information. This stack is organized into \textbf{stack frames}, each representing the state of an active function invocation. When a function is called, a new frame is pushed onto the stack; when it returns, that frame is popped. This structured approach allows programs to keep track of nested calls efficiently and ensures that each function has its own isolated workspace during execution.
 
-\section*{Stack Frame}
-\addcontentsline{toc}{section}{Stack Frame Marker}
+\unnumberedSection{Stack Frame}
 
 Stack frames are aligned on a 16-byte boundary. A stack frame consists of four main areas, depicted in the following figure. 
 
@@ -80,13 +78,11 @@ The \textbf{local area} stores the function’s local variables. This is the reg
 
 Finally, the spill area is used to save register values that must be preserved for the caller and to spill intermediate values when register allocation cannot keep all live data in registers.
 
-\section*{Stack Frame Addressing}
-\addcontentsline{toc}{section}{Stack Frame Addressing}
+\unnumberedSection{Stack Frame Addressing}
 
 All data items within a stack frame are accessed \textbf{relative to the current stack pointer (SP)}. The architecture uses an \texttt{SP - offset} addressing scheme, where each region of the stack frame, i.e. the frame marker, parameter area, local data area, and spill area are located at a fixed negative offset from the SP at function entry. This convention allows the compiler and debugger to compute the location of every stack-resident object from the SP alone, without requiring a dedicated frame pointer. As long as the SP remains stable during the execution of the function, all stack frame items can be reliably referenced through their predefined offsets.
  
-\section*{Stack Frame Marker}
-\addcontentsline{toc}{section}{Stack Frame Marker}
+\unnumberedSection{Stack Frame Marker}
 
 A stack frame marker consists of two double words. The frame marker is pointed by the current stack pointer register (SP).
 
@@ -132,18 +128,15 @@ The first word holds the \textbf{address of the previous stack frame}. This fiel
 
 The second word contains the \textbf{return link}, which is the address immediately following the branch instruction in the calling function. If the called function is a leaf function, there is no need to save the return link in memory.
 
-\section*{Parameter Area}
-\addcontentsline{toc}{section}{Parameter Area}
+\unnumberedSection{Parameter Area}
 
 A stack frame includes a \textbf{parameter area} large enough to hold the largest argument list passed from the calling function to the callee. Although the first four parameters are by convention passed in registers, corresponding space is still reserved in the frame to provide a uniform layout and to support cases where the callee needs to spill register arguments to memory. Any additional parameters beyond the first four are passed directly in the memory locations immediately below this register-parameter area. If a function neither receives parameters nor returns data, the parameter area is omitted from its stack frame, avoiding unnecessary stack usage. 
 
-\section*{Local Data Area}
-\addcontentsline{toc}{section}{Local Data Area}
+\unnumberedSection{Local Data Area}
 
 Immediately below the parameter area lies the \textbf{local data area}, which holds all automatic (local) variables of the function. These variables exist only for the duration of the function call and are allocated anew for each invocation. The compiler determines the size and placement of each local variable within this area, taking into account alignment requirements and optimization opportunities. If a function declares no local variables, this region has size zero and is omitted from the final stack frame layout.
 
-\section*{Spill Area}
-\addcontentsline{toc}{section}{Spill Area}
+\unnumberedSection{Spill Area}
 
 The \textbf{spill area} contains any registers that the function must temporarily save in order to preserve the calling convention. Registers that must remain unchanged across function calls are saved (``spilled'') into this area upon entry and restored before returning to the caller. The compiler allocates spill slots only when necessary. If for example a function does not need to save any registers, the spill area is not present in its stack frame. This selective allocation helps keep stack usage minimal while maintaining correct program behavior.
 

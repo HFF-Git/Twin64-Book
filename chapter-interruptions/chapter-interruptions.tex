@@ -2,8 +2,7 @@
 %
 %
 %--------------------------------------------------------------------------------
-\chapter*{Interruptions}
-\addcontentsline{toc}{chapter}{Interruptions}
+\unnumberedChapter{Interruptions}
 
 Twin-64 features a simple but powerful interrupt system. Interruptions in Twin-64 are divided into four classes - faults, traps, interrupts, and checks - that may occur during instruction execution or at instruction boundaries.
 
@@ -21,15 +20,13 @@ The second kind of traps are boundary traps, raised so that the system can inter
 
 All four classes of interruptions are handled in a uniform manner.
 
-\section*{Interrupt Handling}
-\addcontentsline{toc}{section}{Interrupt Handling}
+\unnumberedSection{Interrupt Handling}
 
 Handling of an interruption is implemented as a fast context switch. When an interruption occurs, the hardware saves the processor status register (PSR) at the time of the interruption into the IPSR control register. For instruction-caused interruptions, the saved instruction address corresponds to the faulting instruction. For boundary-caused interruptions, the saved instruction address corresponds to the next instruction to be executed. All status bits contained in the PSR are saved.
 
 The hardware then initializes the PSR for handler execution. The M bit is set if the interruption is a high-priority machine check. All other status bits are cleared. Depending on the interruption type, additional information may be saved into the interrupt argument control registers IARG0 and IARG1.
 
-\section*{Interrupt Vector Table}
-\addcontentsline{toc}{section}{Interrupt Vector Table}
+\unnumberedSection{Interrupt Vector Table}
 
 The control register \texttt{IVA} holds the virtual address of the interrupt vector table. Execution of the interrupt handler begins at the address computed using the trap number:
 
@@ -103,8 +100,8 @@ Each entry consists of 8 instructions that can be executed. It is the responsibi
     \textbf{20} & Breakpoint Trap & current instruction & instruction & trap code \\
    \end{longtable}
    
-\section*{Debug and Trace Support} 
-\addcontentsline{toc}{chapter}{Interruption Architecture}
+\unnumberedSection{Debug and Trace Support} 
+
 The Twin-64 processor status register contains two bits for supporting debugging traps and traces. When the T bit is set, the processor executes exactly one instruction and then takes a trace exception at the following instruction boundary, before execution of the next instruction.
 
 At an instruction boundary, multiple boundary exception conditions may be present. When multiple exception conditions are present, the processor resolves them according to the priority rules defined in Table~\ref{tab:exception-priority}. Instruction-caused exceptions always take priority over boundary exceptions. Among boundary exceptions, breakpoint traps have the highest priority.

@@ -122,9 +122,19 @@ Since only one instruction is issued per cycle, all instructions share the same 
 %--------------------------------------------------------------------------------
 \unnumberedSection{Dual Issue Pipeline}
 
-The dual issue pipeline extends the single issue design by allowing two independent instructions to be processed simultaneously. The pipeline stages remain divided into Fetch/Decode, Access, and Execute stages, but the Access and Execute stages contain additional resources to allow two compatible instructions to proceed in parallel.
+The dual issue pipeline extends the single issue design by allowing two independent instructions to be processed simultaneously. The pipeline remains divided into the Fetch/Decode, Access, and Execute stages, while the Access and Execute stages provide the additional resources required for two compatible instructions to proceed in parallel.
 
-The instruction decoder identifies two instructions that can be paired and determines whether their resource requirements are compatible. The processor supports parallel execution of different instruction classes, including Compute, Branch, Memory, and System instructions. The following instruction combinations are supported:
+\unnumberedSubsection{Instruction Bundle}
+
+The instruction decoder interprets the two instructions contained in an instruction bundle. The processor supports the parallel execution of different instruction classes, including Compute, Branch, Memory, and System instructions. Unlike the single issue architecture, where each instruction occupies one instruction word, the dual issue architecture fetches and decodes instruction bundles. A bundle contains two instructions together with a bundle identifier that specifies the valid instruction pairing.
+
+\begin{center}
+\drawInstrFormatSixtyFour
+        {0, 1, 8.5, 16}
+        {B, instr 1, instr 2 }
+\end{center}
+
+The two instructions are encoded using the standard Twin-64 instruction format. However, the instruction group field is omitted, as the instruction class is encoded by the bundle identifier. The bundle identifier therefore determines the permitted combination of instruction types.
 
 \begin{center}
 \begin{tabular}{c|l}
@@ -138,7 +148,11 @@ BM & Branch instruction paired with a Memory instruction
 \end{tabular}
 \end{center}
 
-Other combinations are not issued together and are executed as separate instructions. This restriction simplifies hazard detection, resource allocation, and pipeline control while still allowing the most common instruction sequences to benefit from dual issue execution.
+Other combinations are not encoded as instruction bundles and must be issued as separate instructions. Restricting the available bundle types simplifies instruction decoding, hazard detection, resource allocation, and pipeline control while still capturing the instruction combinations most frequently encountered in practice.
+
+\unnumberedSubsection{Instruction Pipeline}
+
+The dual issue pipeline closely resembles the single issue pipeline. The primary difference is that the Execute stage utilizes both execution substages, allowing two compatible computational operations to complete during a single pipeline cycle.
 
 \begin{figure}[H]
 \begin{center}
@@ -206,8 +220,10 @@ Other combinations are not issued together and are executed as separate instruct
 \end{tikzpicture}
 \end{center}
 \caption{Dual Instruction Pipeline}
-\label{fig:DUal Instruction Pipeline}
+\label{fig:Dual Instruction Pipeline}
 \end{figure}
+
+The processor contains a single 64-bit ALU. Although two Compute instructions may be present simultaneously in the Execute stage, they occupy different execution substages. The ALU is therefore reused by successive substages rather than duplicated, allowing one computational result to be produced in each execution substage every clock cycle.
 
 
 \subparagraph{Fetch/Decode Stage}
@@ -228,12 +244,11 @@ The dual issue pipeline improves instruction throughput by allowing independent 
 %--------------------------------------------------------------------------------
 \unnumberedSection{Design Rationale}
 
-The Twin-64 architecture follows the principle of keeping the hardware implementation simple while allowing the compiler to assist in exposing instruction-level parallelism. Instead of relying on complex dynamic scheduling mechanisms to discover parallel execution opportunities at runtime, the processor defines a small number of well-known instruction combinations that can execute together.
+The Twin-64 architecture is based on the principle that instruction-level parallelism should be exposed primarily by software rather than discovered dynamically by hardware. The instruction set therefore provides a small number of well-defined instruction bundle types that allow compatible operations to execute in parallel while preserving a simple and predictable execution model.
 
-By limiting the scope of dual issue execution, the hardware required for instruction decoding, dependency checking, and resource allocation remains manageable. The compiler can take advantage of the available parallelism by scheduling compatible instructions, while the processor only needs to verify that the selected instruction pair can safely execute.
+By limiting the supported instruction combinations, the processor avoids the complex scheduling, dependency analysis, and execution control required by more aggressive superscalar designs. The compiler is responsible for arranging instructions into suitable bundles whenever opportunities for parallel execution exist, while the processor verifies that the selected bundle can be executed safely.
 
-This approach provides improved instruction throughput without introducing the hardware complexity associated with wide superscalar or out-of-order processors. The design represents a balance between implementation simplicity and execution efficiency: the processor provides the capability for parallel execution, while the compiler remains responsible for making effective use of that capability.
+This division of responsibilities results in a processor that offers increased instruction throughput without requiring extensive hardware resources. The architecture deliberately balances execution efficiency with implementation simplicity, making the processor easier to understand, verify, and implement while still exploiting a significant amount of instruction-level parallelism.
 
-The name Twin-64 reflects this design choice. The architecture combines a 64-bit processor model with two cooperating instruction paths, allowing two compatible instructions to progress through the pipeline together while maintaining a simple and predictable hardware design.
-
+The name \emph{Twin-64} reflects this architectural philosophy. The processor combines a 64-bit execution model with the ability to process two compatible instructions together. Rather than maximizing the amount of parallelism that can be extracted in hardware, Twin-64 provides a well-defined dual-issue execution model that allows hardware and compiler to cooperate in achieving efficient execution.
  

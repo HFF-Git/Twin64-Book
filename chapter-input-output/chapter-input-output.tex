@@ -1,9 +1,9 @@
-\chapter*{Input/Output}
-\addcontentsline{toc}{chapter}{Input/Output}
+\unnumberedChapter{Input/Output}
+
 This chapter presents the Twin-64 I/O architecture and introduces its core concepts related to the processor and system architecture. It does not describe any specific I/O module, nor does it cover operating-system initialization or runtime I/O procedures.
 
-\section*{Concepts}
-\addcontentsline{toc}{section}{Concepts}
+\unnumberedSection{Concepts}
+
 Twin-64 uses a memory-mapped I/O architecture. A dedicated portion of the physical address space in address region zero is reserved exclusively for the I/O subsystem. This clean partitioning ensures predictable system behavior during early initialization and simplifies both hardware implementation and software design.
 
 The I/O subsystem is organized around functional entities known as \textbf{modules}. Typical modules include processors, memory controllers, and various I/O devices. All modules connect to the \textbf{system bus}, which supports up to 64 modules in total. Although real systems often provide fewer physical slots, the architecture itself imposes no such restriction. At system startup, each module is assigned a dedicated 4-KB physical address page. This page defines the base address range to which the module responds and serves as a fixed anchor for its control and status information.
@@ -16,8 +16,7 @@ The system bus spans a 256-KB address space, aligned to a 256-KB boundary, with 
 
 Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibility. Its hierarchical structure—from modules to devices, and from hard physical pages to optional soft and broadcast regions—supports both straightforward configurations and more complex, densely populated systems.
 
-\section*{I/O Address Space}
-\addcontentsline{toc}{section}{I/O Address Space}
+\unnumberedSection{I/O Address Space}
 
  As shown in the overall physical memory layout, the physical memory address range dedicated to I/O modules is located from \texttt{0xFF\_0000\_0000} to \texttt{0xFF\_FFFF\_FFFF}. The following figure depicts the I/O memory address space ranges.
 
@@ -97,8 +96,7 @@ At the upper level of the I/O address range there is the \textbf{hard physical a
     A write issued through the broadcast HPA address updates the corresponding register in \emph{every} module on the bus. Broadcast writes are useful for system-wide resets, synchronization operations, or events that must be delivered simultaneously to all modules.
 \end{itemize}
 
-\section*{Hard physical address range}
-\addcontentsline{toc}{section}{Hard physical address range}
+\unnumberedSection{Hard physical address range}
 
 The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 256 I/O modules in the system bus. Each module has a hard physical address page, which consists of up to 16 register sets of 32 registers each. A register itself is a 64-bit word. The first register set is the supervisory register set. This set is architected and must be implemented by each module. It contains the I/O module description. The remainder of the registers in this set and the organization of the remaining register set is specific to the I/O module. 
 
@@ -153,15 +151,13 @@ The \textbf{hard physical address} range contains an I/O page for each I/O modul
 \end{figure}
 
 
-\section*{Broadcast address range}
-\addcontentsline{toc}{section}{Broadcast address range}
+\unnumberedSection{Broadcast address range}
 
 I/O module 255, i.e. the last page in the HPA address range, is the broadcast address range. It is actually not a module and contains no actual functions. Writes issued to broadcastable registers using this module number are not directed to a single module. Instead, the write operation is applied simultaneously to all I/O modules on the system bus. This mechanism is typically used for system-wide commands such as resets, synchronization events, or configuration updates that must reach every module at once.
 
 At reset time, all modules only listen to their broadcastable registers. Only after system bus setup and module discovery, is the HPA address range available.
 
-\section*{Soft physical address range}
-\addcontentsline{toc}{section}{Soft physical address range}
+\unnumberedSection{Soft physical address range}
 
 In many cases, a module requires more addressable registers or data structures than can be  
 accommodated within its hard physical address page. The \textbf{soft physical address} range provides a flexible region where additional space may be allocated for an I/O module’s extended functionality. From a software perspective, the allocated area is termed \textbf{I/O Element}. However, the meaning of register sets in this range is entirely up to the module. A module responds to memory accesses within its configured soft physical address space, which may reside  either in the I/O address space or the general memory address space.
@@ -234,9 +230,7 @@ accommodated within its hard physical address page. The \textbf{soft physical ad
 
 For example, a terminal I/O controller has a hard physical page in the I/O address space and a SPA address allocated for its terminal ports. As a another example, a memory controller has a hard physical page in the I/O address space, yet its soft physical region typically encompasses all or part of the system’s physical memory. Similarly, a processor may allocate a soft physical address range within the I/O space to store performance counters or diagnostic information that needs to be accessible without interfering with normal memory traffic.
 
-
-\section*{Supervisor Register Set}
-\addcontentsline{toc}{section}{Supervisor Register Set}
+\unnumberedSection{Supervisor Register Set}
 
 The supervisor registers implements the architected set of registers for configuring and managing the I/O module. The \texttt{REG 0} to \texttt{REG 7} are implemented by each module. \texttt{REG 8} to \texttt{REG 31} are module specific.
 
@@ -418,8 +412,7 @@ The following table lists the architected registers for an I/O module. Access to
 \end{itemize}
 
 
-\section*{I/O Elements}
-\addcontentsline{toc}{section}{I/O Elements}
+\unnumberedSection{I/O Elements}
 
 Modules typically consist of I/O elements. They represent the smallest I/O unit of operation.
 
@@ -433,8 +426,7 @@ Modules typically consist of I/O elements. They represent the smallest I/O unit 
 
  
 
-\section*{Interrupt Processing}
-\addcontentsline{toc}{section}{Interrupt Processing}
+\unnumberedSection{Interrupt Processing}
 
 A processor has two control registers. The external interrupt register and the external interrupt mask register. Both are ANDed and checked after each instruction execution. An I/O module can set a bit in the processor external interrupt request register. There are 64 interrupt groups in the EIRR control register. When not masked by the EIMR register, the interrupt is handled.
 
@@ -447,8 +439,7 @@ When an I/O operation is started, the command contains in addition to the comman
 \end{center}
 
 
-\section*{Design Rationale}
-\addcontentsline{toc}{section}{Design Rationale}
+\unnumberedSection{Design Rationale}
 
 ??? simple but flexible design
 
