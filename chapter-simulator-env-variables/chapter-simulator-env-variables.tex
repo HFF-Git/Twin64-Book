@@ -1,8 +1,47 @@
 \unnumberedChapter{Simulator Variables}
 
+??? relation to ENV variables ? 
+
+??? how about making them all ENV variables somehow ? 
+
+??? The keyword style variables are dynamically set to actual values... 
+
+??? we could have a method to attach a function to an ENV style variable...
+
+\unnumberedSection{Predefined Variables}
+
+??? better word for these puppies...
 
 \begin{longtable}{@{}p{0.2\linewidth}p{0.1\linewidth}p{0.1\linewidth}p{0.3\linewidth}@{}}
     \caption{Predefined Simulator Variables} \\
+    \toprule
+    \textbf{Name} & \textbf{Type } & \textbf{Access } & \textbf{Purpose} \\
+    \midrule
+    \endfirsthead
+    \toprule
+    \textbf{Name} & \textbf{Type } & \textbf{Access } & \textbf{Purpose} \\
+    \midrule
+    \endhead
+    \midrule
+    \multicolumn{2}{r}{\textit{Continued on next page}} \\
+    \midrule
+    \endfoot
+    \bottomrule
+    \endlastfoot
+    \textbf{R0 .. R15} & numeric & R/W & General register. \\
+    \midrule
+    \textbf{C0 .. C15} & numeric & R/W & Control register. \\
+    \midrule
+    \textbf{IA} & numeric & R/W & Instruction address register. \\
+    \midrule
+\end{longtable}
+
+
+\unnumberedSection{Environment Variables}
+
+
+\begin{longtable}{@{}p{0.2\linewidth}p{0.1\linewidth}p{0.1\linewidth}p{0.3\linewidth}@{}}
+    \caption{Environment Variables} \\
     \toprule
     \textbf{Name} & \textbf{Type } & \textbf{Access } & \textbf{Purpose} \\
     \midrule

@@ -38,12 +38,15 @@ display a prompt or an error, depending on the simulator configuration.
 (12)-> w R1
 0x0000_0000_1234_5678
 
+(13)-> w 0x100, dec
+ 256
+
 # display the value at virtual memory address 0x1000
-(13)-> w [0x1000]
+(14)-> w [0x1000]
 0xDEAD_BEEF
 
 # evaluate an arithmetic expression
-(14)-> w R1 + R2 * 4
+(15)-> w R1 + R2 * 4
 0x0000_0000_2468_ACF0
 
 \end{lstlisting}
@@ -52,6 +55,6 @@ display a prompt or an error, depending on the simulator configuration.
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
 
-The \texttt{W} command is read-only and does not modify registers or memory. It is useful for inspecting register or memory values and evaluating expressions for debugging. 
+None.
 
 \end{iPageDescEntry}

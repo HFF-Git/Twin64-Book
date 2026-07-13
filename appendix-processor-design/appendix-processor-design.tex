@@ -126,7 +126,9 @@ The dual issue pipeline extends the single issue design by allowing two independ
 
 \unnumberedSubsection{Instruction Bundle}
 
-The instruction decoder interprets the two instructions contained in an instruction bundle. The processor supports the parallel execution of different instruction classes, including Compute, Branch, Memory, and System instructions. Unlike the single issue architecture, where each instruction occupies one instruction word, the dual issue architecture fetches and decodes instruction bundles. A bundle contains two instructions together with a bundle identifier that specifies the valid instruction pairing.
+The instruction decoder interprets the two instructions contained in an instruction bundle. The processor supports the parallel execution of different instruction classes, including Compute, Branch, Memory, and System instructions.
+
+Unlike the single issue architecture, where each instruction occupies a separate instruction word, the dual issue architecture fetches and decodes instruction bundles. Each bundle contains two instructions together with a bundle identifier that specifies the permitted instruction combination.
 
 \begin{center}
 \drawInstrFormatSixtyFour
@@ -134,21 +136,54 @@ The instruction decoder interprets the two instructions contained in an instruct
         {B, instr 1, instr 2 }
 \end{center}
 
-The two instructions are encoded using the standard Twin-64 instruction format. However, the instruction group field is omitted, as the instruction class is encoded by the bundle identifier. The bundle identifier therefore determines the permitted combination of instruction types.
+The two instructions are encoded using the standard Twin-64 instruction format. However, the instruction group field present in a single-issue instruction is omitted, as the instruction class is implied by the bundle identifier. Consequently, the bundle identifier determines the permitted combination of instruction types.
+
+In addition to specifying the instruction combination, the bundle identifier contains a serialization flag. When this flag is set, the left instruction is guaranteed to complete before execution of the right instruction begins. This allows dependent instructions to be bundled while preserving their execution order.
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[scale=0.7, transform shape]
+
+	% \draw[help lines, gray!70, dashed] (0,0) grid(4,1.5);
+	
+  	\def\leftofs{0}
+    
+    \node[  tsRectangle, 
+            minimum width=4cm,
+            minimum height=1cm,  
+            fill=white!50] (blocks) at (\leftofs + 2,1) { };
+                                       
+  	\draw[-] (\leftofs+1,0.5) -- (\leftofs+1,1.5);
+     	   	
+    \def\flagOfs{0.125}
+	\node at (\leftofs + 0.5, 1) {S};
+	\node at (\leftofs + 2.5, 1) {Combo};
+	
+	\node at (\leftofs+0.75,0.25) {3};
+	\node at (\leftofs+1.75,0.25) {2};
+    \node at (\leftofs+2.75,0.25) {1};
+   	\node at (\leftofs+3.75,0.25) {0};
+   	 	
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+The \emph{Combo} field encodes the supported instruction bundle types. The bundle identifier is represented by a three-bit field. Of the eight possible encodings, five are currently assigned to instruction bundle types, while the remaining values are reserved for future use. This allows additional bundle types to be introduced without modifying the instruction format.
 
 \begin{center}
-\begin{tabular}{c|l}
-\textbf{Combination} & \textbf{Description} \\
+\begin{tabular}{c|l|l}
+\textbf{Value} & \textbf{Bundle} & \textbf{Description} \\
 \hline
-CC & Two Compute instructions executed in parallel \\
-CM & Compute instruction paired with a Memory instruction \\
-CB & Compute instruction paired with a Branch instruction \\
-CS & Compute instruction paired with a System instruction \\
-BM & Branch instruction paired with a Memory instruction
+0 & CC & Two Compute instructions executed in parallel \\
+1 & CM & Compute instruction paired with a Memory instruction \\
+2 & CB & Compute instruction paired with a Branch instruction \\
+3 & CS & Compute instruction paired with a System instruction \\
+4 & BM & Branch instruction paired with a Memory instruction \\
+5 .. 7 & & reserved
 \end{tabular}
 \end{center}
 
-Other combinations are not encoded as instruction bundles and must be issued as separate instructions. Restricting the available bundle types simplifies instruction decoding, hazard detection, resource allocation, and pipeline control while still capturing the instruction combinations most frequently encountered in practice.
+Instruction combinations not represented by one of the defined bundle types cannot be encoded within a single instruction bundle and must instead be issued as separate instructions. Restricting the available bundle types simplifies instruction decoding, hazard detection, resource allocation, and pipeline control while still covering the instruction pairings encountered most frequently in practice.
 
 \unnumberedSubsection{Instruction Pipeline}
 

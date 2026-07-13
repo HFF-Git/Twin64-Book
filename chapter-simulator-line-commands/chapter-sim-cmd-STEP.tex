@@ -13,7 +13,7 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{STEP} command advances a T64 module by executing one or more instructions or step units on an I/O module. There can be one or more processors and I/O modules configured. When the step command is invoked without an argument, the simulator executes exactly one instruction on the module that is associated with the current window and then returns control to the simulator console. If the step count is provided, modules advance that many steps. If the module number is provided, the module specified will advance.
+The \texttt{STEP} command advances a halted T64 module by executing one or more instructions on a processor module or step units on an I/O module. There can be one or more processors and I/O modules configured. When the step command is invoked without an argument, the simulator executes exactly one instruction on the module that is associated with the current window and then returns control to the simulator console. If the step count is provided, modules advance that many steps. If the module number is provided and the module is halted, the module specified will advance.
 
 After the requested number of steps have completed, execution halts and control returns to the simulator command interface, allowing inspection of state, registers, memory, or windows. Only a halted modules accepts step commands. The sequence is typically that a module encountered a trap or debug breakpoint and passed control to the simulator. After inspection the step command resumes execution of the processor module.
 
@@ -38,8 +38,8 @@ After the requested number of steps have completed, execution halts and control 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
 
-The \texttt{STEP} command respects breakpoint and trace settings. A breakpoint or
-trace exception encountered during stepping may cause execution to stop before
-the requested number of steps has completed.
+The \texttt{STEP} command respects breakpoint and trace settings. A breakpoint or trace exception encountered during stepping may cause execution to stop before the requested number of steps has completed.
+
+All other modules in RUN mode are not affected and continue to process instructions or unit steps.
 
 \end{iPageDescEntry}

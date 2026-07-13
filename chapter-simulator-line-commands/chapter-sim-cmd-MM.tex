@@ -24,8 +24,13 @@ The \texttt{Mx} command modifies a data item in memory. The expression must be a
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-(100)-> ma 0x1000, 0x100      # set memory at location 0x1000 
+(100)-> md 0x1000, 0x100      # set memory double at location 0x1000 
                               # to the value of 0x100.
+                              
+(101) -> mb 0x1009, 0xff      # set memory byte at location 0x1000 
+                              # to the value 0f 0xfF  
+                              
+                              
 
 \end{lstlisting}
 \end{iPageDescOpEntry}
