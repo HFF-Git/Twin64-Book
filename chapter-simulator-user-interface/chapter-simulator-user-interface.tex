@@ -223,42 +223,38 @@ The supported access types are
 \begin{list}{}{\leftmargin=2em}
 \item
 \begin{tabular}{ll}
-BYTE   & 8-bit access \\
-HALF   & 16-bit access \\
-WORD   & 32-bit access \\
-DOUBLE & 64-bit access
+BYTE   & sign extended 8-bit access \\
+UBYTE  & unsigned 8-bit access \\
+HALF   & sign extended  16-bit access \\
+UHALF  & unsigned  16-bit access \\
+WORD   & sign extended 32-bit access \\
+UWORD  & unsigned 32-bit access \\
+DOUBLE & signed 64-bit access
 \end{tabular}
 \end{list}
 
-If no type is specified, a doubleword access is assumed.
+If no type is specified, a double-eword access is assumed.
 
-Examples:
+Examples (assume the value at 0x1000 is 0xaaaa\_bbbb\_cccc\_dddd:
 
 \begin{list}{}{\leftmargin=2em}
 \item
 \begin{verbatim}
-[0x1000]
-[BYTE 0x1000]
+[0x1000] -> 0xaaaa_bbbb_cccc_dddd
+[BYTE 0x1000] -> 0xffff_ffff_ffff_ffdd
+[UBYTE 0x1000] -> 0xdd
+[WORD 0x1000] -> 0xffff_ffff_cccc_dddd
+\end{verbatim}
+\end{list}
+
+The memory address itself can also be an expression:
+
+\begin{list}{}{\leftmargin=2em}
+\item
+\begin{verbatim}
 [WORD R1 + 8]
 [DOUBLE StackPointer]
 \end{verbatim}
 \end{list}
 
 Memory references may appear wherever expressions are accepted.
-
-\unnumberedSection{Example Session}
-
-// ??? needed ? what to show ?
-
-\begin{list}{}{\leftmargin=1em}
-\item
-\begin{verbatim}
-Twin-64 Simulator, Version: A.01.00, Patch Level: 122
- Git Branch: main
- Load Config File: "./Twin64/config/T64ConfigFile"
- Open Log File: "./Twin64/log/T64LogFile"
- (0) ->
- (1) -> 
-
-\end{verbatim}
-\end{list}	
