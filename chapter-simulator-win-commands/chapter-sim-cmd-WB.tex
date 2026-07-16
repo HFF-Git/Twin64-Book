@@ -7,7 +7,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{wb [ <amt> ] [ , <winNum> ]} \\
+\texttt{wb [ <amt> [ , <winNum> ]} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ If the window number parameter is omitted, the command applies to the current wi
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-wn itlb, 0          # Create a tlb window ( TLB is at slot 0 ).
+wn tlb, 0          # Create a tlb window ( TLB is at slot 0 ).
 wj 10               # set the window content start to entry 10.
 wb 5                # Move backward five items.
 

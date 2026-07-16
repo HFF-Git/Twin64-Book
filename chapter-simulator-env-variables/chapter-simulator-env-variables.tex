@@ -1,12 +1,15 @@
 \unnumberedChapter{Simulator Variables}
 
-??? relation to ENV variables ? 
+The simulator provides two categories of variables: built-in variables and environment variables.
 
-??? how about making them all ENV variables somehow ? 
+Built-in variables represent objects that are part of the simulated system, such as CPU registers, status flags, or memory locations. Their values are determined directly by the execution of the simulated program and cannot be assigned by the user.
 
-??? The keyword style variables are dynamically set to actual values... 
+Environment variables are maintained by the simulator itself. They are used to provide information about the simulation environment rather than the simulated hardware. For example, the current command sequence number is stored in a predefined environment variable whose value is updated automatically by the simulator.
 
-??? we could have a method to attach a function to an ENV style variable...
+In addition to the predefined environment variables, users may define their own environment variables. User-defined environment variables behave in the same way as predefined ones, except that their values are assigned explicitly by the user.
+
+All environment variables have global scope and are accessible from any command or script.
+
 
 \unnumberedSection{Predefined Variables}
 

@@ -7,7 +7,8 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{wdef [ <start> [ , <end> ]] | ALL} \\
+\texttt{wdef [ <start> [ , <end> ]] } \\
+\texttt{wdef ALL} \\
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -24,6 +25,7 @@ If no parameter is given, the current window is set to its default. The option \
 \begin{lstlisting}[style=iPageOpStyle]
 wdef                # Reset all windows to default attributes.
 wdef 3, 7           # Reset windows 3 through 7 defaults.
+wdef all			# set all windows to their defaults.
 \end{lstlisting}
 \end{iPageDescOpEntry}
 

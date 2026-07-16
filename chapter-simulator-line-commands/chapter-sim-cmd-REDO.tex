@@ -8,13 +8,13 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{REDO}
+\texttt{REDO [ <cmdId> ]}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{REDO} command recalls a previously executed command from the history stack and opens it for editing in the interactive command line.
+The \texttt{REDO} command recalls a previously executed command from the history stack using its command Id and opens it for editing in the interactive command line.
 
 Editing is performed directly in the command line buffer. Characters can be inserted or removed at the cursor position. Pressing \texttt{Enter} submits the modified command for execution.
 
@@ -26,7 +26,18 @@ The \texttt{REDO} command is only available in interactive console sessions (TTY
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-...
+(11) ->hist
+ [0]: rmod all
+ [1]: nmod tlb,  0, TLB_FA_16S
+ [2]: nmod proc, 4
+ [3]: nmod mem,  1, ROM, SPA_ADR=0xff_0000_0000, SPA_LEN=0x4000
+ [4]: nmod mem,  2, RAM, SPA_ADR=0x0000_0000, SPA_LEN=0x40_0000
+ [5]: reset all
+ [6]: env halt_on_traps, true
+ [7]: loadelf "~/Loop-Test.out"
+ (11) ->redo 2
+ nmod proc, 4
+
 
 \end{lstlisting}
 \end{iPageDescOpEntry}

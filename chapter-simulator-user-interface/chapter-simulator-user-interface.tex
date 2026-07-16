@@ -212,11 +212,11 @@ Memory contents may be accessed directly within expressions. The general syntax 
 \begin{list}{}{\leftmargin=2em}
 \item
 \begin{verbatim}
-[ [type] address ]
+"[" [type] address "]"
 \end{verbatim}
 \end{list}
 
-where \textit{address} is any expression evaluating to a memory address and \textit{type} specifies the access size.
+where \textit{address} is any expression evaluating to a memory address and \textit{type} specifies the access size and sign-extension mode.
 
 The supported access types are
 
@@ -233,7 +233,7 @@ DOUBLE & signed 64-bit access
 \end{tabular}
 \end{list}
 
-If no type is specified, a double-eword access is assumed.
+If no type is specified, a double-word access is assumed.
 
 Examples (assume the value at 0x1000 is 0xaaaa\_bbbb\_cccc\_dddd:
 

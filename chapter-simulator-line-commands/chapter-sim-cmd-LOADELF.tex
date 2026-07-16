@@ -13,7 +13,7 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{LOADELF} command opens an ELF format file and places the ELF segments at the specified address in memory. 
+The \texttt{LOADELF} command opens an ELF format file and places the ELF segments at the in the ELF file specified address in memory. 
 
 This command is currently under construction and will be finalized when the actual ELF file segments and sections are defined for Twin-64. Currently, it just loads the ELF segments at the specified physical address.
 
@@ -22,13 +22,24 @@ This command is currently under construction and will be finalized when the actu
 %--------------------------------------------------------------------------------
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
-
-(5)-> loadelf "~/elf-file"    # load "elf-file" from the working directory.
+Twin-64 Simulator, Version: A.01.00, Patch Level: 126
+ Git Branch: main
+ Load Config File: "~/config/T64ConfigFile"
+ Open Log File: "~/log/T64LogFile"
+ (9) ->loadelf "~/Loop-Test.out"
+ Loading ~/Loop-Test.out
+ Loading: Seg:  0, adr: 0x00005000, mSize: 0x00000004, align: 0x00001000, RX
+ Loading: Seg:  1, adr: 0x00001000, mSize: 0x0000000c, align: 0x00000010, RWX
+ Loading: Seg:  2, adr: 0x00002000, mSize: 0x00000020, align: 0x00000010, RWX
+ Loading: Seg:  3, adr: 0x00003000, mSize: 0x00000024, align: 0x00000010, RWX
+ Set entry: 0x00000000
+ Done
+ (10) ->
 
 \end{lstlisting}
 \end{iPageDescOpEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
-None.
+Mid term, this command will be replaced by the initial program load facility IPL.
 \end{iPageDescEntry}
