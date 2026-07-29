@@ -7,7 +7,8 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{LDO [.B/H/W/D] RegR, ofs(RegB)}
+\texttt{LDO [.B/H/W/D] RegR, ofs(RegB)} \\
+\texttt{LDO [.B/H/W/D] RegR, RegX(RegB)}
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
@@ -30,7 +31,10 @@ The \texttt{LDO} instruction uses the following instruction formats: \\
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
-The \texttt{LDO} instruction loads an offset into a general register. Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted left by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address. The computed value is then stored in \texttt{RegR}.
+The \texttt{LDO} instruction loads an offset into a general register. Two formats are available: the immediate-offset format and the register-indexed format. In the immediate-offset format, the signed immediate offset is shifted left by the \texttt{dw} field of the instruction and added to \texttt{RegB} to form the effective address. The default for the shift amount is 1 ( .B ).
+
+
+In the register-indexed format, \texttt{RegX} is added to \texttt{RegB} to form the effective address. The computed value is then stored in \texttt{RegR}.
 
 \end{iPageDescEntry}
 
@@ -57,6 +61,8 @@ The \texttt{LDO} instruction is often used to load immediate values.
 \end{verbatim}
 
 If value to load is larger than the 13-bit offset, a sequence of instruction is however necessary.
+
+??? decide if whether we drop scaled offset here or not...
 
 
 \end{iPageDescEntry}
