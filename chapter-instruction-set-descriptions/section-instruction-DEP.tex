@@ -7,6 +7,7 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
+\texttt{DEP[.Z] RegR, RegB, pos, len} \\
 \texttt{DEP[.Z] RegR, val, pos, len} \\
 \texttt{DEP[.Z] RegR, RegB, SAR, len}
 \end{iPageDescEntry}
@@ -28,7 +29,9 @@ The \texttt{DEP} instruction deposits a bit field in the length of len from gene
 
 The rightmost bit of the target field is specified by the \texttt{pos} instruction field, or by the Shift Amount Register (\texttt{SAR}) if the \texttt{A} bit is set. The length of the field is specified by the \texttt{len} instruction field.  
 
-If the \texttt{Z} bit is set, the target register \texttt{RegR} is cleared before depositing the field. If the \texttt{I} bit is set, the value to deposit is taken from the RegB field rather than the value in register \texttt{RegB}.
+If the \texttt{Z} bit is set, the target register \texttt{RegR} is cleared before depositing the field. 
+
+If the \texttt{I} bit is set, the value to deposit is taken from the RegB field rather than the value in register \texttt{RegB}.
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
