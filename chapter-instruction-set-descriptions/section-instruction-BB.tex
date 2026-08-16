@@ -28,12 +28,13 @@ The \texttt{BB} instruction tests a bit in register \texttt{RegR}.
 The bit position can be specified directly by the \texttt{pos} field,  
 or indirectly through the Shift Amount Register (\texttt{SAR}) if the \texttt{A} option is set.  
 
-If the \texttt{V} bit is set, the test succeeds when the selected bit is \texttt{1}.  
-If the \texttt{V} bit is clear, the test succeeds when the selected bit is \texttt{0}.  
+The \texttt{V} determines whether to test the bit for true or false.
+If the \texttt{V} bit is set, the branch is taken when the selected bit is \texttt{1}, otherwise the branch is taken when the selected bit is \texttt{0}.  
 
-When the condition is satisfied, execution branches to the target address,  
+When the condition is satisfied, execution resumes at the target address,  
 computed by sign-extending the offset, shifting it left by two bits,  
-and adding it to the current instruction address. If the condition is not satisfied, execution continues with the next sequential instruction.  
+and adding it to the current instruction address. 
+If the condition is not satisfied, execution continues with the next sequential instruction.  
 
 \end{iPageDescEntry}
 

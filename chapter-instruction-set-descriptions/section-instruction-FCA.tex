@@ -3,34 +3,34 @@
 %
 %--------------------------------------------------------------------------------
 \pagebreak
-\unnumberedSection{FxCA - flush from data cache}
+\unnumberedSection{FxCA - flush from instruction or data cache}
 
 \begin{iPageDescEntry}{Syntax}
-    \texttt{FICA RegR, [ RegX ] ( RegB )} \\
-    \texttt{FDCA RegR, [ RegX ] ( RegB )}
+	\texttt{FICA RegR, [ RegX ] ( RegB )} \\
+	\texttt{FDCA RegR, [ RegX ] ( RegB )}
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Format}
-	The \texttt{FICA} instruction uses the following instruction format. \\
-
+ 	The \texttt{FICA} instruction uses the following instruction format. \\
     \begin{flushleft}
     \drawInstrFormat
         {0,1,3,5,6.5,8.5,9.5,11.5,16}
         {\OpCodeGrpSYS, \OpCodePCA, RegR, 0, RegB, 0, RegX, 0}
     \end{flushleft}
-    
     The \texttt{FDCA} instruction uses the following instruction format. \\
-
     \begin{flushleft}
     \drawInstrFormat
         {0,1,3,5,6.5,8.5,9.5,11.5,16}
         {\OpCodeGrpSYS, \OpCodePCA, RegR, 1, RegB, 0, RegX, 0}
     \end{flushleft}
-     
 \end{iPageDescEntry}
 
-\begin{iPageDescEntry}{Description}
-    The \texttt{FxCA} instruction flushes a cache line, selected by the effective address formed by adding \texttt{RegX} to \texttt{RegB}. This is a privileged instruction.
+\begin{iPageDescEntry}{Description}        
+    The \texttt{FICA} instruction invalidates a cache line, selected by the effective address formed by adding \texttt{RegX} to \texttt{RegB}. 
+    
+    The \texttt{FDCA} instruction flushes and invalidates a cache line, selected by the effective address formed by adding \texttt{RegX} to \texttt{RegB}. The cache line addressed is written back to memory if and only if it is dirty, and then invalidated. 
+
+    Both instructions are privileged instructions.
 \end{iPageDescEntry}
 
 \begin{iPageDescOpEntry}{Operation}
