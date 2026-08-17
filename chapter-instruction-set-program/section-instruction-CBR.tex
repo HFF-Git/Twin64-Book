@@ -1,0 +1,77 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{CBR - Compare and Branch}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+
+	\texttt{CBR.<cond> RegR, RegB, target}
+    
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+
+The CBR instruction uses the following instruction format:
+	
+\begin{flushleft}
+\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,16}
+  	{\OpCodeGrpBR,\OpCodeCBR,Reg R, cond, Reg B, ofs }
+\end{flushleft}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{CBR} instruction compares the contents of \texttt{RegB} with \texttt{RegR} using the condition specified in the \texttt{cond} field. If the condition is satisfied, control is transferred to the instruction address computed by adding the sign-extended and word-aligned offset to the current instruction address. Otherwise, execution continues with the next sequential instruction. The comparison operation uses the same signed 64-bit comparator as the \texttt{CMP} instruction, and neither source register is modified.
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Conditions}
+
+The \texttt{cond} field encodes the branch condition as follows:
+
+\begin{center}
+\begin{tabular}{|c|c|l|}
+\hline
+\textbf{Value}  & \textbf{Mnemonic} & \textbf{Branch if} \\ \hline
+0 & \texttt{EQ} & \texttt{RegR == RegB} \\ \hline
+1 & \texttt{LT} & \texttt{RegR <  RegB} \\ \hline
+2 & \texttt{GT} & \texttt{RegR >  RegB} \\ \hline
+3 & undefined    & \\ \hline
+4 & \texttt{NE} & \texttt{RegR != RegB} \\ \hline
+5 & \texttt{GE} & \texttt{RegR >= RegB} \\ \hline
+6 & \texttt{LE} & \texttt{RegR <=  RegB} \\ \hline
+7 & undefined    & \\ \hline
+\end{tabular}
+\end{center}
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if compare( cond, RegR, RegB ) {
+
+    tmpOfs <- signExtend( ofs ) << 2;
+    PSR.[IA-OFS] <- addOfs32( PSR.[IA-OFS], tmpOfs );
+}
+else PSR.[IA-OFS] <- addOfs32( PSR.[IA-OFS], 4 );
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+	Taken Branch Tap.\\
+	Instruction TLB Miss.
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}{
+See also the instruction notes on comparison and branch condition encoding in the appendix.
+}
+\end{iPageDescEntry}

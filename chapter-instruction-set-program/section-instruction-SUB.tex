@@ -1,0 +1,76 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{SUB - Integer Subtraction}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax} 
+  \texttt{SUB RegR, RegB, RegA} \\
+  \texttt{SUB RegR, RegB, val}
+  
+  \texttt{SUB[.D/W/H/B] RegR, ofs ( RegB )} \\
+  \texttt{SUB[.D/W/H/B] RegR, RegX ( RegB )}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+
+The SUB instruction uses the following instruction formats: \\
+	
+\begin{flushleft}	
+
+	\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,9.5,11.5,16}
+  	{\OpCodeGrpALU,\OpCodeSUB,RegR, 0, RegB, 0, RegA, 0}
+	
+	\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,16}
+  	{\OpCodeGrpALU,\OpCodeSUB, RegR, 1, RegB, val}
+
+	\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,9.5,16}
+  	{\OpCodeGrpMEM,\OpCodeSUB, RegR, 0, RegB, dw, ofs}
+ 
+	\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,9.5,11.5,16}
+  	{\OpCodeGrpMEM,\OpCodeSUB, RegR, 1, RegB, dw, RegX, 0}
+
+\end{flushleft}  
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{SUB} instruction subtracts two signed 64-bit operands and stores the result in the target register \texttt{RegR}. This instruction supports the immediate, register, and both memory-reference formats. An arithmetic overflow triggers a numeric overflow trap, and indexed instruction formats may cause a memory-reference–related trap.
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- RegB - RegA;                            (S9 )
+RegR <- RegB - immOperand( instr );             (S15)
+RegR <- RegR - memOperandImmIndexed( instr );   (S13)
+RegR <- RegR - memOpwerandRegIndexed( instr );  (S9 )
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}{
+
+ 	Integer Overflow Trap\\
+	Data Memory Alignment Trap\\
+	Data Memory Access Violation Trap\\
+	Data Memory Protection Violation Trap\\
+	Data TLB Miss Trap
+}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}{
+
+	None. 
+}
+\end{iPageDescEntry}

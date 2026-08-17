@@ -1,0 +1,46 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\unnumberedChapter{Program Instructions}
+
+The general-purpose instructions form the core of the Twin64 instruction set. They are the instructions normally used by application and user-level programs to perform their work. They provide operations for moving data, performing arithmetic and logical calculations, comparing values, and controlling program flow.
+
+These instructions operate primarily on the registers, memory, and execution state available to a program. Together, they provide the fundamental operations from which ordinary Twin64 programs are constructed.
+
+The instructions in this chapter represent the part of the instruction set that a programmer will use most frequently when writing software for the Twin64 architecture.
+
+The division between general-purpose and system instructions is based primarily on their intended use. Consequently, a small number of instructions described in the System Instructions chapter may also be relevant to ordinary programs. For example, the shift amount register is a processor control register, but it is directly used by programs that perform variable shift operations. Such cases are kept with the system instructions because they concern processor-specific control registers, even though the associated operations can be useful in normal program code.
+
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\input {chapter-instruction-set-descriptions/Twin-64-Opcodes}
+\input {chapter-instruction-set-descriptions/section-instruction-ABR}
+\input {chapter-instruction-set-descriptions/section-instruction-ADD}
+\input {chapter-instruction-set-descriptions/section-instruction-ADDIL}
+\input {chapter-instruction-set-descriptions/section-instruction-AND}
+\input {chapter-instruction-set-descriptions/section-instruction-B}
+\input {chapter-instruction-set-descriptions/section-instruction-BB}
+\input {chapter-instruction-set-descriptions/section-instruction-BE}
+\input {chapter-instruction-set-descriptions/section-instruction-BR}
+\input {chapter-instruction-set-descriptions/section-instruction-BV}
+\input {chapter-instruction-set-descriptions/section-instruction-CBR}
+\input {chapter-instruction-set-descriptions/section-instruction-CMP}
+\input {chapter-instruction-set-descriptions/section-instruction-DEP}
+\input {chapter-instruction-set-descriptions/section-instruction-DSR}
+\input {chapter-instruction-set-descriptions/section-instruction-EXTR}
+\input {chapter-instruction-set-descriptions/section-instruction-LD}
+\input {chapter-instruction-set-descriptions/section-instruction-LDIL}
+\input {chapter-instruction-set-descriptions/section-instruction-LDO}
+\input {chapter-instruction-set-descriptions/section-instruction-LDR}
+\input {chapter-instruction-set-descriptions/section-instruction-MBR}
+\input {chapter-instruction-set-descriptions/section-instruction-NOP}
+\input {chapter-instruction-set-descriptions/section-instruction-OR}
+\input {chapter-instruction-set-descriptions/section-instruction-SHLXA}
+\input {chapter-instruction-set-descriptions/section-instruction-SHRXA}
+\input {chapter-instruction-set-descriptions/section-instruction-ST}
+\input {chapter-instruction-set-descriptions/section-instruction-STC}
+\input {chapter-instruction-set-descriptions/section-instruction-SUB}
+\input {chapter-instruction-set-descriptions/section-instruction-XOR}

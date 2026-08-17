@@ -1,0 +1,44 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{ADDIL - Add immediate left}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{ADDIL RegR, val }
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+
+The ADDIL instruction uses the uses the following instruction formats. \\
+	
+\begin{flushleft}
+\drawInstrFormat
+  	{0,1,3,5,6,16}
+  	{\OpCodeGrpALU,\OpCodeADDIL, Reg R, 0, val }
+\end{flushleft}	
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{Description}
+The \texttt{ADDIL} instruction adds an immediate value to a general register using 32-bit unsigned arithmetic. The 20-bit immediate value is shifted left by 12 bits (padded with zeros on the right) before being added to \texttt{RegR}. The resulting value is stored in the general register \texttt{GR1}. Any overflow that occurs during the addition is ignored.
+
+\end{iPageDescEntry}
+
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+R1 <- addOfs32( RegR, ( val << 12 ));
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+
+\begin{iPageDescEntry}{Exceptions}
+None.
+\end{iPageDescEntry}
+
+
+\begin{iPageDescEntry}{Notes}
+None. 
+\end{iPageDescEntry}

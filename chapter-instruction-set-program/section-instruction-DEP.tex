@@ -1,0 +1,60 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{DEP - Deposit Bit Field}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{DEP[.Z] RegR, RegB, pos, len} \\
+\texttt{DEP[.Z] RegR, val, pos, len} \\
+\texttt{DEP[.Z] RegR, RegB, SAR, len}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{DEP} instruction uses the special-13 instruction format. \\
+
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,9,9.5,10,13,16}
+    {0,\OpCodeDEP,RegR,1,RegB,I,A,Z,pos,len}
+\end{flushleft}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{DEP} instruction deposits a bit field in the length of len from general register \texttt{RegB}. The source bit field is right justified in \texttt{RegB}.
+
+The rightmost bit of the target field is specified by the \texttt{pos} instruction field, or by the Shift Amount Register (\texttt{SAR}) if the \texttt{A} bit is set. The length of the field is specified by the \texttt{len} instruction field.  
+
+If the \texttt{Z} bit is set, the target register \texttt{RegR} is cleared before depositing the field. 
+
+If the \texttt{I} bit is set, the value to deposit is taken from the RegB field rather than the value in register \texttt{RegB}.
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( instr.[Z] ) RegR <- 0;
+
+if ( instr.[A] ) pos <- SAR; 
+else             pos <- instr.[pos];
+
+if ( instr.[I] ) 
+    RegR <- deposit( RegR, instr.[RegB], pos, instr.[len] ); 
+else 
+    RegR <- deposit( RegR, RegB, pos, instr.[len] );
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+None
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None
+\end{iPageDescEntry}

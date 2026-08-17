@@ -1,0 +1,67 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{EXTR - Extract Bit Field}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{EXTR[.S] RegR, RegB, pos, len} \\
+\texttt{EXTR[.S] RegR, RegB, SAR, len}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{EXTR} instruction uses the following instruction format: \\
+
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,9,9.5,10,13,16}
+    {0,\OpCodeEXTR,RegR,0,RegB,0,A,S,pos,len}
+\end{flushleft}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{EXTR} instruction extracts a bit field from general register \texttt{RegB}.  
+
+The rightmost bit of the field is specified by the \texttt{pos} instruction field. If the \texttt{A} bit is set, the position value is taken from the Shift Amount Register (\texttt{SAR}) instead of the instruction field.
+
+The length of the field is specified by the \texttt{len} instruction field. The extracted bit field is stored right-justified in \texttt{RegR}. If the \texttt{S} bit is set, the extracted value is sign-extended.  
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( instr.[A] ) tmpPos <- SAR; 
+else             tmpPos <- instr.[pos];
+
+RegR <- extractField( RegB, tmpPos, instr.[len] );
+
+if ( instr.[S] ) RegR <- signExtend( RegR, instr.[len] );
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+None
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+Twin-64 does not have instruction for shifting and rotating a register value. Instead the \texttt{EXTR} and \texttt{DSR} instructions are used. 
+
+An arithmetic shift right operation can easily be encoded as
+
+\begin{verbatim}
+    ASR Rm, Rn, amt -> EXTR.S Rm, Rn, R0, amt, 64 - amt
+\end{verbatim}
+
+and an arithmetic shift left left operation: 
+
+\begin{verbatim}
+    ASL Rm, Rn, amt -> EXTR.S Rn, Rm, amt, 64 - amt
+\end{verbatim}
+\end{iPageDescEntry}

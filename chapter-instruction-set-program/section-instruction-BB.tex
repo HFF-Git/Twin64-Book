@@ -1,0 +1,70 @@
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{BB - Branch on Bit}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax} 
+  \texttt{BB .T/F RegR, pos, ofs} \\
+  \texttt{BB .T/F RegR, SAR, ofs}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+
+The \texttt{BB} instruction uses the following instruction format: \\
+
+\begin{flushleft}
+  \drawInstrFormat
+    {0,1,3,5,5.5,6,6.5,9.5,16}
+    {\OpCodeGrpBR,\OpCodeBB,RegR,0,A,V,pos,ofs}
+\end{flushleft}
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{BB} instruction tests a bit in register \texttt{RegR}.  
+The bit position can be specified directly by the \texttt{pos} field,  
+or indirectly through the Shift Amount Register (\texttt{SAR}) if the \texttt{A} option is set.  
+
+The \texttt{V} determines whether to test the bit for true or false.
+If the \texttt{V} bit is set, the branch is taken when the selected bit is \texttt{1}, otherwise the branch is taken when the selected bit is \texttt{0}.  
+
+When the condition is satisfied, execution resumes at the target address,  
+computed by sign-extending the offset, shifting it left by two bits,  
+and adding it to the current instruction address. 
+If the condition is not satisfied, execution continues with the next sequential instruction.  
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( instr.[A] )  pos <- SAR;
+else              pos <- instr.[pos];
+
+bVal <- testBit( RegR, pos );
+cond <- ( instr.[V] ? ( bVal == 1 ) : ( bVal == 0 ));
+
+if ( cond ) {
+
+    tmpOfs <- signExtend( ofs ) << 2;
+    PSR.[IA-OFS] <- addOfs32( PSR.[IA-OFS], tmpOfs );
+}
+else PSR.[IA-OFS] <- addOfs32( PSR.[IA-OFS], 4 );
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}{
+  Taken Branch Trap\\
+  Instruction TLB Miss Trap
+}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}{
+  None.
+}
+\end{iPageDescEntry}

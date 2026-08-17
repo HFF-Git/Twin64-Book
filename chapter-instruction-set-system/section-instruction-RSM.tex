@@ -1,0 +1,37 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{RSM - Reset System Mask}
+
+\begin{iPageDescEntry}{Syntax}
+    \texttt{RSM RegR, mask}
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{Format}
+    The \texttt{RSM} instruction uses the following instruction format: \\
+
+    \begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,5,6.5,13,13.5,14,14.5,15,15.5,16}
+        {\OpCodeGrpSYS, \OpCodeRSM, RegR, 0, 0, 0, 0, 0, 0, 0, 0}
+    \end{flushleft}
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{Description}
+    The \texttt{RSM} instruction clears bits in the system
+    mask register that are encoded in the instruction. The previous mask values are returned in \texttt{RegR}.
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{Operation}
+    \texttt{SystemMask <- SystemMask \& instr.[5:0];}
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{Exceptions}
+    - Privileged instruction trap.
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{Notes}
+     None.
+\end{iPageDescEntry}

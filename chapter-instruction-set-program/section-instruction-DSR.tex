@@ -1,0 +1,67 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{DSR - Double Shift Right}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{DSR RegR, RegB, RegA, amt} \\
+\texttt{DSR RegR, RegB, RegA, SAR}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{DSR} instruction uses the following instruction format: \\
+
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,9,9.5,11.5,13, 16}
+    {0,\OpCodeDSR, RegR, 2, RegB, 0, A, RegA, 0, amt}
+\end{flushleft}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{DSR} instruction concatenates the contents of registers \texttt{RegB} (left) and \texttt{RegA} (right) and performs a right shift operation. The lower 64 bits of the shifted result are stored in \texttt{RegR}.  
+
+The shift amount is specified by the \texttt{amt} instruction field, or by the Shift Amount Register (\texttt{SAR}) if the \texttt{A} bit is set.
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+if ( instr.[A] ) shAmt <- SAR;
+else             shAmt <- instr.[amt];
+
+RegR <- doubleShiftR( RegB, RegA, shAmt );
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+None
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+Twin-64 does not have instruction for shifting and rotating a register value. Instead the \texttt{EXTR} and \texttt{DSR} instructions are used. A shift left operation can easily be encoded as
+
+\begin{verbatim}
+    ROL Rm, Rn, amt -> DSR Rm, Rn, R0, amt, 64 - amt
+\end{verbatim}
+
+The instruction rotates \texttt{Rn} by the amount and stores the result in \texttt{Rm}. Likewise, a rotate right operation can be encoded as:
+
+\begin{verbatim}
+    ROR Rm, Rn, amt -> DSR Rm, Rn, Rn, amt
+\end{verbatim}
+
+and a rotate left operation: 
+
+\begin{verbatim}
+    ROL Rm, Rn, amt -> DSR Rm, Rn, Rn, 64 - amt
+\end{verbatim}
+
+\end{iPageDescEntry}

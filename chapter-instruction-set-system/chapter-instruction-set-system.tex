@@ -1,0 +1,35 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\unnumberedChapter{System and Supervisory Instructions}
+
+The system instructions are part of the Twin64 processor architecture but are intended primarily for system-level software. They provide operations that interact directly with processor control and execution state and support functions that are normally outside the scope of an application program.
+
+A typical user-level programmer will have little need to use these instructions directly. They become relevant when writing operating-system code, low-level runtime software, firmware, or other software that needs to interact closely with the processor itself.
+
+The system instructions are presented separately from the general-purpose instructions to make this distinction clear. They are nevertheless part of the complete Twin64 instruction set and are described here for completeness and for programmers working at the system level.
+
+Some system instructions have a direct role in normal program execution. In particular, certain processor control registers provide facilities that are useful to application programmers. Their presence in this chapter reflects their system-level nature rather than a restriction on their use.
+
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\input {chapter-instruction-set-descriptions/Twin-64-Opcodes}
+\input {chapter-instruction-set-descriptions/section-instruction-DIAG}
+\input {chapter-instruction-set-descriptions/section-instruction-FxCA}
+\input {chapter-instruction-set-descriptions/section-instruction-FxCE}
+\input {chapter-instruction-set-descriptions/section-instruction-ITLB}
+\input {chapter-instruction-set-descriptions/section-instruction-LPA}
+\input {chapter-instruction-set-descriptions/section-instruction-MFIA}
+\input {chapter-instruction-set-descriptions/section-instruction-MFCR}
+\input {chapter-instruction-set-descriptions/section-instruction-MTCR}
+\input {chapter-instruction-set-descriptions/section-instruction-PxCA}
+\input {chapter-instruction-set-descriptions/section-instruction-PxCE}
+\input {chapter-instruction-set-descriptions/section-instruction-PRB}
+\input {chapter-instruction-set-descriptions/section-instruction-PTLB}
+\input {chapter-instruction-set-descriptions/section-instruction-RFI}
+\input {chapter-instruction-set-descriptions/section-instruction-RSM}
+\input {chapter-instruction-set-descriptions/section-instruction-SSM}
+\input {chapter-instruction-set-descriptions/section-instruction-TRAP}

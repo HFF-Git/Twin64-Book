@@ -1,0 +1,47 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{MTCR - Move To Control Register}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{MTCR RegB, CReg [ , RegR ]}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{MTCR} instruction uses the following instruction format. \\
+
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,13,16}
+    {\OpCodeGrpSYS, \OpCodeMTCR, RegR, 1, RegB, 0, CReg}
+\end{flushleft}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{MTCR} instruction copies the contents of the control register \texttt{CReg} to \texttt{RegR} and then the general register \texttt{RegB} to control register \texttt{CReg}.  
+Some control registers are privileged. Attempting to write them in user mode results in a privilege exception.
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- CReg;
+CReg <- RegB;    
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+Privilege operation trap for some control registers.
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+None
+\end{iPageDescEntry}
+

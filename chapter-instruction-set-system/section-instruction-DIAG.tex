@@ -1,0 +1,47 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{DIAG - Diagnose Instruction}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{DIAG id, RegB, RegA [ , RegR ]}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+The \texttt{DIAG} instruction uses the following instruction format: \\
+
+\begin{flushleft}
+\drawInstrFormat
+    {0,1,3,5,6.5,8.5,9.5,11.5,16}
+    {\OpCodeGrpSYS, \OpCodeDIAG, RegR, id1, RegB, id2, RegA, 0}
+\end{flushleft}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+The \texttt{DIAG} instruction provides a mechanism for diagnostic and system level operations.  
+
+The concatenated \texttt{id1} and \texttt{id2} fields specify the diagnostic function. The \texttt{RegB} and \texttt{RegA} fields may provide operands or data required by the diagnostic function. An optional result is returned in \texttt{RegR}.
+ 
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- diagOperation( concat( id1, id2 ), RegB, RegA );
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}
+Exceptions depend on diagnostic function and operands.
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+See the appendix for the available diagnostic operation codes.
+\end{iPageDescEntry}

@@ -1,0 +1,97 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{CMP - Compare}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax} 
+  \texttt{CMP RegR, RegB, RegA} \\
+  \texttt{CMP RegR, RegB, val}
+  
+  \texttt{CMP .cond [.D/W/H/B] RegR, ofs ( RegB )} \\
+  \texttt{CMP .cond [.D/W/H/B] RegR, RegX ( RegB )}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Format}
+
+The CMP instruction uses the following instruction formats. \\
+	
+\begin{flushleft}	
+
+	\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,9.5,11.5,16}
+  	{\OpCodeGrpALU, \OpCodeCMPA, RegR, cond, RegB, 0, RegA, 0}
+	
+	\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,16}
+  	{\OpCodeGrpALU, \OpCodeCMPB, RegR, cond, RegB, val}
+
+	\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,9.5,16}
+  	{\OpCodeGrpMEM, \OpCodeCMPA, RegR, cond, RegB, dw, ofs}
+ 
+	\drawInstrFormat
+  	{0,1,3,5,6.5,8.5,9.5,11.5,16}
+  	{\OpCodeGrpMEM, \OpCodeCMPB, RegR, cond, RegB, dw, RegX, 0}
+
+\end{flushleft}  
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{CMP} instruction compares two signed 64-bit operands. In register mode, it compares \texttt{RegB} and \texttt{RegA}; in immediate mode, it compares \texttt{RegB} and the immediate value; and in memory-reference formats, it compares \texttt{RegR} with the memory operand. The operands are called \texttt{op1} and \texttt{op2}. The result of the comparison is stored in RegR. The instruction does not cause an arithmetic overflow but indexed instruction formats may cause a memory-reference–related trap.
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Conditions}
+
+The \texttt{cond} field encodes the branch condition as follows:
+
+\begin{center}
+\begin{tabular}{|c|c|l|}
+\hline
+\textbf{Value}  & \textbf{Mnemonic} & \textbf{Branch if} \\ \hline
+0 & \texttt{EQ} & \texttt{RegR == RegB} \\ \hline
+1 & \texttt{LT} & \texttt{RegR <  RegB} \\ \hline
+2 & \texttt{GT} & \texttt{RegR > RegB} \\ \hline
+3 &  undefined    & \\ \hline
+4 & \texttt{NE} & \texttt{RegR != RegB} \\ \hline
+5 &  \texttt{GE} & \texttt{RegR >= RegB} \\ \hline
+6 & \texttt{LE} & \texttt{RegR <=  RegB} \\ \hline
+7 & undefined    & \\ \hline
+\end{tabular}
+\end{center}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+RegR <- compare( cond, RegB, RegA );                  (S9 )
+RegR <- compare( cond, RegB, immOperand());           (S15)
+RegR <- compare( cond, RegR, memOperandImmIndexed()); (S13) 
+RegR <- compare( cond, RegR, memOperandRegIndexed()); (S9 )
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Exceptions}{
+
+ 	Data Memory Alignment Trap\\
+	Memory Access Violation Trap\\
+	Memory Protection Violation Trap\\
+	Data TLB Miss Trap
+}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}{
+
+See also the instruction notes on comparison and branch condition encoding in the appendix.
+}
+
+\end{iPageDescEntry}
