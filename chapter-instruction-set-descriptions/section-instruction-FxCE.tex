@@ -1,0 +1,48 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{FxCE - flush Instruction or Data Cache Entries}
+
+\begin{iPageDescEntry}{Syntax}
+	\texttt{FICE [ RegX ] ( RegB )} \\
+	\texttt{FDCE [ RegX ] ( RegB )}
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{Format}
+ 	The \texttt{FICE} instruction uses the following instruction format. \\
+    \begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpSYS, \OpCodePCA, 0, 4, 0, 0, RegX, 0}
+    \end{flushleft}
+    The \texttt{FDCE} instruction uses the following instruction format. \\
+    \begin{flushleft}
+    \drawInstrFormat
+        {0,1,3,5,6.5,8.5,9.5,11.5,16}
+        {\OpCodeGrpSYS, \OpCodePCA, 0, 5, RegB, 0, RegX, 0}
+    \end{flushleft}
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{Description}        
+    The \texttt{FICE} instruction invalidates a cache line entry or a set of entries, selected by the effective address formed by adding \texttt{RegX} to \texttt{RegB}. 
+    
+    The \texttt{FDCE} instruction flushes and invalidates a cache line, selected by the effective address formed by adding \texttt{RegX} to \texttt{RegB}. The cache line addressed is written back to memory if and only if it is dirty, and then invalidated. 
+
+    Both instructions are privileged instructions. The implementation is processor dependent.
+\end{iPageDescEntry}
+
+\begin{iPageDescOpEntry}{Operation}
+\begin{lstlisting}[style=iPageOpStyle]
+flushEntriesFromCache( addOfs32( RegB, RegX ));
+\end{lstlisting}
+\end{iPageDescOpEntry}
+
+\begin{iPageDescEntry}{Exceptions}
+    Privilege violation trap.
+\end{iPageDescEntry}
+
+\begin{iPageDescEntry}{Notes}
+None.
+\end{iPageDescEntry} 
