@@ -94,7 +94,7 @@ A virtual address is translated into a physical address. For translation purpose
 
 \unnumberedSection{Address Space Layout}
 
-Twin-64 architecture features a 52-bit address space with a 40-bit physical memory address range that allows a maximum physical memory of up to 1 TByte. The following figure depicts the overall address space layout.
+Twin-64 architecture features a 52-bit address space divided into $2^{20}$ regions of 4Gbyte each. The following figure depicts the overall address space layout.
 
 \begin{figure}[H]
 \begin{center}
@@ -153,7 +153,7 @@ Twin-64 architecture features a 52-bit address space with a 40-bit physical memo
 \label{fig:Memory Address Ranges}
 \end{figure}
 
-Region IDs 0 to 255 represent the physical address space, with a maximum size of 1 TB. These regions are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these regions. Control Register 0 contains a field that contains the actual physical memory size installed in the system.
+Region IDs 0 to 254 represent the physical address space, with a maximum size of 1 TB. These regions are directly mapped to physical addresses, without TLB translation or access-rights checking. Only privileged-mode code can access these regions. Control Register 0 contains a field that is set to the actual physical memory size installed in the system.
 
 Twin-64 uses a memory-mapped I/O architecture. The I/O address space occupies the top region, region 255, of the physical address space. I/O modules allocate addresses for their registers and storage within this range, and access to this area is uncached.
 

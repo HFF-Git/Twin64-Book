@@ -367,11 +367,11 @@ The instruction address portion of the PSR registers contains the region id and 
     \midrule
     \textbf{E} & Little endian access enable. When set, memory access is in little endian format, else big endian format. Endian support is an optional feature. If not implemented, all access is in big endian format. \\
     \midrule
-    \textbf{X} & When set, the processor runs in privileged ( supervisor ) mode. \\
+    \textbf{X} & When set, the processor runs in user mode. \\
     \midrule
-    \textbf{R} & Recovery counter enable. When set the recovery counter trap is issued when the recovery counter becomes negative. \\
+    \textbf{R} & Recovery counter enable. When set, the recovery counter trap is issued when the recovery counter becomes negative. \\
     \midrule
-    \textbf{B} & Break enable. When set execution of a BREAK instruction causes a breakpoint exception. \\
+    \textbf{B} & Break enable. When set, execution of a BREAK instruction causes a breakpoint exception. \\
     \midrule
     \textbf{T} & Trace enable. When set, the processor generates a trace exception after the next instruction completes, regardless of the instruction type. \\
     \midrule
