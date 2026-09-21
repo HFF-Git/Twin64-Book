@@ -1,0 +1,43 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{BE - Enable simulator breakpoint}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{be  <bNum>  }
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{BE} command enables a simulator breakpoint. The breakpoint
+must have previously been created with the \texttt{BN} command and
+remains in the breakpoint table after being disabled.
+
+The \texttt{bNum} parameter specifies the breakpoint number as shown by
+the \texttt{BL} command. Enabling a breakpoint activates its configured
+address, type, and module association.
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Example}
+
+The following examples demonstrate the \texttt{BE} command. 
+
+\begin{lstlisting}[style=iPageOpStyle]
+(4) -> be 2
+(5) ->
+\end{lstlisting}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+
+Enabling a breakpoint does not change its configuration. Use the
+\texttt{BD} command to disable it again.
+
+\end{iPageDescEntry}

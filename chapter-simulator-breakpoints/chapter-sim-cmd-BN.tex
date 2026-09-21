@@ -1,0 +1,62 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{BN - Create a simulator breakpoint}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{bn  <modNum>, <type>, <adr> [ , <len> ]  }
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{BN} command creates a simulator breakpoint.
+
+The \texttt{modNum} parameter specifies the module for which the
+breakpoint is active. A module number of \texttt{-1} specifies all
+modules.
+
+The \texttt{type} parameter specifies the type of breakpoint. The
+following types are supported:
+
+\begin{smallGapItemize}
+	\item \texttt{CODE  } - Break when execution reaches the specified address.
+    \item \texttt{DATA  } - Break on any data access to the specified address or range.
+    \item \texttt{DATA\_R} - Break on a read access to the specified address or range.
+    \item \texttt{DATA\_W} - Break on a write access to the specified address or range.
+\end{smallGapItemize}
+ 
+The \texttt{adr} parameter specifies the breakpoint address. For data
+breakpoints, the optional \texttt{len} parameter specifies the length
+of the address range. Code breakpoints do not support address ranges.
+
+If a breakpoint with the same type and address range already exists for
+another module, no new breakpoint entry is created. Instead, the
+specified module is added to the existing breakpoint's module mask.
+Newly created breakpoints are enabled automatically.
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Example}
+
+The following examples demonstrate the \texttt{BN} command. 
+
+\begin{lstlisting}[style=iPageOpStyle]
+(4) -> bn 0, code, 0x80001000
+(5) -> bn 0, data_r, 0x80002000, 0x100
+(6) -> bn 2, data_w, 0x80003000
+(7) ->
+\end{lstlisting}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+
+Data breakpoint ranges are defined by their starting address and
+length. The address is aligned to the corresponding range boundary.
+
+\end{iPageDescEntry}

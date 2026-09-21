@@ -1,0 +1,43 @@
+%--------------------------------------------------------------------------------
+%
+%
+%--------------------------------------------------------------------------------
+\pagebreak
+\unnumberedSection{BD - Disable simulator breakpoint}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Syntax}
+\texttt{bd  <bNum>  }
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Description}
+
+The \texttt{BD} command disables a simulator breakpoint. The breakpoint
+remains in the breakpoint table and can be enabled again using the
+\texttt{BE} command.
+
+The \texttt{bNum} parameter specifies the breakpoint number as shown by
+the \texttt{BL} command. Disabling a breakpoint does not change its
+address, type, or module association.
+
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Example}
+
+The following examples demonstrate the \texttt{BD} command. 
+
+\begin{lstlisting}[style=iPageOpStyle]
+(4) -> bd 2
+(5) ->
+\end{lstlisting}
+\end{iPageDescEntry}
+
+%--------------------------------------------------------------------------------
+\begin{iPageDescEntry}{Notes}
+
+A disabled breakpoint remains available for later use. Use the
+\texttt{BE} command to enable it again.
+
+\end{iPageDescEntry}
