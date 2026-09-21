@@ -1,35 +1,49 @@
-%--------------------------------------------------------------------------------
+%––––––––––––––––––––––––––––––––––––––––
 %
 %
-%--------------------------------------------------------------------------------
+%––––––––––––––––––––––––––––––––––––––––
 \pagebreak
 \unnumberedSection{BK - Remove simulator breakpoint}
 
-%--------------------------------------------------------------------------------
+%––––––––––––––––––––––––––––––––––––––––
 \begin{iPageDescEntry}{Syntax}
-\texttt{bk  <adr>  }
+\texttt{bk  <bNum> [ , <modNum> ] }
 \end{iPageDescEntry}
 
-%--------------------------------------------------------------------------------
+%––––––––––––––––––––––––––––––––––––––––
 \begin{iPageDescEntry}{Description}
 
-The \texttt{BK} command ...
+The \texttt{BK} command removes a simulator breakpoint.
 
+The \texttt{bNum} parameter specifies the breakpoint number as shown by
+the \texttt{BL} command. The optional \texttt{modNum} parameter specifies the
+module from which the breakpoint is to be removed. A module number of
+\texttt{-1} removes the breakpoint from all modules.
+
+If the breakpoint is associated with more than one module, removing it
+from one module does not remove the breakpoint itself. The module is
+instead removed from the breakpoint’s module mask. The breakpoint is
+removed from the breakpoint table only when no modules remain
+associated with it.
+
+Removing a breakpoint also removes its enabled state and all other
+configuration associated with the breakpoint.
 
 \end{iPageDescEntry}
 
-%--------------------------------------------------------------------------------
+%––––––––––––––––––––––––––––––––––––––––
 \begin{iPageDescEntry}{Example}
 
-The following examples demonstrate the \texttt{BK} command. 
+The following examples demonstrate the \texttt{BK} command.
 
 \begin{lstlisting}[style=iPageOpStyle]
-(4) -> ...
-(5) ->
+(4) -> bk 0, 2
+(5) -> bk 3, -1
+(6) ->
 \end{lstlisting}
 \end{iPageDescEntry}
 
-%--------------------------------------------------------------------------------
+%––––––––––––––––––––––––––––––––––––––––
 \begin{iPageDescEntry}{Notes}
 
 None.
