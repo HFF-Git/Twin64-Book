@@ -6,19 +6,13 @@ The simulator provides a breakpoint facility that is independent of the breakpoi
 
 A simulator is most useful when it provides more than simply the ability to execute a program. When something goes wrong during execution, it must also provide a way to stop the simulated machine at a useful point and inspect its state.
 
-An architectural breakpoint instruction is one mechanism for doing this. A program can deliberately execute such an instruction and thereby enter the operating system’s exception handling mechanism. This is useful for debugging at the software level, but it is not sufficient for debugging the simulated machine itself. In particular, it cannot conveniently be used to observe arbitrary instructions or memory accesses without modifying the program being executed.
-
-Simulator breakpoints thus serve a different purpose. They are a facility of the simulated machine and are invisible to the program running on it. A breakpoint can be associated with a code address, causing the simulator to stop before an instruction at that address is executed. A breakpoint can also be associated with a data address or address range, causing the simulator to stop when a processor accesses that range.
-
-This distinction is important. An architectural breakpoint is something that the program does to the processor. A simulator breakpoint is something that the simulator does to the running machine.
+Simulator breakpoints are a facility of the simulated machine and are invisible to the program running on it. A breakpoint can be associated with a code address, causing the simulator to stop before an instruction at that address is executed. A breakpoint can also be associated with a data address or address range, causing the simulator to stop when a processor accesses that range.
 
 \unnumberedSection{System-Wide Breakpoints}
 
 The simulator normally runs several modules concurrently. In particular, a system may contain multiple processor modules, together with I/O modules and other system components. A breakpoint therefore cannot simply stop the processor that happens to encounter it.
 
 When a processor encounters a simulator breakpoint, the simulator changes the state of the complete simulated system to \texttt{HALT}. All processor modules consequently stop executing. Control is then returned to the simulator command interpreter, where the user can inspect the system state and issue further commands.
-
-This provides a well-defined debugging environment. The state of all processors and other system components can be examined at the instant at which the breakpoint was encountered, rather than allowing the remaining processors to continue executing while the stopped processor is being inspected.
 
 The breakpoint facility is therefore associated with the system rather than with an individual processor. A breakpoint can specify which processor modules are capable of triggering it. This makes it possible, for example, to stop when a particular processor reaches an address while allowing the same address to be executed normally by another processor.
 
@@ -29,16 +23,13 @@ A breakpoint can also be defined for all processor modules. This is useful when 
 An instruction breakpoint identifies an address at which execution is to stop. Processor modules check for an applicable simulator breakpoint before fetching the next instruction. If the current program counter matches an enabled instruction breakpoint, the simulator does not perform the instruction fetch. Instead, the system enters the \texttt{HALT} state and control is returned to the simulator.
 
 No instruction in memory has to be modified. In particular, the simulator does not insert a breakpoint instruction into the program. The program image therefore remains unchanged.
-
 This is also important for debugging code that cannot easily be modified, such as read-only code, firmware, or code shared by several processors.
 
 \unnumberedSection{Data Breakpoints}
 
-A simulator breakpoint can also monitor data accesses. Data breakpoints may be configured for read access, write access, or both.
+The Twin64 simulator breakpoint can also monitor data accesses. Data breakpoints may be configured for read access, write access, or both.
 
-Unlike an instruction breakpoint, a data breakpoint does not refer to the program counter. It refers to the address involved in a memory operation. When a processor executes an instruction that performs a memory access, the simulator checks whether the access matches an applicable data breakpoint.
-
-If it does, the instruction is not allowed to complete normally. The simulated system enters the \texttt{HALT} state and control is returned to the simulator.
+Unlike an instruction breakpoint, a data breakpoint does not refer to the program counter. It refers to the address involved in a memory operation. When a processor executes an instruction that performs a memory access, the simulator checks whether the access matches an applicable data breakpoint. If it does, the instruction is not allowed to complete normally. The simulated system enters the \texttt{HALT} state and control is returned to the simulator.
 
 Data breakpoints are particularly useful when the location of an unexpected change is known, but the instruction responsible for the change is not. For example, a breakpoint can be placed on a memory location containing a variable suspected of being overwritten. Execution then stops at the instruction that performs the write, allowing the processor state and the instruction responsible for the access to be examined.
 
@@ -59,8 +50,7 @@ Once the machine is halted, individual processor modules can be single-stepped. 
 The simulator maintains a system-wide breakpoint table. Each entry describes the type of breakpoint, its enabled state, the address range, and the processor modules for which the breakpoint is active.
 
 The address and address mask form the range definition. The module mask contains one bit for each module in the system. A set bit indicates that the corresponding module is capable of triggering the breakpoint.
-
-The module mask is primarily an implementation detail of the simulator. The command interface uses a module number when creating or removing a breakpoint. A special module number of $-1$ denotes all modules. This allows the user to create a system-wide breakpoint without having to construct a module mask explicitly.
+The command interface uses a module number when creating or removing a breakpoint. A special module number of $-1$ denotes all modules. This allows the user to create a system-wide breakpoint without having to construct a module mask explicitly.
 
 If several modules request a breakpoint for the same type and address range, they share a single breakpoint table entry. The corresponding module bits are combined in the entry’s module mask. When a breakpoint is removed for one module, only that module’s bit is cleared. The breakpoint entry itself is removed when no module remains associated with it.
 
@@ -85,8 +75,10 @@ The important property of this mechanism is that it does not require the softwar
 
 \unnumberedSection{Command Summary}
 
+The simulator breakpoints are accessed using the following five commands, which allow for creation, removal, enabling and disabling. Finally, a breakpoint list command gives an overview of the currently defined breakpoints.
+
 \begin{longtable}{@{}p{0.3\linewidth}p{0.6\linewidth}@{}}
-\caption{Simulator Line Commands} \\
+% \caption{Simulator Line Commands} \\
 \toprule
 \textbf{Command} & \textbf{Purpose} \\
 \midrule
@@ -119,8 +111,3 @@ The following sections describe each command in detail, including its purpose, s
 \input{chapter-simulator-breakpoints/chapter-sim-cmd-BK}
 \input{chapter-simulator-breakpoints/chapter-sim-cmd-BL}
 \input{chapter-simulator-breakpoints/chapter-sim-cmd-BN}
-
-
-
-
-

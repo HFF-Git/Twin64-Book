@@ -26,9 +26,6 @@ instead removed from the breakpoint’s module mask. The breakpoint is
 removed from the breakpoint table only when no modules remain
 associated with it.
 
-Removing a breakpoint also removes its enabled state and all other
-configuration associated with the breakpoint.
-
 \end{iPageDescEntry}
 
 %––––––––––––––––––––––––––––––––––––––––
@@ -37,9 +34,11 @@ configuration associated with the breakpoint.
 The following examples demonstrate the \texttt{BK} command.
 
 \begin{lstlisting}[style=iPageOpStyle]
-(4) -> bk 0, 2
-(5) -> bk 3, -1
-(6) ->
+(4) -> bn ...
+(5) -> bn ...
+(5) -> bl ...
+(6) -> bk ...
+(7) -> bl
 \end{lstlisting}
 \end{iPageDescEntry}
 
