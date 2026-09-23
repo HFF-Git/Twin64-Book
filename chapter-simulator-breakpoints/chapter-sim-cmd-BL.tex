@@ -13,7 +13,10 @@
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{BL} command ...
+The \texttt{BL} command displays the currently defined breakpoints. A breakpoint has a number assigned at creation, the state, i.e. whether enabled or disabled, the address and for data breakpoints, the length. The length is appended to address separated by a colon.
+
+The Modules column shows for which module the breakpoint is defined. It is a 64-bit mask, where each bit represents a module. Module 0 is the leftmost bit. For example, the value \texttt{0000\_0000\_0000\_0010} represents module 4, a 
+    value of \texttt{0000\_0000\_0000\_0018} represents module 4 and module 3.
 
 \end{iPageDescEntry}
 
@@ -23,12 +26,13 @@ The \texttt{BL} command ...
 The following examples demonstrate the \texttt{BE} command. 
 
 \begin{lstlisting}[style=iPageOpStyle]
-(4) -> bl
-
-(4) -> bn ...
-(5) -> bn ...
-(7) -> bl
-(5) -> ...
+ (6) ->bl
+ Idx  Type   State   Adr                  Modules         
+ 0    CODE   E       0x00_0000_1000       0000_0000_0000_0010
+ 1    CODE   E       0x00_0000_2000       0000_0000_0000_0010
+ 2    DATA   E       0x00_0000_3000:0004  0000_0000_0000_0010
+ 3    DATA   E       0x00_0000_3100:0100  0000_0000_0000_0020
+ (7) ->
 \end{lstlisting}
 \end{iPageDescEntry}
 

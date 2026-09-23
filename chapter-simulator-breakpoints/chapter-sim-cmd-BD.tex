@@ -29,10 +29,18 @@ address, type, or module association.
 The following examples demonstrate the \texttt{BD} command. 
 
 \begin{lstlisting}[style=iPageOpStyle]
-(4) -> bn ...
-(5) -> bl ...
-(6) -> bd ...
-(7) -> bl
+ (9) ->bl
+ Idx  Type   State   Adr                  Modules         
+ 0    CODE   E       0x00_0000_1000       0000_0000_0000_0010
+ 2    DATA   E       0x00_0000_3000:0004  0000_0000_0000_0010
+ 3    DATA   E       0x00_0000_3100:0100  0000_0000_0000_0020
+ (10) ->bd 2
+ (11) ->bl
+ Idx  Type   State   Adr                  Modules         
+ 0    CODE   E       0x00_0000_1000       0000_0000_0000_0010
+ 2    DATA   D       0x00_0000_3000:0004  0000_0000_0000_0010
+ 3    DATA   E       0x00_0000_3100:0100  0000_0000_0000_0020
+ (12) ->
 \end{lstlisting}
 \end{iPageDescEntry}
 
