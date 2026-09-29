@@ -9,42 +9,32 @@ At the heart of the simulator is the concept of a window to show and modify the 
 %--------------------------------------------------------------------------------
 \unnumberedSection{Window}
 
-A window consists of a \textbf{window banner line} and a \textbf{window body}. The banner line begins with the window identification, which includes the window stack number and the window number. The window number is a unique identifier that can be used to refer to a specific window. Beneath the window banner line is the window body, which consists of several lines of ascii text. Both areas are window types specific and display status information, messages and simulator output. 
+A window consists of a \textbf{window banner line} and a \textbf{window body}. The banner line begins with the window identification, which includes the window stack number and the window number. The window number is a unique identifier that can be used to refer to a specific window. Beneath the banner line is the window body, which consists of several lines of ASCII text. Both the banner and the body are specific to the window type and are used to display status information, messages, and simulator output.
 
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
 
-    \draw[help lines, gray!70, dashed] (0,0) grid (16,16);
+    % \draw[help lines, gray!70, dashed] (0,0) grid (16,16);
 
     % Image
     \node[anchor=south west] (img) at (0, 0)
         {\includegraphics[width=16cm]{chapter-simulator-environment/SimWindows.pdf}};
-
-    % Arrows
-    \draw[gray, thick] (0.6, 13.25) -- (1.2, 16);
-    \node[anchor=west] at ( 1.25, 16 ) {\Large Window is Current};
-    
-    \draw[gray, thick] (0.9, 13.25) -- (2.25, 15.25);
-    \node[anchor=west] at ( 2.25, 15.25 ) {\Large Window Stack Number};
-    
-    \draw[gray, thick] (1.25, 13.25) -- (3.25, 14.5);
-    \node[anchor=west] at ( 3.25, 14.5 ) {\Large Window Number};
-    
-    \draw[gray, thick] (9.2, 13.1) -- (11.25, 15.25);
-    \node[anchor=west] at ( 11.25, 15.25 ) {\LARGE Window Banner};
-    
-    \draw[gray, thick] (10, 10.75) -- (12.25, 14.5);
-    \node[anchor=west] at ( 12.25, 14.5 ) {\LARGE Window Body};
-    
+            
 \end{tikzpicture}
 \caption{Simulator Windows}
 \label{fig:simulator-windows}
 \end{figure}
 
-Windows can be organized into stacks. This allows related windows—for example, all windows associated with a single CPU—to be grouped together. A stack can be displayed or hidden as a whole. At all times, exactly one window is designated as the current window. The current window is marked with a star (*) symbol in the banner line. If a window command does not explicitly specify a window identifier, it operates on the current window.
+The banner line displays general information about the window as well as data specific to its window type. In the example above, the asterisk in the command line indicates that this is the current window. Commands that accept a window number as an optional parameter operate on the current window when no window is specified.
 
-The remainder of the banner line is specific to the window type and is described in the following sections of this manual. At the right edge of the banner line, each window displays the radix format used for presenting its data. The command window banner line displays the currently defined window stacks at the right edge.
+The window number and window stack are displayed next. The remainder of the banner line is specific to the window type. In the example, the window is a processor window for module 4. The instruction address is 0 and the processor state is \texttt{HALT}.
+
+Windows can be organized into stacks. This allows related windows—for example, all windows associated with a single CPU—to be grouped together. A complete stack can be displayed or hidden as a unit.
+
+At all times, exactly one window is designated as the current window. The current window is marked with an asterisk (*) in the banner line. If a window command does not explicitly specify a window identifier, it operates on the current window.
+
+The remainder of the banner line is specific to the window type and is described in the following sections of this manual. At the right edge of the banner line, each window displays the radix format used to present its data. The command window is an exception: its banner line displays the currently defined window stacks at the right edge.
 
 %--------------------------------------------------------------------------------
 \unnumberedSection{Window Stacks}

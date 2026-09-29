@@ -7,26 +7,48 @@
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Syntax}
-\texttt{STEP [ <steps> [ , <modNum> ]} \\
+\texttt{STEP [  [ ,  ] ]} \
 \end{iPageDescEntry}
 
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Description}
 
-The \texttt{STEP} command advances a halted T64 module by executing one or more 
-instructions on a processor module or step units on an I/O module. There can be 
-one or more processors and I/O modules configured. When the step command is 
-invoked without an argument, the simulator executes exactly one instruction on
-all modules and return s control to the simulator. Likewise, a step count greater
-than one will execute that amount of steps. 
+The \texttt{STEP} command advances one or more halted T64 modules by executing
+one or more execution units. On a processor module, an execution unit is an
+instruction; on an I/O module, it is one module-specific execution unit.
 
-If the module number is provided and the module is halted, only the module specified 
-will execute the entered steps.
+When the \texttt{STEP} command is invoked without an argument, exactly one
+execution unit is performed on all modules and control then returns to the
+simulator command interface.
 
-In either case, after the requested number of steps have completed, execution 
-halts and control returns to the simulator command interface, allowing inspection 
-of state, registers, memory, or windows. After inspection the step command or 
-the run command resumes execution of the processor modules.
+A step count greater than one causes the specified number of execution units
+to be performed on each selected module. Execution continues until the
+requested number of steps has been completed or a breakpoint or other trap
+causes the module to stop.
+
+If the module number is provided and the module is halted, only the specified
+module executes the requested number of steps.
+
+Unlike the \texttt{RUN} command, \texttt{STEP} executes a finite and precisely
+defined number of execution units. For a multi-step operation, the requested
+count is therefore completed independently for each selected module, unless
+execution is interrupted by a breakpoint or trap.
+
+After the requested number of steps has completed, or execution has been
+stopped by a breakpoint or trap, control returns to the simulator command
+interface. The current state, registers, memory, and other simulator
+information can then be inspected before execution is resumed with another
+\texttt{STEP} or \texttt{RUN} command.
+
+A single-step operation has special breakpoint semantics. When exactly one
+step is requested, code breakpoints are temporarily disabled for that
+operation. This allows the instruction at a code breakpoint to be stepped
+over without requiring an additional step merely to pass the breakpoint.
+Data breakpoints remain active and may still stop the instruction when it
+performs a matching data access.
+
+When more than one step is requested, code and data breakpoints are honored
+normally.
 
 \end{iPageDescEntry}
 
@@ -34,13 +56,13 @@ the run command resumes execution of the processor modules.
 \begin{iPageDescOpEntry}{Example}
 \begin{lstlisting}[style=iPageOpStyle]
 
-(5)->s        # execute a single instruction on all modules.
+(5)->s             # execute one instruction on all modules.
 (6)->
 
-(6)->s 10     # execute ten instructions in all modules.
+(6)->s 10          # execute ten instructions on all modules.
 (7)->
 
-(8)->s 10, 5  # execute ten instructions on module 5
+(8)->s 10, 5       # execute ten instructions on module 5.
 (9)->
 
 \end{lstlisting}
@@ -49,8 +71,11 @@ the run command resumes execution of the processor modules.
 %--------------------------------------------------------------------------------
 \begin{iPageDescEntry}{Notes}
 
-The \texttt{STEP} command respects breakpoint and trace settings. A breakpoint 
-or trace exception encountered during stepping may cause execution to stop before
-the requested number of steps has completed.
+A single-step operation ignores code breakpoints, but data breakpoints remain
+active. A multi-step operation honors both code and data breakpoints.
+
+The \texttt{STEP} command always represents a finite execution request. The
+requested number of execution units is executed on each selected module,
+unless a breakpoint or other trap interrupts execution.
 
 \end{iPageDescEntry}
