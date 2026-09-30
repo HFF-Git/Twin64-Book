@@ -31,15 +31,15 @@ The following examples demonstrate the \texttt{BE} command.
 \begin{lstlisting}[style=iPageOpStyle]
  (9) ->bl
  Idx  Type   State   Adr                  Modules         
- 0    CODE   E       0x00_0000_1000       0000_0000_0000_0010
- 2    DATA   E       0x00_0000_3000:0004  0000_0000_0000_0010
- 3    DATA   D       0x00_0000_3100:0100  0000_0000_0000_0020
+ 1    CODE   E       0x00_0000_1000       0000_0000_0000_0010
+ 3    DATA   E       0x00_0000_3000:0004  0000_0000_0000_0010
+ 4    DATA   D       0x00_0000_3100:0100  0000_0000_0000_0020
  (10) ->be 3
  (11) ->bl
  Idx  Type   State   Adr                  Modules         
- 0    CODE   E       0x00_0000_1000       0000_0000_0000_0010
- 2    DATA   E       0x00_0000_3000:0004  0000_0000_0000_0010
- 3    DATA   E       0x00_0000_3100:0100  0000_0000_0000_0020
+ 1    CODE   E       0x00_0000_1000       0000_0000_0000_0010
+ 3    DATA   E       0x00_0000_3000:0004  0000_0000_0000_0010
+ 4    DATA   E       0x00_0000_3100:0100  0000_0000_0000_0020
  (12) ->
 \end{lstlisting}
 
