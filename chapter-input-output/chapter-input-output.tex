@@ -268,42 +268,42 @@ The supervisor registers implements the architected set of registers for configu
 	% IOREG0
 	\draw[thick] (\leftofs, 15) -- (\rightofs, 15);
   	\node[anchor = east] at ({\leftofs - 0.75}, {15 + 0.5}) { IOREG0 };
-  	\node at ( \middleofs, {15 + 0.5}) { IO\_STATUS };	
+  	\node at ( \middleofs, {15 + 0.5}) { IO\_REQ };	
   	
   	% IOREG1
   	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
   	\node[anchor = east] at ({\leftofs - 0.75}, {14 + 0.5}) { IOREG1 };
-  	\node at ( \middleofs, {14 + 0.5}) { IO\_COMMAND };
+  	\node at ( \middleofs, {14 + 0.5}) { IO\_CONFIG };
   	
   	% IOREG2
   	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
   	\node[anchor = east] at ({\leftofs - 0.75}, {13 + 0.5}) { IOREG2 };
-  	\node at ( \middleofs, {13 + 0.5}) { IO\_CONFIG };
+  	\node at ( \middleofs, {13 + 0.5}) { IO\_EIR };
 
   	% IOREG3
   	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
   	\node[anchor = east] at ({\leftofs - 0.75}, {12 + 0.5}) { IOREG3 };
-  	\node at ( \middleofs, {12 + 0.5}) { IO\_VERSION };
+  	\node at ( \middleofs, {12 + 0.5}) { IO\_SPA\_ADR };
   	
   	% IOREG4
   	\draw[thick] (\leftofs, 11) -- (\rightofs, 11);
     \node[anchor = east] at ({\leftofs - 0.75}, {11 + 0.5}) { IOREG4 };
-    \node at ( \middleofs, {11 + 0.5}) { IO\_SPA\_ADR };
+    \node at ( \middleofs, {11 + 0.5}) { IO\_RESERVED\_1 };
   
   	% IOREG5
   	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
   	\node[anchor = east] at ({\leftofs - 0.75}, {10 + 0.5}) { IOREG5 };
-  	\node at ( \middleofs, {10 + 0.5}) { IO\_RESERVED\_1 };
+  	\node at ( \middleofs, {10 + 0.5}) { IO\_RESERVED\_2 };
   	
   	% IOREG6
   	\draw[thick] (\leftofs, 9) -- (\rightofs, 9);
   	\node[anchor = east] at ({\leftofs - 0.75}, {9 + 0.5}) { IOREG6 };
-  	\node at ( \middleofs, {9 + 0.5}) { IO\_RESERVED\_2 };
+  	\node at ( \middleofs, {9 + 0.5}) { IO\_RESERVED\_3 };
 
   	% IOREG7
   	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
   	\node[anchor = east] at ({\leftofs - 0.75}, {8 + 0.5}) { IOREG7 };  
-  	\node at ( \middleofs, {8 + 0.5}) { IO\_RESERVED\_3 };
+  	\node at ( \middleofs, {8 + 0.5}) { IO\_RESERVED\_4 };
 
 
 	\node at ( \middleofs, {5 + 0.5}) { module specific };
@@ -342,13 +342,11 @@ The following table lists the architected registers for an I/O module. Access to
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{IO\_STATUS} & I/O module status \\
-    \midrule
-    \textbf{IO\_COMMAND} & I/O module command and EIR data \\
+    \textbf{IO\_REQ} & I/O module command / status \\
     \midrule
     \textbf{IO\_CONFIG} & I/O module configuration data \\
     \midrule
-    \textbf{IO\_VERSION} & I/O module version data \\
+    \textbf{IO\_EIR} & EIR data \\
     \midrule
     \textbf{IO\_SPA\_ADR\_0} & I/O module soft physical address range \\
     \midrule
@@ -358,58 +356,49 @@ The following table lists the architected registers for an I/O module. Access to
     \midrule
     \textbf{IO\_RESERVED\_3} & reserved for future use \\
     \midrule
+    \textbf{IO\_RESERVED\_4} & reserved for future use \\
+    \midrule
 \end{longtable}
 
-
-\begin{itemize}
-
-
-\item \textbf{I/O Status Register}. 
+\unnumberedSubsection{I/O Request Register}
 
 \begin{center}
 \drawInstrFormatSixtyFour
-        {0,  16}
-        {0 }
+        {0,  12, 16}
+        {0, command / status }
 \end{center}
 
-\item \textbf{I/O Command Register}
+\unnumberedSubsection{I/O Configuration Register}
 
 \begin{center}
 \drawInstrFormatSixtyFour
-        {0,  16}
-        {0 }
+        {0, 2, 4, 8, 15, 16}
+        {version, subversion, SPA Size, 0, 0 }
 \end{center}
 
-\item \textbf{I/O Configuration Register}
+\unnumberedSubsection{I/O EIR}
 
 \begin{center}
 \drawInstrFormatSixtyFour
-        {0, 15, 16}
-        {0, 0 }
+        {0, 16}
+        {0, EIR Mask }
 \end{center}
 
-\item \textbf{I/O Version Register}
+\unnumberedSubsection{I/O Soft Physical Address}
 
 \begin{center}
 \drawInstrFormatSixtyFour
-        {0,  16}
-        {0 }
+        {0,  6, 13, 16}
+        {0, SPA page number, 0 }
 \end{center}
 
-\item \textbf{I/O Soft Physical Address}
+\unnumberedSubsection{I/O Reserved Register 1 to 4}
 
-\begin{center}
-\drawInstrFormatSixtyFour
-        {0,  16}
-        {0 }
-\end{center}
+\textbf{IO\_RESERVED\_1} to \textbf{IO\_RESERVED\_4} are reserved for T64 architecture extensions.  
 
-\item \textbf{I/O Reserved Register 1 to 3}
+\unnumberedSubsection{I/O Register 8 to 31}
 
-... reserved for future use
-
-
-\end{itemize}
+I/O registers 8 to 31 are module specific registers.
 
 
 \unnumberedSection{I/O Elements}
