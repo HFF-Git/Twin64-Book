@@ -11,12 +11,13 @@
 
 \begin{iPageDescEntry}{Format}
     The \texttt{SSM} instruction uses the following instruction format. \\
-
+    
     \begin{flushleft}
     \drawInstrFormat
         {0,1,3,5,6.5,13,13.5,14,14.5,15,15.5,16}
-        {\OpCodeGrpSYS, \OpCodeSSM, RegR, 1, 0, 0, 0, 0, 0, 0, 0}
+        {\OpCodeGrpSYS, \OpCodeSSM, RegR, 1, 0, E, R, B, T, J, I}
     \end{flushleft}
+
 \end{iPageDescEntry}
 
 \begin{iPageDescEntry}{Description}
@@ -25,10 +26,21 @@
 \end{iPageDescEntry}
 
 \begin{iPageDescOpEntry}{Operation}
-\begin{lstlisting}[style=iPageOpStyle]
-RegR <- PSR.[ST]
-PSR.[ST] <- PSR.[ST] | instr.[5:0];
-\end{lstlisting}
+	\begin{lstlisting}[style=iPageOpStyle]
+	RegR <- 0;
+	RegR.[58] <- PSW.[E];
+	RegR.[59] <- PSW.[R];
+	RegR.[60] <- PSW.[B];
+	RegR.[61] <- PSW.[T];
+	RegR.[62] <- PSW.[J];
+	RegR.[63] <- PSW.[I];
+	PSW.[E] <- PSW.[E] | instr.[E];
+	PSW.[R] <- PSW.[R] | instr.[R];
+	PSW.[B] <- PSW.[B] | instr.[B];
+	PSW.[T] <- PSW.[T] | instr.[T];
+	PSW.[J] <- PSW.[J] | instr.[J];
+	PSW.[I] <- PSW.[I] | instr.[I];
+	\end{lstlisting}
 \end{iPageDescOpEntry}
 
 \begin{iPageDescEntry}{Exceptions}
