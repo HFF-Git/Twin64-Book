@@ -9,3 +9,70 @@ This chapter presents the Twin-64 processor abstraction layer....
 
 
 
+
+PAL\_TOC - programatic reset
+
+PAL\_CHECK - entry point to HPMC
+
+PAL\_RESET - hardware entry point, start of PAL code area.
+
+PAL\_CHASSIS - writes a value to system chassis display.
+
+PAL\_GETC - reads a character from console
+
+PAL\_PUTC - writes a character to console
+
+PAL\_GET\_LINE - reads a line from console
+
+PAL\_PUT\_LINE - writes a line to console
+
+PAL\_CONSOLE - general entry point to console functions. ( getc, putc, flus, write line, read line, etc. )
+
+
+\unnumberedSection{PAL code area layout}
+
+first locations are RESET vector, PAL COMMAND vector, two reserved vectors.
+
+RESET vector is where a processor starts after reset.
+
+COMMAND vector is the entry point to PAL functions.
+
+
+
+\unnumberedSection{System startup}
+
+PAL plays a key role in startup.
+
+
+\begin{smallGapItemize}
+
+\item{Test processor}
+
+\item{Select monarch. All other processors wait for monarch. The monarch is the processor with the lowest HPA address. }
+
+\item{Monarch issues RESET to all I/O modules.}
+
+\item{Monarch finds memory module with largest size. If there are more than one, the lowest HPA wins.}
+
+\item{Monarch places this module at physical memory address zero.}
+
+\item{Monarch checks source of RESET. ( power fail ?) }
+
+\item{Monarch tests memory large enough for ISL image }
+
+\item{Monarch finds CONSOLE module }
+
+\item{Monarch finds boot device }
+
+\item{Monarch loads and launches IPL }
+
+
+	
+\end{smallGapItemize}
+
+Page Zero plays a key role, lots of low level data, such as boot paths, etc.
+Page Zero also has initial stack ? 
+
+Destructive vs. non-destructive memory test ?
+
+

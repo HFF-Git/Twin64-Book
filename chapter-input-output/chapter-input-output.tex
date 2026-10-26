@@ -24,7 +24,7 @@ Overall, the Twin-64 I/O subsystem emphasizes clarity, modularity, and extensibi
 \begin{center}
 \begin{tikzpicture}[scale=0.7, transform shape]
         
-  	\draw[help lines, gray!70, dashed] (0,0) grid(18,16);
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(18,16);
 
 	% Rectangle dimensions
 	\def\width{8}
@@ -98,58 +98,103 @@ At the upper level of the I/O address range there is the \textbf{hard physical a
 
 \unnumberedSection{Hard physical address range}
 
-The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 256 I/O modules in the system bus. Each module has a hard physical address page, which consists of up to 16 register sets of 32 registers each. A register itself is a 64-bit word. The first register set is the supervisory register set. This set is architected and must be implemented by each module. It contains the I/O module description. The remainder of the registers in this set and the organization of the remaining register set is specific to the I/O module. 
+The \textbf{hard physical address} range contains an I/O page for each I/O module installed. There is room for 64 I/O modules in the system bus. Each module has a hard physical address page, which consists of up to 512 64-bit registers each. The first registers are the supervisory registers. This set is architected and must be implemented by each module. It contains among other items the I/O module description. The remainder of the registers in the HPA page and their organization
+    is specific to the I/O module. 
 
 \begin{figure}[H]
 \begin{center}
-\begin{tikzpicture}[scale=0.7, transform shape]
+\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
         
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(16,12);
-
-	% Rectangle dimensions
+  	% \draw[help lines, gray!70, dashed] (0,0) grid(12,17);
+  	
+  	% Rectangle dimensions
 	\def\width{8}
-	\def\leftofs{4}
+	\def\leftofs{3}
 	\def\rightofs{\leftofs + \width}
+  	\def\middleofs{ \leftofs + \width / 2 }
+  	
+  	% Bits
+  	\node at (\leftofs   + 0.25,16 + 0.25) {\small 63};
+  	\node at (\middleofs + 0.25,16 + 0.25) {\small 32};
+	\node at (\middleofs - 0.25,16 + 0.25) {\small 31};
+	\node at (\middleofs + 1.75,16  + 0.25) {\small 16};
+	\node at (\middleofs + 2.25,16 + 0.25) {\small 15};
+	\node at (\rightofs  - 0.25,16 + 0.25) {\small 0};
 
-	% Left side
-	\draw[thick] (\leftofs, 0) -- (\leftofs, 3); 
-	\draw[thick, dashed] (\leftofs, 3) -- (\leftofs, 7);
-	\draw[thick] (\leftofs, 7) -- (\leftofs, 12);
-	
-	% Right side
-	\draw[thick] (\rightofs, 0) -- (\rightofs, 3); 
-	\draw[thick, dashed] (\rightofs, 3) -- (\rightofs, 7);
-	\draw[thick] (\rightofs, 7) -- (\rightofs, 12); 		
-		
-	% Edges
+	% Box
+	\draw[thick] (\leftofs, 0) -- (\leftofs, 3);
+	\draw[thick, dashed] (\leftofs, 3) -- (\leftofs, 6);
+	\draw[thick] (\leftofs, 6) -- (\leftofs, 16);
+	\draw[thick] (\rightofs, 0) -- (\rightofs, 3);
+	\draw[thick, dashed] (\rightofs, 3) -- (\rightofs, 6);
+	\draw[thick] (\rightofs, 6) -- (\rightofs, 16);
 	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
-	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
-	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
-	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
-	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
+	\draw[thick] (\leftofs, 16) -- (\rightofs, 16);
 	
-	% Labels 
-	\node[left] at (\leftofs, 12 - 0.2) {\texttt{0x0}};
-	\node[left] at (\leftofs, 10 - 0.2) {\texttt{0x80}};
-	\node[left] at (\leftofs, 8 - 0.2) {\texttt{0x100}};
-	\node[left] at (\leftofs, 2 - 0.2) {\texttt{0xF00}};
-	\node[left] at (\leftofs, 0  + 0.2) {\texttt{0xFFF}};
-	
-	\node at (\leftofs + \width / 2, 11) {\textbf{Supervisor Register Set}};
-	\node at (\leftofs + \width / 2, 9) {\textbf{Register Set 1}};
-	\node at (\leftofs + \width / 2, 1) {\textbf{Register Set 15}};
+	% Fields 
+	% IOREG0
+	\draw[thick] (\leftofs, 15) -- (\rightofs, 15);
+  	\node[anchor = east] at ({\leftofs - 0.75}, {15 + 0.5}) { IOREG0 };
+  	\node at ( \middleofs, {15 + 0.5}) { IO\_STATUS };	
+  	
+  	% IOREG1
+  	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
+  	\node[anchor = east] at ({\leftofs - 0.75}, {14 + 0.5}) { IOREG1 };
+  	\node at ( \middleofs, {14 + 0.5}) { IO\_COMMAND };
+  	
+  	% IOREG2
+  	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
+  	\node[anchor = east] at ({\leftofs - 0.75}, {13 + 0.5}) { IOREG2 };
+  	\node at ( \middleofs, {13 + 0.5}) { IO\_CONFIG};
 
-		
-	% bracket
-	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,0) -- (\rightofs + 0.5,12)
-	node[midway, right=1cm, anchor=west]{\Large HPA Page};
+  	% IOREG3
+  	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
+  	\node[anchor = east] at ({\leftofs - 0.75}, {12 + 0.5}) { IOREG3 };
+  	\node at ( \middleofs, {12 + 0.5}) { IO\_EIR};
+  	
+  	% IOREG4
+  	\draw[thick] (\leftofs, 11) -- (\rightofs, 11);
+    \node[anchor = east] at ({\leftofs - 0.75}, {11 + 0.5}) { IOREG4 };
+    \node at ( \middleofs, {11 + 0.5}) { IO\_SPA\_ADR };
+  
+  	% IOREG5
+  	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
+  	\node[anchor = east] at ({\leftofs - 0.75}, {10 + 0.5}) { IOREG5 };
+  	\node at ( \middleofs, {10 + 0.5}) { IO\_RESERVED\_0 };
+  	
+  	% IOREG6
+  	\draw[thick] (\leftofs, 9) -- (\rightofs, 9);
+  	\node[anchor = east] at ({\leftofs - 0.75}, {9 + 0.5}) { IOREG6 };
+  	\node at ( \middleofs, {9 + 0.5}) { IO\_RESERVED\_1 };
+
+  	% IOREG7
+  	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
+  	\node[anchor = east] at ({\leftofs - 0.75}, {8 + 0.5}) { IOREG7 };  
+  	\node at ( \middleofs, {8 + 0.5}) { IO\_RESERVED\_2 };
+
+	% IOREG8
+	\node[anchor = east] at ({\leftofs - 0.75}, {7 + 0.5}) { IOREG8 };
+	\node at ( \middleofs, {4 + 0.5}) { module specific };
 	
+	% bracket
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,8) -- (\rightofs + 0.5,16)
+	node[midway, right=1cm, anchor=west]{\Large Supervisor Register Set};
+	
+	% bracket
+	\draw[thick]  [decorate, decoration={brace, amplitude=0.5cm, mirror}] (\rightofs + 0.5,0) -- (\rightofs + 0.5,8)
+	node[midway, right=1cm, anchor=west]{\Large Module specific Register Set};
+	
+  	% IOREG511
+  	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
+  	\node[anchor = east] at ({\leftofs - 0.75}, {0 + 0.5}) { IOREG15 };
+			
 \end{tikzpicture}
 \end{center}
 \caption{Hard physical Address Page}
 \label{fig:Hard physical Address Page}
 \end{figure}
 
+The supervisor registers are described in detail later in this chapter.
 
 \unnumberedSection{Broadcast address range}
 
@@ -232,99 +277,7 @@ For example, a terminal I/O controller has a hard physical page in the I/O addre
 
 \unnumberedSection{Supervisor Register Set}
 
-The supervisor registers implements the architected set of registers for configuring and managing the I/O module. The \texttt{REG 0} to \texttt{REG 7} are implemented by each module. \texttt{REG 8} to \texttt{REG 31} are module specific.
-
-\begin{figure}[H]
-\begin{center}
-\begin{tikzpicture}[x=1cm, y=1cm, scale=0.7, transform shape]
-        
-  	% \draw[help lines, gray!70, dashed] (0,0) grid(12,17);
-  	
-  	% Rectangle dimensions
-	\def\width{8}
-	\def\leftofs{3}
-	\def\rightofs{\leftofs + \width}
-  	\def\middleofs{ \leftofs + \width / 2 }
-  	
-  	% Bits
-  	\node at (\leftofs   + 0.25,16 + 0.25) {\small 63};
-  	\node at (\middleofs + 0.25,16 + 0.25) {\small 32};
-	\node at (\middleofs - 0.25,16 + 0.25) {\small 31};
-	\node at (\middleofs + 1.75,16  + 0.25) {\small 16};
-	\node at (\middleofs + 2.25,16 + 0.25) {\small 15};
-	\node at (\rightofs  - 0.25,16 + 0.25) {\small 0};
-
-	% Box
-	\draw[thick] (\leftofs, 0) -- (\leftofs, 3);
-	\draw[thick, dashed] (\leftofs, 3) -- (\leftofs, 7);
-	\draw[thick] (\leftofs, 7) -- (\leftofs, 16);
-	\draw[thick] (\rightofs, 0) -- (\rightofs, 3);
-	\draw[thick, dashed] (\rightofs, 3) -- (\rightofs, 7);
-	\draw[thick] (\rightofs, 7) -- (\rightofs, 16);
-	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
-	\draw[thick] (\leftofs, 16) -- (\rightofs, 16);
-	
-	% Fields 
-	% IOREG0
-	\draw[thick] (\leftofs, 15) -- (\rightofs, 15);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {15 + 0.5}) { IOREG0 };
-  	\node at ( \middleofs, {15 + 0.5}) { IO\_REQ };	
-  	
-  	% IOREG1
-  	\draw[thick] (\leftofs, 14) -- (\rightofs, 14);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {14 + 0.5}) { IOREG1 };
-  	\node at ( \middleofs, {14 + 0.5}) { IO\_CONFIG };
-  	
-  	% IOREG2
-  	\draw[thick] (\leftofs, 13) -- (\rightofs, 13);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {13 + 0.5}) { IOREG2 };
-  	\node at ( \middleofs, {13 + 0.5}) { IO\_EIR };
-
-  	% IOREG3
-  	\draw[thick] (\leftofs, 12) -- (\rightofs, 12);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {12 + 0.5}) { IOREG3 };
-  	\node at ( \middleofs, {12 + 0.5}) { IO\_SPA\_ADR };
-  	
-  	% IOREG4
-  	\draw[thick] (\leftofs, 11) -- (\rightofs, 11);
-    \node[anchor = east] at ({\leftofs - 0.75}, {11 + 0.5}) { IOREG4 };
-    \node at ( \middleofs, {11 + 0.5}) { IO\_RESERVED\_1 };
-  
-  	% IOREG5
-  	\draw[thick] (\leftofs, 10) -- (\rightofs, 10);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {10 + 0.5}) { IOREG5 };
-  	\node at ( \middleofs, {10 + 0.5}) { IO\_RESERVED\_2 };
-  	
-  	% IOREG6
-  	\draw[thick] (\leftofs, 9) -- (\rightofs, 9);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {9 + 0.5}) { IOREG6 };
-  	\node at ( \middleofs, {9 + 0.5}) { IO\_RESERVED\_3 };
-
-  	% IOREG7
-  	\draw[thick] (\leftofs, 8) -- (\rightofs, 8);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {8 + 0.5}) { IOREG7 };  
-  	\node at ( \middleofs, {8 + 0.5}) { IO\_RESERVED\_4 };
-
-
-	\node at ( \middleofs, {5 + 0.5}) { module specific };
-	\draw[thick] (\leftofs, 2) -- (\rightofs, 2);
-  	
-  	% IOREG30
-  	\draw[thick] (\leftofs, 1) -- (\rightofs, 1);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {1 + 0.5}) { IOREG30 };
-  	\node at ( \middleofs, {1 + 0.5}) { module specific };
-  	
-  	% IOREG31
-  	\draw[thick] (\leftofs, 0) -- (\rightofs, 0);
-  	\node[anchor = east] at ({\leftofs - 0.75}, {0 + 0.5}) { IOREG31 };
-  	\node at ( \middleofs, {0 + 0.5}) { module specific };
-			
-\end{tikzpicture}
-\end{center}
-\caption{I/O Module Supervisory Registers}
-\label{fig:I/O Module Supervisory Registers}
-\end{figure}
-The following table lists the architected registers for an I/O module. Access to these registers is always on a double word boundary.
+The supervisor registers implements the architected set of registers for configuring and managing the I/O module. The \texttt{REG 0} to \texttt{REG 7} are implemented by each module. The following figure depicts the overall layout of the HPA page. The following table lists the architected registers for an I/O module. Access to these registers is always on a double word boundary.
 
 \begin{longtable}{@{}p{0.35\linewidth}p{0.5\linewidth}@{}}
     \caption{Supervisor Register Set} \\
@@ -342,78 +295,79 @@ The following table lists the architected registers for an I/O module. Access to
     \endfoot
     \bottomrule
     \endlastfoot
-    \textbf{IO\_REQ} & I/O module command / status \\
+    \textbf{IO\_STATUS} & I/O module status \\
+    \midrule
+    \textbf{IO\_COMMAND} & I/O module command \\
     \midrule
     \textbf{IO\_CONFIG} & I/O module configuration data \\
     \midrule
-    \textbf{IO\_EIR} & EIR data \\
+    \textbf{IO\_EIRR} & I/O module external interrupt request data \\
     \midrule
-    \textbf{IO\_SPA\_ADR\_0} & I/O module soft physical address range \\
+    \textbf{IO\_SPA\_ADR} & I/O module soft physical address range \\
     \midrule
-    \textbf{IO\_RESERVED\_1} & reserved for future use \\
+    \textbf{IO\_SESERVED\_0} & reserved register for future use \\
     \midrule
-    \textbf{IO\_RESERVED\_2} & reserved for future use \\
+    \textbf{IO\_RESERVED\_1} & reserved register for future use\\
     \midrule
-    \textbf{IO\_RESERVED\_3} & reserved for future use \\
-    \midrule
-    \textbf{IO\_RESERVED\_4} & reserved for future use \\
-    \midrule
+    \textbf{IO\_RESERVED\_2} & reserved register for future use\\
 \end{longtable}
 
-\unnumberedSubsection{I/O Request Register}
+\unnumberedSubsection{Status Register}
 
 \begin{center}
 \drawInstrFormatSixtyFour
         {0,  12, 16}
-        {0, command / status }
+        {0, status }
 \end{center}
 
-\unnumberedSubsection{I/O Configuration Register}
+IO status: OFF, ACTIVE, READY, HW\_ERR, SW\_ERR, module specific bits.
+
+\unnumberedSubsection{Command Register}
 
 \begin{center}
 \drawInstrFormatSixtyFour
-        {0, 2, 4, 8, 15, 16}
+        {0,  12, 16}
+        {0, command}
+\end{center}
+
+Architected command vs. module specific commands.
+
+Room for specifying the HPA address of the target module to interrupt.
+
+\unnumberedSubsection{Configuration Register}
+
+\begin{center}
+\drawInstrFormatSixtyFour
+        {0, 2, 4, 6, 15, 16}
         {version, subversion, SPA Size, 0, 0 }
 \end{center}
 
-\unnumberedSubsection{I/O EIR}
+A read only register. SPA size is encoded to cover ranges up to 4GB. 
+
+( 4k, 16K, 64K, 256K, 1M, 4M, 16M, 64M, 256M, 1G, 4G ) 
+
+SPA is aligned to size.
+
+
+\unnumberedSubsection{External Interrupt Register}
 
 \begin{center}
 \drawInstrFormatSixtyFour
         {0, 16}
-        {0, EIR Mask }
+        {EIRR Mask }
 \end{center}
 
-\unnumberedSubsection{I/O Soft Physical Address}
+A bit for each module. When signaling an interrupt, this ...
+
+\unnumberedSubsection{Soft Physical Address Registers}
+
+A module is capable to specify two soft physical address ranges.
 
 \begin{center}
 \drawInstrFormatSixtyFour
         {0,  6, 13, 16}
         {0, SPA page number, 0 }
 \end{center}
-
-\unnumberedSubsection{I/O Reserved Register 1 to 4}
-
-\textbf{IO\_RESERVED\_1} to \textbf{IO\_RESERVED\_4} are reserved for T64 architecture extensions.  
-
-\unnumberedSubsection{I/O Register 8 to 31}
-
-I/O registers 8 to 31 are module specific registers.
-
-
-\unnumberedSection{I/O Elements}
-
-Modules typically consist of I/O elements. They represent the smallest I/O unit of operation.
-
-??? a subset of registers, at least status, command and data.
-
-??? several types of I/O Elements.
-
-??? a two page type, where one page is privileged and in I/O space, another one mapped into user space. 
-
-??? also option of packing many smaller I/O elements in one page.
-
- 
 
 \unnumberedSection{Interrupt Processing}
 
