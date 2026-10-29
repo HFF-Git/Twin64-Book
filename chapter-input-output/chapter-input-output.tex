@@ -316,8 +316,8 @@ The supervisor registers implements the architected set of registers for configu
 
 \begin{center}
 \drawInstrFormatSixtyFour
-        {0,  12, 16}
-        {0, status }
+        {0,  12, 14, 16}
+        {0, U-stat, S-stat }
 \end{center}
 
 IO status: OFF, ACTIVE, READY, HW\_ERR, SW\_ERR, module specific bits.
@@ -326,8 +326,8 @@ IO status: OFF, ACTIVE, READY, HW\_ERR, SW\_ERR, module specific bits.
 
 \begin{center}
 \drawInstrFormatSixtyFour
-        {0,  12, 16}
-        {0, command}
+        {0,  12, 14, 16}
+        {0, U-cmd, S-cmd}
 \end{center}
 
 Architected command vs. module specific commands.
